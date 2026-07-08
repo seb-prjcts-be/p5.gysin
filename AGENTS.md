@@ -30,6 +30,9 @@ Project-specific instructions and working memory for agents working on
 - Do not reintroduce `humanplot` as a public API, alias, file name, or docs name.
 - Concept: vector-first traces for generative, plotter-friendly drawings.
 - Influences: Brion Gysin, cut-up, rubout, concrete poetry, vulnerable machine traces, worn print, plotter art.
+- Audience: public creative-coding and plotter users. Do not frame the library
+  as classroom-only material; examples should work for artists, designers,
+  educators, studios, plotter users, and general p5.js users.
 
 ## Structure
 
@@ -101,7 +104,7 @@ Latest-tag CDN:
 <script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@latest/p5.gysin.min.js"></script>
 ```
 
-Stable teaching/release CDN should use a version tag:
+Stable release CDN should use a version tag:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.1.0/p5.gysin.min.js"></script>
@@ -125,7 +128,7 @@ Also run the local HTML-link check after docs or example path changes.
 
 ## Current Goals
 
-- Keep the library small, readable, and useful for creative coding teaching.
+- Keep the library small, readable, and useful for creative coding work.
 - Preserve the p5.waves-like repository structure.
 - Keep demos and docs on GitHub Pages.
 - Add a generated manifest later, replacing the manual MVP manifest.
@@ -135,6 +138,19 @@ Also run the local HTML-link check after docs or example path changes.
 - Add route simplification and path optimization later.
 - Add tagged CDN releases when the API stabilizes.
 
+## Example System
+
+Examples follow the p5.waves three-level rule:
+
+1. Gallery/live preview and short snippet in `docs/examples.html`.
+2. Standalone page in `examples/<name>/index.html`.
+3. Complete sketch in `examples/<name>/sketch.js`.
+
+When changing an example, update all three levels together. The snippet should
+teach the transferable idea; the sketch file remains the complete source.
+Use public-facing language for makers and plotter users, not classroom-only
+language.
+
 ## Accepted Roadmap
 
 These are the active product goals for future agents. Treat them as the
@@ -142,10 +158,11 @@ working roadmap until Seb changes direction.
 
 ### User Track
 
-Make `p5.gysin` easy to use in sketches, classes, and small creative coding
-projects.
+Make `p5.gysin` easy to use in sketches, studios, workshops, and small
+creative coding projects.
 
-- Provide stable CDN snippets with pinned release tags for teaching.
+- Provide stable CDN snippets with pinned release tags for public docs and
+  examples.
 - Keep `@latest` documented only as an experimental or fast-moving option.
 - Add copy-paste examples for basic shapes, text, cut-up, layers, export, and
   parameter exploration.
@@ -210,6 +227,9 @@ Keep the library expressive and maintainable for Seb as the author.
   minified build removed necessary spaces inside template literals, corrupting
   SVG values such as `viewBox="0 0 400 300"` into
   `viewBox="0 0 400300"`.
+- 2026-07-08: p5.waves example-system study adopted the three-level example
+  structure for p5.gysin: live gallery snippet, standalone page, complete
+  `sketch.js`. The examples are public-facing, not classroom-only.
 - The minified build must remain semantically identical to `p5.gysin.js`.
   Always run `node tools/build-min.js` and `node tests/snapshot.js` before
   release or CDN advice. `npm run build:min` and `npm test` are convenience
@@ -224,6 +244,8 @@ Keep the library expressive and maintainable for Seb as the author.
 - If `p5.gysin.js` changes, regenerate and verify `p5.gysin.min.js`.
 - Do not use unsafe regex or whitespace-only minification on this library;
   template literals contain SVG and path data where spaces are semantic.
-- Do not use `@latest` in lesson material unless Seb explicitly wants moving
-  behavior.
+- Regenerate `docs/p5.gysin.manifest.json` with `node tools/gen-manifest.js`
+  after changing example folders, version metadata, or public API lists.
+- Do not use `@latest` in public docs or examples unless Seb explicitly wants
+  moving behavior.
 - Do not commit or push unless asked.

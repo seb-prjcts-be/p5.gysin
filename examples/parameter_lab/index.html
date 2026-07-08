@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Parameter Lab | p5.gysin examples</title>
+  <link rel="stylesheet" href="../showcase.css">
+</head>
+<body>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Showcase</a></li>
+      <li><a href="../../docs/examples.html" class="active">Examples</a></li>
+      <li><a href="../../docs/guide.html">Guide</a></li>
+      <li><a href="../../docs/about.html">About</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">wobble · dropout · repeat · rubout</div>
+      <h1>Parameter Lab</h1>
+      <p>A small control surface for the trace engine. The sliders rebuild the same composition so the effect of each parameter stays readable.</p>
+    </div>
+    <div class="demo-layout">
+      <div class="demo-code">
+        <div class="code-label">Core snippet</div>
+        <pre><code class="language-javascript">plot.textCutup("RUB OUT", 58, 170, {
+  size: 72,
+  slices: 7,
+  sliceOffset: 18,
+  wobble: wobbleValue,
+  dropout: dropoutValue,
+  repeat: repeatValue,
+  rubout: ruboutValue
+});</code></pre>
+        <div class="control-grid" aria-label="Trace parameters">
+          <label class="control-row">
+            <span>Wobble <output id="wobble-value">1.4</output></span>
+            <input id="wobble" type="range" min="0" max="4" step="0.1" value="1.4">
+          </label>
+          <label class="control-row">
+            <span>Dropout <output id="dropout-value">0.08</output></span>
+            <input id="dropout" type="range" min="0" max="0.28" step="0.01" value="0.08">
+          </label>
+          <label class="control-row">
+            <span>Repeat <output id="repeat-value">2</output></span>
+            <input id="repeat" type="range" min="1" max="5" step="1" value="2">
+          </label>
+          <label class="control-row">
+            <span>Rubout <output id="rubout-value">0.12</output></span>
+            <input id="rubout" type="range" min="0" max="0.35" step="0.01" value="0.12">
+          </label>
+        </div>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas" id="sketch"></div>
+        <div class="demo-note">Press <code>R</code> for a new seed. Press <code>S</code> to download SVG.</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      <a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp;
+      <a href="../../docs/guide.html">Guide</a>
+    </p>
+    <p class="footer-sub">p5.gysin v0.1.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

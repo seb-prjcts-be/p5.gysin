@@ -298,6 +298,135 @@ h3 {
   font-weight: 700;
 }
 
+.ex-page-header {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 86px 8vw 42px;
+  text-align: center;
+}
+
+.ex-page-header h1 {
+  margin-top: 10px;
+  font-size: clamp(56px, 10vw, 120px);
+}
+
+.ex-page-header p {
+  max-width: 720px;
+  margin: 18px auto 0;
+  color: var(--muted);
+  font-size: 20px;
+}
+
+.ex-preview {
+  display: grid;
+  gap: 12px;
+  max-width: 620px;
+}
+
+.ex-canvas {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+}
+
+.ex-canvas canvas {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+.ex-code-block {
+  width: 100%;
+  margin: 0;
+  padding: 18px;
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  background: #faf8f3;
+  color: #151515;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  white-space: pre;
+}
+
+.ex-code-block code {
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.code-preview .token.comment,
+.ex-code-block .token.comment,
+.demo-code .token.comment {
+  color: #8b8b8b;
+  font-style: italic;
+}
+
+.code-preview .token.keyword,
+.ex-code-block .token.keyword,
+.demo-code .token.keyword {
+  color: #9c2d82;
+}
+
+.code-preview .token.string,
+.ex-code-block .token.string,
+.demo-code .token.string {
+  color: #37614f;
+}
+
+.code-preview .token.number,
+.code-preview .token.boolean,
+.ex-code-block .token.number,
+.ex-code-block .token.boolean,
+.demo-code .token.number,
+.demo-code .token.boolean {
+  color: #8a5a10;
+}
+
+.code-preview .token.function,
+.ex-code-block .token.function,
+.demo-code .token.function {
+  color: #244f73;
+}
+
+.code-preview .token.property,
+.ex-code-block .token.property,
+.demo-code .token.property {
+  color: #b5362b;
+}
+
+.ex-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.ex-full-link {
+  color: var(--muted);
+  font-family: "Oswald", Arial, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule);
+}
+
+.ex-full-link:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.section-dark .ex-full-link {
+  color: #d8d0c4;
+  border-color: #6e665b;
+}
+
+.section-dark .ex-full-link:hover {
+  color: var(--white);
+  border-color: var(--white);
+}
+
 footer {
   padding: 42px 8vw;
   border-top: 1px solid var(--rule);

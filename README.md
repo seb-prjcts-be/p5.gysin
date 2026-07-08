@@ -59,17 +59,29 @@ Open lokaal:
 ```text
 index.html
 docs/examples.html
+examples/first_trace/index.html
 examples/gysin_demo/index.html
+examples/parameter_lab/index.html
+examples/plotter_export/index.html
 ```
 
-In de Gysin demo:
+De voorbeelden volgen dezelfde drie-lagenstructuur als `p5.waves`:
 
-- `S` downloadt SVG
-- `J` downloadt JSON
-- `R` regenereert niet-bevroren vormen
+- live preview en snippet in `docs/examples.html`
+- standalone pagina in `examples/<naam>/index.html`
+- volledige sketch in `examples/<naam>/sketch.js`
+
+Beschikbare voorbeelden:
+
+- `first_trace` - minimale trace-compositie
+- `gysin_demo` - cut-up typography en rubout
+- `parameter_lab` - live controle over trace-parameters
+- `plotter_export` - SVG/JSON/HPGL exportworkflow
 
 ## Test
 
 ```powershell
+node tools/build-min.js
+node tools/gen-manifest.js
 node tests/snapshot.js
 ```

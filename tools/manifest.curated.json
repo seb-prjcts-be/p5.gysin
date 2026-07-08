@@ -1,0 +1,14 @@
+{
+  "_comment": "Hand-maintained block. gen-manifest.js merges this into docs/p5.gysin.manifest.json. Mechanical fields such as version, commit, shape methods, exports, and examples are derived.",
+  "p5js_target": "2.x",
+  "audience": "public creative-coding and plotter users",
+  "removed_apis": [],
+  "added_apis": [
+    {
+      "name": "GysinPlot",
+      "added_in": "0.1.0",
+      "status": "mvp",
+      "note": "Main class for vector capture, sampling, humanized traces, addressing, and export."
+    }
+  ]
+}

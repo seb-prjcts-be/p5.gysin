@@ -261,7 +261,7 @@ er meerdere strategieen:
 
 3. **Fallback vectorletters**
    Zonder font gebruikt de MVP een eenvoudige 5x7 vectorfont. Dat is bewust
-   sober, plotbaar en begrijpelijk voor leerlingen.
+   sober, plotbaar en begrijpelijk voor elke gebruiker.
 
 4. **Tekst als contourmateriaal**
    Zodra tekst punten of contouren zijn, mag dezelfde humanizing pipeline erop

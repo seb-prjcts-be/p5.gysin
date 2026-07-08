@@ -118,6 +118,7 @@ function setup() {
   });
 
   plot.freeze(titleId);
+  wireActions();
 }
 
 function draw() {
@@ -128,17 +129,42 @@ function draw() {
 
 function keyPressed() {
   if (key === "s" || key === "S") {
-    plot.downloadSVG("p5-gysin-demo.svg", { width: 900, height: 900 });
+    downloadSVG();
   }
 
   if (key === "j" || key === "J") {
-    plot.downloadJSON("p5-gysin-demo.json");
+    downloadJSON();
   }
 
   if (key === "r" || key === "R") {
-    plot.regenerate();
-    redraw();
+    regeneratePlot();
   }
+}
+
+function wireActions() {
+  const svgButton = document.getElementById("svg-button");
+  const jsonButton = document.getElementById("json-button");
+  const regenerateButton = document.getElementById("regenerate-button");
+
+  if (svgButton) svgButton.addEventListener("click", downloadSVG);
+  if (jsonButton) jsonButton.addEventListener("click", downloadJSON);
+  if (regenerateButton) regenerateButton.addEventListener("click", regeneratePlot);
+}
+
+function downloadSVG() {
+  plot.downloadSVG("p5-gysin-demo.svg", {
+    width: 900,
+    height: 900
+  });
+}
+
+function downloadJSON() {
+  plot.downloadJSON("p5-gysin-demo.json");
+}
+
+function regeneratePlot() {
+  plot.regenerate();
+  redraw();
 }
 
 function drawPaper() {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gysin Demo | p5.gysin examples</title>
+  <title>First Trace | p5.gysin examples</title>
   <link rel="stylesheet" href="../showcase.css">
 </head>
 <body>
@@ -20,34 +20,33 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">textCutup() + vector traces</div>
-      <h1>Gysin Demo</h1>
-      <p>Cut-up typography, repeated contours, rubout gaps, uncertain plotter lines, and exportable vector output. Press <code>S</code> for SVG, <code>J</code> for JSON, or <code>R</code> to regenerate unfrozen traces.</p>
+      <div class="demo-number">line() + text() + circle()</div>
+      <h1>First Trace</h1>
+      <p>A minimal composition that shows the core idea: define clean vector forms, then let p5.gysin redraw them as unstable plotter traces. Click the canvas to reseed the drawing.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 19600319 });
+        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
 
-plot.textCutup("I THINK THEREFORE I AM", 76, 370, {
-  size: 55,
-  slices: 9,
-  sliceOffset: 24,
-  dropout: 0.09,
-  repeat: 2,
-  rubout: 0.12
+plot.line(70, 160, 450, 178, {
+  wobble: 1.2,
+  dropout: 0.04,
+  overshoot: 8
+});
+
+plot.text("FIRST TRACE", 68, 255, {
+  size: 54,
+  wobble: 1.4,
+  dropout: 0.08,
+  repeat: 2
 });
 
 plot.draw();</code></pre>
-        <div class="demo-actions" aria-label="Demo actions">
-          <button type="button" id="svg-button">Download SVG</button>
-          <button type="button" id="json-button">Download JSON</button>
-          <button type="button" id="regenerate-button">Regenerate</button>
-        </div>
       </div>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch"></div>
-        <div class="demo-note">Keyboard: <code>S</code> SVG, <code>J</code> JSON, <code>R</code> regenerate.</div>
+        <div class="demo-note">Click the canvas to reseed. Press <code>S</code> to download SVG.</div>
       </div>
     </div>
   </main>

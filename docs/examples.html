@@ -9,6 +9,9 @@
 <body>
   <nav id="navbar">
     <a class="nav-logo" href="../index.html"><span>p5</span>.gysin</a>
+    <button class="nav-hamburger" aria-label="Toggle menu" onclick="this.closest('nav').classList.toggle('nav-open')">
+      <span></span><span></span><span></span>
+    </button>
     <ul class="nav-links">
       <li><a href="../index.html">Showcase</a></li>
       <li><a href="examples.html" class="active">Examples</a></li>
@@ -18,26 +21,290 @@
     </ul>
   </nav>
 
-  <header class="page-header">
-    <div class="section-tag">Standalone pages</div>
-    <h1>Examples</h1>
-    <p>Examples live outside the docs pages, just like p5.waves. Each example has its own `index.html` and `sketch.js`, so it can be opened directly or linked from GitHub Pages.</p>
+  <header class="ex-page-header">
+    <div class="section-tag">Public examples · v0.1.0</div>
+    <h1>p5.<span class="accent">gysin</span> Examples</h1>
+    <p>Each preview is a live sketch. Open the full example for the complete page and source file. The snippets show the transferable idea, not every line of the sketch.</p>
   </header>
 
-  <main class="section">
-    <div class="examples-grid">
-      <a class="example-card" href="../examples/gysin_demo/index.html">
-        <h2>Gysin Demo</h2>
-        <p>Cut-up typography, rubout gaps, repeated contours, uncertain plotter lines, and SVG/JSON export shortcuts.</p>
-        <div class="example-meta">Open example</div>
-      </a>
+  <section id="first-trace" class="section">
+    <div class="section-header">
+      <div class="section-tag">line() · text() · circle()</div>
+      <h2>First <span class="accent">Trace</span></h2>
+      <p class="section-desc">Start with clean vector forms and let p5.gysin turn them into uncertain plotter traces.</p>
     </div>
-  </main>
+    <div class="ex-preview">
+      <div id="ex-first-trace" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+
+plot.line(70, 160, 450, 178, {
+  wobble: 1.2,
+  dropout: 0.04,
+  overshoot: 8
+});
+
+plot.text("FIRST TRACE", 68, 255, {
+  size: 54,
+  wobble: 1.4,
+  dropout: 0.08,
+  repeat: 2
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/first_trace/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="../examples/first_trace/sketch.js" target="_blank">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="gysin-demo" class="section section-dark">
+    <div class="section-header">
+      <div class="section-tag">textCutup() · rubout</div>
+      <h2>Cut-Up <span class="accent">Typography</span></h2>
+      <p class="section-desc">Slice text into unstable bands, then combine dropout, rubout, repeat, and drift.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-cutup" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">plot.textCutup("I THINK THEREFORE I AM", 76, 220, {
+  size: 42,
+  slices: 8,
+  sliceOffset: 18,
+  dropout: 0.09,
+  repeat: 2,
+  rubout: 0.12
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/gysin_demo/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="../examples/gysin_demo/sketch.js" target="_blank">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="parameter-lab" class="section">
+    <div class="section-header">
+      <div class="section-tag">wobble · dropout · repeat</div>
+      <h2>Parameter <span class="accent">Lab</span></h2>
+      <p class="section-desc">Use a small control surface to see how trace parameters change the same composition.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-parameter" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">plot.textCutup("RUB OUT", 58, 170, {
+  size: 72,
+  slices: 7,
+  wobble: wobbleValue,
+  dropout: dropoutValue,
+  repeat: repeatValue,
+  rubout: ruboutValue
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/parameter_lab/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="../examples/parameter_lab/sketch.js" target="_blank">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="plotter-export" class="section section-dark">
+    <div class="section-header">
+      <div class="section-tag">SVG · JSON · HPGL</div>
+      <h2>Plotter <span class="accent">Export</span></h2>
+      <p class="section-desc">The same generated traces drive canvas drawing and vector export.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-export" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const svg = plot.exportSVG({
+  width: 560,
+  height: 560
+});
+
+const json = plot.exportJSON({
+  includeGenerated: true
+});
+
+const hpgl = plot.exportHPGL({ scale: 40 });</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/plotter_export/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="../examples/plotter_export/sketch.js" target="_blank">-> source sketch</a>
+      </div>
+    </div>
+  </section>
 
   <footer>
     <p><a href="../index.html">Showcase</a> &nbsp;&middot;&nbsp; <a href="guide.html">Guide</a></p>
     <p class="footer-sub">p5.gysin v0.1.0</p>
   </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../p5.gysin.js"></script>
+  <script>
+  function previewSize(id) {
+    const element = document.getElementById(id);
+    const canvasW = Math.max(280, Math.floor(element.offsetWidth || 420));
+    return {
+      width: canvasW,
+      height: Math.floor(canvasW * 0.68)
+    };
+  }
+
+  function makePreview(id, builder) {
+    new p5(function(p) {
+      let plot;
+
+      p.setup = function() {
+        const size = previewSize(id);
+        p.createCanvas(size.width, size.height).parent(id);
+        p.pixelDensity(1);
+        p.noLoop();
+        plot = builder(p, size.width, size.height);
+      };
+
+      p.draw = function() {
+        p.background(245);
+        drawPreviewPaper(p);
+        plot.draw();
+      };
+
+      p.windowResized = function() {
+        const size = previewSize(id);
+        p.resizeCanvas(size.width, size.height);
+        plot = builder(p, size.width, size.height);
+        p.redraw();
+      };
+    }, id);
+  }
+
+  function drawPreviewPaper(p) {
+    p.stroke("#dedede");
+    p.strokeWeight(0.6);
+    for (let y = 34; y < p.height; y += 28) {
+      p.line(24, y, p.width - 24, y);
+    }
+  }
+
+  makePreview("ex-first-trace", function(p, canvasW, canvasH) {
+    const plot = new GysinPlot({
+      p: p,
+      seed: 1960,
+      width: canvasW,
+      height: canvasH
+    });
+    plot.line(44, canvasH * 0.34, canvasW - 44, canvasH * 0.38, {
+      wobble: 1.2,
+      dropout: 0.04,
+      overshoot: 7,
+      segmentLength: 8
+    });
+    plot.text("FIRST TRACE", 44, canvasH * 0.58, {
+      size: canvasW * 0.075,
+      wobble: 1.2,
+      dropout: 0.08,
+      repeat: 2,
+      drift: 1.2
+    });
+    plot.circle(canvasW * 0.74, canvasH * 0.74, canvasW * 0.18, {
+      wobble: 1.2,
+      dropout: 0.08,
+      repeat: 2,
+      rubout: 0.08
+    });
+    return plot;
+  });
+
+  makePreview("ex-cutup", function(p, canvasW, canvasH) {
+    const plot = new GysinPlot({
+      p: p,
+      seed: 19600319,
+      width: canvasW,
+      height: canvasH,
+      style: {
+        stroke: "#151515",
+        strokeWeight: 1,
+        alpha: 0.86
+      }
+    });
+    plot.text("RUB OUT", 42, canvasH * 0.33, {
+      size: canvasW * 0.13,
+      wobble: 1.5,
+      dropout: 0.09,
+      repeat: 2,
+      rubout: 0.08
+    });
+    plot.textCutup("I THINK THEREFORE I AM", 42, canvasH * 0.62, {
+      size: canvasW * 0.068,
+      slices: 8,
+      sliceOffset: 16,
+      sliceDropout: 0.14,
+      wobble: 1.3,
+      dropout: 0.09,
+      repeat: 2,
+      rubout: 0.12
+    });
+    return plot;
+  });
+
+  makePreview("ex-parameter", function(p, canvasW, canvasH) {
+    const plot = new GysinPlot({
+      p: p,
+      seed: 8319,
+      width: canvasW,
+      height: canvasH
+    });
+    plot.textCutup("RUB OUT", 42, canvasH * 0.36, {
+      size: canvasW * 0.12,
+      slices: 7,
+      sliceOffset: 16,
+      wobble: 2.1,
+      dropout: 0.13,
+      repeat: 3,
+      drift: 2.6,
+      rubout: 0.18
+    });
+    for (let i = 0; i < 8; i++) {
+      const y = canvasH * 0.62 + i * 13;
+      plot.line(44, y, canvasW - 44, y + p.sin(i) * 7, {
+        wobble: 1.1,
+        dropout: 0.08,
+        repeat: 2,
+        overshoot: 6,
+        alpha: 0.62
+      });
+    }
+    return plot;
+  });
+
+  makePreview("ex-export", function(p, canvasW, canvasH) {
+    const plot = new GysinPlot({
+      p: p,
+      seed: 7475,
+      width: canvasW,
+      height: canvasH
+    });
+    plot.rect(42, 42, canvasW - 84, canvasH - 84, {
+      wobble: 0.4,
+      dropout: 0.015,
+      repeat: 2,
+      layer: "frame"
+    });
+    plot.text("PLOT", 64, canvasH * 0.42, {
+      size: canvasW * 0.14,
+      wobble: 1.3,
+      dropout: 0.07,
+      repeat: 2,
+      rubout: 0.08,
+      stroke: "#b5362b",
+      layer: "type"
+    });
+    for (let i = 0; i < 8; i++) {
+      const y = canvasH * 0.61 + i * 12;
+      plot.line(72, y, canvasW - 72, y + p.sin(i * 0.8) * 7, {
+        wobble: 0.7,
+        dropout: 0.04,
+        overshoot: 7,
+        stroke: "#244f73",
+        layer: "hatch"
+      });
+    }
+    return plot;
+  });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
 </body>
 </html>
-
