@@ -1,0 +1,27 @@
+{
+  "id": "p5-gysin-examples",
+  "slug": "p5-gysin-examples",
+  "title": "examples",
+  "type": null,
+  "env": {
+    "online": 0,
+    "extern": 0,
+    "local": 1,
+    "live": 1
+  },
+  "lifecycle": "wip",
+  "repo": {
+    "git": 0,
+    "host": "",
+    "visibility": ""
+  },
+  "tech": [],
+  "ai": "none",
+  "org": {},
+  "version": {},
+  "privacy_checked": 0,
+  "collection": 0,
+  "other_tags": [],
+  "_schema": 1
+}
+

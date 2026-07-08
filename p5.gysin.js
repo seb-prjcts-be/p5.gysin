@@ -1,0 +1,1018 @@
+/*
+ * p5.gysin
+ * Vector-first humanized drawing traces for p5.js.
+ * No build step, no dependencies.
+ */
+(function (global) {
+  "use strict";
+
+  const HUMAN_KEYS = [
+    "density",
+    "wobble",
+    "dropout",
+    "hesitate",
+    "overshoot",
+    "repeat",
+    "drift",
+    "rubout",
+    "fray",
+    "pressure",
+    "segmentLength",
+    "seed"
+  ];
+
+  const STYLE_KEYS = ["stroke", "strokeWeight", "alpha"];
+  const EXPORT_KEYS = ["simplify", "minSegmentLength", "layer"];
+
+  const DEFAULT_HUMAN = {
+    density: 1,
+    wobble: 0,
+    dropout: 0,
+    hesitate: 0,
+    overshoot: 0,
+    repeat: 1,
+    drift: 0,
+    rubout: 0,
+    fray: 0,
+    pressure: 0,
+    segmentLength: 8,
+    seed: null
+  };
+
+  const DEFAULT_STYLE = {
+    stroke: "#111111",
+    strokeWeight: 1,
+    alpha: 1
+  };
+
+  const DEFAULT_EXPORT = {
+    simplify: 0.35,
+    minSegmentLength: 1.5,
+    layer: "default"
+  };
+
+  const SIMPLE_FONT = {
+    "A": ["01110", "10001", "10001", "11111", "10001", "10001", "10001"],
+    "B": ["11110", "10001", "10001", "11110", "10001", "10001", "11110"],
+    "C": ["01111", "10000", "10000", "10000", "10000", "10000", "01111"],
+    "D": ["11110", "10001", "10001", "10001", "10001", "10001", "11110"],
+    "E": ["11111", "10000", "10000", "11110", "10000", "10000", "11111"],
+    "F": ["11111", "10000", "10000", "11110", "10000", "10000", "10000"],
+    "G": ["01111", "10000", "10000", "10011", "10001", "10001", "01111"],
+    "H": ["10001", "10001", "10001", "11111", "10001", "10001", "10001"],
+    "I": ["11111", "00100", "00100", "00100", "00100", "00100", "11111"],
+    "J": ["00111", "00010", "00010", "00010", "00010", "10010", "01100"],
+    "K": ["10001", "10010", "10100", "11000", "10100", "10010", "10001"],
+    "L": ["10000", "10000", "10000", "10000", "10000", "10000", "11111"],
+    "M": ["10001", "11011", "10101", "10101", "10001", "10001", "10001"],
+    "N": ["10001", "11001", "10101", "10011", "10001", "10001", "10001"],
+    "O": ["01110", "10001", "10001", "10001", "10001", "10001", "01110"],
+    "P": ["11110", "10001", "10001", "11110", "10000", "10000", "10000"],
+    "Q": ["01110", "10001", "10001", "10001", "10101", "10010", "01101"],
+    "R": ["11110", "10001", "10001", "11110", "10100", "10010", "10001"],
+    "S": ["01111", "10000", "10000", "01110", "00001", "00001", "11110"],
+    "T": ["11111", "00100", "00100", "00100", "00100", "00100", "00100"],
+    "U": ["10001", "10001", "10001", "10001", "10001", "10001", "01110"],
+    "V": ["10001", "10001", "10001", "10001", "10001", "01010", "00100"],
+    "W": ["10001", "10001", "10001", "10101", "10101", "11011", "10001"],
+    "X": ["10001", "10001", "01010", "00100", "01010", "10001", "10001"],
+    "Y": ["10001", "10001", "01010", "00100", "00100", "00100", "00100"],
+    "Z": ["11111", "00001", "00010", "00100", "01000", "10000", "11111"],
+    "0": ["01110", "10001", "10011", "10101", "11001", "10001", "01110"],
+    "1": ["00100", "01100", "00100", "00100", "00100", "00100", "01110"],
+    "2": ["01110", "10001", "00001", "00010", "00100", "01000", "11111"],
+    "3": ["11110", "00001", "00001", "01110", "00001", "00001", "11110"],
+    "4": ["00010", "00110", "01010", "10010", "11111", "00010", "00010"],
+    "5": ["11111", "10000", "10000", "11110", "00001", "00001", "11110"],
+    "6": ["01110", "10000", "10000", "11110", "10001", "10001", "01110"],
+    "7": ["11111", "00001", "00010", "00100", "01000", "01000", "01000"],
+    "8": ["01110", "10001", "10001", "01110", "10001", "10001", "01110"],
+    "9": ["01110", "10001", "10001", "01111", "00001", "00001", "01110"],
+    ".": ["00000", "00000", "00000", "00000", "00000", "01100", "01100"],
+    ",": ["00000", "00000", "00000", "00000", "01100", "00100", "01000"],
+    ":": ["00000", "01100", "01100", "00000", "01100", "01100", "00000"],
+    ";": ["00000", "01100", "01100", "00000", "01100", "00100", "01000"],
+    "!": ["00100", "00100", "00100", "00100", "00100", "00000", "00100"],
+    "?": ["01110", "10001", "00001", "00010", "00100", "00000", "00100"],
+    "-": ["00000", "00000", "00000", "11111", "00000", "00000", "00000"],
+    "_": ["00000", "00000", "00000", "00000", "00000", "00000", "11111"],
+    "/": ["00001", "00010", "00010", "00100", "01000", "01000", "10000"],
+    "'": ["00100", "00100", "01000", "00000", "00000", "00000", "00000"],
+    "\"": ["01010", "01010", "10001", "00000", "00000", "00000", "00000"],
+    "(": ["00010", "00100", "01000", "01000", "01000", "00100", "00010"],
+    ")": ["01000", "00100", "00010", "00010", "00010", "00100", "01000"],
+    " ": ["00000", "00000", "00000", "00000", "00000", "00000", "00000"]
+  };
+
+  class SeededRandom {
+    constructor(seed) {
+      this.state = hashSeed(seed);
+      if (this.state === 0) this.state = 0x6d2b79f5;
+    }
+
+    next() {
+      let t = this.state += 0x6d2b79f5;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+
+    range(min, max) {
+      return min + (max - min) * this.next();
+    }
+
+    chance(probability) {
+      return this.next() < clamp01(probability);
+    }
+  }
+
+  class GysinPlot {
+    constructor(options = {}) {
+      this.p = options.p || null;
+      this.globalSeed = options.seed === undefined ? 1 : options.seed;
+      this.defaultHuman = Object.assign({}, DEFAULT_HUMAN, options.human || {});
+      this.defaultStyle = Object.assign({}, DEFAULT_STYLE, options.style || {});
+      this.defaultExport = Object.assign({}, DEFAULT_EXPORT, options.export || {});
+      this.width = options.width || null;
+      this.height = options.height || null;
+      this.shapes = [];
+      this.shapeMap = new Map();
+      this.nextId = 1;
+      this.selectedId = null;
+    }
+
+    line(x1, y1, x2, y2, options = {}) {
+      return this._addShape("line", { x1, y1, x2, y2 }, false, options);
+    }
+
+    rect(x, y, w, h, options = {}) {
+      return this._addShape("rect", { x, y, w, h }, true, options);
+    }
+
+    circle(x, y, diameter, options = {}) {
+      return this._addShape("circle", { x, y, diameter }, true, options);
+    }
+
+    polygon(points, options = {}) {
+      return this._addShape("polygon", { points: normalizePoints(points) }, true, options);
+    }
+
+    path(points, options = {}) {
+      const closed = options.closed === true;
+      return this._addShape("path", { points: normalizePoints(points) }, closed, options);
+    }
+
+    text(value, x, y, options = {}) {
+      return this._addShape("text", textParams(value, x, y, options), false, options);
+    }
+
+    textCutup(value, x, y, options = {}) {
+      const params = textParams(value, x, y, options);
+      params.slices = options.slices || 7;
+      params.sliceOffset = options.sliceOffset === undefined ? params.size * 0.18 : options.sliceOffset;
+      params.sliceDropout = options.sliceDropout === undefined ? 0.08 : options.sliceDropout;
+      return this._addShape("textCutup", params, false, options);
+    }
+
+    draw() {
+      const p = this._p();
+      if (!p || !p.beginShape) return;
+
+      p.push();
+      p.noFill();
+
+      for (const shape of this.shapes) {
+        this._ensureGenerated(shape);
+        for (const trace of shape.generated) {
+          if (trace.points.length < 2) continue;
+
+          const ctx = p.drawingContext || global.drawingContext;
+          const oldAlpha = ctx ? ctx.globalAlpha : 1;
+          if (ctx) ctx.globalAlpha = trace.style.alpha;
+
+          p.stroke(trace.style.stroke);
+          p.strokeWeight(trace.style.strokeWeight);
+          p.beginShape();
+          for (const pt of trace.points) {
+            p.vertex(pt.x, pt.y);
+          }
+          p.endShape();
+
+          if (ctx) ctx.globalAlpha = oldAlpha;
+        }
+      }
+
+      p.pop();
+    }
+
+    clear() {
+      this.shapes = [];
+      this.shapeMap.clear();
+      this.selectedId = null;
+    }
+
+    get(id) {
+      return this.shapeMap.get(id) || null;
+    }
+
+    select(id) {
+      if (!this.shapeMap.has(id)) return null;
+      this.selectedId = id;
+      return this.get(id);
+    }
+
+    freeze(id = this.selectedId) {
+      const shape = this.get(id);
+      if (!shape) return null;
+      this._ensureGenerated(shape);
+      shape.frozen = true;
+      return shape;
+    }
+
+    thaw(id = this.selectedId) {
+      const shape = this.get(id);
+      if (!shape) return null;
+      shape.frozen = false;
+      return shape;
+    }
+
+    regenerate(id = null) {
+      if (id === null) {
+        for (const shape of this.shapes) {
+          if (!shape.frozen) this._regenerateShape(shape);
+        }
+        return this;
+      }
+
+      const shape = this.get(id);
+      if (!shape || shape.frozen) return shape;
+      this._regenerateShape(shape);
+      return shape;
+    }
+
+    remove(id = this.selectedId) {
+      const shape = this.get(id);
+      if (!shape) return false;
+      this.shapeMap.delete(id);
+      this.shapes = this.shapes.filter((item) => item.id !== id);
+      if (this.selectedId === id) this.selectedId = null;
+      return true;
+    }
+
+    update(id, options = {}) {
+      const shape = this.get(id);
+      if (!shape) return null;
+
+      const split = splitOptions(options);
+      Object.assign(shape.human, split.human);
+      Object.assign(shape.style, split.style);
+      Object.assign(shape.exportSettings, split.exportSettings);
+
+      const paramKeys = Object.keys(options.params || {});
+      for (const key of paramKeys) shape.params[key] = options.params[key];
+
+      if (!shape.frozen) this._regenerateShape(shape);
+      return shape;
+    }
+
+    setSeed(seed) {
+      this.globalSeed = seed;
+      for (const shape of this.shapes) {
+        if (shape.human.seed === null || shape.human.seed === undefined) {
+          shape.seed = hashSeed(`${this.globalSeed}:${shape.id}:${shape.type}`);
+        }
+      }
+      this.regenerate();
+    }
+
+    exportSVG(options = {}) {
+      const width = options.width || this.width || global.width || 800;
+      const height = options.height || this.height || global.height || 800;
+      const title = escapeXML(options.title || "p5.gysin export");
+      const decimals = options.decimals === undefined ? 2 : options.decimals;
+      const lines = [];
+
+      lines.push(`<?xml version="1.0" encoding="UTF-8"?>`);
+      lines.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${round(width, decimals)}" height="${round(height, decimals)}" viewBox="0 0 ${round(width, decimals)} ${round(height, decimals)}">`);
+      lines.push(`  <title>${title}</title>`);
+      lines.push(`  <g fill="none" stroke-linecap="round" stroke-linejoin="round">`);
+
+      for (const shape of this.shapes) {
+        this._ensureGenerated(shape);
+        lines.push(`    <g id="${escapeXML(shape.id)}" data-type="${escapeXML(shape.type)}" data-layer="${escapeXML(shape.exportSettings.layer)}">`);
+        for (const trace of shape.generated) {
+          if (trace.points.length < 2) continue;
+          const d = svgPathD(trace.points, decimals);
+          lines.push(`      <path d="${d}" stroke="${escapeXML(trace.style.stroke)}" stroke-width="${round(trace.style.strokeWeight, decimals)}" opacity="${round(trace.style.alpha, decimals)}" />`);
+        }
+        lines.push(`    </g>`);
+      }
+
+      lines.push(`  </g>`);
+      lines.push(`</svg>`);
+      return lines.join("\n");
+    }
+
+    exportJSON(options = {}) {
+      const includeGenerated = options.includeGenerated !== false;
+      const data = {
+        library: "p5.gysin",
+        seed: this.globalSeed,
+        shapes: this.shapes.map((shape) => serializableShape(shape, includeGenerated))
+      };
+      return JSON.stringify(data, null, options.pretty === false ? 0 : 2);
+    }
+
+    exportHPGL(options = {}) {
+      const scale = options.scale || 40;
+      const offsetX = options.offsetX || 0;
+      const offsetY = options.offsetY || 0;
+      const lines = ["IN;", "SP1;"];
+
+      for (const shape of this.shapes) {
+        this._ensureGenerated(shape);
+        for (const trace of shape.generated) {
+          if (trace.points.length < 2) continue;
+          const first = hpglPoint(trace.points[0], scale, offsetX, offsetY);
+          lines.push(`PU${first.x},${first.y};`);
+          const rest = trace.points.slice(1).map((pt) => {
+            const p = hpglPoint(pt, scale, offsetX, offsetY);
+            return `${p.x},${p.y}`;
+          });
+          lines.push(`PD${rest.join(",")};`);
+        }
+      }
+
+      lines.push("PU;");
+      lines.push("SP0;");
+      return lines.join("\n");
+    }
+
+    downloadSVG(filename = "gysin.svg", options = {}) {
+      downloadText(filename, this.exportSVG(options), "image/svg+xml");
+    }
+
+    downloadJSON(filename = "gysin.json", options = {}) {
+      downloadText(filename, this.exportJSON(options), "application/json");
+    }
+
+    _addShape(type, params, closed, options) {
+      const split = splitOptions(options);
+      const id = options.id || `hp_${this.nextId++}`;
+      const human = Object.assign({}, this.defaultHuman, split.human);
+      const seed = human.seed === null || human.seed === undefined
+        ? hashSeed(`${this.globalSeed}:${id}:${type}`)
+        : human.seed;
+
+      const shape = {
+        id,
+        type,
+        params,
+        points: [],
+        paths: [],
+        closed,
+        style: Object.assign({}, this.defaultStyle, split.style),
+        seed,
+        human,
+        exportSettings: Object.assign({}, this.defaultExport, split.exportSettings),
+        frozen: options.frozen === true,
+        generated: [],
+        bounds: null,
+        dirty: true
+      };
+
+      this._regenerateShape(shape);
+      this.shapes.push(shape);
+      this.shapeMap.set(id, shape);
+      this.selectedId = id;
+      return id;
+    }
+
+    _ensureGenerated(shape) {
+      if (shape.dirty && !shape.frozen) this._regenerateShape(shape);
+    }
+
+    _regenerateShape(shape) {
+      shape.paths = this._sampleShape(shape);
+      shape.points = flatten(shape.paths);
+      shape.bounds = boundsOfPaths(shape.paths);
+      shape.generated = this._humanizeShape(shape);
+      shape.dirty = false;
+    }
+
+    _sampleShape(shape) {
+      const h = shape.human;
+      const p = shape.params;
+
+      if (shape.type === "line") {
+        return [this._samplePolyline([{ x: p.x1, y: p.y1 }, { x: p.x2, y: p.y2 }], false, h)];
+      }
+
+      if (shape.type === "rect") {
+        const corners = [
+          { x: p.x, y: p.y },
+          { x: p.x + p.w, y: p.y },
+          { x: p.x + p.w, y: p.y + p.h },
+          { x: p.x, y: p.y + p.h }
+        ];
+        return [this._samplePolyline(corners, true, h)];
+      }
+
+      if (shape.type === "circle") {
+        return [this._sampleCircle(p.x, p.y, p.diameter, h)];
+      }
+
+      if (shape.type === "polygon") {
+        return [this._samplePolyline(p.points, true, h)];
+      }
+
+      if (shape.type === "path") {
+        return [this._samplePolyline(p.points, shape.closed, h)];
+      }
+
+      if (shape.type === "text" || shape.type === "textCutup") {
+        return this._sampleTextPaths(shape);
+      }
+
+      return [];
+    }
+
+    _samplePolyline(points, closed, human) {
+      const result = [];
+      if (!points || points.length < 2) return result;
+      const spacing = sampleSpacing(human);
+      const count = closed ? points.length : points.length - 1;
+
+      for (let i = 0; i < count; i++) {
+        const a = points[i];
+        const b = points[(i + 1) % points.length];
+        const dist = distance(a, b);
+        const steps = Math.max(1, Math.ceil(dist / spacing));
+        if (result.length === 0) result.push(copyPoint(a));
+        for (let j = 1; j <= steps; j++) {
+          result.push(lerpPoint(a, b, j / steps));
+        }
+      }
+
+      return result;
+    }
+
+    _sampleCircle(x, y, diameter, human) {
+      const radius = diameter / 2;
+      const spacing = sampleSpacing(human);
+      const steps = Math.max(12, Math.ceil((Math.PI * diameter) / spacing));
+      const points = [];
+
+      for (let i = 0; i <= steps; i++) {
+        const angle = (Math.PI * 2 * i) / steps;
+        points.push({
+          x: x + Math.cos(angle) * radius,
+          y: y + Math.sin(angle) * radius
+        });
+      }
+
+      return points;
+    }
+
+    _sampleTextPaths(shape) {
+      const params = shape.params;
+      const hasFont = params.font && typeof params.font.textToPoints === "function";
+      const paths = hasFont ? this._fontTextPaths(shape) : this._bitmapTextPaths(shape);
+
+      if (shape.type === "textCutup" && hasFont) {
+        return this._applyCutupToPaths(paths, shape);
+      }
+
+      return paths;
+    }
+
+    _fontTextPaths(shape) {
+      const params = shape.params;
+      const font = params.font;
+      let raw;
+
+      try {
+        raw = font.textToPoints(params.value, params.x, params.y, params.size, {
+          sampleFactor: params.sampleFactor,
+          simplifyThreshold: 0
+        });
+      } catch (error) {
+        raw = font.textToPoints(params.value, params.x, params.y, params.size, params.sampleFactor);
+      }
+
+      const points = raw.map((pt) => ({ x: pt.x, y: pt.y }));
+      const maxJump = params.size * 0.45;
+      return splitLongJumps(points, maxJump);
+    }
+
+    _bitmapTextPaths(shape) {
+      const params = shape.params;
+      const rng = new SeededRandom(`${shape.seed}:cutup`);
+      const paths = [];
+      const lines = String(params.value).toUpperCase().split("\n");
+      const cell = params.size / 7;
+      const glyphWidth = cell * 5;
+      const gap = cell * params.letterSpacing;
+      const lineHeight = params.size * params.lineHeight;
+      const cutup = shape.type === "textCutup";
+      const rowOffsets = [];
+
+      for (let i = 0; i < 7; i++) {
+        rowOffsets[i] = cutup ? rng.range(-params.sliceOffset, params.sliceOffset) : 0;
+      }
+
+      for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+        const line = lines[lineIndex];
+        const top = params.y + lineIndex * lineHeight - params.size;
+        let cursorX = params.x;
+
+        for (const char of line) {
+          const glyph = SIMPLE_FONT[char] || SIMPLE_FONT["?"];
+
+          for (let row = 0; row < 7; row++) {
+            if (cutup && rng.chance(params.sliceDropout * 0.25)) continue;
+            const bits = glyph[row];
+            const y = top + row * cell + cell * 0.5;
+            const shiftX = rowOffsets[row];
+            let col = 0;
+
+            while (col < 5) {
+              while (col < 5 && bits[col] !== "1") col++;
+              if (col >= 5) break;
+              const start = col;
+              while (col < 5 && bits[col] === "1") col++;
+              const end = col;
+              paths.push([
+                { x: cursorX + start * cell + shiftX, y },
+                { x: cursorX + end * cell - cell * 0.15 + shiftX, y }
+              ]);
+            }
+          }
+
+          cursorX += glyphWidth + gap;
+        }
+      }
+
+      return paths.map((path) => this._samplePolyline(path, false, shape.human));
+    }
+
+    _applyCutupToPaths(paths, shape) {
+      const params = shape.params;
+      const bounds = boundsOfPaths(paths);
+      if (!bounds) return paths;
+
+      const rng = new SeededRandom(`${shape.seed}:font-cutup`);
+      const slices = Math.max(2, Math.round(params.slices || 7));
+      const offsets = [];
+      for (let i = 0; i < slices; i++) {
+        offsets[i] = rng.range(-params.sliceOffset, params.sliceOffset);
+      }
+
+      const sliceHeight = Math.max(1, bounds.height / slices);
+      const result = [];
+
+      for (const path of paths) {
+        let current = [];
+        let currentSlice = -1;
+
+        for (const pt of path) {
+          const slice = Math.max(0, Math.min(slices - 1, Math.floor((pt.y - bounds.minY) / sliceHeight)));
+          if (rng.chance(params.sliceDropout * 0.04)) {
+            pushIfLine(result, current);
+            current = [];
+            currentSlice = -1;
+            continue;
+          }
+
+          if (currentSlice !== -1 && slice !== currentSlice) {
+            pushIfLine(result, current);
+            current = [];
+          }
+
+          currentSlice = slice;
+          current.push({ x: pt.x + offsets[slice], y: pt.y });
+        }
+
+        pushIfLine(result, current);
+      }
+
+      return result;
+    }
+
+    _humanizeShape(shape) {
+      const h = shape.human;
+      const rng = new SeededRandom(shape.seed);
+      const traces = [];
+      const repeat = Math.max(1, Math.round(h.repeat || 1));
+      const ruboutZones = makeRuboutZones(shape.bounds, h.rubout, rng);
+
+      for (let r = 0; r < repeat; r++) {
+        const driftAmount = Number(h.drift) || 0;
+        const driftX = r === 0 ? 0 : rng.range(-driftAmount, driftAmount);
+        const driftY = r === 0 ? 0 : rng.range(-driftAmount, driftAmount);
+
+        for (const basePath of shape.paths) {
+          let path = basePath.map(copyPoint);
+          if (!shape.closed && h.overshoot) {
+            path = extendOpenPath(path, Number(h.overshoot), rng);
+          }
+
+          let current = [];
+          for (let i = 0; i < path.length; i++) {
+            const source = path[i];
+            const erased = insideAnyRuboutZone(source, ruboutZones);
+            const dropped = rng.chance(h.dropout);
+
+            if (erased || dropped) {
+              this._pushTrace(traces, current, shape, rng);
+              current = [];
+              continue;
+            }
+
+            const wobble = Number(h.wobble) || 0;
+            const pt = {
+              x: source.x + driftX + rng.range(-wobble, wobble),
+              y: source.y + driftY + rng.range(-wobble, wobble)
+            };
+
+            if (h.hesitate && current.length > 0 && rng.chance(h.hesitate * 0.08)) {
+              current.push({
+                x: pt.x + rng.range(-wobble * 0.5 - 0.5, wobble * 0.5 + 0.5),
+                y: pt.y + rng.range(-wobble * 0.5 - 0.5, wobble * 0.5 + 0.5)
+              });
+            }
+
+            current.push(pt);
+
+            if (h.fray && rng.chance(h.fray * 0.012)) {
+              const angle = rng.range(0, Math.PI * 2);
+              const len = rng.range(1, 5 + h.fray * 5);
+              traces.push({
+                points: [
+                  copyPoint(pt),
+                  { x: pt.x + Math.cos(angle) * len, y: pt.y + Math.sin(angle) * len }
+                ],
+                style: traceStyle(shape.style, h, rng)
+              });
+            }
+          }
+
+          this._pushTrace(traces, current, shape, rng);
+        }
+      }
+
+      return traces;
+    }
+
+    _pushTrace(traces, points, shape, rng) {
+      if (!points || points.length < 2) return;
+
+      const simplified = simplify(points, shape.exportSettings.simplify);
+      if (simplified.length < 2) return;
+      if (pathLength(simplified) < shape.exportSettings.minSegmentLength) return;
+
+      traces.push({
+        points: simplified,
+        style: traceStyle(shape.style, shape.human, rng)
+      });
+    }
+
+    _p() {
+      return this.p || global;
+    }
+  }
+
+  function textParams(value, x, y, options) {
+    return {
+      value: String(value),
+      x,
+      y,
+      size: options.size || 64,
+      font: options.font || null,
+      sampleFactor: options.sampleFactor || 0.18,
+      lineHeight: options.lineHeight || 1.15,
+      letterSpacing: options.letterSpacing === undefined ? 0.9 : options.letterSpacing
+    };
+  }
+
+  function splitOptions(options) {
+    const human = {};
+    const style = {};
+    const exportSettings = {};
+
+    for (const key of HUMAN_KEYS) {
+      if (Object.prototype.hasOwnProperty.call(options, key)) human[key] = options[key];
+    }
+    for (const key of STYLE_KEYS) {
+      if (Object.prototype.hasOwnProperty.call(options, key)) style[key] = options[key];
+    }
+    for (const key of EXPORT_KEYS) {
+      if (Object.prototype.hasOwnProperty.call(options, key)) exportSettings[key] = options[key];
+    }
+
+    Object.assign(human, options.human || {});
+    Object.assign(style, options.style || {});
+    Object.assign(exportSettings, options.export || {});
+
+    return { human, style, exportSettings };
+  }
+
+  function sampleSpacing(human) {
+    const segmentLength = Math.max(0.5, Number(human.segmentLength) || 8);
+    const density = Math.max(0.05, Number(human.density) || 1);
+    return Math.max(0.5, segmentLength / density);
+  }
+
+  function normalizePoints(points) {
+    if (!Array.isArray(points)) return [];
+    return points.map((pt) => {
+      if (Array.isArray(pt)) return { x: Number(pt[0]), y: Number(pt[1]) };
+      return { x: Number(pt.x), y: Number(pt.y) };
+    }).filter((pt) => Number.isFinite(pt.x) && Number.isFinite(pt.y));
+  }
+
+  function hashSeed(value) {
+    const str = String(value);
+    let h = 2166136261;
+    for (let i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+
+  function copyPoint(pt) {
+    return { x: pt.x, y: pt.y };
+  }
+
+  function lerpPoint(a, b, t) {
+    return {
+      x: a.x + (b.x - a.x) * t,
+      y: a.y + (b.y - a.y) * t
+    };
+  }
+
+  function distance(a, b) {
+    return Math.hypot(b.x - a.x, b.y - a.y);
+  }
+
+  function flatten(paths) {
+    return paths.reduce((all, path) => all.concat(path), []);
+  }
+
+  function boundsOfPaths(paths) {
+    const points = flatten(paths);
+    if (points.length === 0) return null;
+
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+
+    for (const pt of points) {
+      minX = Math.min(minX, pt.x);
+      minY = Math.min(minY, pt.y);
+      maxX = Math.max(maxX, pt.x);
+      maxY = Math.max(maxY, pt.y);
+    }
+
+    return {
+      minX,
+      minY,
+      maxX,
+      maxY,
+      width: maxX - minX,
+      height: maxY - minY
+    };
+  }
+
+  function makeRuboutZones(bounds, amount, rng) {
+    amount = clamp01(amount);
+    if (!bounds || amount <= 0) return [];
+
+    const count = Math.max(1, Math.ceil(amount * 7));
+    const zones = [];
+
+    for (let i = 0; i < count; i++) {
+      zones.push({
+        x: rng.range(bounds.minX, bounds.maxX),
+        y: rng.range(bounds.minY, bounds.maxY),
+        rx: Math.max(4, bounds.width * rng.range(0.04, 0.11 + amount * 0.18)),
+        ry: Math.max(4, bounds.height * rng.range(0.05, 0.14 + amount * 0.22)),
+        strength: amount
+      });
+    }
+
+    return zones;
+  }
+
+  function insideAnyRuboutZone(point, zones) {
+    for (const zone of zones) {
+      const dx = (point.x - zone.x) / zone.rx;
+      const dy = (point.y - zone.y) / zone.ry;
+      if (dx * dx + dy * dy <= 1) return true;
+    }
+    return false;
+  }
+
+  function extendOpenPath(points, amount, rng) {
+    if (!points || points.length < 2 || amount <= 0) return points;
+
+    const first = points[0];
+    const second = points[1];
+    const last = points[points.length - 1];
+    const beforeLast = points[points.length - 2];
+    const startDir = unitVector(second.x - first.x, second.y - first.y);
+    const endDir = unitVector(last.x - beforeLast.x, last.y - beforeLast.y);
+    const startAmount = amount * rng.range(0.55, 1.2);
+    const endAmount = amount * rng.range(0.55, 1.2);
+
+    const extended = points.map(copyPoint);
+    extended[0] = {
+      x: first.x - startDir.x * startAmount,
+      y: first.y - startDir.y * startAmount
+    };
+    extended[extended.length - 1] = {
+      x: last.x + endDir.x * endAmount,
+      y: last.y + endDir.y * endAmount
+    };
+
+    return extended;
+  }
+
+  function unitVector(x, y) {
+    const len = Math.hypot(x, y) || 1;
+    return { x: x / len, y: y / len };
+  }
+
+  function traceStyle(style, human, rng) {
+    const pressure = clamp01(human.pressure || 0);
+    const weightFactor = 1 + rng.range(-pressure * 0.35, pressure * 0.35);
+    const alphaFactor = 1 - rng.range(0, pressure * 0.25);
+
+    return {
+      stroke: style.stroke,
+      strokeWeight: Math.max(0.1, style.strokeWeight * weightFactor),
+      alpha: clamp01(style.alpha * alphaFactor)
+    };
+  }
+
+  function splitLongJumps(points, maxJump) {
+    const paths = [];
+    let current = [];
+
+    for (const pt of points) {
+      if (current.length > 0 && distance(current[current.length - 1], pt) > maxJump) {
+        pushIfLine(paths, current);
+        current = [];
+      }
+      current.push(pt);
+    }
+
+    pushIfLine(paths, current);
+    return paths;
+  }
+
+  function pushIfLine(paths, points) {
+    if (points && points.length >= 2) paths.push(points.map(copyPoint));
+  }
+
+  function simplify(points, tolerance) {
+    tolerance = Math.max(0, Number(tolerance) || 0);
+    if (points.length <= 2 || tolerance === 0) return points.map(copyPoint);
+
+    const sqTolerance = tolerance * tolerance;
+    const result = [points[0]];
+    simplifyStep(points, 0, points.length - 1, sqTolerance, result);
+    result.push(points[points.length - 1]);
+    return result;
+  }
+
+  function simplifyStep(points, first, last, sqTolerance, result) {
+    let maxSqDist = sqTolerance;
+    let index = -1;
+
+    for (let i = first + 1; i < last; i++) {
+      const sqDist = sqSegmentDistance(points[i], points[first], points[last]);
+      if (sqDist > maxSqDist) {
+        index = i;
+        maxSqDist = sqDist;
+      }
+    }
+
+    if (index !== -1) {
+      if (index - first > 1) simplifyStep(points, first, index, sqTolerance, result);
+      result.push(points[index]);
+      if (last - index > 1) simplifyStep(points, index, last, sqTolerance, result);
+    }
+  }
+
+  function sqSegmentDistance(p, a, b) {
+    let x = a.x;
+    let y = a.y;
+    let dx = b.x - x;
+    let dy = b.y - y;
+
+    if (dx !== 0 || dy !== 0) {
+      const t = ((p.x - x) * dx + (p.y - y) * dy) / (dx * dx + dy * dy);
+      if (t > 1) {
+        x = b.x;
+        y = b.y;
+      } else if (t > 0) {
+        x += dx * t;
+        y += dy * t;
+      }
+    }
+
+    dx = p.x - x;
+    dy = p.y - y;
+    return dx * dx + dy * dy;
+  }
+
+  function pathLength(points) {
+    let total = 0;
+    for (let i = 1; i < points.length; i++) total += distance(points[i - 1], points[i]);
+    return total;
+  }
+
+  function svgPathD(points, decimals) {
+    const first = points[0];
+    const commands = [`M ${round(first.x, decimals)} ${round(first.y, decimals)}`];
+    for (let i = 1; i < points.length; i++) {
+      commands.push(`L ${round(points[i].x, decimals)} ${round(points[i].y, decimals)}`);
+    }
+    return commands.join(" ");
+  }
+
+  function hpglPoint(point, scale, offsetX, offsetY) {
+    return {
+      x: Math.round((point.x + offsetX) * scale),
+      y: Math.round((point.y + offsetY) * scale)
+    };
+  }
+
+  function serializableShape(shape, includeGenerated) {
+    const data = {
+      id: shape.id,
+      type: shape.type,
+      params: cleanParams(shape.params),
+      points: shape.points,
+      closed: shape.closed,
+      style: shape.style,
+      seed: shape.seed,
+      human: shape.human,
+      exportSettings: shape.exportSettings,
+      frozen: shape.frozen
+    };
+
+    if (includeGenerated) data.generated = shape.generated;
+    return data;
+  }
+
+  function cleanParams(params) {
+    const clean = {};
+    for (const key of Object.keys(params)) {
+      if (key === "font" && params[key]) clean[key] = "[p5.Font]";
+      else clean[key] = params[key];
+    }
+    return clean;
+  }
+
+  function downloadText(filename, text, type) {
+    const blob = new Blob([text], { type });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  function round(value, decimals) {
+    const factor = Math.pow(10, decimals);
+    return Math.round(value * factor) / factor;
+  }
+
+  function escapeXML(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function clamp01(value) {
+    return Math.max(0, Math.min(1, Number(value) || 0));
+  }
+
+  global.GysinPlot = GysinPlot;
+
+  if (global.p5) {
+    global.p5.GysinPlot = GysinPlot;
+    global.p5.prototype.createGysinPlot = function (options = {}) {
+      return new GysinPlot(Object.assign({}, options, { p: this }));
+    };
+  }
+})(typeof window !== "undefined" ? window : globalThis);

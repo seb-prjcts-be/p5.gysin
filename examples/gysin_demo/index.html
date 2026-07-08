@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gysin Demo | p5.gysin examples</title>
+  <link rel="stylesheet" href="../showcase.css">
+</head>
+<body>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Showcase</a></li>
+      <li><a href="../../docs/examples.html" class="active">Examples</a></li>
+      <li><a href="../../docs/guide.html">Guide</a></li>
+      <li><a href="../../docs/about.html">About</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">textCutup() + vector traces</div>
+      <h1>Gysin Demo</h1>
+      <p>Cut-up typography, repeated contours, rubout gaps, uncertain plotter lines, and exportable vector output. Press <code>S</code> for SVG, <code>J</code> for JSON, or <code>R</code> to regenerate unfrozen traces.</p>
+    </div>
+    <div class="demo-layout">
+      <div class="demo-code">
+        <div class="code-label">Core snippet</div>
+        <pre><code>const plot = new GysinPlot({ seed: 19600319 });
+
+plot.textCutup("I THINK THEREFORE I AM", 76, 370, {
+  size: 55,
+  slices: 9,
+  sliceOffset: 24,
+  dropout: 0.09,
+  repeat: 2,
+  rubout: 0.12
+});
+
+plot.draw();</code></pre>
+      </div>
+      <div class="demo-canvas" id="sketch"></div>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      <a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp;
+      <a href="../../docs/guide.html">Guide</a>
+    </p>
+    <p class="footer-sub">p5.gysin v0.1.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="sketch.js"></script>
+</body>
+</html>

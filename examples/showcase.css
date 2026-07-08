@@ -1,0 +1,173 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap");
+
+:root {
+  --paper: #f5f5f5;
+  --paper-deep: #e8e8e8;
+  --ink: #151515;
+  --muted: #625d55;
+  --rule: #b8ae9d;
+  --red: #b5362b;
+  --blue: #244f73;
+  --white: #fbfaf5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Arial, sans-serif;
+}
+
+a {
+  color: inherit;
+}
+
+code,
+pre {
+  font-family: Consolas, "Courier New", monospace;
+}
+
+#navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+  padding: 0 28px;
+  background: rgba(245, 245, 245, 0.94);
+  border-bottom: 1px solid var(--rule);
+}
+
+.nav-logo {
+  font-family: "Oswald", Arial, sans-serif;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.nav-logo span {
+  color: var(--red);
+}
+
+.nav-links {
+  display: flex;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.nav-links a.active,
+.nav-links a:hover {
+  color: var(--ink);
+}
+
+.demo-page {
+  min-height: calc(100vh - 64px);
+  padding: 56px 5vw 72px;
+}
+
+.demo-header {
+  max-width: 940px;
+  margin: 0 auto 28px;
+}
+
+.demo-number,
+.code-label {
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.demo-header h1 {
+  font-family: "Oswald", Arial, sans-serif;
+  font-weight: 600;
+  margin: 8px 0 10px;
+  font-size: clamp(44px, 9vw, 104px);
+  line-height: 1;
+}
+
+.demo-header p {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.demo-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.72fr) minmax(320px, 1fr);
+  gap: 22px;
+  align-items: start;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.demo-code {
+  padding: 20px;
+  border: 1px solid var(--rule);
+  background: rgba(251, 250, 245, 0.58);
+}
+
+.demo-code pre {
+  overflow: auto;
+  margin: 14px 0 0;
+  padding: 18px;
+  background: #171614;
+  color: #f2eee5;
+}
+
+.demo-canvas {
+  display: grid;
+  place-items: center;
+  min-height: 420px;
+}
+
+.demo-canvas canvas {
+  display: block;
+  max-width: min(100%, 900px);
+  height: auto !important;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.16);
+}
+
+footer {
+  padding: 32px 5vw;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  text-align: center;
+}
+
+.footer-sub {
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  #navbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 18px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+  }
+
+  .demo-layout {
+    grid-template-columns: 1fr;
+  }
+}

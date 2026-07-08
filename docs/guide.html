@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide | p5.gysin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav id="navbar">
+    <a class="nav-logo" href="../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Showcase</a></li>
+      <li><a href="examples.html">Examples</a></li>
+      <li><a href="guide.html" class="active">Guide</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <header class="page-header">
+    <div class="section-tag">API guide</div>
+    <h1>Guide</h1>
+    <p>p5.gysin captures vector shapes first, then turns them into plotter-friendly traces. The generated paths are the same paths used for drawing, SVG, JSON, and HPGL export.</p>
+  </header>
+
+  <main class="section guide-layout">
+    <section class="guide-block">
+      <h2>Setup</h2>
+      <div class="code-preview">
+        <code>&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
+&lt;script src="../p5.gysin.min.js"&gt;&lt;/script&gt;</code>
+      </div>
+    </section>
+
+    <section class="guide-block">
+      <h2>Basic Use</h2>
+      <div class="code-preview">
+        <code>let plot;
+
+function setup() {
+  createCanvas(800, 800);
+  plot = new GysinPlot({ seed: 1960 });
+
+  plot.textCutup("RUB OUT THE WORD", 80, 180, {
+    size: 72,
+    wobble: 2,
+    dropout: 0.12,
+    repeat: 2,
+    rubout: 0.25
+  });
+
+  plot.line(80, 260, 720, 280, {
+    wobble: 1,
+    dropout: 0.05,
+    overshoot: 8
+  });
+
+  plot.draw();
+}</code>
+      </div>
+    </section>
+
+    <section class="guide-block">
+      <h2>Shape Methods</h2>
+      <ul>
+        <li>`plot.line(x1, y1, x2, y2, options)`</li>
+        <li>`plot.rect(x, y, w, h, options)`</li>
+        <li>`plot.circle(x, y, diameter, options)`</li>
+        <li>`plot.polygon(points, options)`</li>
+        <li>`plot.path(points, options)`</li>
+        <li>`plot.text(value, x, y, options)`</li>
+        <li>`plot.textCutup(value, x, y, options)`</li>
+      </ul>
+    </section>
+
+    <section class="guide-block">
+      <h2>Trace Parameters</h2>
+      <ul>
+        <li>`density`: point sampling density.</li>
+        <li>`wobble`: maximum point displacement in pixels.</li>
+        <li>`dropout`: probability that a point interrupts a path.</li>
+        <li>`repeat`: number of near-identical redraws.</li>
+        <li>`drift`: global offset between repeats.</li>
+        <li>`rubout`: generated zones that remove parts of the trace.</li>
+        <li>`fray`: small loose edge strokes.</li>
+        <li>`overshoot`: extends open paths beyond endpoints.</li>
+        <li>`segmentLength`: target spacing between sampled points.</li>
+        <li>`seed`: per-shape deterministic seed.</li>
+      </ul>
+    </section>
+
+    <section class="guide-block">
+      <h2>Addressing</h2>
+      <div class="code-preview">
+        <code>const titleId = plot.text("RUB OUT", 80, 180, { wobble: 2 });
+
+plot.freeze(titleId);
+plot.update(titleId, { stroke: "#b5362b" });
+plot.thaw(titleId);
+plot.regenerate(titleId);
+plot.remove(titleId);</code>
+      </div>
+    </section>
+
+    <section class="guide-block">
+      <h2>Export</h2>
+      <div class="code-preview">
+        <code>const svg = plot.exportSVG({ width: 800, height: 800 });
+const json = plot.exportJSON();
+const hpgl = plot.exportHPGL({ scale: 40 });
+
+plot.downloadSVG("gysin.svg");
+plot.downloadJSON("gysin.json");</code>
+      </div>
+    </section>
+
+    <section class="guide-block">
+      <h2>Text</h2>
+      <p>When you pass `options.font`, p5.gysin uses `font.textToPoints()` if it is available. Without a font, it falls back to a simple vector alphabet, so demos and teaching sketches stay dependency-free.</p>
+      <p>For p5.js 2.x, load fonts with `async setup()` and `await loadFont(...)` before passing the font to `plot.text()`.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p><a href="examples.html">Examples</a> &nbsp;&middot;&nbsp; <a href="../index.html">Showcase</a></p>
+    <p class="footer-sub">p5.gysin v0.1.0</p>
+  </footer>
+</body>
+</html>

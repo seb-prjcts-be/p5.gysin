@@ -1,0 +1,35 @@
+{
+  "$schema_note": "Manual seed manifest for the p5.gysin MVP. Keep in sync with p5.gysin.js and examples/ until a generator exists.",
+  "version": "0.1.0",
+  "commit": null,
+  "generated": "2026-07-08",
+  "pages_url": "https://seb-prjcts-be.github.io/p5.gysin/docs/p5.gysin.manifest.json",
+  "p5js_target": "2.x",
+  "shape_methods": [
+    "line",
+    "rect",
+    "circle",
+    "polygon",
+    "path",
+    "text",
+    "textCutup"
+  ],
+  "exports": [
+    "SVG",
+    "JSON",
+    "HPGL"
+  ],
+  "examples": [
+    "gysin_demo"
+  ],
+  "removed_apis": [],
+  "added_apis": [
+    {
+      "name": "GysinPlot",
+      "added_in": "0.1.0",
+      "status": "mvp",
+      "note": "Main class for vector capture, sampling, humanized traces, addressing, and export."
+    }
+  ]
+}
+

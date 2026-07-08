@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>p5.gysin - vector traces for plotter drawings</title>
+  <meta name="description" content="p5.gysin is a vector-first p5.js addon for plotter-friendly drawings, cut-up typography, rubout gaps, repeated contours, and uncertain lines.">
+  <meta property="og:title" content="p5.gysin - vector traces for plotter drawings">
+  <meta property="og:description" content="Vector-first traces for cut-up text, rubout gaps, dropout lines, repeats, wobble, SVG, JSON, and HPGL export.">
+  <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="docs/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="p5.gysin.min.js"></script>
+</head>
+<body>
+  <nav id="navbar">
+    <a class="nav-logo" href="#hero"><span>p5</span>.gysin</a>
+    <button class="nav-hamburger" aria-label="Toggle menu" onclick="this.closest('nav').classList.toggle('nav-open')">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#hero" class="active">Showcase</a></li>
+      <li><a href="docs/examples.html">Examples</a></li>
+      <li><a href="docs/guide.html">Guide</a></li>
+      <li><a href="docs/about.html">About</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <section id="hero">
+    <div id="hero-canvas"></div>
+    <div class="hero-overlay">
+      <div class="hero-text">
+        <div class="hero-badge">p5.js addon library</div>
+        <h1>p5.<span class="accent">gysin</span></h1>
+        <p class="hero-sub">Vector-first traces for cut-up text, rubout gaps, uncertain contours, and plotter-friendly export.</p>
+        <a href="docs/guide.html" class="cta-btn">Read the guide</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-tag">Draw as traces</div>
+      <h2>Not pixels. <span class="accent">Paths.</span></h2>
+      <p class="section-desc">Every call captures a vector shape, samples it into points, applies seeded damage and hesitation, then draws or exports the same generated polylines.</p>
+    </div>
+    <div class="feature-grid">
+      <article>
+        <h3>Capture</h3>
+        <p>Use `plot.line()`, `plot.rect()`, `plot.circle()`, `plot.polygon()`, `plot.path()`, `plot.text()`, and `plot.textCutup()`.</p>
+      </article>
+      <article>
+        <h3>Disturb</h3>
+        <p>Shape the trace with `wobble`, `dropout`, `repeat`, `drift`, `rubout`, `fray`, `overshoot`, and `pressure`.</p>
+      </article>
+      <article>
+        <h3>Export</h3>
+        <p>Keep output plotter-friendly with SVG, JSON, and HPGL export. No raster erase, no canvas pixel analysis.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="section-header">
+      <div class="section-tag">5 lines to start</div>
+      <h2>Get <span class="accent">Started</span></h2>
+    </div>
+    <div class="code-preview">
+      <code>&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
+&lt;script src="p5.gysin.min.js"&gt;&lt;/script&gt;
+
+function setup() {
+  createCanvas(800, 800);
+  const plot = new GysinPlot({ seed: 1960 });
+  plot.textCutup("RUB OUT THE WORD", 80, 180, {
+    size: 72,
+    wobble: 2,
+    dropout: 0.12,
+    repeat: 2,
+    rubout: 0.25
+  });
+  plot.draw();
+}</code>
+    </div>
+    <div class="button-row">
+      <a href="docs/examples.html" class="cta-btn">Examples</a>
+      <a href="docs/guide.html" class="cta-btn secondary">Guide</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Built with <a href="https://p5js.org" target="_blank">p5.js</a></p>
+    <p class="footer-sub">MIT License &middot; v0.1.0</p>
+  </footer>
+
+  <script src="docs/sketch.js"></script>
+</body>
+</html>
+
