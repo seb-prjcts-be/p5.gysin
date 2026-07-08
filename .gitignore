@@ -1,0 +1,45 @@
+# Dependencies and package-manager noise
+node_modules/
+.pnpm-store/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+
+# Build/test output that is not part of the committed library surface
+dist/
+build/
+coverage/
+.nyc_output/
+.cache/
+tmp/
+temp/
+
+# Local server and generated demo downloads
+*.log
+*.tmp
+p5-gysin-demo.svg
+p5-gysin-demo.json
+gysin.svg
+gysin.json
+
+# Keep project metadata tracked even when a global gitignore ignores it.
+!info.json
+!docs/info.json
+!examples/info.json
+
+# Important: p5.gysin.min.js is a committed distribution file.
+!p5.gysin.min.js
+

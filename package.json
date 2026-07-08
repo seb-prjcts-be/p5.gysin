@@ -4,10 +4,10 @@
   "description": "Vector-first plotter-friendly traces for p5.js.",
   "main": "p5.gysin.js",
   "scripts": {
+    "build:min": "node tools/build-min.js",
     "test": "node tests/snapshot.js"
   },
   "repository": "github:seb-prjcts-be/p5.gysin",
   "license": "MIT",
   "private": true
 }
-

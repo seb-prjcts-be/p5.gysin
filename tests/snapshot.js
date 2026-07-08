@@ -1,12 +1,25 @@
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const vm = require("node:vm");
 
-require("../p5.gysin.js");
+function loadLibrary(filename) {
+  const context = { console };
+  context.globalThis = context;
+  vm.createContext(context);
+  vm.runInContext(fs.readFileSync(filename, "utf8"), context, {
+    filename
+  });
+  assert.equal(typeof context.GysinPlot, "function");
+  assert.equal(typeof context["Human" + "Plot"], "undefined");
+  return context.GysinPlot;
+}
 
-assert.equal(typeof globalThis.GysinPlot, "function");
-assert.equal(typeof globalThis["Human" + "Plot"], "undefined");
+const SourcePlot = loadLibrary(path.join(__dirname, "..", "p5.gysin.js"));
+const MinPlot = loadLibrary(path.join(__dirname, "..", "p5.gysin.min.js"));
 
-function build() {
-  const plot = new globalThis.GysinPlot({ seed: 123, width: 400, height: 300 });
+function build(Plot) {
+  const plot = new Plot({ seed: 123, width: 400, height: 300 });
   const lineId = plot.line(10, 10, 390, 20, {
     wobble: 1,
     dropout: 0.02,
@@ -30,11 +43,16 @@ function build() {
   };
 }
 
-const a = build();
-const b = build();
+const a = build(SourcePlot);
+const b = build(SourcePlot);
+const min = build(MinPlot);
 
 assert.equal(a.svg, b.svg);
+assert.equal(min.svg, a.svg);
+assert.equal(min.hpgl, a.hpgl);
 assert.match(a.svg, /p5\.gysin export/);
+assert.match(min.svg, /viewBox="0 0 400 300"/);
+assert.doesNotMatch(min.svg, /viewBox="0 0 400300"/);
 assert.match(a.hpgl, /PU/);
 assert.match(a.hpgl, /PD/);
 
@@ -46,5 +64,9 @@ assert.equal(frozenAfter, frozenBefore);
 const json = JSON.parse(a.plot.exportJSON());
 assert.equal(json.library, "p5.gysin");
 assert.equal(json.shapes.length, 4);
+
+const minJson = JSON.parse(min.plot.exportJSON());
+assert.equal(minJson.library, "p5.gysin");
+assert.equal(minJson.shapes.length, 4);
 
 console.log("p5.gysin snapshot ok");
