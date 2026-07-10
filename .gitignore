@@ -11,6 +11,9 @@ pnpm-debug.log*
 .env.*
 !.env.example
 
+# Private agent instructions and working memory
+AGENTS.md
+
 # OS/editor files
 .DS_Store
 Thumbs.db
@@ -42,4 +45,3 @@ gysin.json
 
 # Important: p5.gysin.min.js is a committed distribution file.
 !p5.gysin.min.js
-
