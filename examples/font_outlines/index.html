@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gysin Demo | p5.gysin examples</title>
+  <title>Font Outlines | p5.gysin examples</title>
   <link rel="stylesheet" href="../showcase.css">
 </head>
 <body>
@@ -20,43 +20,43 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">textCutup() + vector traces</div>
-      <h1>Gysin Demo</h1>
-      <p>Cut-up typography, repeated contours, rubout gaps, uncertain plotter lines, and exportable vector output. Press <code>S</code> for SVG, <code>J</code> for JSON, or <code>R</code> for a new seeded variation.</p>
+      <div class="demo-number">p5.Font · contours · counters</div>
+      <h1>Font Outlines</h1>
+      <p>Load a real font, then let p5.gysin keep the outer contours and inner counters as separate plotter paths. The title is deliberately made of letters with holes.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 19600319 });
+        <pre><code class="language-javascript">const outlineFont = await loadFont(FONT_URL);
 
-plot.textCutup("I THINK THEREFORE I AM", 76, 370, {
-  size: 55,
-  slices: 9,
-  sliceOffset: 24,
-  dropout: 0.09,
+plot.text("O8BR", 70, 190, {
+  font: outlineFont,
+  size: 150,
+  wobble: 0.9,
   repeat: 2,
-  rubout: 0.12
+  rubout: 0.08
 });
 
-plot.draw();</code></pre>
-        <div class="demo-actions" aria-label="Demo actions">
-          <button type="button" id="svg-button">Download SVG</button>
-          <button type="button" id="json-button">Download JSON</button>
+plot.textCutup("COUNTER MEMORY", 72, 380, {
+  font: outlineFont,
+  size: 48,
+  slices: 8,
+  sliceOffset: 15
+});</code></pre>
+        <div class="demo-actions" aria-label="Font outline actions">
           <button type="button" id="reroll-button">New variation</button>
+          <button type="button" id="svg-button">Download SVG</button>
         </div>
       </div>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch"></div>
-        <div class="demo-note">Keyboard: <code>S</code> SVG, <code>J</code> JSON, <code>R</code> new variation.</div>
+        <div class="demo-note" id="font-status">Loading outline font…</div>
       </div>
     </div>
   </main>
 
   <footer>
-    <p>
-      <a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp;
-      <a href="../../docs/guide.html">Guide</a>
-    </p>
+    <p><a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp; <a href="../../docs/guide.html">Guide</a></p>
     <p class="footer-sub">p5.gysin v0.2.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
   </footer>
 

@@ -64,6 +64,9 @@ examples/first_trace/index.html
 examples/gysin_demo/index.html
 examples/p5_editor/index.html
 examples/parameter_lab/index.html
+examples/font_outlines/index.html
+examples/signal_score/index.html
+examples/plotter_calibration/index.html
 examples/plotter_export/index.html
 ```
 
@@ -79,6 +82,9 @@ Beschikbare voorbeelden:
 - `gysin_demo` - cut-up typography en rubout
 - `p5_editor` - copy-paste starter voor editor.p5js.org
 - `parameter_lab` - live controle over trace-parameters
+- `font_outlines` - echte p5.Font-contours en lettercounters
+- `signal_score` - abstracte path- en polygoncompositie zonder tekst
+- `plotter_calibration` - A4-marges, pennen, dropout en plotstatistieken
 - `plotter_export` - SVG/JSON/HPGL exportworkflow
 
 ## Plotterexport

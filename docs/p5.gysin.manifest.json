@@ -20,10 +20,13 @@
   ],
   "examples": [
     "first_trace",
+    "font_outlines",
     "gysin_demo",
     "p5_editor",
     "parameter_lab",
-    "plotter_export"
+    "plotter_calibration",
+    "plotter_export",
+    "signal_score"
   ],
   "removed_apis": [],
   "added_apis": [

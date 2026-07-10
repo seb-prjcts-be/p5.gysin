@@ -120,6 +120,76 @@ plot.text("FIRST TRACE", 68, 255, {
     </div>
   </section>
 
+  <section id="font-outlines" class="section section-dark">
+    <div class="section-header">
+      <div class="section-tag">p5.Font · real contours</div>
+      <h2>Font <span class="accent">Outlines</span></h2>
+      <p class="section-desc">Use a real p5 font and preserve its outer contours and inner counters as plotter paths.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-font-outlines" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const outlineFont = await loadFont(FONT_URL);
+
+plot.text("O8BR", 70, 190, {
+  font: outlineFont,
+  size: 150,
+  wobble: 0.9,
+  repeat: 2
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/font_outlines/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="../examples/font_outlines/sketch.js" target="_blank">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="signal-score" class="section">
+    <div class="section-header">
+      <div class="section-tag">path() · polygon() · no text</div>
+      <h2>Signal <span class="accent">Score</span></h2>
+      <p class="section-desc">Treat paths as fragile signals: no typography, only a scored machine reading made from vector paths and markers.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-signal-score" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const signal = [];
+for (let x = 0; x &lt;= 620; x += 8) {
+  signal.push([x, y + sin(x * 0.04) * 28]);
+}
+
+plot.path(signal, {
+  dropout: 0.07,
+  repeat: 2,
+  rubout: 0.16
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/signal_score/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="../examples/signal_score/sketch.js" target="_blank">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="plotter-calibration" class="section section-dark">
+    <div class="section-header">
+      <div class="section-tag">page · mm · penMap · stats</div>
+      <h2>Plotter <span class="accent">Calibration</span></h2>
+      <p class="section-desc">A practical calibration sheet for margins, circles, dropout, overshoot, multi-pen output, and route statistics.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-calibration" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const page = { width: 210, height: 297, units: "mm", margin: 10, scale: 1 / 3, clip: true };
+
+plot.downloadHPGL("calibration.hpgl", {
+  page,
+  penMap: { frame: 1, circle: 2, hatch: 3 },
+  speed: 20
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/plotter_calibration/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="../examples/plotter_calibration/sketch.js" target="_blank">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
   <section id="plotter-export" class="section section-dark">
     <div class="section-header">
       <div class="section-tag">SVG · JSON · HPGL</div>
@@ -193,6 +263,54 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2 } });</code></p
     for (let y = 34; y < p.height; y += 28) {
       p.line(24, y, p.width - 24, y);
     }
+  }
+
+  const OUTLINE_FONT_URL = "../examples/font_outlines/assets/Anton-Regular.ttf";
+
+  function makeFontPreview(id) {
+    new p5(function(p) {
+      let plot;
+
+      p.setup = async function() {
+        const size = previewSize(id);
+        p.createCanvas(size.width, size.height).parent(id);
+        p.pixelDensity(1);
+        p.noLoop();
+        let outlineFont = null;
+        try {
+          outlineFont = await p.loadFont(OUTLINE_FONT_URL);
+        } catch (error) {
+          outlineFont = null;
+        }
+        plot = new GysinPlot({ p: p, seed: 8088, width: size.width, height: size.height });
+        const fontOptions = outlineFont ? { font: outlineFont } : {};
+        plot.text("O8BR", 36, size.height * 0.5, Object.assign({}, fontOptions, {
+          size: size.width * 0.17,
+          wobble: 0.7,
+          dropout: 0.025,
+          repeat: 2,
+          drift: 0.8,
+          rubout: 0.07,
+          stroke: "#171717"
+        }));
+        plot.textCutup("COUNTER", 38, size.height * 0.78, Object.assign({}, fontOptions, {
+          size: size.width * 0.07,
+          slices: 7,
+          sliceOffset: 12,
+          wobble: 0.8,
+          dropout: 0.06,
+          repeat: 2,
+          stroke: "#b5362b"
+        }));
+        p.redraw();
+      };
+
+      p.draw = function() {
+        p.background(245);
+        drawPreviewPaper(p);
+        if (plot) plot.draw();
+      };
+    }, id);
   }
 
   makePreview("ex-first-trace", function(p, canvasW, canvasH) {
@@ -327,6 +445,62 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2 } });</code></p
     }
     return plot;
   });
+
+  makePreview("ex-signal-score", function(p, canvasW, canvasH) {
+    const plot = new GysinPlot({ p: p, seed: 40017, width: canvasW, height: canvasH });
+    for (let row = 0; row < 4; row++) {
+      const points = [];
+      const yBase = canvasH * (0.22 + row * 0.18);
+      for (let x = 34; x <= canvasW - 34; x += 8) {
+        points.push([x, yBase + p.sin(x * 0.04 + row) * (10 + row * 3)]);
+      }
+      plot.path(points, {
+        wobble: 0.9 + row * 0.1,
+        dropout: 0.05 + row * 0.01,
+        repeat: row % 2 === 0 ? 2 : 1,
+        rubout: 0.06 + row * 0.03,
+        overshoot: 6,
+        stroke: row === 2 ? "#b5362b" : "#171717"
+      });
+    }
+    for (let index = 0; index < 5; index++) {
+      const x = 72 + index * ((canvasW - 144) / 4);
+      plot.polygon([[x, 38], [x + 9, 47], [x, 56], [x - 9, 47]], {
+        wobble: 0.5,
+        repeat: 2,
+        stroke: "#244f73"
+      });
+    }
+    return plot;
+  });
+
+  makePreview("ex-calibration", function(p, canvasW, canvasH) {
+    const plot = new GysinPlot({ p: p, seed: 210297, width: canvasW, height: canvasH });
+    plot.rect(34, 24, canvasW - 68, canvasH - 48, { wobble: 0.25, repeat: 2, layer: "frame" });
+    const diameters = [canvasW * 0.1, canvasW * 0.18, canvasW * 0.28];
+    for (let index = 0; index < diameters.length; index++) {
+      plot.circle(canvasW * 0.5, canvasH * 0.38, diameters[index], {
+        density: 1.2,
+        wobble: 0.35,
+        repeat: 2,
+        stroke: "#b5362b",
+        layer: "circle"
+      });
+    }
+    for (let index = 0; index < 7; index++) {
+      const y = canvasH * 0.7 + index * 11;
+      plot.line(58, y, canvasW - 58, y, {
+        wobble: 0.35,
+        dropout: index * 0.01,
+        overshoot: 7,
+        stroke: "#244f73",
+        layer: "hatch"
+      });
+    }
+    return plot;
+  });
+
+  makeFontPreview("ex-font-outlines");
 
   makePreview("ex-export", function(p, canvasW, canvasH) {
     const plot = new GysinPlot({

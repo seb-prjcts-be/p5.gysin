@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gysin Demo | p5.gysin examples</title>
+  <title>Signal Score | p5.gysin examples</title>
   <link rel="stylesheet" href="../showcase.css">
 </head>
 <body>
@@ -20,43 +20,41 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">textCutup() + vector traces</div>
-      <h1>Gysin Demo</h1>
-      <p>Cut-up typography, repeated contours, rubout gaps, uncertain plotter lines, and exportable vector output. Press <code>S</code> for SVG, <code>J</code> for JSON, or <code>R</code> for a new seeded variation.</p>
+      <div class="demo-number">path() · polygon() · layers</div>
+      <h1>Signal Score</h1>
+      <p>No letters: this score treats paths as fragile signals. Click the composition or press <code>R</code> to generate a new machine reading while keeping the same score structure.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 19600319 });
+        <pre><code class="language-javascript">const signal = [];
+for (let x = 0; x &lt;= 620; x += 8) {
+  signal.push([x, y + sin(x * 0.04) * 28]);
+}
 
-plot.textCutup("I THINK THEREFORE I AM", 76, 370, {
-  size: 55,
-  slices: 9,
-  sliceOffset: 24,
-  dropout: 0.09,
+plot.path(signal, {
+  wobble: 1.2,
+  dropout: 0.07,
   repeat: 2,
-  rubout: 0.12
+  rubout: 0.16,
+  layer: "signal"
 });
 
-plot.draw();</code></pre>
-        <div class="demo-actions" aria-label="Demo actions">
+plot.polygon(nodes, { layer: "markers" });</code></pre>
+        <div class="demo-actions" aria-label="Signal score actions">
+          <button type="button" id="reroll-button">New reading</button>
           <button type="button" id="svg-button">Download SVG</button>
-          <button type="button" id="json-button">Download JSON</button>
-          <button type="button" id="reroll-button">New variation</button>
         </div>
       </div>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch"></div>
-        <div class="demo-note">Keyboard: <code>S</code> SVG, <code>J</code> JSON, <code>R</code> new variation.</div>
+        <div class="demo-note">Click the score or press <code>R</code> for a new variation. Press <code>S</code> to export SVG.</div>
       </div>
     </div>
   </main>
 
   <footer>
-    <p>
-      <a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp;
-      <a href="../../docs/guide.html">Guide</a>
-    </p>
+    <p><a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp; <a href="../../docs/guide.html">Guide</a></p>
     <p class="footer-sub">p5.gysin v0.2.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
   </footer>
 

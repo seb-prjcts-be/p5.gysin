@@ -137,18 +137,18 @@ function keyPressed() {
   }
 
   if (key === "r" || key === "R") {
-    regeneratePlot();
+    rerollPlot();
   }
 }
 
 function wireActions() {
   const svgButton = document.getElementById("svg-button");
   const jsonButton = document.getElementById("json-button");
-  const regenerateButton = document.getElementById("regenerate-button");
+  const rerollButton = document.getElementById("reroll-button");
 
   if (svgButton) svgButton.addEventListener("click", downloadSVG);
   if (jsonButton) jsonButton.addEventListener("click", downloadJSON);
-  if (regenerateButton) regenerateButton.addEventListener("click", regeneratePlot);
+  if (rerollButton) rerollButton.addEventListener("click", rerollPlot);
 }
 
 function downloadSVG() {
@@ -162,8 +162,8 @@ function downloadJSON() {
   plot.downloadJSON("p5-gysin-demo.json");
 }
 
-function regeneratePlot() {
-  plot.regenerate();
+function rerollPlot() {
+  plot.reroll();
   redraw();
 }
 

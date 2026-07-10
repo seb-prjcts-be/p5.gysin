@@ -1,4 +1,5 @@
-seedValue = 19600319;
+let plot;
+let seedValue = 19600319;
 
 function setup() {
   const canvas = createCanvas(720, 720);
