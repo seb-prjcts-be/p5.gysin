@@ -78,6 +78,8 @@ Current MVP methods:
 - `plot.exportHPGL(options)`
 - `plot.downloadSVG(filename, options)`
 - `plot.downloadJSON(filename, options)`
+- `plot.downloadHPGL(filename, options)`
+- `plot.stats(options)`
 
 Addressing:
 
@@ -86,6 +88,7 @@ Addressing:
 - `plot.freeze(id)`
 - `plot.thaw(id)`
 - `plot.regenerate(id)`
+- `plot.reroll(id)`
 - `plot.remove(id)`
 - `plot.update(id, options)`
 
@@ -107,7 +110,7 @@ Latest-tag CDN:
 Stable release CDN should use a version tag:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.1.0/p5.gysin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.2.0/p5.gysin.min.js"></script>
 ```
 
 Use `@latest` only when changing behavior automatically is acceptable.
@@ -150,6 +153,8 @@ When changing an example, update all three levels together. The snippet should
 teach the transferable idea; the sketch file remains the complete source.
 Use public-facing language for makers and plotter users, not classroom-only
 language.
+The `p5_editor` example uses the pinned `v0.2.0` jsDelivr URL. Use `@main`
+only for development copy-paste snippets where moving behavior is intentional.
 
 ## Accepted Roadmap
 

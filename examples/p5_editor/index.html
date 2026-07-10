@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gysin Demo | p5.gysin examples</title>
+  <title>p5 Editor Starter | p5.gysin examples</title>
   <link rel="stylesheet" href="../showcase.css">
 </head>
 <body>
@@ -20,34 +20,33 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">textCutup() + vector traces</div>
-      <h1>Gysin Demo</h1>
-      <p>Cut-up typography, repeated contours, rubout gaps, uncertain plotter lines, and exportable vector output. Press <code>S</code> for SVG, <code>J</code> for JSON, or <code>R</code> to regenerate unfrozen traces.</p>
+      <div class="demo-number">editor.p5js.org starter</div>
+      <h1>p5 Editor Starter</h1>
+      <p>A paste-ready starter for the p5.js Web Editor. Add the CDN script in <code>index.html</code>, then paste the sketch into <code>sketch.js</code>.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
-        <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 19600319 });
+        <div class="code-label">index.html tab</div>
+        <pre><code class="language-html">&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.2.0/p5.gysin.min.js"&gt;&lt;/script&gt;
+&lt;script src="sketch.js"&gt;&lt;/script&gt;</code></pre>
+        <div class="code-label">sketch.js core</div>
+        <pre><code class="language-javascript">seedValue = 19600319;
 
-plot.textCutup("I THINK THEREFORE I AM", 76, 370, {
-  size: 55,
-  slices: 9,
-  sliceOffset: 24,
-  dropout: 0.09,
-  repeat: 2,
-  rubout: 0.12
-});
+function setup() {
+  createCanvas(720, 720);
+  noLoop();
+  buildPlot();
+}
 
-plot.draw();</code></pre>
-        <div class="demo-actions" aria-label="Demo actions">
-          <button type="button" id="svg-button">Download SVG</button>
-          <button type="button" id="json-button">Download JSON</button>
-          <button type="button" id="regenerate-button">Regenerate</button>
-        </div>
+function draw() {
+  background(245);
+  plot.draw();
+}</code></pre>
       </div>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch"></div>
-        <div class="demo-note">Keyboard: <code>S</code> SVG, <code>J</code> JSON, <code>R</code> regenerate.</div>
+        <div class="demo-note">Press <code>R</code> to reseed. Press <code>S</code> to download SVG.</div>
       </div>
     </div>
   </main>

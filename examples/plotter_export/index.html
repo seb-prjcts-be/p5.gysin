@@ -27,18 +27,22 @@
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">const svg = plot.exportSVG({
-  width: 560,
-  height: 560
-});
+        <pre><code class="language-javascript">const page = {
+  width: 210, height: 210, units: "mm",
+  margin: 5, scale: 0.375, clip: true
+};
+
+const svg = plot.exportSVG({ page, optimize: true });
 
 const json = plot.exportJSON({
   includeGenerated: true
 });
 
 const hpgl = plot.exportHPGL({
-  scale: 40
-});</code></pre>
+  page, penMap: { frame: 1, type: 2 }, speed: 20
+});
+
+const stats = plot.stats({ page, drawSpeed: 20 });</code></pre>
         <div class="demo-actions" aria-label="Export actions">
           <button type="button" id="svg-button">Download SVG</button>
           <button type="button" id="json-button">Download JSON</button>
@@ -57,7 +61,7 @@ const hpgl = plot.exportHPGL({
       <a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp;
       <a href="../../docs/guide.html">Guide</a>
     </p>
-    <p class="footer-sub">p5.gysin v0.1.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+    <p class="footer-sub">p5.gysin v0.2.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>

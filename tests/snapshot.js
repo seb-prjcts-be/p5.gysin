@@ -69,6 +69,55 @@ const minJson = JSON.parse(min.plot.exportJSON());
 assert.equal(minJson.library, "p5.gysin");
 assert.equal(minJson.shapes.length, 4);
 
+assert.throws(() => new SourcePlot().circle(0, 0, Infinity), /finite number/);
+assert.throws(() => new SourcePlot().path([[0, 0]], {}), /at least 2 points/);
+
+const addressing = new SourcePlot({ seed: 4 });
+const addressingId = addressing.line(0, 0, 80, 0, { id: "trace", wobble: 2 });
+assert.throws(() => addressing.line(0, 0, 1, 1, { id: "trace" }), /already exists/);
+const regenerated = JSON.stringify(addressing.get(addressingId).generated);
+addressing.regenerate(addressingId);
+assert.equal(JSON.stringify(addressing.get(addressingId).generated), regenerated);
+addressing.reroll(addressingId);
+assert.notEqual(JSON.stringify(addressing.get(addressingId).generated), regenerated);
+const reservedAutoId = new SourcePlot();
+reservedAutoId.line(0, 0, 1, 1, { id: "hp_1" });
+assert.equal(reservedAutoId.line(0, 0, 1, 1), "hp_2");
+
+const pagePlot = new SourcePlot({ seed: 9 });
+pagePlot.circle(20, 20, 30, { layer: "red", stroke: "#d22", density: 1.4 });
+pagePlot.line(0, 0, 90, 60, { layer: "blue", stroke: "#24c", wobble: 0.4 });
+const page = { width: 100, height: 80, units: "mm", margin: 5, clip: true };
+const pageSvg = pagePlot.exportSVG({ page, optimize: true });
+const pageHpgl = pagePlot.exportHPGL({ page, penMap: { red: 2, blue: 3 }, maxPointsPerCommand: 3, speed: 20 });
+const pageStats = pagePlot.stats({ page, optimize: true, drawSpeed: 20, travelSpeed: 60 });
+assert.match(pageSvg, /width="100mm"/);
+assert.match(pageSvg, /id="layer-red"/);
+assert.match(pageSvg, /clip-path="url\(#p5-gysin-page\)"/);
+assert.match(pageHpgl, /SP2;/);
+assert.match(pageHpgl, /SP3;/);
+assert.ok((pageHpgl.match(/PD/g) || []).length > 2);
+assert.equal(pageStats.page.units, "mm");
+assert.ok(pageStats.drawnLength > 0);
+assert.ok(pageStats.estimatedSeconds > 0);
+
+const outlineFont = {
+  textToPoints() { return []; },
+  font: {
+    getPath() {
+      return {
+        commands: [
+          { type: "M", x: 0, y: 0 }, { type: "L", x: 20, y: 0 }, { type: "L", x: 20, y: 20 }, { type: "Z" },
+          { type: "M", x: 6, y: 6 }, { type: "L", x: 14, y: 6 }, { type: "L", x: 14, y: 14 }, { type: "Z" }
+        ]
+      };
+    }
+  }
+};
+const outlinePlot = new SourcePlot();
+const outlineId = outlinePlot.text("O", 0, 0, { size: 20, font: outlineFont, simplify: 0 });
+assert.equal(outlinePlot.get(outlineId).paths.length, 2);
+
 const root = path.join(__dirname, "..");
 const manifest = JSON.parse(fs.readFileSync(
   path.join(root, "docs", "p5.gysin.manifest.json"),

@@ -1,12 +1,18 @@
 {
   "name": "p5.gysin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Vector-first plotter-friendly traces for p5.js.",
   "main": "p5.gysin.js",
+  "files": [
+    "p5.gysin.js",
+    "p5.gysin.min.js",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build:min": "node tools/build-min.js",
     "manifest": "node tools/gen-manifest.js",
-    "test": "node tests/snapshot.js"
+    "test": "node tests/snapshot.js && node tools/check-links.js"
   },
   "repository": "github:seb-prjcts-be/p5.gysin",
   "license": "MIT",

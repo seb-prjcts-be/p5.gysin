@@ -1,4 +1,12 @@
 let plot;
+const EXPORT_PAGE = {
+  width: 210,
+  height: 210,
+  units: "mm",
+  margin: 5,
+  scale: 0.375,
+  clip: true
+};
 
 function setup() {
   const canvas = createCanvas(560, 560);
@@ -17,9 +25,9 @@ function draw() {
 
 function keyPressed() {
   if (key === "r" || key === "R") {
-    plot.regenerate();
+    plot.reroll();
     redraw();
-    setStatus("Regenerated unfrozen traces.");
+    setStatus("Created a new seeded variation.");
   }
 }
 
@@ -28,6 +36,7 @@ function buildPlot() {
     seed: 7475,
     width: width,
     height: height,
+    page: EXPORT_PAGE,
     style: {
       stroke: "#151515",
       strokeWeight: 0.9,
@@ -104,8 +113,8 @@ function buildPlot() {
 function wireExportButtons() {
   document.getElementById("svg-button").addEventListener("click", function() {
     plot.downloadSVG("p5-gysin-plotter-export.svg", {
-      width: width,
-      height: height
+      page: EXPORT_PAGE,
+      optimize: true
     });
     setStatus("SVG exported.");
   });
@@ -118,27 +127,24 @@ function wireExportButtons() {
   });
 
   document.getElementById("hpgl-button").addEventListener("click", function() {
-    downloadText("p5-gysin-plotter-export.hpgl", plot.exportHPGL({
-      scale: 40
-    }), "application/vnd.hpgl");
-    setStatus("HPGL exported.");
+    plot.downloadHPGL("p5-gysin-plotter-export.hpgl", {
+      page: EXPORT_PAGE,
+      penMap: { frame: 1, type: 2, hatch: 3, registration: 1 },
+      speed: 20,
+      optimize: true
+    });
+    const stats = plot.stats({
+      page: EXPORT_PAGE,
+      optimize: true,
+      drawSpeed: 20,
+      travelSpeed: 60
+    });
+    setStatus(`HPGL exported · ${stats.paths} paths · ${stats.drawnLength.toFixed(1)} mm drawn.`);
   });
 }
 
 function setStatus(message) {
   document.getElementById("export-status").textContent = message;
-}
-
-function downloadText(filename, text, type) {
-  const blob = new Blob([text], { type: type });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
 }
 
 function drawPageFrame() {

@@ -34,6 +34,16 @@
     </section>
 
     <section class="guide-block">
+      <h2>p5 Editor</h2>
+      <p>In the p5.js Web Editor, add the library script to the `index.html` tab before `sketch.js`.</p>
+      <div class="code-preview">
+        <code>&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.2.0/p5.gysin.min.js"&gt;&lt;/script&gt;
+&lt;script src="sketch.js"&gt;&lt;/script&gt;</code>
+      </div>
+    </section>
+
+    <section class="guide-block">
       <h2>Basic Use</h2>
       <div class="code-preview">
         <code>let plot;
@@ -99,32 +109,55 @@ plot.freeze(titleId);
 plot.update(titleId, { stroke: "#b5362b" });
 plot.thaw(titleId);
 plot.regenerate(titleId);
+plot.reroll(titleId); // explicit new seeded variation
 plot.remove(titleId);</code>
       </div>
+      <p><code>regenerate()</code> recalculates with the same seed. Use <code>reroll()</code> only when you want a new deterministic variation.</p>
     </section>
 
     <section class="guide-block">
       <h2>Export</h2>
       <div class="code-preview">
-        <code>const svg = plot.exportSVG({ width: 800, height: 800 });
+        <code>const page = {
+  width: 210,
+  height: 297,
+  units: "mm",
+  margin: 10,
+  scale: 0.25,
+  clip: true
+};
+
+const svg = plot.exportSVG({ page, optimize: true });
 const json = plot.exportJSON();
-const hpgl = plot.exportHPGL({ scale: 40 });
+const hpgl = plot.exportHPGL({
+  page,
+  penMap: { frame: 1, type: 2 },
+  speed: 20
+});
+const stats = plot.stats({ page, drawSpeed: 20, travelSpeed: 60 });
 
 plot.downloadSVG("gysin.svg");
-plot.downloadJSON("gysin.json");</code>
+plot.downloadJSON("gysin.json");
+plot.downloadHPGL("gysin.hpgl", { page });</code>
       </div>
+      <p>The page model applies units, margins, origin, rotation, scale, and optional clipping to SVG, HPGL, and statistics. Route optimization is opt-in so the original drawing order remains the default.</p>
     </section>
 
     <section class="guide-block">
       <h2>Text</h2>
-      <p>When you pass `options.font`, p5.gysin uses `font.textToPoints()` if it is available. Without a font, it falls back to a simple vector alphabet, so demos and small sketches stay dependency-free.</p>
+      <p>When the supplied p5 font exposes its outline path, p5.gysin keeps separate glyph contours and counters. Otherwise it uses `font.textToPoints()`; without a font, it falls back to a simple vector alphabet.</p>
       <p>For p5.js 2.x, load fonts with `async setup()` and `await loadFont(...)` before passing the font to `plot.text()`.</p>
+    </section>
+
+    <section class="guide-block">
+      <h2>Input safety</h2>
+      <p>Geometry and sampling values must be finite. Invalid dimensions, duplicate shape ids, and paths that would produce more than 100,000 sampled points raise a clear error; probability values are clamped to the 0–1 range.</p>
     </section>
   </main>
 
   <footer>
     <p><a href="examples.html">Examples</a> &nbsp;&middot;&nbsp; <a href="../index.html">Showcase</a></p>
-    <p class="footer-sub">p5.gysin v0.1.0</p>
+    <p class="footer-sub">p5.gysin v0.2.0</p>
   </footer>
 </body>
 </html>

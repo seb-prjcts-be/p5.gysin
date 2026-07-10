@@ -64,6 +64,7 @@ plot.select(id);
 plot.freeze(id);
 plot.thaw(id);
 plot.regenerate(id);
+plot.reroll(id);
 plot.remove(id);
 plot.update(id, { wobble: 3 });
 ```
@@ -83,6 +84,13 @@ De eerste versie bevat:
 - `exportSVG()` voor plotbare SVG-paden
 - `exportJSON()` voor data-uitwisseling en debugging
 - `exportHPGL()` als eenvoudige eerste pen-up/pen-down export
+
+De exportlaag deelt één trace-collectie tussen SVG, HPGL en statistieken. Een
+optioneel page model beschrijft breedte, hoogte, units, marges, origin, rotatie,
+schaal en clipping. SVG groepeert uitvoer per layer; HPGL ondersteunt
+penmapping, snelheid, commandobatching en optionele route-optimalisatie.
+`plot.stats()` rapporteert pad-, teken- en reisafstand en kan een
+tijdsinschatting maken wanneer snelheden zijn meegegeven.
 
 Voor plotbaarheid worden extreem korte fragmenten weggefilterd en kunnen paden
 met Ramer-Douglas-Peucker vereenvoudigd worden.
@@ -338,10 +346,14 @@ plot.freeze(titleId);
 plot.update(titleId, { stroke: "#cc3333" });
 plot.thaw(titleId);
 plot.regenerate(titleId);
+plot.reroll(titleId);
 ```
 
 `freeze(id)` bewaart de gegenereerde paden. Een bevroren vorm verandert niet bij
-`setSeed()` of `regenerate()`, tenzij je eerst `thaw(id)` aanroept.
+`setSeed()`, `regenerate()` of `reroll()`, tenzij je eerst `thaw(id)` aanroept.
+
+`regenerate()` herbouwt met dezelfde seed. `reroll()` verhoogt de variatie-index
+en maakt een nieuwe, nog steeds reproduceerbare variant.
 
 ## 9. Seeds
 
@@ -381,7 +393,7 @@ Deze repository bevat een haalbare MVP:
 - `draw`
 - `exportSVG`
 - `exportJSON`
-- eenvoudige `exportHPGL`
+- page-aware `exportHPGL` with penmapping and batching
 - addressing en seeds
 
 Niet in de MVP:
