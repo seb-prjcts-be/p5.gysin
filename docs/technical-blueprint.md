@@ -3,7 +3,9 @@
 Naam: `p5.gysin`. De namen `rubout` en `ghostline` passen goed als interne modi
 of presets, maar de library zelf draagt de Gysin-referentie expliciet.
 
-Deze eerste versie mikt op p5.js 1.x en 2.x in global mode, zonder build system.
+Versie 0.2.0 mikt op p5.js 2.x in global en instance mode, zonder build system.
+De frameworkvrije vector- en exportkern kan ook buiten p5.js draaien; p5.js 1.x
+behoort niet tot de geteste supportmatrix.
 Omdat p5.js 2.x asset loading met `async setup()` werkt, laadt de library zelf
 geen fonts. Tekst gebruikt optioneel een meegegeven `p5.Font` met
 `font.textToPoints()`. Zonder font valt ze terug op een eenvoudige vector-font.
@@ -376,9 +378,9 @@ Regels:
 - bevroren vormen veranderen niet
 - `regenerate(id)` verandert alleen niet-bevroren vormen
 
-## 10. Minimale eerste versie
+## 10. Huidige versie 0.2.0
 
-Deze repository bevat een haalbare MVP:
+Deze repository bevat:
 
 - `line`
 - `rect`
@@ -395,6 +397,8 @@ Deze repository bevat een haalbare MVP:
 - `exportJSON`
 - page-aware `exportHPGL` with penmapping and batching
 - addressing en seeds
+- route optimization voor kortere plottertijd, begrensd tot 2.000 traces
+- plotstatistieken per laag
 
 Niet in de MVP:
 
@@ -402,4 +406,3 @@ Niet in de MVP:
 - boolean path operations
 - echte pen pressure mapping
 - multi-pen kleurplanning
-- route optimization voor korte plottertijd

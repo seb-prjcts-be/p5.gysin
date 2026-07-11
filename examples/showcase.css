@@ -75,6 +75,14 @@ pre {
   color: var(--ink);
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+canvas:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
 .demo-page {
   min-height: calc(100vh - 64px);
   max-width: 1180px;

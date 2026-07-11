@@ -12,7 +12,7 @@ leven als standalone pagina's onder `examples/`.
 ## Structuur
 
 - `p5.gysin.js` - source library
-- `p5.gysin.min.js` - browser build voor examples/docs
+- `p5.gysin.min.js` - semantisch identieke browserbuild voor examples/docs; bewust niet agressief geminified
 - `index.html` - Pages showcase
 - `docs/examples.html` - overzicht van voorbeelden
 - `docs/guide.html` - publieke handleiding
@@ -80,6 +80,9 @@ Beschikbare voorbeelden:
 - `p5_editor` - copy-paste starter voor editor.p5js.org
 - `parameter_lab` - live controle over trace-parameters
 - `plotter_export` - SVG/JSON/HPGL exportworkflow
+- `font_outlines` - echte fontcontouren met afzonderlijke counters
+- `plotter_calibration` - fysieke A4-maten, marges en penlagen
+- `signal_score` - abstracte paths en herhaalbare datascores
 
 ## Plotterexport
 
@@ -110,10 +113,26 @@ console.log(plot.stats({ page, drawSpeed: 20, travelSpeed: 60 }));
 vormen een nieuwe variant te geven. Niet-eindige geometrie, dubbele ids en
 extreme sampling worden vroeg afgewezen met een duidelijke fout.
 
+## Compatibiliteit
+
+Versie 0.2.0 ondersteunt p5.js 2.x in global mode en instance mode. Maak in
+instance mode na `p.createCanvas()` een gekoppelde plot met
+`p.createGysinPlot(options)`. De vector- en exportkern heeft geen p5-runtime
+nodig, maar p5.js 1.x behoort niet tot de geteste supportmatrix.
+
+De distributie is bedoeld als browser-script via GitHub/jsDelivr. Het package
+is momenteel niet ingericht als npm-, ESM-, CommonJS- of TypeScript-package.
+
 ## Test
+
+```powershell
+npm test
+```
+
+Releasebestanden opnieuw genereren:
 
 ```powershell
 node tools/build-min.js
 node tools/gen-manifest.js
-node tests/snapshot.js
+npm test
 ```

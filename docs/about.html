@@ -9,6 +9,9 @@
 <body>
   <nav id="navbar">
     <a class="nav-logo" href="../index.html"><span>p5</span>.gysin</a>
+    <button class="nav-hamburger" type="button" aria-label="Toggle menu" aria-expanded="false" onclick="const open=this.closest('nav').classList.toggle('nav-open');this.setAttribute('aria-expanded',String(open))">
+      <span></span><span></span><span></span>
+    </button>
     <ul class="nav-links">
       <li><a href="../index.html">Showcase</a></li>
       <li><a href="examples.html">Examples</a></li>

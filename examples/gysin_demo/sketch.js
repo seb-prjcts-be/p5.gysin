@@ -4,6 +4,7 @@ let titleId;
 function setup() {
   const canvas = createCanvas(900, 900);
   canvas.parent("sketch");
+  describe("A cut-up typographic poster with rubbed-out words, repeated contours, and uncertain lines.");
   pixelDensity(1);
   noLoop();
 

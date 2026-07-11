@@ -9,6 +9,9 @@
 <body>
   <nav id="navbar">
     <a class="nav-logo" href="../index.html"><span>p5</span>.gysin</a>
+    <button class="nav-hamburger" type="button" aria-label="Toggle menu" aria-expanded="false" onclick="const open=this.closest('nav').classList.toggle('nav-open');this.setAttribute('aria-expanded',String(open))">
+      <span></span><span></span><span></span>
+    </button>
     <ul class="nav-links">
       <li><a href="../index.html">Showcase</a></li>
       <li><a href="examples.html">Examples</a></li>
@@ -35,7 +38,7 @@
 
     <section class="guide-block">
       <h2>p5 Editor</h2>
-      <p>In the p5.js Web Editor, add the library script to the `index.html` tab before `sketch.js`.</p>
+      <p>In the p5.js Web Editor, add the library script to the <code>index.html</code> tab before <code>sketch.js</code>.</p>
       <div class="code-preview">
         <code>&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
 &lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.2.0/p5.gysin.min.js"&gt;&lt;/script&gt;
@@ -74,30 +77,51 @@ function setup() {
     <section class="guide-block">
       <h2>Shape Methods</h2>
       <ul>
-        <li>`plot.line(x1, y1, x2, y2, options)`</li>
-        <li>`plot.rect(x, y, w, h, options)`</li>
-        <li>`plot.circle(x, y, diameter, options)`</li>
-        <li>`plot.polygon(points, options)`</li>
-        <li>`plot.path(points, options)`</li>
-        <li>`plot.text(value, x, y, options)`</li>
-        <li>`plot.textCutup(value, x, y, options)`</li>
+        <li><code>plot.line(x1, y1, x2, y2, options)</code></li>
+        <li><code>plot.rect(x, y, w, h, options)</code></li>
+        <li><code>plot.circle(x, y, diameter, options)</code></li>
+        <li><code>plot.polygon(points, options)</code></li>
+        <li><code>plot.path(points, options)</code></li>
+        <li><code>plot.text(value, x, y, options)</code></li>
+        <li><code>plot.textCutup(value, x, y, options)</code></li>
       </ul>
     </section>
 
     <section class="guide-block">
       <h2>Trace Parameters</h2>
       <ul>
-        <li>`density`: point sampling density.</li>
-        <li>`wobble`: maximum point displacement in pixels.</li>
-        <li>`dropout`: probability that a point interrupts a path.</li>
-        <li>`repeat`: number of near-identical redraws.</li>
-        <li>`drift`: global offset between repeats.</li>
-        <li>`rubout`: generated zones that remove parts of the trace.</li>
-        <li>`fray`: small loose edge strokes.</li>
-        <li>`overshoot`: extends open paths beyond endpoints.</li>
-        <li>`segmentLength`: target spacing between sampled points.</li>
-        <li>`seed`: per-shape deterministic seed.</li>
+        <li><code>density</code>: positive point sampling density; default <code>1</code>.</li>
+        <li><code>wobble</code>: maximum point displacement in pixels; default <code>0</code>.</li>
+        <li><code>dropout</code>: clamped 0–1 probability that a point interrupts a path.</li>
+        <li><code>hesitate</code>: clamped 0–1 probability of small mechanical hesitations.</li>
+        <li><code>repeat</code>: whole number from 1 through 1000; default <code>1</code>.</li>
+        <li><code>drift</code>: non-negative global offset between repeats.</li>
+        <li><code>rubout</code>: clamped 0–1 strength of generated erase zones.</li>
+        <li><code>fray</code>: non-negative amount of loose edge strokes.</li>
+        <li><code>pressure</code>: clamped 0–1 screen weight and alpha variation.</li>
+        <li><code>overshoot</code>: non-negative extension of open path endpoints.</li>
+        <li><code>segmentLength</code>: positive target spacing; default <code>8</code>.</li>
+        <li><code>seed</code>: optional deterministic seed for one shape.</li>
       </ul>
+    </section>
+
+    <section class="guide-block">
+      <h2>Constructor and Instance Mode</h2>
+      <p><code>new GysinPlot(options)</code> accepts <code>seed</code>, <code>width</code>, <code>height</code>, <code>page</code>, and default <code>human</code>, <code>style</code>, and <code>export</code> objects. In p5 instance mode, create the plot after <code>createCanvas()</code>:</p>
+      <div class="code-preview"><code>const plot = p.createGysinPlot({ seed: 1960 });</code></div>
+      <p>The helper links drawing and automatic export dimensions to that p5 instance. Capture methods return a shape id. Lookup and mutation methods return detached snapshots, so use <code>update()</code> instead of modifying data returned by <code>get()</code>.</p>
+    </section>
+
+    <section class="guide-block">
+      <h2>Shape, Text, Style, and Export Options</h2>
+      <ul>
+        <li><code>path</code>: set <code>closed: true</code> for an exact closed contour.</li>
+        <li><code>text</code>: <code>size</code>, <code>font</code>, <code>sampleFactor</code>, <code>lineHeight</code>, and <code>letterSpacing</code>.</li>
+        <li><code>textCutup</code>: all text options plus <code>slices</code>, <code>sliceOffset</code>, and <code>sliceDropout</code>.</li>
+        <li>Style: <code>stroke</code>, positive <code>strokeWeight</code>, and clamped <code>alpha</code>.</li>
+        <li>Export per shape: <code>simplify</code>, <code>minSegmentLength</code>, and <code>layer</code>.</li>
+      </ul>
+      <p>Invalid geometry, duplicate ids, excessive sampling, more than 1,000 repeats, and route optimization above 2,000 traces raise an error before export.</p>
     </section>
 
     <section class="guide-block">
@@ -136,17 +160,23 @@ const hpgl = plot.exportHPGL({
 });
 const stats = plot.stats({ page, drawSpeed: 20, travelSpeed: 60 });
 
-plot.downloadSVG("gysin.svg");
+plot.downloadSVG("gysin.svg", { page, optimize: true });
 plot.downloadJSON("gysin.json");
 plot.downloadHPGL("gysin.hpgl", { page });</code>
       </div>
       <p>The page model applies units, margins, origin, rotation, scale, and optional clipping to SVG, HPGL, and statistics. Route optimization is opt-in so the original drawing order remains the default.</p>
+      <p>Supported units are <code>px</code>, <code>mm</code>, <code>cm</code>, and <code>in</code>. Origins are <code>top-left</code> and <code>bottom-left</code>. SVG precision accepts <code>decimals</code> from 0 through 12. HPGL additionally accepts <code>scale</code>, <code>penMap</code>, <code>speed</code>, offsets, and <code>maxPointsPerCommand</code>.</p>
     </section>
 
     <section class="guide-block">
       <h2>Text</h2>
-      <p>When the supplied p5 font exposes its outline path, p5.gysin keeps separate glyph contours and counters. Otherwise it uses `font.textToPoints()`; without a font, it falls back to a simple vector alphabet.</p>
-      <p>For p5.js 2.x, load fonts with `async setup()` and `await loadFont(...)` before passing the font to `plot.text()`.</p>
+      <p>When the supplied p5 font exposes its outline path, p5.gysin keeps separate glyph contours and counters. Otherwise it uses <code>font.textToPoints()</code>; without a font, it falls back to a simple vector alphabet.</p>
+      <p>For p5.js 2.x, load fonts with <code>async setup()</code> and <code>await loadFont(...)</code> before passing the font to <code>plot.text()</code>.</p>
+    </section>
+
+    <section class="guide-block">
+      <h2>Compatibility</h2>
+      <p>Version 0.2.0 targets p5.js 2.x in global and instance mode. The vector and export core is framework-independent, but p5.js 1.x is not part of the tested support contract.</p>
     </section>
 
     <section class="guide-block">

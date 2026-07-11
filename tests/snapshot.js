@@ -71,6 +71,7 @@ assert.equal(minJson.shapes.length, 4);
 
 assert.throws(() => new SourcePlot().circle(0, 0, Infinity), /finite number/);
 assert.throws(() => new SourcePlot().path([[0, 0]], {}), /at least 2 points/);
+assert.throws(() => new SourcePlot().line(0, 0, 1, 1, { repeat: 1001 }), /from 1 through 1000/);
 
 const addressing = new SourcePlot({ seed: 4 });
 const addressingId = addressing.line(0, 0, 80, 0, { id: "trace", wobble: 2 });
@@ -80,6 +81,11 @@ addressing.regenerate(addressingId);
 assert.equal(JSON.stringify(addressing.get(addressingId).generated), regenerated);
 addressing.reroll(addressingId);
 assert.notEqual(JSON.stringify(addressing.get(addressingId).generated), regenerated);
+const publicSnapshot = addressing.get(addressingId);
+publicSnapshot.params.x2 = 999;
+publicSnapshot.generated[0].points[0].x = 999;
+assert.equal(addressing.get(addressingId).params.x2, 80);
+assert.notEqual(addressing.get(addressingId).generated[0].points[0].x, 999);
 const reservedAutoId = new SourcePlot();
 reservedAutoId.line(0, 0, 1, 1, { id: "hp_1" });
 assert.equal(reservedAutoId.line(0, 0, 1, 1), "hp_2");
@@ -100,6 +106,55 @@ assert.ok((pageHpgl.match(/PD/g) || []).length > 2);
 assert.equal(pageStats.page.units, "mm");
 assert.ok(pageStats.drawnLength > 0);
 assert.ok(pageStats.estimatedSeconds > 0);
+
+for (const layer of ["__proto__", "constructor", "toString"]) {
+  const specialLayerPlot = new SourcePlot();
+  specialLayerPlot.line(0, 0, 10, 0, { layer, simplify: 0, minSegmentLength: 0 });
+  assert.equal(Object.prototype.hasOwnProperty.call(specialLayerPlot.stats().layers, layer), true);
+  assert.match(specialLayerPlot.exportHPGL(), /PD/);
+}
+
+const closedPlot = new SourcePlot({ seed: 1 });
+const closedId = closedPlot.circle(50, 50, 80, { wobble: 10, simplify: 0, minSegmentLength: 0 });
+const closedTrace = closedPlot.get(closedId).generated[0];
+assert.deepEqual(closedTrace.points[0], closedTrace.points[closedTrace.points.length - 1]);
+assert.equal(closedTrace.closed, true);
+assert.match(closedPlot.exportSVG(), / Z"/);
+
+const updatePlot = new SourcePlot();
+const updateId = updatePlot.path([[0, 0], [10, 0]]);
+updatePlot.update(updateId, { params: { points: [[0, 0], [20, 0]] } });
+assert.equal(updatePlot.get(updateId).params.points[1].x, 20);
+assert.equal(updatePlot.get(updateId).params.points[1].y, 0);
+assert.throws(() => updatePlot.update(updateId, {
+  wobble: 5,
+  params: { points: [[0, 0], [Infinity, 0]] }
+}), /finite number/);
+assert.equal(updatePlot.get(updateId).human.wobble, 0);
+assert.equal(updatePlot.get(updateId).params.points[1].x, 20);
+assert.equal(updatePlot.get(updateId).params.points[1].y, 0);
+
+const frozenStylePlot = new SourcePlot();
+const frozenStyleId = frozenStylePlot.line(0, 0, 10, 0);
+frozenStylePlot.freeze(frozenStyleId);
+frozenStylePlot.update(frozenStyleId, { stroke: "#ff0000" });
+assert.equal(frozenStylePlot.get(frozenStyleId).generated[0].style.stroke, "#ff0000");
+assert.match(frozenStylePlot.exportSVG(), /stroke="#ff0000"/);
+
+const instancePlot = new SourcePlot({ p: { width: 321, height: 123 } });
+instancePlot.line(0, 0, 10, 10);
+assert.equal(instancePlot.stats().page.width, 321);
+assert.equal(instancePlot.stats().page.height, 123);
+assert.match(instancePlot.exportSVG(), /viewBox="0 0 321 123"/);
+
+assert.throws(() => instancePlot.exportSVG({ decimals: 1.5 }), /whole number/);
+assert.throws(() => instancePlot.exportSVG({ decimals: 13 }), /from 0 through 12/);
+
+const manyTracesPlot = new SourcePlot();
+manyTracesPlot.line(0, 0, 10, 0, { repeat: 1000, simplify: 0, minSegmentLength: 0 });
+manyTracesPlot.line(0, 1, 10, 1, { repeat: 1000, simplify: 0, minSegmentLength: 0 });
+manyTracesPlot.line(0, 2, 10, 2, { repeat: 1, simplify: 0, minSegmentLength: 0 });
+assert.throws(() => manyTracesPlot.exportSVG({ optimize: true }), /at most 2000 traces/);
 
 const outlineFont = {
   textToPoints() { return []; },

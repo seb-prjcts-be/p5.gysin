@@ -11,6 +11,7 @@ const EXPORT_PAGE = {
 function setup() {
   const canvas = createCanvas(560, 560);
   canvas.parent("sketch");
+  describe("A layered plotter composition prepared for SVG, JSON, and HPGL export.");
   pixelDensity(1);
   noLoop();
   buildPlot();

@@ -13,6 +13,7 @@ let plot;
 function setup() {
   const canvas = createCanvas(190 * MM, 277 * MM);
   canvas.parent("sketch");
+  describe("An A4 pen-plotter calibration sheet with margins, measurement marks, and three pen layers.");
   pixelDensity(1);
   noLoop();
   buildPlot();

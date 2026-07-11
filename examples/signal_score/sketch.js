@@ -3,6 +3,7 @@ let plot;
 function setup() {
   const canvas = createCanvas(720, 620);
   canvas.parent("sketch");
+  describe("An abstract signal score made from wavering paths, marks, and distressed labels.");
   pixelDensity(1);
   noLoop();
   buildPlot();

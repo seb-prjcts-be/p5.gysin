@@ -4,9 +4,11 @@ let seedValue = 8319;
 function setup() {
   const canvas = createCanvas(560, 560);
   canvas.parent("sketch");
+  describe("A parameter-controlled cut-up title, repeated horizontal traces, and a distressed frame.");
   pixelDensity(1);
   noLoop();
   wireControls();
+  wireActions();
   buildPlot();
 }
 
@@ -18,17 +20,30 @@ function draw() {
 
 function keyPressed() {
   if (key === "r" || key === "R") {
-    seedValue = floor(random(100000));
-    buildPlot();
-    redraw();
+    rerollPlot();
   }
 
   if (key === "s" || key === "S") {
-    plot.downloadSVG("p5-gysin-parameter-lab.svg", {
-      width: width,
-      height: height
-    });
+    downloadSVG();
   }
+}
+
+function wireActions() {
+  document.getElementById("reroll-button").addEventListener("click", rerollPlot);
+  document.getElementById("svg-button").addEventListener("click", downloadSVG);
+}
+
+function rerollPlot() {
+  seedValue = floor(random(100000));
+  buildPlot();
+  redraw();
+}
+
+function downloadSVG() {
+  plot.downloadSVG("p5-gysin-parameter-lab.svg", {
+    width: width,
+    height: height
+  });
 }
 
 function wireControls() {

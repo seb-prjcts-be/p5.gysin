@@ -5,6 +5,7 @@ function setup() {
   const canvas = createCanvas(720, 720);
   const holder = document.getElementById("sketch");
   if (holder) canvas.parent(holder);
+  describe("A compact starter composition for copying into the p5.js Web Editor.");
   pixelDensity(1);
   noLoop();
   buildPlot();

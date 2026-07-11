@@ -84,6 +84,13 @@ code {
   color: var(--ink);
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
 .nav-hamburger {
   display: none;
   width: 40px;

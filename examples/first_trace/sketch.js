@@ -4,8 +4,10 @@ let seedValue = 1960;
 function setup() {
   const canvas = createCanvas(520, 520);
   canvas.parent("sketch");
+  describe("A fragile typographic composition with a line, the words First Trace, and a repeated circle.");
   pixelDensity(1);
   noLoop();
+  wireActions();
   buildPlot();
 }
 
@@ -17,18 +19,31 @@ function draw() {
 
 function mousePressed() {
   if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) return;
+  rerollPlot();
+}
+
+function keyPressed() {
+  if (key === "s" || key === "S") {
+    downloadSVG();
+  }
+}
+
+function wireActions() {
+  document.getElementById("reroll-button").addEventListener("click", rerollPlot);
+  document.getElementById("svg-button").addEventListener("click", downloadSVG);
+}
+
+function rerollPlot() {
   seedValue = floor(random(100000));
   buildPlot();
   redraw();
 }
 
-function keyPressed() {
-  if (key === "s" || key === "S") {
-    plot.downloadSVG("p5-gysin-first-trace.svg", {
-      width: width,
-      height: height
-    });
-  }
+function downloadSVG() {
+  plot.downloadSVG("p5-gysin-first-trace.svg", {
+    width: width,
+    height: height
+  });
 }
 
 function buildPlot() {
