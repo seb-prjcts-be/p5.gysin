@@ -3,7 +3,7 @@
 [Open de publieke p5.gysin-site](https://seb-prjcts-be.github.io/p5.gysin/)
 
 p5.gysin is een vector-first p5.js-library voor generatieve, plotbare
-tekeningen: cut-up tekst, rubout-zones, wobble, dropout, repeat, drift en
+tekeningen: cut-up tekst, rubout-zones, wobble, dropout, selectieve ink bleed en
 export naar SVG, JSON en HPGL. Versie 0.2.0 voegt fysieke pagina-instellingen,
 lagen/penmapping, optionele route-optimalisatie en plotstatistieken toe.
 
@@ -22,6 +22,7 @@ leven als standalone pagina's onder `examples/`.
 - `docs/guide.html` - publieke handleiding
 - `docs/about.html` - context en status
 - `docs/technical-blueprint.md` - technische blauwdruk
+- `docs/ink-bleed-design.md` - ontwerp en veiligheidsmodel voor additieve inktopbouw
 - `examples/gysin_demo/` - standalone demo
 - `tests/snapshot.js` - minimale runtime/snapshot-check
 
@@ -43,7 +44,9 @@ function setup() {
     size: 72,
     wobble: 2,
     dropout: 0.12,
-    repeat: 2,
+    bleed: 0.2,
+    bleedPasses: 2,
+    bleedSpread: 0.8,
     rubout: 0.25
   });
 
@@ -56,6 +59,27 @@ function setup() {
 plot.draw();
 }
 ```
+
+## Selectieve inktopbouw
+
+`dropout` en `rubout` halen lijnmateriaal weg. `bleed` is de additieve
+tegenhanger: de core kiest deterministisch aaneengesloten fragmenten en geeft
+alleen die één of meer extra, licht verschoven passages.
+
+```js
+plot.textCutup("RUB OUT THE WORD", 80, 180, {
+  bleed: 0.22,       // aandeel van de geschreven contourlengte
+  bleedPasses: 2,    // maximaal aantal extra passages, begrensd op 3
+  bleedSpread: 0.8,  // coherente verschuiving; minimaal 0.1 bij actieve bleed
+  bleedCluster: 18   // gewenste lengte van een inktcluster
+});
+```
+
+De extra traces krijgen in SVG/JSON `role: "bleed"` en een fysiek
+passagenummer. `plot.stats()` rapporteert `bleedPaths`, `bleedLength`,
+`overdrawRatio` en `maxLocalPasses`. Voor snijgereedschap filtert
+`tool: "blade"` alle tweede en latere passages uit de export; `tool: "pen"`
+behoudt de inktopbouw.
 
 ## Optionele tekstpermutaties
 
@@ -143,14 +167,21 @@ const page = {
   clip: true
 };
 
-plot.downloadSVG("drawing.svg", { page, optimize: true });
+plot.downloadSVG("drawing.svg", { page, optimize: true, tool: "pen" });
 plot.downloadHPGL("drawing.hpgl", {
   page,
+  tool: "pen",
   penMap: { frame: 1, type: 2 },
   speed: 20
 });
 
-console.log(plot.stats({ page, drawSpeed: 20, travelSpeed: 60 }));
+console.log(plot.stats({ page, tool: "pen", drawSpeed: 20, travelSpeed: 60 }));
+```
+
+Maak een veilige variant voor een mes zonder de compositie opnieuw te bouwen:
+
+```js
+plot.downloadSVG("drawing-blade.svg", { page, tool: "blade" });
 ```
 
 `regenerate()` behoudt de seed; gebruik `reroll()` om alleen niet-bevroren

@@ -49,6 +49,10 @@ humanizing-pipeline:
 - `repeat`: tekent varianten boven elkaar
 - `overshoot`: verlengt open lijnen voorbij begin/einde
 - `drift`: verschuift herhalingen licht
+- `bleed`: kiest aaneengesloten fragmentclusters voor plaatselijke inktopbouw
+- `bleedPasses`: begrenst de extra passages per gekozen fragment
+- `bleedSpread`: verschuift iedere extra passage coherent, nooit als exacte kopie
+- `bleedCluster`: bepaalt de gewenste booglengte van een geselecteerd fragment
 - `rubout`: maakt uitgewiste zones
 - `fray`: voegt korte rafelige lijntjes toe
 - `hesitate`: voegt kleine haperingen toe
@@ -91,8 +95,10 @@ De exportlaag deelt één trace-collectie tussen SVG, HPGL en statistieken. Een
 optioneel page model beschrijft breedte, hoogte, units, marges, origin, rotatie,
 schaal en clipping. SVG groepeert uitvoer per layer; HPGL ondersteunt
 penmapping, snelheid, commandobatching en optionele route-optimalisatie.
-`plot.stats()` rapporteert pad-, teken- en reisafstand en kan een
-tijdsinschatting maken wanneer snelheden zijn meegegeven.
+`plot.stats()` rapporteert pad-, teken- en reisafstand, bleed-lengte,
+overdraw-ratio en maximale lokale passages. Een <code>tool</code>-profiel wordt
+gedeeld door SVG, HPGL en statistieken: <code>pen</code> bewaart alle passages;
+<code>blade</code> filtert iedere tweede en latere passage uit.
 
 Voor plotbaarheid worden extreem korte fragmenten weggefilterd en kunnen paden
 met Ramer-Douglas-Peucker vereenvoudigd worden.
@@ -133,6 +139,10 @@ Elke vorm wordt intern zo bewaard:
     overshoot: 8,
     repeat: 1,
     drift: 0,
+    bleed: 0.22,
+    bleedPasses: 2,
+    bleedSpread: 0.8,
+    bleedCluster: 18,
     rubout: 0,
     fray: 0,
     pressure: 0,
@@ -148,7 +158,9 @@ Elke vorm wordt intern zo bewaard:
   generated: [
     {
       points: [{ x: 72, y: 259 }, { x: 88.4, y: 260.6 }],
-      style: { stroke: "#111111", strokeWeight: 1, alpha: 1 }
+      style: { stroke: "#111111", strokeWeight: 1, alpha: 1 },
+      role: "base",
+      pass: 1
     }
   ]
 }
@@ -171,7 +183,9 @@ function setup() {
     density: 1,
     wobble: 2,
     dropout: 0.12,
-    repeat: 2,
+    bleed: 0.22,
+    bleedPasses: 2,
+    bleedSpread: 0.8,
     rubout: 0.25
   });
 
@@ -236,6 +250,21 @@ een eigen drift en wobble.
 `drift`
 : Maximale globale verschuiving per herhaling. Goed voor slecht geregistreerde
 druk of een plotter die opnieuw probeert.
+
+`bleed`
+: Aandeel van de werkelijk geschreven contourlengte dat een additieve
+inktcluster krijgt. Selectie gebeurt seeded en pas na dropout/rubout.
+
+`bleedPasses`
+: Maximum aantal extra passages per geselecteerd cluster, begrensd van 1 tot 3.
+
+`bleedSpread`
+: Maximale coherente offset van een extra passage. Bij actieve bleed minimaal
+0.1 om exacte dubbele fragmenten te voorkomen.
+
+`bleedCluster`
+: Positieve doellengte voor aaneengesloten fragmenten. Kleinere waarden geven
+meer korte inktplekken; grotere waarden langere verdichte zones.
 
 `rubout`
 : Sterkte van uitgewiste zones. De library maakt vectorzones en laat punten

@@ -14,6 +14,10 @@
     "overshoot",
     "repeat",
     "drift",
+    "bleed",
+    "bleedPasses",
+    "bleedSpread",
+    "bleedCluster",
     "rubout",
     "fray",
     "pressure",
@@ -32,6 +36,10 @@
     overshoot: 0,
     repeat: 1,
     drift: 0,
+    bleed: 0,
+    bleedPasses: 2,
+    bleedSpread: 0.8,
+    bleedCluster: 18,
     rubout: 0,
     fray: 0,
     pressure: 0,
@@ -53,8 +61,11 @@
 
   const PAGE_UNITS = new Set(["px", "mm", "cm", "in"]);
   const PAGE_ORIGINS = new Set(["top-left", "bottom-left"]);
+  const TOOL_MODES = new Set(["pen", "blade"]);
   const MAX_SAMPLE_POINTS = 100000;
   const MAX_REPEAT = 1000;
+  const MAX_BLEED_PASSES = 3;
+  const MIN_BLEED_SPREAD = 0.1;
   const MAX_GENERATED_POINTS = 1000000;
   const MAX_OPTIMIZE_TRACES = 2000;
   const MAX_SVG_DECIMALS = 12;
@@ -321,7 +332,11 @@
         candidate.generated = shape.generated.map((trace) => ({
           points: trace.points.map(copyPoint),
           style: Object.assign({}, style),
-          closed: trace.closed === true
+          closed: trace.closed === true,
+          role: trace.role || "base",
+          pass: trace.pass || 1,
+          bleedSource: trace.bleedSource,
+          bleedCluster: trace.bleedCluster
         }));
       } else {
         this._regenerateShape(candidate);
@@ -345,6 +360,7 @@
 
     exportSVG(options = {}) {
       const page = this._resolvePage(options);
+      const tool = normalizeToolMode(options.tool);
       const width = page.width;
       const height = page.height;
       const title = escapeXML(options.title || "p5.gysin export");
@@ -355,7 +371,7 @@
       lines.push(`<?xml version="1.0" encoding="UTF-8"?>`);
       lines.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${round(width, decimals)}${page.units}" height="${round(height, decimals)}${page.units}" viewBox="0 0 ${round(width, decimals)} ${round(height, decimals)}">`);
       lines.push(`  <title>${title}</title>`);
-      lines.push(`  <metadata>${escapeXML(JSON.stringify({ library: "p5.gysin", page: page.metadata }))}</metadata>`);
+      lines.push(`  <metadata>${escapeXML(JSON.stringify({ library: "p5.gysin", page: page.metadata, tool }))}</metadata>`);
       if (page.clip) {
         lines.push(`  <clipPath id="p5-gysin-page"><rect x="${round(page.margin.left, decimals)}" y="${round(page.margin.top, decimals)}" width="${round(page.drawableWidth, decimals)}" height="${round(page.drawableHeight, decimals)}" /></clipPath>`);
       }
@@ -364,7 +380,7 @@
       for (const [layer, layerTraces] of tracesByLayer(traces)) {
         lines.push(`    <g id="layer-${escapeXML(svgId(layer))}" data-layer="${escapeXML(layer)}"${page.clip ? " clip-path=\"url(#p5-gysin-page)\"" : ""}>`);
         for (const trace of layerTraces) {
-          lines.push(`      <path d="${svgPathD(trace.points, decimals, trace.closed)}" stroke="${escapeXML(trace.style.stroke)}" stroke-width="${round(trace.style.strokeWeight, decimals)}" opacity="${round(trace.style.alpha, decimals)}" data-shape-id="${escapeXML(trace.shapeId)}" data-type="${escapeXML(trace.type)}" />`);
+          lines.push(`      <path d="${svgPathD(trace.points, decimals, trace.closed)}" stroke="${escapeXML(trace.style.stroke)}" stroke-width="${round(trace.style.strokeWeight, decimals)}" opacity="${round(trace.style.alpha, decimals)}" data-shape-id="${escapeXML(trace.shapeId)}" data-type="${escapeXML(trace.type)}" data-role="${escapeXML(trace.role)}" data-pass="${trace.pass}" />`);
         }
         lines.push(`    </g>`);
       }
@@ -434,20 +450,35 @@
 
     stats(options = {}) {
       const page = this._resolvePage(options);
+      const tool = normalizeToolMode(options.tool);
       const traces = this._exportTraces(page, options);
       const layerStats = new Map();
       let drawnLength = 0;
       let travelLength = 0;
+      let bleedLength = 0;
+      let bleedPaths = 0;
+      let maxLocalPasses = 1;
       let previous = null;
 
       for (const trace of traces) {
         const length = pathLength(trace.points);
         drawnLength += length;
+        if (trace.role === "bleed") {
+          bleedLength += length;
+          bleedPaths += 1;
+        }
+        maxLocalPasses = Math.max(maxLocalPasses, trace.pass || 1);
         if (previous) travelLength += distance(previous, trace.points[0]);
         previous = trace.points[trace.points.length - 1];
-        if (!layerStats.has(trace.layer)) layerStats.set(trace.layer, { paths: 0, drawnLength: 0 });
+        if (!layerStats.has(trace.layer)) {
+          layerStats.set(trace.layer, { paths: 0, drawnLength: 0, bleedPaths: 0, bleedLength: 0 });
+        }
         layerStats.get(trace.layer).paths += 1;
         layerStats.get(trace.layer).drawnLength += length;
+        if (trace.role === "bleed") {
+          layerStats.get(trace.layer).bleedPaths += 1;
+          layerStats.get(trace.layer).bleedLength += length;
+        }
       }
 
       const drawSpeed = options.drawSpeed === undefined ? null : positiveNumber(options.drawSpeed, "drawSpeed");
@@ -457,6 +488,12 @@
         layers: Object.fromEntries(layerStats),
         drawnLength,
         travelLength,
+        extraPasses: bleedPaths,
+        bleedPaths,
+        bleedLength,
+        overdrawRatio: drawnLength > bleedLength ? bleedLength / (drawnLength - bleedLength) : 0,
+        maxLocalPasses,
+        tool,
         bounds: boundsOfPaths(traces.map((trace) => trace.points)),
         page: page.metadata,
         estimatedSeconds: drawSpeed === null ? null : drawnLength / drawSpeed + travelLength / travelSpeed
@@ -548,6 +585,7 @@
 
     _exportTraces(page, options = {}) {
       const traces = [];
+      const tool = normalizeToolMode(options.tool);
       const clipRect = page.clip ? {
         minX: page.margin.left,
         minY: page.margin.top,
@@ -559,6 +597,7 @@
         this._ensureGenerated(shape);
         for (const trace of shape.generated) {
           if (trace.points.length < 2) continue;
+          if (tool === "blade" && (trace.pass || 1) > 1) continue;
           const transformed = trace.points.map((point) => transformPagePoint(point, page));
           const paths = clipRect ? clipPolyline(transformed, clipRect) : [transformed];
           for (const points of paths) {
@@ -569,14 +608,18 @@
               layer: shape.exportSettings.layer,
               shapeId: shape.id,
               type: shape.type,
-              closed: trace.closed === true && isClosedPath(points)
+              closed: trace.closed === true && isClosedPath(points),
+              role: trace.role || "base",
+              pass: trace.pass || 1,
+              bleedSource: trace.bleedSource,
+              bleedCluster: trace.bleedCluster
             });
           }
         }
       }
 
       if (options.optimize === true && traces.length > MAX_OPTIMIZE_TRACES) {
-        throw new RangeError(`Route optimization supports at most ${MAX_OPTIMIZE_TRACES} traces. Reduce repeat/dropout/fray or export without optimize.`);
+        throw new RangeError(`Route optimization supports at most ${MAX_OPTIMIZE_TRACES} traces. Reduce repeat/bleed/dropout/fray or export without optimize.`);
       }
       return options.optimize === true ? optimizeTraceOrder(traces) : traces;
     }
@@ -594,6 +637,7 @@
         throw new RangeError(`Shape generation would exceed ${MAX_GENERATED_POINTS} points. Reduce repeat/density or increase segmentLength.`);
       }
       shape.generated = this._humanizeShape(shape);
+      assertTracePointBudget(shape.generated, MAX_GENERATED_POINTS, "shape generation");
       shape.dirty = false;
     }
 
@@ -836,6 +880,7 @@
       const ruboutZones = makeRuboutZones(shape.bounds, h.rubout, rng);
 
       for (let r = 0; r < repeat; r++) {
+        const baseMeta = { role: "base", pass: r + 1 };
         const driftAmount = Number(h.drift) || 0;
         const driftX = r === 0 ? 0 : rng.range(-driftAmount, driftAmount);
         const driftY = r === 0 ? 0 : rng.range(-driftAmount, driftAmount);
@@ -853,7 +898,7 @@
             const dropped = rng.chance(h.dropout);
 
             if (erased || dropped) {
-              this._pushTrace(traces, current, shape, rng);
+              this._pushTrace(traces, current, shape, rng, baseMeta);
               current = [];
               continue;
             }
@@ -881,7 +926,10 @@
                   copyPoint(pt),
                   { x: pt.x + Math.cos(angle) * len, y: pt.y + Math.sin(angle) * len }
                 ],
-                style: traceStyle(shape.style, h, rng)
+                style: traceStyle(shape.style, h, rng),
+                closed: false,
+                role: "base",
+                pass: r + 1
               });
             }
           }
@@ -889,14 +937,54 @@
           if (shape.closed && isClosedPath(path) && h.dropout === 0 && ruboutZones.length === 0 && current.length >= 2) {
             current[current.length - 1] = copyPoint(current[0]);
           }
-          this._pushTrace(traces, current, shape, rng);
+          this._pushTrace(traces, current, shape, rng, baseMeta);
         }
       }
 
+      if (h.bleed > 0) this._addBleedTraces(traces, shape, rng, repeat);
       return traces;
     }
 
-    _pushTrace(traces, points, shape, rng) {
+    _addBleedTraces(traces, shape, rng, baseRepeat) {
+      const h = shape.human;
+      const baseTraces = traces.filter((trace) => trace.role === "base" && trace.pass === 1);
+      const candidates = [];
+      let eligibleLength = 0;
+
+      for (let traceIndex = 0; traceIndex < baseTraces.length; traceIndex++) {
+        const trace = baseTraces[traceIndex];
+        const clusters = clusterPolyline(trace.points, h.bleedCluster);
+        for (let clusterIndex = 0; clusterIndex < clusters.length; clusterIndex++) {
+          const points = clusters[clusterIndex];
+          const length = pathLength(points);
+          if (length < shape.exportSettings.minSegmentLength) continue;
+          candidates.push({ points, length, traceIndex, clusterIndex });
+          eligibleLength += length;
+        }
+      }
+
+      shuffleInPlace(candidates, rng);
+      const targetLength = eligibleLength * h.bleed;
+      let selectedLength = 0;
+
+      for (const candidate of candidates) {
+        if (selectedLength >= targetLength) break;
+        selectedLength += candidate.length;
+        const extraPasses = 1 + Math.floor(rng.next() * h.bleedPasses);
+
+        for (let extraPass = 1; extraPass <= extraPasses; extraPass++) {
+          const shifted = offsetBleedFragment(candidate.points, h.bleedSpread, rng);
+          this._pushTrace(traces, shifted, shape, rng, {
+            role: "bleed",
+            pass: baseRepeat + extraPass,
+            bleedSource: candidate.traceIndex,
+            bleedCluster: candidate.clusterIndex
+          });
+        }
+      }
+    }
+
+    _pushTrace(traces, points, shape, rng, metadata = {}) {
       if (!points || points.length < 2) return;
 
       const simplified = simplify(points, shape.exportSettings.simplify);
@@ -906,7 +994,11 @@
       traces.push({
         points: simplified,
         style: traceStyle(shape.style, shape.human, rng),
-        closed: isClosedPath(simplified)
+        closed: isClosedPath(simplified),
+        role: metadata.role || "base",
+        pass: metadata.pass || 1,
+        bleedSource: metadata.bleedSource,
+        bleedCluster: metadata.bleedCluster
       });
     }
 
@@ -1020,6 +1112,12 @@
     return Math.max(0, Math.min(1, finiteNumber(value, name)));
   }
 
+  function normalizeToolMode(value) {
+    const mode = value === undefined ? "pen" : String(value);
+    if (!TOOL_MODES.has(mode)) throw new RangeError("tool must be either pen or blade.");
+    return mode;
+  }
+
   function normalizeId(value) {
     const id = String(value).trim();
     if (!id) throw new TypeError("Shape id must be a non-empty string.");
@@ -1027,7 +1125,7 @@
   }
 
   function normalizeHumanOptions(human) {
-    return {
+    const normalized = {
       density: positiveNumber(human.density, "density"),
       wobble: nonNegativeNumber(human.wobble, "wobble"),
       dropout: probability(human.dropout, "dropout"),
@@ -1035,12 +1133,21 @@
       overshoot: nonNegativeNumber(human.overshoot, "overshoot"),
       repeat: boundedInteger(human.repeat, "repeat", 1, MAX_REPEAT),
       drift: nonNegativeNumber(human.drift, "drift"),
+      bleed: probability(human.bleed, "bleed"),
+      bleedPasses: boundedInteger(human.bleedPasses, "bleedPasses", 1, MAX_BLEED_PASSES),
+      bleedSpread: nonNegativeNumber(human.bleedSpread, "bleedSpread"),
+      bleedCluster: positiveNumber(human.bleedCluster, "bleedCluster"),
       rubout: probability(human.rubout, "rubout"),
       fray: nonNegativeNumber(human.fray, "fray"),
       pressure: probability(human.pressure, "pressure"),
       segmentLength: positiveNumber(human.segmentLength, "segmentLength"),
       seed: human.seed === undefined ? null : human.seed
     };
+
+    if (normalized.bleed > 0 && normalized.bleedSpread < MIN_BLEED_SPREAD) {
+      throw new RangeError(`bleedSpread must be at least ${MIN_BLEED_SPREAD} when bleed is greater than zero.`);
+    }
+    return normalized;
   }
 
   function normalizeStyleOptions(style) {
@@ -1189,12 +1296,94 @@
     return paths.reduce((all, path) => all.concat(path), []);
   }
 
+  function clusterPolyline(points, targetLength) {
+    if (!points || points.length < 2) return [];
+    const clusters = [];
+    let current = [copyPoint(points[0])];
+    let currentLength = 0;
+
+    for (let index = 1; index < points.length; index++) {
+      const point = points[index];
+      currentLength += distance(points[index - 1], point);
+      current.push(copyPoint(point));
+
+      if (currentLength >= targetLength) {
+        clusters.push(current);
+        current = [copyPoint(point)];
+        currentLength = 0;
+      }
+    }
+
+    if (current.length >= 2) {
+      if (clusters.length && currentLength < targetLength * 0.35) {
+        clusters[clusters.length - 1].push(...current.slice(1));
+      } else {
+        clusters.push(current);
+      }
+    }
+    return clusters;
+  }
+
+  function shuffleInPlace(values, rng) {
+    for (let index = values.length - 1; index > 0; index--) {
+      const other = Math.floor(rng.next() * (index + 1));
+      const swap = values[index];
+      values[index] = values[other];
+      values[other] = swap;
+    }
+    return values;
+  }
+
+  function offsetBleedFragment(points, spread, rng) {
+    const sign = rng.chance(0.5) ? 1 : -1;
+    const startOffset = sign * spread * rng.range(0.35, 1);
+    const endOffset = sign * spread * rng.range(0.35, 1);
+    const startAlong = rng.range(-spread * 0.08, spread * 0.08);
+    const endAlong = rng.range(-spread * 0.08, spread * 0.08);
+
+    return points.map((point, index) => {
+      const direction = pathDirectionAt(points, index);
+      const normal = { x: -direction.y, y: direction.x };
+      const t = points.length <= 1 ? 0 : index / (points.length - 1);
+      const normalOffset = startOffset + (endOffset - startOffset) * t;
+      const alongOffset = startAlong + (endAlong - startAlong) * t;
+      return {
+        x: point.x + normal.x * normalOffset + direction.x * alongOffset,
+        y: point.y + normal.y * normalOffset + direction.y * alongOffset
+      };
+    });
+  }
+
+  function pathDirectionAt(points, index) {
+    const previous = points[Math.max(0, index - 1)];
+    const next = points[Math.min(points.length - 1, index + 1)];
+    let x = next.x - previous.x;
+    let y = next.y - previous.y;
+
+    if (Math.hypot(x, y) < 0.000001) {
+      x = points[points.length - 1].x - points[0].x;
+      y = points[points.length - 1].y - points[0].y;
+    }
+    if (Math.hypot(x, y) < 0.000001) return { x: 1, y: 0 };
+    return unitVector(x, y);
+  }
+
   function assertPointBudget(paths, maximum, label) {
     let total = 0;
     for (const path of paths) {
       total += path.length;
       if (total > maximum) {
         throw new RangeError(`${label} would create more than ${maximum} points. Increase segmentLength, reduce density, or simplify the input path.`);
+      }
+    }
+  }
+
+  function assertTracePointBudget(traces, maximum, label) {
+    let total = 0;
+    for (const trace of traces) {
+      total += trace.points.length;
+      if (total > maximum) {
+        throw new RangeError(`${label} would exceed ${maximum} points. Reduce repeat/bleed/density or increase segmentLength.`);
       }
     }
   }
@@ -1638,7 +1827,11 @@
       generated: shape.generated.map((trace) => ({
         points: trace.points.map(copyPoint),
         style: Object.assign({}, trace.style),
-        closed: trace.closed === true
+        closed: trace.closed === true,
+        role: trace.role || "base",
+        pass: trace.pass || 1,
+        bleedSource: trace.bleedSource,
+        bleedCluster: trace.bleedCluster
       })),
       bounds: shape.bounds ? Object.assign({}, shape.bounds) : null,
       dirty: shape.dirty

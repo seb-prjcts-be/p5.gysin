@@ -13,6 +13,8 @@ pnpm-debug.log*
 
 # Private agent instructions and working memory
 AGENTS.md
+/STATUS.md
+/VERSLAG.md
 
 # OS/editor files
 .DS_Store

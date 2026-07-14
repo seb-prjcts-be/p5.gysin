@@ -110,6 +110,74 @@ assert.equal(minJson.shapes.length, 4);
 assert.throws(() => new SourcePlot().circle(0, 0, Infinity), /finite number/);
 assert.throws(() => new SourcePlot().path([[0, 0]], {}), /at least 2 points/);
 assert.throws(() => new SourcePlot().line(0, 0, 1, 1, { repeat: 1001 }), /from 1 through 1000/);
+assert.throws(() => new SourcePlot().line(0, 0, 10, 0, {
+  bleed: 0.2,
+  bleedSpread: 0
+}), /bleedSpread must be at least 0.1/);
+
+function buildBleedPlot() {
+  const plot = new SourcePlot({ seed: 77, width: 420, height: 180 });
+  const id = plot.textCutup("INK BUILDS", 20, 100, {
+    size: 42,
+    slices: 7,
+    sliceOffset: 5,
+    sliceDropout: 0.02,
+    bleed: 0.42,
+    bleedPasses: 3,
+    bleedSpread: 1.1,
+    bleedCluster: 12,
+    simplify: 0,
+    minSegmentLength: 0,
+    segmentLength: 3
+  });
+  return { plot, id };
+}
+
+const bleedA = buildBleedPlot();
+const bleedB = buildBleedPlot();
+const bleedShape = bleedA.plot.get(bleedA.id);
+const bleedTraces = bleedShape.generated.filter((trace) => trace.role === "bleed");
+const baseTraces = bleedShape.generated.filter((trace) => trace.role === "base");
+const serializedBaseTraces = new Set(baseTraces.map((trace) => JSON.stringify(trace.points)));
+const bleedStats = bleedA.plot.stats({ drawSpeed: 20, travelSpeed: 60 });
+
+assert.ok(bleedTraces.length > 0);
+assert.ok(baseTraces.length > 0);
+assert.deepEqual(bleedA.plot.get(bleedA.id).generated, bleedB.plot.get(bleedB.id).generated);
+assert.equal(bleedTraces.some((trace) => serializedBaseTraces.has(JSON.stringify(trace.points))), false);
+assert.equal(bleedStats.bleedPaths, bleedTraces.length);
+assert.equal(bleedStats.extraPasses, bleedStats.bleedPaths);
+assert.ok(bleedStats.bleedLength > 0);
+assert.ok(bleedStats.overdrawRatio > 0);
+assert.ok(bleedStats.maxLocalPasses >= 2 && bleedStats.maxLocalPasses <= 4);
+assert.match(bleedA.plot.exportSVG(), /data-role="bleed"/);
+assert.match(bleedA.plot.exportSVG(), /data-pass="[2-4]"/);
+
+const bladeStats = bleedA.plot.stats({ tool: "blade", drawSpeed: 20, travelSpeed: 60 });
+const bladeSvg = bleedA.plot.exportSVG({ tool: "blade" });
+assert.equal(bladeStats.tool, "blade");
+assert.equal(bladeStats.bleedPaths, 0);
+assert.equal(bladeStats.maxLocalPasses, 1);
+assert.equal(bladeStats.paths, baseTraces.length);
+assert.doesNotMatch(bladeSvg, /data-role="bleed"/);
+assert.doesNotMatch(bladeSvg, /data-pass="[2-9]/);
+assert.ok((bleedA.plot.exportHPGL().match(/PD/g) || []).length > (bleedA.plot.exportHPGL({ tool: "blade" }).match(/PD/g) || []).length);
+assert.throws(() => bleedA.plot.exportSVG({ tool: "laser" }), /tool must be either pen or blade/);
+
+const noBleedDefault = new SourcePlot({ seed: 81 });
+noBleedDefault.line(0, 0, 100, 0, { simplify: 0, minSegmentLength: 0 });
+const noBleedExplicit = new SourcePlot({ seed: 81 });
+noBleedExplicit.line(0, 0, 100, 0, {
+  bleed: 0,
+  bleedPasses: 3,
+  bleedSpread: 2,
+  bleedCluster: 30,
+  simplify: 0,
+  minSegmentLength: 0
+});
+assert.equal(noBleedExplicit.exportSVG(), noBleedDefault.exportSVG());
+assert.equal(noBleedExplicit.stats().bleedPaths, 0);
+assert.equal(noBleedExplicit.stats().maxLocalPasses, 1);
 
 const addressing = new SourcePlot({ seed: 4 });
 const addressingId = addressing.line(0, 0, 80, 0, { id: "trace", wobble: 2 });

@@ -118,6 +118,10 @@ lines.forEach((line, index) =&gt; {
         <li><code>hesitate</code>: clamped 0–1 probability of small mechanical hesitations.</li>
         <li><code>repeat</code>: whole number from 1 through 1000; default <code>1</code>.</li>
         <li><code>drift</code>: non-negative global offset between repeats.</li>
+        <li><code>bleed</code>: clamped 0–1 share of written contour length selected for additive ink accumulation.</li>
+        <li><code>bleedPasses</code>: maximum extra passages per selected fragment, from 1 through 3; default <code>2</code>.</li>
+        <li><code>bleedSpread</code>: coherent offset between bleed passages; at least <code>0.1</code> when bleed is active.</li>
+        <li><code>bleedCluster</code>: positive target length for contiguous selected fragments; default <code>18</code>.</li>
         <li><code>rubout</code>: clamped 0–1 strength of generated erase zones.</li>
         <li><code>fray</code>: non-negative amount of loose edge strokes.</li>
         <li><code>pressure</code>: clamped 0–1 screen weight and alpha variation.</li>
@@ -125,6 +129,18 @@ lines.forEach((line, index) =&gt; {
         <li><code>segmentLength</code>: positive target spacing; default <code>8</code>.</li>
         <li><code>seed</code>: optional deterministic seed for one shape.</li>
       </ul>
+    </section>
+
+    <section class="guide-block">
+      <h2>Ink accumulation</h2>
+      <p><code>dropout</code> and <code>rubout</code> remove material. <code>bleed</code> is their additive counterpart: it selects seeded, contiguous trace fragments and adds a bounded number of coherently offset passages. It does not repeat the complete glyph or shape.</p>
+      <div class="code-preview"><code>plot.textCutup("RUB OUT THE WORD", 80, 180, {
+  bleed: 0.22,
+  bleedPasses: 2,
+  bleedSpread: 0.8,
+  bleedCluster: 18
+});</code></div>
+      <p>Generated bleed traces carry <code>data-role="bleed"</code> and <code>data-pass</code> in SVG. Statistics expose <code>bleedPaths</code>, <code>bleedLength</code>, <code>overdrawRatio</code>, and <code>maxLocalPasses</code>.</p>
     </section>
 
     <section class="guide-block">
@@ -173,20 +189,21 @@ plot.remove(titleId);</code>
   clip: true
 };
 
-const svg = plot.exportSVG({ page, optimize: true });
+const svg = plot.exportSVG({ page, optimize: true, tool: "pen" });
 const json = plot.exportJSON();
 const hpgl = plot.exportHPGL({
   page,
   penMap: { frame: 1, type: 2 },
   speed: 20
 });
-const stats = plot.stats({ page, drawSpeed: 20, travelSpeed: 60 });
+const stats = plot.stats({ page, tool: "pen", drawSpeed: 20, travelSpeed: 60 });
 
 plot.downloadSVG("gysin.svg", { page, optimize: true });
 plot.downloadJSON("gysin.json");
 plot.downloadHPGL("gysin.hpgl", { page });</code>
       </div>
       <p>The page model applies units, margins, origin, rotation, scale, and optional clipping to SVG, HPGL, and statistics. Route optimization is opt-in so the original drawing order remains the default.</p>
+      <p><code>tool: "pen"</code> preserves bleed and explicit repeats. <code>tool: "blade"</code> automatically removes every second and later passage, including legacy <code>repeat</code> traces, so a cutter receives only the first physical path.</p>
       <p>Supported units are <code>px</code>, <code>mm</code>, <code>cm</code>, and <code>in</code>. Origins are <code>top-left</code> and <code>bottom-left</code>. SVG precision accepts <code>decimals</code> from 0 through 12. HPGL additionally accepts <code>scale</code>, <code>penMap</code>, <code>speed</code>, offsets, and <code>maxPointsPerCommand</code>.</p>
     </section>
 
@@ -203,7 +220,7 @@ plot.downloadHPGL("gysin.hpgl", { page });</code>
 
     <section class="guide-block">
       <h2>Input safety</h2>
-      <p>Geometry and sampling values must be finite. Invalid dimensions, duplicate shape ids, and paths that would produce more than 100,000 sampled points raise a clear error; probability values are clamped to the 0–1 range.</p>
+      <p>Geometry and sampling values must be finite. Invalid dimensions, duplicate shape ids, generated output above the point budget, and paths that would produce more than 100,000 sampled points raise a clear error; probability values are clamped to the 0–1 range. Active bleed rejects a spread below 0.1 to prevent exact duplicate fragments.</p>
     </section>
   </main>
 
