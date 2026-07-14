@@ -6,6 +6,8 @@
   "files": [
     "p5.gysin.js",
     "p5.gysin.min.js",
+    "p5.gysin.text.js",
+    "p5.gysin.text.min.js",
     "README.md",
     "LICENSE"
   ],

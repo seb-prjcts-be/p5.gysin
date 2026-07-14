@@ -3,19 +3,22 @@ const path = require("node:path");
 
 const root = path.resolve(__dirname, "..");
 const packagePath = path.join(root, "package.json");
-const sourcePath = path.join(root, "p5.gysin.js");
-const outputPath = path.join(root, "p5.gysin.min.js");
-
 const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8"));
-const source = fs.readFileSync(sourcePath, "utf8").replace(/\r\n/g, "\n");
+const builds = [
+  ["p5.gysin.js", "p5.gysin.min.js"],
+  ["p5.gysin.text.js", "p5.gysin.text.min.js"]
+];
 
-// Keep the distributable semantically identical to the source. A previous
-// whitespace-only minifier broke spaces inside template literals, corrupting
-// SVG path data and viewBox values.
-const body = source.replace(/^\s*\/\*[\s\S]*?\*\/\s*/, "").trimEnd();
-const banner = `/* ${pkg.name} v${pkg.version} | ${pkg.license} | https://github.com/seb-prjcts-be/p5.gysin */\n`;
+for (const [sourceName, outputName] of builds) {
+  const sourcePath = path.join(root, sourceName);
+  const outputPath = path.join(root, outputName);
+  const source = fs.readFileSync(sourcePath, "utf8").replace(/\r\n/g, "\n");
 
-fs.writeFileSync(outputPath, `${banner}${body}\n`, "utf8");
+  // Keep each distributable semantically identical to its source. A previous
+  // whitespace-only minifier broke spaces inside template literals.
+  const body = source.replace(/^\s*\/\*[\s\S]*?\*\/\s*/, "").trimEnd();
+  const banner = `/* ${sourceName.replace(/\.js$/, "")} v${pkg.version} | ${pkg.license} | https://github.com/seb-prjcts-be/p5.gysin */\n`;
 
-const bytes = fs.statSync(outputPath).size;
-console.log(`Built p5.gysin.min.js (${bytes} bytes)`);
+  fs.writeFileSync(outputPath, `${banner}${body}\n`, "utf8");
+  console.log(`Built ${outputName} (${fs.statSync(outputPath).size} bytes)`);
+}

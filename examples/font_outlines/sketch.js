@@ -1,4 +1,4 @@
-const FONT_URL = "assets/Anton-Regular.ttf";
+const FONT_URL = "assets/Oswald-Regular.otf";
 
 let outlineFont;
 let plot;
@@ -11,7 +11,7 @@ async function setup() {
 
   try {
     outlineFont = await loadFont(FONT_URL);
-    document.getElementById("font-status").textContent = "Real font outlines loaded. O, 8, B, and R keep their counters.";
+    document.getElementById("font-status").textContent = "Oswald outlines loaded. O, 8, B, and R keep their counters.";
   } catch (error) {
     document.getElementById("font-status").textContent = "The remote font could not load, so this preview uses the built-in vector alphabet.";
   }

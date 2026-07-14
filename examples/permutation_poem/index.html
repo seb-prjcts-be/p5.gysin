@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Permutation Poem | p5.gysin examples</title>
+  <link rel="stylesheet" href="../showcase.css">
+  <style>
+    .poster-layout {
+      grid-template-columns: minmax(300px, 0.64fr) minmax(420px, 1fr);
+      max-width: 1320px;
+    }
+
+    .poster-canvas {
+      background: #f1ecdf;
+    }
+
+    @media (max-width: 900px) {
+      .poster-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Showcase</a></li>
+      <li><a href="../../docs/examples.html" class="active">Examples</a></li>
+      <li><a href="../../docs/guide.html">Guide</a></li>
+      <li><a href="../../docs/about.html">About</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">GysinText.permute() → textCutup() → plotter paths</div>
+      <h1>Permutation Poem</h1>
+      <p>The optional text module rearranges the sentence. The original cut-up engine then passes every permutation through repeated type, a symbolic code column, damaged letter bands, and a modular grid. Meaning and letterform are disturbed in two separate passes.</p>
+    </div>
+    <div class="demo-layout poster-layout">
+      <div class="demo-code">
+        <div class="code-label">Two independent layers</div>
+        <pre><code class="language-javascript">const regels = GysinText.permute("I LOVE YOU", {
+  seed: 1960,
+  limit: 6,
+  order: "walk"
+});
+
+regels.forEach((regel, index) =&gt; {
+  plot.textCutup(regel, x[index], y[index], {
+    font: outlineFont,
+    slices: 7 + index,
+    sliceOffset: 14 + index * 6,
+    dropout: 0.02 + index * 0.01
+  });
+});</code></pre>
+        <div class="demo-actions" aria-label="Permutation poster actions">
+          <button type="button" id="reroll-button">New order</button>
+          <button type="button" id="svg-button">Download A3 SVG</button>
+          <button type="button" id="hpgl-button">Download HPGL</button>
+        </div>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas poster-canvas" id="sketch" role="img" aria-label="A monochrome A3 typographic poster containing repeated cut-up permutations of I love you, a symbolic code column, dense letter bands, and a modular grid."></div>
+        <div class="demo-note" id="poster-status" role="status" aria-live="polite">Loading the outline font…</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p><a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp; <a href="../../docs/guide.html">Guide</a></p>
+    <p class="footer-sub">Optional text addon &nbsp;&middot;&nbsp; p5.gysin v0.2.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.text.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

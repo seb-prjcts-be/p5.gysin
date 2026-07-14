@@ -97,6 +97,33 @@ plot.text("FIRST TRACE", 68, 255, {
     </div>
   </section>
 
+  <section id="permutation-poem" class="section">
+    <div class="section-header">
+      <div class="section-tag">GysinText.permute() · textCutup()</div>
+      <h2>Permutation <span class="accent">Poem</span></h2>
+      <p class="section-desc">Reorder the words first, then send every resulting line through the original contour cut-up and plotter pipeline.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-permutation" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const regels = GysinText.permute("I LOVE YOU", {
+  seed: 1960,
+  limit: 6,
+  order: "walk"
+});
+
+regels.forEach((regel, index) =&gt; {
+  plot.textCutup(regel, 48, 90 + index * 46, {
+    slices: 7 + index,
+    sliceOffset: 12 + index * 4
+  });
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/permutation_poem/" target="_blank">-&gt; full poster</a>
+        <a class="ex-full-link" href="../examples/permutation_poem/sketch.js" target="_blank">-&gt; source sketch</a>
+      </div>
+    </div>
+  </section>
+
   <section id="parameter-lab" class="section">
     <div class="section-header">
       <div class="section-tag">wobble · dropout · repeat</div>
@@ -220,6 +247,7 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2 } });</code></p
 
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="../p5.gysin.min.js"></script>
+  <script src="../p5.gysin.text.min.js"></script>
   <script>
   function previewSize(id) {
     const element = document.getElementById(id);
@@ -265,7 +293,7 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2 } });</code></p
     }
   }
 
-  const OUTLINE_FONT_URL = "../examples/font_outlines/assets/Anton-Regular.ttf";
+  const OUTLINE_FONT_URL = "../examples/font_outlines/assets/Oswald-Regular.otf";
 
   function makeFontPreview(id) {
     new p5(function(p) {
@@ -412,6 +440,38 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2 } });</code></p
       dropout: 0.09,
       repeat: 2,
       rubout: 0.12
+    });
+    return plot;
+  });
+
+  makePreview("ex-permutation", function(p, canvasW, canvasH) {
+    const plot = new GysinPlot({
+      p: p,
+      seed: 1960,
+      width: canvasW,
+      height: canvasH,
+      style: { stroke: "#171717", strokeWeight: 0.82, alpha: 0.88 }
+    });
+    const regels = GysinText.permute("I LOVE YOU", {
+      seed: 1960,
+      limit: 6,
+      order: "walk"
+    });
+    regels.forEach(function(regel, index) {
+      for (let repeatIndex = 0; repeatIndex < 3; repeatIndex++) {
+        const y = 38 + index * (canvasH - 58) / 6 + repeatIndex * 11;
+        plot.textCutup(regel, 30 + (repeatIndex === 2 ? 6 : 0), y, {
+          size: canvasW * 0.041,
+          slices: 4 + index,
+          sliceOffset: 1 + index * 0.8,
+          sliceDropout: 0.02 + repeatIndex * 0.01,
+          wobble: 0.12,
+          dropout: 0.01,
+          stroke: "#171717",
+          strokeWeight: 0.65,
+          alpha: repeatIndex === 1 ? 0.62 : 0.84
+        });
+      }
     });
     return plot;
   });

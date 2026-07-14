@@ -9,6 +9,12 @@
       "added_in": "0.1.0",
       "status": "mvp",
       "note": "Main class for vector capture, sampling, humanized traces, addressing, and export."
+    },
+    {
+      "name": "GysinText.permute",
+      "added_in": "next",
+      "status": "optional-addon",
+      "note": "Dependency-free seeded word permutations that can run alone or feed lines into text() and textCutup()."
     }
   ]
 }

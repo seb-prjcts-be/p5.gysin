@@ -88,6 +88,28 @@ function setup() {
     </section>
 
     <section class="guide-block">
+      <h2>Optional Text Permutations</h2>
+      <p><code>p5.gysin.text.min.js</code> is a separate dependency-free addon. It works without p5.js and without <code>GysinPlot</code>, returning ordinary strings that can optionally be drawn through the existing core.</p>
+      <div class="code-preview">
+        <code>&lt;script src="../p5.gysin.text.min.js"&gt;&lt;/script&gt;
+
+const lines = GysinText.permute("I LOVE YOU", {
+  seed: 1960,
+  limit: 6,
+  order: "walk"
+});
+
+lines.forEach((line, index) =&gt; {
+  plot.textCutup(line, 70, 140 + index * 90, {
+    slices: 7 + index,
+    sliceOffset: 14 + index * 6
+  });
+});</code>
+      </div>
+      <p>Orders: <code>walk</code>, <code>random</code>, <code>lexical</code>, and <code>rotate</code>. The source line stays first, duplicate words produce only unique lines, and <code>limit</code> is capped at 1,000.</p>
+    </section>
+
+    <section class="guide-block">
       <h2>Trace Parameters</h2>
       <ul>
         <li><code>density</code>: positive point sampling density; default <code>1</code>.</li>

@@ -18,6 +18,44 @@ function loadLibrary(filename) {
 const SourcePlot = loadLibrary(path.join(__dirname, "..", "p5.gysin.js"));
 const MinPlot = loadLibrary(path.join(__dirname, "..", "p5.gysin.min.js"));
 
+function loadTextAddon(filename) {
+  const context = {};
+  context.globalThis = context;
+  vm.createContext(context);
+  vm.runInContext(fs.readFileSync(filename, "utf8"), context, { filename });
+  assert.equal(typeof context.GysinText, "object");
+  assert.equal(typeof context.GysinText.permute, "function");
+  assert.equal(typeof context.GysinPlot, "undefined");
+  return context.GysinText;
+}
+
+const SourceText = loadTextAddon(path.join(__dirname, "..", "p5.gysin.text.js"));
+const MinText = loadTextAddon(path.join(__dirname, "..", "p5.gysin.text.min.js"));
+
+const loveWalk = Array.from(SourceText.permute("I love you", { seed: 1960, limit: 6, order: "walk" }));
+assert.equal(loveWalk.length, 6);
+assert.equal(loveWalk[0], "I love you");
+assert.equal(new Set(loveWalk).size, 6);
+assert.deepEqual(
+  Array.from(SourceText.permute("I love you", { seed: 1960, limit: 6, order: "walk" })),
+  loveWalk
+);
+assert.deepEqual(
+  Array.from(MinText.permute("I love you", { seed: 1960, limit: 6, order: "walk" })),
+  loveWalk
+);
+
+const divinePermutations = Array.from(SourceText.permute("I AM THAT I AM", { limit: 100, order: "lexical" }));
+assert.equal(divinePermutations.length, 30);
+assert.equal(new Set(divinePermutations).size, 30);
+assert.deepEqual(
+  Array.from(SourceText.permute("one two three", { limit: 3, order: "rotate" })),
+  ["one two three", "two three one", "three one two"]
+);
+assert.throws(() => SourceText.permute("  "), /at least one word/);
+assert.throws(() => SourceText.permute("one two", { limit: 0 }), /from 1 through 1000/);
+assert.throws(() => SourceText.permute("one two", { order: "grammar" }), /order must be one of/);
+
 function build(Plot) {
   const plot = new Plot({ seed: 123, width: 400, height: 300 });
   const lineId = plot.line(10, 10, 390, 20, {

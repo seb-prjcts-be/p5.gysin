@@ -13,6 +13,8 @@ leven als standalone pagina's onder `examples/`.
 
 - `p5.gysin.js` - source library
 - `p5.gysin.min.js` - semantisch identieke browserbuild voor examples/docs; bewust niet agressief geminified
+- `p5.gysin.text.js` - optionele, zelfstandige tekstpermutaties; draait zonder p5.js en zonder de core
+- `p5.gysin.text.min.js` - semantisch identieke browserbuild van de tekstmodule
 - `index.html` - Pages showcase
 - `docs/examples.html` - overzicht van voorbeelden
 - `docs/guide.html` - publieke handleiding
@@ -49,9 +51,48 @@ function setup() {
     overshoot: 8
   });
 
-  plot.draw();
+plot.draw();
 }
 ```
+
+## Optionele tekstpermutaties
+
+Laad de tekstmodule alleen wanneer je zinnen wilt herordenen. De module heeft
+geen p5.js of `GysinPlot` nodig en retourneert gewone strings:
+
+```html
+<script src="p5.gysin.text.min.js"></script>
+```
+
+```js
+const regels = GysinText.permute("I LOVE YOU", {
+  seed: 1960,
+  limit: 6,
+  order: "walk"
+});
+```
+
+Combineer beide modules om iedere permutatie door de bestaande grafische
+cut-up te sturen:
+
+```js
+regels.forEach((regel, index) => {
+  plot.textCutup(regel, 70, 150 + index * 100, {
+    slices: 7 + index,
+    sliceOffset: 14 + index * 6
+  });
+});
+```
+
+Beschikbare ordeningen zijn `walk`, `random`, `lexical` en `rotate`. De
+originele zin staat altijd eerst; dubbele woorden leveren geen dubbele regels
+op. `limit` is standaard 24 en maximaal 1.000.
+
+De taal- en beeldbewerking blijven bewust gescheiden: `GysinText.permute()`
+deconstrueert de woordvolgorde, waarna `textCutup()` elke gekozen regel opnieuw
+versnijdt als lettercontour. Het voorbeeld `permutation_poem` gebruikt die
+tweestapsmethode voor een monochrome A3-compositie met herhaalde tekstvelden,
+een symbolische codekolom en een modulair raster.
 
 ## Voorbeelden
 
@@ -77,6 +118,7 @@ Beschikbare voorbeelden:
 
 - `first_trace` - minimale trace-compositie
 - `gysin_demo` - cut-up typography en rubout
+- `permutation_poem` - A3-poster waarin alle woordpermutaties opnieuw door `textCutup()` gaan
 - `p5_editor` - copy-paste starter voor editor.p5js.org
 - `parameter_lab` - live controle over trace-parameters
 - `plotter_export` - SVG/JSON/HPGL exportworkflow
