@@ -18,7 +18,7 @@ async function setup() {
 
   try {
     outlineFont = await loadFont(FONT_URL);
-    setStatus("Every line uses Oswald outlines and the original textCutup() pipeline.");
+    setStatus("Plotter-safe Oswald outlines: every permutation uses textCutup(), without retraced paths.");
   } catch (error) {
     setStatus("The outline font could not load; the poster is using p5.gysin's built-in vector alphabet.");
   }
@@ -81,7 +81,7 @@ function buildPoster() {
     const encoded = encodePermutation(regel);
 
     for (let repeatIndex = 0; repeatIndex < 6; repeatIndex++) {
-      const baseline = groupTop + repeatIndex * 14;
+      const baseline = groupTop + repeatIndex * 16;
       const offset = 0.7 + ((groupIndex * 3 + repeatIndex) % 7) * 0.72;
 
       plot.textCutup(textField, 64 + (repeatIndex === 4 ? 8 : 0), baseline, Object.assign({}, font, {
@@ -134,8 +134,6 @@ function drawLetterBand(font) {
 
   plot.line(56, 812, 784, 812, {
     wobble: 0.2,
-    repeat: 2,
-    drift: 0.6,
     strokeWeight: 0.7,
     alpha: 0.58,
     layer: "rules"
@@ -176,8 +174,6 @@ function drawPermutationGrid(font) {
     plot.rect(x, y, cellWidth, cellHeight, {
       wobble: 0.65,
       dropout: 0.02,
-      repeat: index % 2 === 0 ? 2 : 1,
-      drift: 0.8,
       strokeWeight: 0.68,
       alpha: 0.68,
       layer: "grid"
@@ -190,8 +186,6 @@ function drawPermutationGrid(font) {
       sliceDropout: 0.035 + index * 0.006,
       wobble: 0.2 + index * 0.035,
       dropout: 0.012,
-      repeat: index === 5 ? 2 : 1,
-      drift: 0.8,
       rubout: index === 2 ? 0.025 : 0,
       segmentLength: 3.4,
       strokeWeight: 0.94,
@@ -215,8 +209,6 @@ function drawFrame() {
   plot.rect(42, 42, POSTER_WIDTH - 84, POSTER_HEIGHT - 84, {
     wobble: 0.45,
     dropout: 0.006,
-    repeat: 2,
-    drift: 0.45,
     strokeWeight: 0.62,
     alpha: 0.64,
     layer: "frame"

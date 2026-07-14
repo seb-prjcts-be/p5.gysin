@@ -211,6 +211,49 @@ const outlinePlot = new SourcePlot();
 const outlineId = outlinePlot.text("O", 0, 0, { size: 20, font: outlineFont, simplify: 0 });
 assert.equal(outlinePlot.get(outlineId).paths.length, 2);
 
+let p5TextSize = null;
+let p5Pushes = 0;
+let p5Pops = 0;
+const p5V2Font = {
+  textToContours(value, x, y, options) {
+    assert.equal(value, "WIDE");
+    assert.equal(x, 10);
+    assert.equal(y, 60);
+    assert.equal(p5TextSize, 42);
+    assert.equal(options.sampleFactor, 0.18);
+    return [[
+      { x: 10, y: 20 },
+      { x: 110, y: 20 },
+      { x: 110, y: 60 },
+      { x: 10, y: 60 },
+      { x: 10, y: 20 }
+    ]];
+  },
+  textToPoints() {
+    throw new Error("p5.js 2 text must not use the legacy width argument");
+  }
+};
+const p5V2Plot = new SourcePlot({
+  p: {
+    push() { p5Pushes += 1; },
+    pop() { p5Pops += 1; },
+    textSize(size) { p5TextSize = size; },
+    width: 200,
+    height: 100
+  }
+});
+const p5V2Id = p5V2Plot.text("WIDE", 10, 60, {
+  size: 42,
+  font: p5V2Font,
+  simplify: 0,
+  minSegmentLength: 0
+});
+const p5V2Shape = p5V2Plot.get(p5V2Id);
+assert.equal(p5V2Shape.bounds.width, 100);
+assert.equal(p5V2Shape.bounds.height, 40);
+assert.equal(p5Pushes, 1);
+assert.equal(p5Pops, 1);
+
 const root = path.join(__dirname, "..");
 const manifest = JSON.parse(fs.readFileSync(
   path.join(root, "docs", "p5.gysin.manifest.json"),
