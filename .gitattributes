@@ -1,0 +1,14 @@
+# Normaliseer regeleindes zodat build-artefacten (min.js, manifest) op elk
+# platform identiek blijven aan wat tools/build-min.js en gen-manifest.js schrijven.
+# Zonder dit merkt git op Windows de rebuild als "gewijzigd" terwijl de inhoud gelijk is.
+* text=auto eol=lf
+
+# Binaire bestanden nooit aanraken.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
