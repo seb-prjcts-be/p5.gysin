@@ -21,6 +21,10 @@
     "rubout",
     "fray",
     "pressure",
+    "fill",
+    "hatchSpacing",
+    "hatchAngle",
+    "glyphJitter",
     "segmentLength",
     "seed"
   ];
@@ -43,6 +47,10 @@
     rubout: 0,
     fray: 0,
     pressure: 0,
+    fill: "none",
+    hatchSpacing: 2,
+    hatchAngle: 0,
+    glyphJitter: 0.35,
     segmentLength: 8,
     seed: null
   };
@@ -69,6 +77,9 @@
   const MAX_GENERATED_POINTS = 1000000;
   const MAX_OPTIMIZE_TRACES = 2000;
   const MAX_SVG_DECIMALS = 12;
+  const MAX_FILL_LINES = 6000;
+  const MIN_HATCH_SPACING = 0.25;
+  const FILL_MODES = new Set(["none", "hatch", "cross"]);
 
   const SIMPLE_FONT = {
     "A": ["01110", "10001", "10001", "11111", "10001", "10001", "10001"],
@@ -198,6 +209,120 @@
 
     text(value, x, y, options = {}) {
       return this._addShape("text", textParams(value, finiteNumber(x, "text x"), finiteNumber(y, "text y"), options), false, options);
+    }
+
+    asemic(x, y, w, h, options = {}) {
+      if (![x, y, w, h].every((v) => Number.isFinite(v))) {
+        throw new TypeError("asemic() needs finite x, y, w, and h.");
+      }
+      const seedKey = options.seed === undefined
+        ? `${this.globalSeed}:asemic:${this._asemicCount = (this._asemicCount || 0) + 1}`
+        : options.seed;
+      const rng = new SeededRandom(seedKey);
+      const loops = options.loops === undefined ? 4 + Math.floor(rng.next() * 4) : positiveInteger(options.loops, "loops");
+      const detail = options.detail === undefined ? 16 : positiveInteger(options.detail, "detail");
+      const steps = Math.min(2000, loops * detail);
+      const cx = x + w / 2;
+      const cy = y + h / 2;
+      const reach = Math.min(w, h) * 0.44;
+
+      // A smooth turning walk that drifts back toward the centre reads as a
+      // compact, cursive, handwriting-like tangle rather than an angular net.
+      const points = [];
+      let ang = rng.range(0, Math.PI * 2);
+      let px = cx + rng.range(-reach, reach) * 0.3;
+      let py = cy + rng.range(-reach, reach) * 0.3;
+      for (let i = 0; i <= steps; i++) {
+        ang += rng.range(0.32, 0.78);
+        const r = reach * (0.35 + 0.55 * Math.abs(Math.sin(i * 0.27)));
+        px += Math.cos(ang) * r * 0.34 + (cx - px) * 0.06;
+        py += Math.sin(ang) * r * 0.34 + (cy - py) * 0.06;
+        points.push([px, py]);
+      }
+
+      const pathOptions = Object.assign({ wobble: 0.5, strokeWeight: 1.3, seed: seedKey }, options);
+      delete pathOptions.loops;
+      delete pathOptions.detail;
+      return this.path(points, pathOptions);
+    }
+
+    // Draw a modular, ink-bled frame grid and return its cell rectangles so a
+    // composition can place fields and gestures declaratively instead of with
+    // hand-computed coordinates.
+    grid(x, y, w, h, cols, rows, options = {}) {
+      if (![x, y, w, h].every((v) => Number.isFinite(v)) || w <= 0 || h <= 0) {
+        throw new TypeError("grid() needs finite x, y and positive w, h.");
+      }
+      const c = positiveInteger(cols, "cols");
+      const r = positiveInteger(rows, "rows");
+      const gap = options.gap === undefined ? 0 : nonNegativeNumber(options.gap, "gap");
+      const cw = w / c;
+      const ch = h / r;
+      const frameOptions = Object.assign(
+        { wobble: 0.8, bleed: 0.35, bleedPasses: 3, bleedSpread: 1.2, strokeWeight: 2.4, dropout: 0.015, layer: "frame" },
+        options.frame || {}
+      );
+
+      if (options.outer !== false) {
+        this.rect(x, y, w, h, Object.assign({}, frameOptions, { strokeWeight: frameOptions.strokeWeight + 0.9 }));
+      }
+
+      const cells = [];
+      for (let row = 0; row < r; row++) {
+        for (let col = 0; col < c; col++) {
+          const cx = x + col * cw + gap;
+          const cy = y + row * ch + gap;
+          const cellW = cw - 2 * gap;
+          const cellH = ch - 2 * gap;
+          if (options.cells !== false) this.rect(cx, cy, cellW, cellH, frameOptions);
+          cells.push({ x: cx, y: cy, w: cellW, h: cellH, col, row });
+        }
+      }
+      return cells;
+    }
+
+    // Fill a box with rows of letters drawn from a source phrase, clustered by
+    // repetition so words dissolve into a decaying letter field.
+    letters(source, x, y, w, h, options = {}) {
+      const pool = String(source).toUpperCase().replace(/[^A-Z0-9]/g, "").split("");
+      if (!pool.length) throw new TypeError("letters() needs at least one letter or digit.");
+      return this._textField(pool, true, x, y, w, h, options);
+    }
+
+    // Fill a box with a texture of typewriter operator glyphs.
+    symbols(x, y, w, h, options = {}) {
+      const pool = String(options.set === undefined ? "+\"#&/" : options.set).split("");
+      if (!pool.length) throw new TypeError("symbols() needs at least one symbol.");
+      return this._textField(pool, options.cluster === true, x, y, w, h, options);
+    }
+
+    _textField(pool, cluster, x, y, w, h, options) {
+      if (![x, y, w, h].every((v) => Number.isFinite(v)) || w <= 0 || h <= 0) {
+        throw new TypeError("text field needs finite x, y and positive w, h.");
+      }
+      const size = options.size === undefined ? 12 : positiveNumber(options.size, "size");
+      const lineHeight = size * (options.lineHeight === undefined ? 1.25 : positiveNumber(options.lineHeight, "lineHeight"));
+      const seedKey = options.seed === undefined
+        ? `${this.globalSeed}:field:${this._fieldCount = (this._fieldCount || 0) + 1}`
+        : options.seed;
+      const rng = new SeededRandom(seedKey);
+      const perRow = Math.max(1, Math.floor(w / (size * 0.62)));
+      const rows = Math.max(1, Math.floor(h / lineHeight));
+      const textOptions = Object.assign({}, options);
+      delete textOptions.set;
+      delete textOptions.lineHeight;
+      delete textOptions.seed;
+
+      const ids = [];
+      for (let r = 0; r < rows; r++) {
+        let s = "";
+        while (s.length < perRow) {
+          const glyph = pool[Math.floor(rng.next() * pool.length)];
+          s += cluster ? glyph.repeat(1 + Math.floor(rng.next() * 3)) : glyph;
+        }
+        ids.push(this.text(s.slice(0, perRow), x, y + size + r * lineHeight, Object.assign({ size }, textOptions)));
+      }
+      return ids;
     }
 
     textCutup(value, x, y, options = {}) {
@@ -457,6 +582,8 @@
       let travelLength = 0;
       let bleedLength = 0;
       let bleedPaths = 0;
+      let fillLength = 0;
+      let fillPaths = 0;
       let maxLocalPasses = 1;
       let previous = null;
 
@@ -466,6 +593,10 @@
         if (trace.role === "bleed") {
           bleedLength += length;
           bleedPaths += 1;
+        }
+        if (trace.role === "fill") {
+          fillLength += length;
+          fillPaths += 1;
         }
         maxLocalPasses = Math.max(maxLocalPasses, trace.pass || 1);
         if (previous) travelLength += distance(previous, trace.points[0]);
@@ -491,6 +622,8 @@
         extraPasses: bleedPaths,
         bleedPaths,
         bleedLength,
+        fillPaths,
+        fillLength,
         overdrawRatio: drawnLength > bleedLength ? bleedLength / (drawnLength - bleedLength) : 0,
         maxLocalPasses,
         tool,
@@ -517,6 +650,7 @@
         params,
         points: [],
         paths: [],
+        fillPaths: [],
         closed,
         style,
         baseSeed,
@@ -598,6 +732,7 @@
         for (const trace of shape.generated) {
           if (trace.points.length < 2) continue;
           if (tool === "blade" && (trace.pass || 1) > 1) continue;
+          if (tool === "blade" && trace.role === "fill") continue;
           const transformed = trace.points.map((point) => transformPagePoint(point, page));
           const paths = clipRect ? clipPolyline(transformed, clipRect) : [transformed];
           for (const points of paths) {
@@ -633,6 +768,10 @@
       assertPointBudget(shape.paths, MAX_SAMPLE_POINTS, "shape sampling");
       shape.points = flatten(shape.paths);
       shape.bounds = boundsOfPaths(shape.paths);
+      shape.fillPaths = this._buildFillPaths(shape);
+      if (shape.fillPaths.length) {
+        assertPointBudget(shape.fillPaths, MAX_SAMPLE_POINTS, "shape fill");
+      }
       if (shape.points.length * shape.human.repeat > MAX_GENERATED_POINTS) {
         throw new RangeError(`Shape generation would exceed ${MAX_GENERATED_POINTS} points. Reduce repeat/density or increase segmentLength.`);
       }
@@ -718,13 +857,23 @@
     _sampleTextPaths(shape) {
       const params = shape.params;
       const hasFont = params.font && typeof params.font.textToPoints === "function";
-      const paths = hasFont ? this._fontTextPaths(shape) : this._bitmapTextPaths(shape);
+      const raw = hasFont ? this._fontTextPaths(shape) : this._bitmapTextPaths(shape);
+      const paths = this._applyGlyphJitter(raw, shape);
 
       if (shape.type === "textCutup" && hasFont) {
         return this._applyCutupToPaths(paths, shape);
       }
 
       return paths;
+    }
+
+    // Per-glyph variation so every rendered letter differs. No-op when
+    // glyphJitter is 0, so shapes without it keep byte-identical output.
+    _applyGlyphJitter(paths, shape) {
+      const amount = shape.human.glyphJitter;
+      if (!amount || !paths.length) return paths;
+      const rng = new SeededRandom(`${shape.seed}:glyph-jitter`);
+      return jitterGlyphContours(paths, amount, shape.params.size, rng);
     }
 
     _fontTextPaths(shape) {
@@ -942,6 +1091,7 @@
       }
 
       if (h.bleed > 0) this._addBleedTraces(traces, shape, rng, repeat);
+      if (shape.fillPaths && shape.fillPaths.length) this._emitFill(traces, shape, rng, ruboutZones);
       return traces;
     }
 
@@ -981,6 +1131,69 @@
             bleedCluster: candidate.clusterIndex
           });
         }
+      }
+    }
+
+    _buildFillPaths(shape) {
+      const h = shape.human;
+      if (h.fill === "none") return [];
+      const contours = this._fillableContours(shape);
+      if (!contours.length) return [];
+      if (h.fill === "hatch") {
+        return fillHatch(contours, h.hatchSpacing, h.hatchAngle, MAX_FILL_LINES);
+      }
+      if (h.fill === "cross") {
+        // Two hatch passes at right angles read as a more even, solid ink than
+        // single-direction stripes — easier on legibility for filled type.
+        return fillHatch(contours, h.hatchSpacing, h.hatchAngle, MAX_FILL_LINES)
+          .concat(fillHatch(contours, h.hatchSpacing, h.hatchAngle + 90, MAX_FILL_LINES));
+      }
+      return [];
+    }
+
+    // Closed contours whose interior can be filled. Open shapes (line, path) and
+    // the built-in bitmap alphabet have no fillable interior; text only fills
+    // when a real outline font supplies closed glyph contours.
+    _fillableContours(shape) {
+      const type = shape.type;
+      if (type === "rect" || type === "polygon" || type === "circle") return shape.paths;
+      if (type === "text" || type === "textCutup") {
+        const params = shape.params;
+        const hasFont = params.font && typeof params.font.textToPoints === "function";
+        if (!hasFont) return [];
+        // For textCutup the stored paths are already sliced open, so recompute
+        // the un-cut glyph outline (with the same per-glyph jitter) to fill the
+        // true letter shapes. For plain text the stored paths are already it.
+        return type === "text"
+          ? shape.paths
+          : this._applyGlyphJitter(this._fontTextPaths(shape), shape);
+      }
+      return [];
+    }
+
+    // Fill runs last in the rng stream and only when fill is active, so shapes
+    // without fill keep byte-identical output. Fill lines honor wobble, dropout
+    // and rubout like any other trace, tagged role "fill".
+    _emitFill(traces, shape, rng, ruboutZones) {
+      const h = shape.human;
+      const wobble = Number(h.wobble) || 0;
+      const meta = { role: "fill", pass: 1 };
+
+      for (const segment of shape.fillPaths) {
+        const sampled = this._samplePolyline(segment, false, h);
+        let current = [];
+        for (const source of sampled) {
+          if (insideAnyRuboutZone(source, ruboutZones) || rng.chance(h.dropout)) {
+            this._pushTrace(traces, current, shape, rng, meta);
+            current = [];
+            continue;
+          }
+          current.push({
+            x: source.x + rng.range(-wobble, wobble),
+            y: source.y + rng.range(-wobble, wobble)
+          });
+        }
+        this._pushTrace(traces, current, shape, rng, meta);
       }
     }
 
@@ -1140,6 +1353,10 @@
       rubout: probability(human.rubout, "rubout"),
       fray: nonNegativeNumber(human.fray, "fray"),
       pressure: probability(human.pressure, "pressure"),
+      fill: normalizeFillMode(human.fill),
+      hatchSpacing: positiveNumber(human.hatchSpacing, "hatchSpacing"),
+      hatchAngle: finiteNumber(human.hatchAngle, "hatchAngle"),
+      glyphJitter: nonNegativeNumber(human.glyphJitter, "glyphJitter"),
       segmentLength: positiveNumber(human.segmentLength, "segmentLength"),
       seed: human.seed === undefined ? null : human.seed
     };
@@ -1147,7 +1364,19 @@
     if (normalized.bleed > 0 && normalized.bleedSpread < MIN_BLEED_SPREAD) {
       throw new RangeError(`bleedSpread must be at least ${MIN_BLEED_SPREAD} when bleed is greater than zero.`);
     }
+    if (normalized.fill !== "none" && normalized.hatchSpacing < MIN_HATCH_SPACING) {
+      throw new RangeError(`hatchSpacing must be at least ${MIN_HATCH_SPACING} when fill is active.`);
+    }
     return normalized;
+  }
+
+  function normalizeFillMode(value) {
+    if (value === undefined || value === null) return "none";
+    const mode = String(value);
+    if (!FILL_MODES.has(mode)) {
+      throw new RangeError(`fill must be one of: ${Array.from(FILL_MODES).join(", ")}.`);
+    }
+    return mode;
   }
 
   function normalizeStyleOptions(style) {
@@ -1645,6 +1874,147 @@
     let total = 0;
     for (let i = 1; i < points.length; i++) total += distance(points[i - 1], points[i]);
     return total;
+  }
+
+  // Group contours into glyphs by horizontal overlap. Letter outlines are laid
+  // out left to right with gaps between them; a glyph's counter (the hole in O,
+  // A, e) overlaps its outer contour in x, so it lands in the same group.
+  function groupGlyphContours(paths) {
+    const items = [];
+    for (const contour of paths) {
+      const bounds = boundsOfPaths([contour]);
+      if (bounds) items.push({ contour, minX: bounds.minX, maxX: bounds.maxX });
+    }
+    items.sort((a, b) => a.minX - b.minX);
+
+    const groups = [];
+    let current = null;
+    for (const item of items) {
+      if (current && item.minX <= current.maxX) {
+        current.contours.push(item.contour);
+        if (item.maxX > current.maxX) current.maxX = item.maxX;
+      } else {
+        current = { contours: [item.contour], maxX: item.maxX };
+        groups.push(current);
+      }
+    }
+    return groups;
+  }
+
+  function contoursCentroid(contours) {
+    let sx = 0;
+    let sy = 0;
+    let n = 0;
+    for (const contour of contours) {
+      for (const pt of contour) {
+        sx += pt.x;
+        sy += pt.y;
+        n += 1;
+      }
+    }
+    return n ? { x: sx / n, y: sy / n } : { x: 0, y: 0 };
+  }
+
+  // Give every glyph its own small affine variation (rotation, offset, scale)
+  // around its centroid, so no two rendered letters are identical — not even two
+  // of the same character. Amounts are relative to the type size and driven by a
+  // per-glyph rng, so the result is deterministic but independent per glyph.
+  function jitterGlyphContours(paths, amount, size, rng) {
+    const scaleUnit = size || 1;
+    const result = [];
+
+    for (const group of groupGlyphContours(paths)) {
+      const c = contoursCentroid(group.contours);
+      const rotation = rng.range(-amount, amount) * 0.16;
+      const dx = rng.range(-amount, amount) * scaleUnit * 0.06;
+      const dy = rng.range(-amount, amount) * scaleUnit * 0.06;
+      const scale = 1 + rng.range(-amount, amount) * 0.05;
+      const cos = Math.cos(rotation);
+      const sin = Math.sin(rotation);
+
+      for (const contour of group.contours) {
+        result.push(contour.map((pt) => {
+          const x = (pt.x - c.x) * scale;
+          const y = (pt.y - c.y) * scale;
+          return {
+            x: c.x + x * cos - y * sin + dx,
+            y: c.y + x * sin + y * cos + dy
+          };
+        }));
+      }
+    }
+
+    return result;
+  }
+
+  // Even-odd scanline fill. Each contour is treated as closed (the last point
+  // wraps to the first), so glyph counters and holes stay open. Returns an array
+  // of two-point segments that fill the interior with parallel hatch lines.
+  function fillHatch(contours, spacing, angleDeg, maxLines) {
+    const theta = (-angleDeg * Math.PI) / 180;
+    const cos = Math.cos(theta);
+    const sin = Math.sin(theta);
+    const edges = [];
+    let minY = Infinity;
+    let maxY = -Infinity;
+
+    for (const contour of contours) {
+      const n = contour.length;
+      if (n < 3) continue;
+      for (let i = 0; i < n; i++) {
+        const a = contour[i];
+        const b = contour[(i + 1) % n];
+        if (a.x === b.x && a.y === b.y) continue;
+        const ay = a.x * sin + a.y * cos;
+        const by = b.x * sin + b.y * cos;
+        edges.push({
+          ax: a.x * cos - a.y * sin,
+          ay,
+          bx: b.x * cos - b.y * sin,
+          by
+        });
+        if (ay < minY) minY = ay;
+        if (by < minY) minY = by;
+        if (ay > maxY) maxY = ay;
+        if (by > maxY) maxY = by;
+      }
+    }
+
+    if (!edges.length || !Number.isFinite(minY) || !Number.isFinite(maxY)) return [];
+
+    const lineCount = Math.floor((maxY - minY) / spacing);
+    if (lineCount > maxLines) {
+      throw new RangeError(`Fill would need ${lineCount} hatch lines (max ${maxLines}). Increase hatchSpacing.`);
+    }
+
+    const segments = [];
+
+    for (let y = minY + spacing * 0.5; y < maxY; y += spacing) {
+      const xs = [];
+      for (const edge of edges) {
+        const y1 = edge.ay;
+        const y2 = edge.by;
+        // Half-open crossing rule avoids double-counting shared vertices.
+        if ((y1 <= y && y2 > y) || (y2 <= y && y1 > y)) {
+          const t = (y - y1) / (y2 - y1);
+          xs.push(edge.ax + t * (edge.bx - edge.ax));
+        }
+      }
+      if (xs.length < 2) continue;
+      xs.sort((p, q) => p - q);
+      for (let i = 0; i + 1 < xs.length; i += 2) {
+        const x0 = xs[i];
+        const x1 = xs[i + 1];
+        if (x1 - x0 < 0.000001) continue;
+        // Rotate the scanline point back by +theta (inverse of the forward rotation).
+        segments.push([
+          { x: x0 * cos + y * sin, y: -x0 * sin + y * cos },
+          { x: x1 * cos + y * sin, y: -x1 * sin + y * cos }
+        ]);
+      }
+    }
+
+    return segments;
   }
 
   function transformPagePoint(point, page) {

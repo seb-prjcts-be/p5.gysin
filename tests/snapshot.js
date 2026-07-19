@@ -279,6 +279,194 @@ const outlinePlot = new SourcePlot();
 const outlineId = outlinePlot.text("O", 0, 0, { size: 20, font: outlineFont, simplify: 0 });
 assert.equal(outlinePlot.get(outlineId).paths.length, 2);
 
+// --- fill engine, step 1: hatch ---------------------------------------------
+function buildFillRect(Plot) {
+  const plot = new Plot({ seed: 5, width: 200, height: 200 });
+  const id = plot.rect(20, 20, 100, 60, {
+    fill: "hatch",
+    hatchSpacing: 6,
+    wobble: 0,
+    simplify: 0,
+    minSegmentLength: 0
+  });
+  return { plot, id };
+}
+
+const fillRect = buildFillRect(SourcePlot);
+const fillTraces = fillRect.plot.get(fillRect.id).generated.filter((t) => t.role === "fill");
+assert.ok(fillTraces.length > 0, "hatch fill produces fill traces");
+const fillStats = fillRect.plot.stats();
+assert.equal(fillStats.fillPaths, fillTraces.length);
+assert.ok(fillStats.fillLength > 0);
+assert.match(fillRect.plot.exportSVG(), /data-role="fill"/);
+
+// deterministic, and identical between source and min build
+const fillTracesJSON = JSON.stringify(fillRect.plot.get(fillRect.id).generated);
+assert.equal(JSON.stringify(buildFillRect(SourcePlot).plot.get("hp_1").generated), fillTracesJSON);
+assert.equal(JSON.stringify(buildFillRect(MinPlot).plot.get("hp_1").generated), fillTracesJSON);
+
+// a blade must not fill an interior
+assert.doesNotMatch(fillRect.plot.exportSVG({ tool: "blade" }), /data-role="fill"/);
+assert.equal(fillRect.plot.stats({ tool: "blade" }).fillPaths, 0);
+
+// default (no fill) stays byte-identical: no fill traces, no fill length
+const noFill = new SourcePlot({ seed: 5, width: 200, height: 200 });
+const noFillId = noFill.rect(20, 20, 100, 60, { wobble: 0 });
+assert.equal(noFill.get(noFillId).generated.filter((t) => t.role === "fill").length, 0);
+assert.equal(noFill.stats().fillPaths, 0);
+
+// open shapes and the bitmap alphabet have no fillable interior
+const openFill = new SourcePlot();
+const openFillId = openFill.line(0, 0, 50, 0, { fill: "hatch" });
+assert.equal(openFill.get(openFillId).generated.filter((t) => t.role === "fill").length, 0);
+const bitmapFill = new SourcePlot();
+const bitmapFillId = bitmapFill.text("A", 0, 40, { size: 40, fill: "hatch" });
+assert.equal(bitmapFill.get(bitmapFillId).generated.filter((t) => t.role === "fill").length, 0);
+
+// even-odd: an outline glyph counter stays empty (the hole is not filled)
+const holeFillPlot = new SourcePlot();
+const holeFillId = holeFillPlot.text("O", 0, 0, {
+  size: 20,
+  font: outlineFont,
+  fill: "hatch",
+  hatchSpacing: 2,
+  wobble: 0,
+  glyphJitter: 0,
+  simplify: 0,
+  minSegmentLength: 0
+});
+const holeFill = holeFillPlot.get(holeFillId).generated.filter((t) => t.role === "fill");
+assert.ok(holeFill.length > 0, "outline text fills");
+let counterScanline = false;
+let counterCovered = false;
+for (const trace of holeFill) {
+  for (let i = 0; i + 1 < trace.points.length; i++) {
+    const p = trace.points[i];
+    const q = trace.points[i + 1];
+    if (Math.abs(p.y - 9) < 0.5 && Math.abs(q.y - 9) < 0.5) {
+      counterScanline = true;
+      const lo = Math.min(p.x, q.x);
+      const hi = Math.max(p.x, q.x);
+      if (lo < 12 - 1e-6 && hi > 12 + 1e-6) counterCovered = true;
+    }
+  }
+}
+assert.ok(counterScanline, "a scanline crosses the counter height");
+assert.equal(counterCovered, false, "hatch fill must leave the glyph counter empty");
+
+// --- per-glyph variation: every generated letter must differ --------------
+// Two identical 10x10 square glyphs, spaced apart. With glyphJitter each is
+// transformed independently, so after re-centering they must no longer match.
+const twoGlyphFont = {
+  textToPoints() { return []; },
+  font: {
+    getPath() {
+      return {
+        commands: [
+          { type: "M", x: 0, y: 0 }, { type: "L", x: 10, y: 0 }, { type: "L", x: 10, y: 10 }, { type: "L", x: 0, y: 10 }, { type: "Z" },
+          { type: "M", x: 20, y: 0 }, { type: "L", x: 30, y: 0 }, { type: "L", x: 30, y: 10 }, { type: "L", x: 20, y: 10 }, { type: "Z" }
+        ]
+      };
+    }
+  }
+};
+
+function centerContour(contour) {
+  let sx = 0;
+  let sy = 0;
+  for (const p of contour) { sx += p.x; sy += p.y; }
+  const cx = sx / contour.length;
+  const cy = sy / contour.length;
+  return contour.map((p) => ({ x: p.x - cx, y: p.y - cy }));
+}
+
+const glyphVaryPlot = new SourcePlot();
+const glyphVaryId = glyphVaryPlot.text("HI", 0, 0, {
+  size: 10,
+  font: twoGlyphFont,
+  glyphJitter: 0.7,
+  wobble: 0,
+  simplify: 0,
+  minSegmentLength: 0
+});
+const glyphPaths = glyphVaryPlot.get(glyphVaryId).paths;
+assert.equal(glyphPaths.length, 2, "two glyph contours");
+const avgX = (c) => c.reduce((s, p) => s + p.x, 0) / c.length;
+const gLeft = centerContour(glyphPaths[avgX(glyphPaths[0]) < avgX(glyphPaths[1]) ? 0 : 1]);
+const gRight = centerContour(glyphPaths[avgX(glyphPaths[0]) < avgX(glyphPaths[1]) ? 1 : 0]);
+let glyphMaxDev = 0;
+for (let i = 0; i < gLeft.length; i++) {
+  glyphMaxDev = Math.max(glyphMaxDev, Math.abs(gLeft[i].x - gRight[i].x), Math.abs(gLeft[i].y - gRight[i].y));
+}
+assert.ok(glyphMaxDev > 0.05, "each glyph must vary independently");
+
+// deterministic and reroll-varying
+const glyphVaryPlot2 = new SourcePlot();
+glyphVaryPlot2.text("HI", 0, 0, { size: 10, font: twoGlyphFont, glyphJitter: 0.7, wobble: 0, simplify: 0, minSegmentLength: 0 });
+assert.equal(JSON.stringify(glyphVaryPlot2.get("hp_1").paths), JSON.stringify(glyphPaths));
+glyphVaryPlot.reroll(glyphVaryId);
+assert.notEqual(JSON.stringify(glyphVaryPlot.get(glyphVaryId).paths), JSON.stringify(glyphPaths));
+
+// glyphJitter: 0 opts out — the two identical squares stay identical
+const noJitterPlot = new SourcePlot();
+const noJitterId = noJitterPlot.text("HI", 0, 0, { size: 10, font: twoGlyphFont, glyphJitter: 0, simplify: 0, minSegmentLength: 0 });
+const noJitterPaths = noJitterPlot.get(noJitterId).paths;
+const njLeft = centerContour(noJitterPaths[0]);
+const njRight = centerContour(noJitterPaths[1]);
+let noJitterMaxDev = 0;
+for (let i = 0; i < njLeft.length; i++) {
+  noJitterMaxDev = Math.max(noJitterMaxDev, Math.abs(njLeft[i].x - njRight[i].x), Math.abs(njLeft[i].y - njRight[i].y));
+}
+assert.ok(noJitterMaxDev < 1e-9, "without jitter identical glyphs stay identical");
+
+// --- asemic gesture generator ----------------------------------------------
+const asemicPlot = new SourcePlot({ seed: 3 });
+const asemicId = asemicPlot.asemic(0, 0, 120, 80, { loops: 5 });
+assert.ok(asemicPlot.get(asemicId).generated.length > 0, "asemic produces traces");
+assert.equal(asemicPlot.get(asemicId).type, "path");
+const asemicPlot2 = new SourcePlot({ seed: 3 });
+asemicPlot2.asemic(0, 0, 120, 80, { loops: 5 });
+assert.equal(JSON.stringify(asemicPlot2.get("hp_1").generated), JSON.stringify(asemicPlot.get(asemicId).generated));
+assert.throws(() => new SourcePlot().asemic(0, 0, Infinity, 10), /finite/);
+
+// --- text fields: letters() and symbols() ----------------------------------
+const fieldPlot = new SourcePlot({ seed: 6 });
+const letterIds = fieldPlot.letters("RUB OUT THE WORD", 10, 10, 300, 120, { size: 12 });
+assert.ok(letterIds.length > 1, "letters() emits multiple rows");
+assert.equal(fieldPlot.get(letterIds[0]).type, "text");
+const symbolIds = fieldPlot.symbols(10, 140, 300, 60, { size: 11, set: "+#/" });
+assert.ok(symbolIds.length > 1, "symbols() emits multiple rows");
+const fieldPlot2 = new SourcePlot({ seed: 6 });
+fieldPlot2.letters("RUB OUT THE WORD", 10, 10, 300, 120, { size: 12 });
+assert.equal(JSON.stringify(fieldPlot2.get(letterIds[0]).generated), JSON.stringify(fieldPlot.get(letterIds[0]).generated));
+assert.throws(() => new SourcePlot().letters("", 0, 0, 10, 10), /at least one letter/);
+assert.throws(() => new SourcePlot().symbols(0, 0, 0, 10), /positive w, h/);
+
+// --- grid() modular frame ---------------------------------------------------
+const gridPlot = new SourcePlot({ seed: 7 });
+const gridCells = gridPlot.grid(0, 0, 300, 200, 3, 2, { gap: 4 });
+assert.equal(gridCells.length, 6, "grid returns cols*rows cells");
+assert.equal(gridCells[0].w, 300 / 3 - 8);
+assert.equal(gridCells[5].col, 2);
+assert.equal(gridCells[5].row, 1);
+assert.ok(gridPlot.shapes.length >= 7, "grid draws outer + cell frames");
+assert.throws(() => new SourcePlot().grid(0, 0, 10, 10, 0, 2), /greater than zero/);
+assert.throws(() => new SourcePlot().grid(0, 0, 10, 10, 2.5, 2), /whole number/);
+const gridNoCells = new SourcePlot().grid(0, 0, 100, 100, 2, 2, { cells: false, outer: false });
+assert.equal(gridNoCells.length, 4);
+
+// cross-hatch fill produces more lines than single hatch
+const hatchOnly = new SourcePlot({ seed: 9 });
+hatchOnly.rect(0, 0, 80, 60, { fill: "hatch", hatchSpacing: 5, wobble: 0, simplify: 0, minSegmentLength: 0 });
+const crossOnly = new SourcePlot({ seed: 9 });
+crossOnly.rect(0, 0, 80, 60, { fill: "cross", hatchSpacing: 5, wobble: 0, simplify: 0, minSegmentLength: 0 });
+assert.ok(crossOnly.stats().fillPaths > hatchOnly.stats().fillPaths, "cross fill adds a second pass");
+
+// fill validation
+assert.throws(() => new SourcePlot().rect(0, 0, 10, 10, { fill: "solid" }), /fill must be one of/);
+assert.throws(() => new SourcePlot().rect(0, 0, 10, 10, { fill: "hatch", hatchSpacing: 0.1 }), /hatchSpacing must be at least/);
+assert.throws(() => new SourcePlot().rect(0, 0, 10, 2000, { fill: "hatch", hatchSpacing: 0.25 }), /hatch lines/);
+
 let p5TextSize = null;
 let p5Pushes = 0;
 let p5Pops = 0;
@@ -313,6 +501,7 @@ const p5V2Plot = new SourcePlot({
 const p5V2Id = p5V2Plot.text("WIDE", 10, 60, {
   size: 42,
   font: p5V2Font,
+  glyphJitter: 0,
   simplify: 0,
   minSegmentLength: 0
 });

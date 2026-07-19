@@ -81,6 +81,80 @@ passagenummer. `plot.stats()` rapporteert `bleedPaths`, `bleedLength`,
 `tool: "blade"` alle tweede en latere passages uit de export; `tool: "pen"`
 behoudt de inktopbouw.
 
+## Gevulde vormen en letters
+
+Lettervormen en gesloten vormen zijn standaard alleen omtrek. `fill: "hatch"`
+vult het binnenwerk met parallelle plotterlijnen, zodat type solide wordt in
+plaats van hol:
+
+```js
+plot.rect(40, 40, 200, 120, { fill: "hatch", hatchSpacing: 3, hatchAngle: 30 });
+
+plot.text("RUB OUT", 60, 200, {
+  size: 96,
+  font: outlineFont,   // vulling vereist echte fontcontouren
+  fill: "hatch",
+  hatchSpacing: 2
+});
+```
+
+- `hatchSpacing` (standaard 2) is de afstand tussen de vullijnen; minimaal 0.25.
+- `hatchAngle` (standaard 0) draait de arcering, in graden.
+- `fill: "cross"` legt twee arceringen haaks op elkaar; dat leest egaler en
+  soliede dan enkele strepen — prettiger voor gevulde typografie.
+
+**Leesbaarheid van gevulde tekst.** De outline wordt altijd mee getekend, dus
+gevulde letters hebben scherpe randen én een gevuld lijf. Vuistregel uit de
+praktijk: gebruik vulling voor **displaymaten (≥~16px)** — daar leest `"cross"`
+solide en leesbaar — en laat **kleine tekst enkel outline of single-stroke**.
+
+**Pendikte en kleine tekst (plotter).** Bij een echte pen lopen de dubbele
+lijnen van een klein outline- of gevuld letter dicht tot een vlek. Gebruik voor
+kleine tekst het **ingebouwde single-stroke alfabet** (laat `font` weg): daar is
+de pendikte zélf de streek, dus het schaalt mee. Dat font tekent op een
+`size/7`-raster, dus de strepen blijven los zolang:
+
+```text
+glyph-grootte  ≳  7–8 × pendikte
+```
+
+Voorbeeld: met een pen van 1.7px is `size 14` de leesbare ondergrens; met een
+dikkere pen schuift die mee omhoog. Houd `glyphJitter` laag (~0.1) voor kleine
+tekst. Gevulde/outline-fonts hebben ~2–3× méér grootte nodig om leesbaar te
+blijven, dus die zijn voor koppen, niet voor kleine velden.
+- De vulling gebruikt de even-odd-regel, dus letter-counters en gaten (de holte
+  in `O`, `A`, `e`) blijven open.
+- Vulling werkt op `rect`, `circle`, `polygon` en op `text`/`textCutup` met een
+  outline-font. Open vormen (`line`, `path`) en het ingebouwde bitmap-alfabet
+  hebben geen binnenwerk en worden overgeslagen.
+- Vullijnen krijgen `role: "fill"`; `plot.stats()` rapporteert `fillPaths` en
+  `fillLength`. `tool: "blade"` laat álle vulling weg (een mes vult geen vlak),
+  `tool: "pen"` behoudt ze.
+
+> Roadmap: `fill: "dots"` (losse plotterpunten met een dichtheids-gradiënt voor
+> letter-verval en tabellen) staat als volgende stap in
+> [`docs/composition-plan.md`](docs/composition-plan.md).
+
+### Elke letter uniek
+
+Geen twee gerenderde letters zijn identiek — ook niet twee keer dezelfde letter.
+Iedere glyph krijgt een eigen, onafhankelijke variatie (kleine rotatie,
+verschuiving en schaal rond zijn zwaartepunt). De vulling erft dat mee, want die
+wordt uit de gevarieerde contour berekend.
+
+```js
+plot.text("RUB OUT THE WORD", 60, 200, {
+  size: 72,
+  font: outlineFont,
+  glyphJitter: 0.6   // 0 = uit (exacte fontvorm), hoger = meer afwijking
+});
+```
+
+`glyphJitter` staat standaard op `0.35`. De variatie is deterministisch: dezelfde
+seed geeft dezelfde letters, `reroll()` geeft een nieuwe set. Werkt op `text` en
+`textCutup` (outline- en bitmap-alfabet). Zet `glyphJitter: 0` voor mechanisch
+exacte type.
+
 ## Optionele tekstpermutaties
 
 Laad de tekstmodule alleen wanneer je zinnen wilt herordenen. De module heeft
