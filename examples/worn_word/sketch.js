@@ -11,7 +11,7 @@
 //  one decaying gesture, with strong defaults. This whole sketch is that
 //  one call - everything else here is just a canvas, a decay knob, and a
 //  reseed button. Compare it with first_trace, which builds the same
-//  gesture by hand: rub() is those ~40 lines, rubbed out.
+//  gesture by hand: rub() is those ~40 lines collapsed into one.
 // ═══════════════════════════════════════════════════════════════════
 
 let plot;
