@@ -21,12 +21,12 @@
     <div class="demo-header">
       <div class="demo-number">p5.Font · contours · counters</div>
       <h1>Font Outlines</h1>
-      <p>Load a real font and p5.gysin fills the letter bodies with hatching while the inner counters stay empty. Both sides show the <strong>same</strong> glyphs, <strong>O8</strong>, so the fill mode is the only thing that changes: single-pass hatch on the left, woven cross-hatch twisted 23&deg; off-axis on the right. Below, <strong>COUNTER MEMORY</strong> is cut up over a hand-inked rule, then decays past it into a field of <strong>asemic</strong> marks &mdash; the memory pulled apart into illegible signs instead of spelled out again. One <strong>Weave spacing</strong> slider drives all three: tighter weave shuts the bodies, slices the word harder, and tangles the marks.</p>
+      <p>Load a real font and p5.gysin fills the letter bodies with hatching while the inner counters stay empty. Both sides show the <strong>same</strong> glyphs, <strong>O8</strong>, so the fill mode is the only thing that changes: single-pass hatch on the left, woven cross-hatch twisted 23&deg; off-axis on the right. Below, <strong>COUNTER MEMORY</strong> is cut up over a hand-inked rule, then decays past it into a field of <strong>asemic</strong> marks - the memory pulled apart into illegible signs instead of spelled out again. One <strong>Weave spacing</strong> slider drives all three: tighter weave shuts the bodies, slices the word harder, and tangles the marks.</p>
       <p><strong>What to try:</strong></p>
       <ul>
         <li>Toggle <strong>Fill</strong> to watch the bodies weave shut.</li>
         <li>Drag <strong>Weave spacing</strong> and watch the fill-line count and the cut-up react in the status line.</li>
-        <li>Hit <strong>New variation</strong> &mdash; the seed in the status changes with the drawing.</li>
+        <li>Hit <strong>New variation</strong> - the seed in the status changes with the drawing.</li>
         <li>Switch <strong>Oswald / Anton</strong> for different counters.</li>
         <li><strong>Download SVG</strong> or <strong>Download HPGL</strong> to send the pen-line total to a real plotter.</li>
       </ul>
@@ -34,7 +34,7 @@
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">// The whole library, in three lines — this alone is a complete sketch:
+        <pre><code class="language-javascript">// The whole library, in three lines - this alone is a complete sketch:
 const plot = new GysinPlot({ seed: 8088 });
 const font = await loadFont(FONT_URL);        // Oswald or Anton
 plot.text("O8", 64, 190, { font });   // an outline font -> real letter bodies
@@ -43,7 +43,7 @@ plot.draw();
 // A real outline font is the ONLY extra this example needs. Everything below is
 // OPTIONAL disturbance layered on top; defaults are all zero. This example adds:
 
-// 1) the same glyphs filled two ways — single hatch vs woven cross-hatch —
+// 1) the same glyphs filled two ways - single hatch vs woven cross-hatch -
 //    so the fill mode is the only variable; counters stay hollow (even-odd rule)
 plot.text("O8", 64, 190, { font, fill: "hatch", hatchAngle: 22 });
 plot.text("O8", 384, 190, { font, fill: "cross", hatchAngle: 22 + 23 });
@@ -79,7 +79,7 @@ plot.draw();</code></pre>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch" role="img" aria-label="Large distressed font outlines demonstrating preserved counters in letters and numbers."></div>
         <div class="demo-note" id="font-status" role="status" aria-live="polite">Loading outline font…</div>
-        <p class="demo-note" style="opacity:0.7;">The red arrow points at a <strong>counter</strong> &mdash; the hole inside the O that the hatching leaves empty. Tighter weave = more fill lines, a harder cut-up, and a more tangled asemic field. The status line names the weave angle set on each side.</p>
+        <p class="demo-note" style="opacity:0.7;">The red arrow points at a <strong>counter</strong> - the hole inside the O that the hatching leaves empty. Tighter weave = more fill lines, a harder cut-up, and a more tangled asemic field. The status line names the weave angle set on each side.</p>
       </div>
     </div>
   </main>

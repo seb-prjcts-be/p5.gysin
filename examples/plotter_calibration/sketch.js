@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════
-//  plotter_calibration — an A4 pen-plotter test sheet drawn on three pens
+//  plotter_calibration - an A4 pen-plotter test sheet drawn on three pens
 // ═══════════════════════════════════════════════════════════════════
 //  New to p5.gysin? The whole library is three lines:
 //
@@ -9,7 +9,7 @@
 //
 //  Every option below (wobble, dropout, fill, pressure, hatch, asemic…)
 //  is OPTIONAL disturbance layered on top of that core. The defaults are
-//  all zero, so a call with no options just draws clean — nothing here is
+//  all zero, so a call with no options just draws clean - nothing here is
 //  required to use the library. This sheet is a physical instrument: it
 //  works in millimetres on an A4 page (mm() converts mm -> canvas pixels)
 //  and maps every layer to one of three pens. It builds up in zones drawn
@@ -46,9 +46,9 @@ const ZONES = {
 };
 
 // Three physical pens; every zone's layer name maps to one of them.
-const INK  = "#171717";   // pen 1 — structure, text, measurement
-const RED   = "#b5362b";  // pen 2 — rings, the one focal accent
-const TINT  = "#c69a63";  // pen 3 — hatch-fill mass, a muted tint
+const INK  = "#171717";   // pen 1 - structure, text, measurement
+const RED   = "#b5362b";  // pen 2 - rings, the one focal accent
+const TINT  = "#c69a63";  // pen 3 - hatch-fill mass, a muted tint
 const PEN_OF = {
   frame: 1,
   label: 1,
@@ -116,22 +116,22 @@ function buildPlot(seed) {
   // ── frame · border, registration crosses, title masthead ──
   drawFrame();
 
-  // ── 1 · scale — the mm ruler ──────────────────────────────
+  // ── 1 · scale - the mm ruler ──────────────────────────────
   drawScale();      // 1 · mm ruler with tick marks and numbers
 
-  // ── 2 · rings — ink mass, red rings, asemic field ─────────
+  // ── 2 · rings - ink mass, red rings, asemic field ─────────
   drawRings();      // 2 · rings between a cross-hatched ink mass and asemic marks
 
-  // ── 3 · ramp — dropout vs wobble ──────────────────────────
+  // ── 3 · ramp - dropout vs wobble ──────────────────────────
   drawRamp();       // 3 · mirrored ramp: dropout 0->0.4, wobble 0->live
 
-  // ── 4 · gradient — hatch density ──────────────────────────
+  // ── 4 · gradient - hatch density ──────────────────────────
   drawGradient();   // 4 · hatch-density gradient, spacing 0.8->2.4 mm
 
-  // ── 5 · weights — pen-weight bars ─────────────────────────
+  // ── 5 · weights - pen-weight bars ─────────────────────────
   drawWeights();    // 5 · bars with rising strokeWeight
 
-  // ── 6 · verbs — disturbance verbs + symbols foot ──────────
+  // ── 6 · verbs - disturbance verbs + symbols foot ──────────
   drawVerbs();      // 6 · four disturbance verbs + a symbols() texture foot
 }
 
@@ -210,7 +210,7 @@ function drawFrame() {
   label("letters() · glyphJitter 0.6", mx, mm(24), INK);
 }
 
-// Zone 1 — mm ruler: minor ticks every 10 mm, numbered every 50 mm.
+// Zone 1 - mm ruler: minor ticks every 10 mm, numbered every 50 mm.
 function drawScale() {
   head("1 : SCALE MM · wobble 0.15", mm(16), mm(ZONES.scale.label));
   const y = mm(ZONES.scale.ruler), x0 = mm(ZONES.scale.x0), span = 160;
@@ -228,7 +228,7 @@ function drawScale() {
   }
 }
 
-// Zone 2 — RED rings by diameter with a centre cross, between a tinted ink mass and an asemic field.
+// Zone 2 - RED rings by diameter with a centre cross, between a tinted ink mass and an asemic field.
 function drawRings() {
   head("2 : RINGS DIA MM · wobble 0.45 · repeat 2", mm(16), mm(ZONES.rings.label));
   const cx = width / 2, cy = mm(ZONES.rings.center);
@@ -285,7 +285,7 @@ function drawRings() {
       });
 }
 
-// Zone 3 — mirrored rulers: dropout 0->0.4 left, wobble 0->liveWobble right (driven by the slider).
+// Zone 3 - mirrored rulers: dropout 0->0.4 left, wobble 0->liveWobble right (driven by the slider).
 function drawRamp() {
   head(`3 : DROPOUT 0-0.4 · WOBBLE 0-${liveWobble.toFixed(2)}`, mm(16), mm(ZONES.ramp.label));
   const xMid = width / 2, gap = mm(5), half = mm(70);
@@ -328,7 +328,7 @@ function drawRamp() {
   label(liveWobble.toFixed(2), xMid + gap + half + mm(2), yEnd + mm(1.5), INK, "ramp");
 }
 
-// Zone 4 — five hatch-filled diamonds, spacing 0.8->2.4 mm with a sweeping hatch angle.
+// Zone 4 - five hatch-filled diamonds, spacing 0.8->2.4 mm with a sweeping hatch angle.
 function drawGradient() {
   head("4 : FILL HATCH · spacing mm · angle sweep", mm(16), mm(ZONES.gradient.label));
   const cy = mm(ZONES.gradient.center), hs = mm(12);
@@ -347,7 +347,7 @@ function drawGradient() {
     (s) => s.toFixed(1));
 }
 
-// Zone 5 — bars with rising strokeWeight: reads the line weight the pen lays down.
+// Zone 5 - bars with rising strokeWeight: reads the line weight the pen lays down.
 function drawWeights() {
   head("5 : PEN WEIGHT · strokeWeight", mm(16), mm(ZONES.weights.label));
   const yt = mm(ZONES.weights.top), yb = mm(ZONES.weights.bottom);
@@ -363,7 +363,7 @@ function drawWeights() {
     (w) => w.toFixed(1));
 }
 
-// Zone 6 — four verbs, each above a straight zero line, then a full-width symbols() foot.
+// Zone 6 - four verbs, each above a straight zero line, then a full-width symbols() foot.
 function drawVerbs() {
   head("6 : DISTURBANCE VERBS · vs straight zero", mm(16), mm(ZONES.verbs.label));
   const y = mm(ZONES.verbs.line), len = mm(34);

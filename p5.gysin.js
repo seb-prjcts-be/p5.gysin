@@ -1248,7 +1248,7 @@
       }
       if (h.fill === "cross") {
         // Two hatch passes at right angles read as a more even, solid ink than
-        // single-direction stripes — easier on legibility for filled type.
+        // single-direction stripes - easier on legibility for filled type.
         return fillHatch(contours, h.hatchSpacing, h.hatchAngle, MAX_FILL_LINES)
           .concat(fillHatch(contours, h.hatchSpacing, h.hatchAngle + 90, MAX_FILL_LINES));
       }
@@ -2020,7 +2020,7 @@
   }
 
   // Give every glyph its own small affine variation (rotation, offset, scale)
-  // around its centroid, so no two rendered letters are identical — not even two
+  // around its centroid, so no two rendered letters are identical - not even two
   // of the same character. Amounts are relative to the type size and driven by a
   // per-glyph rng, so the result is deterministic but independent per glyph.
   function jitterGlyphContours(paths, amount, size, rng) {

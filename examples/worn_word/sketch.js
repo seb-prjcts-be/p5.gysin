@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════
-//  worn_word — one word worn away, in a single call
+//  worn_word - one word worn away, in a single call
 // ═══════════════════════════════════════════════════════════════════
 //  New to p5.gysin? The whole library is three lines:
 //
@@ -9,7 +9,7 @@
 //
 //  rub() is an intent verb: it composes text → textCutup → asemic into
 //  one decaying gesture, with strong defaults. This whole sketch is that
-//  one call — everything else here is just a canvas, a decay knob, and a
+//  one call - everything else here is just a canvas, a decay knob, and a
 //  reseed button. Compare it with first_trace, which builds the same
 //  gesture by hand: rub() is those ~40 lines collapsed into one.
 // ═══════════════════════════════════════════════════════════════════

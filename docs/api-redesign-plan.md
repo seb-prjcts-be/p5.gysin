@@ -1,4 +1,4 @@
-# API-redesign — klein plan: intentie-werkwoorden bovenop de primitieven
+# API-redesign - klein plan: intentie-werkwoorden bovenop de primitieven
 
 Status: **voorstel, wacht op Sebs akkoord.** Nog niets geïmplementeerd.
 
@@ -69,15 +69,15 @@ Intern is dit exact de `STAGES`/`TANGLES`/`decayed()`-logica uit `first_trace`,
 nu met defaults in de library. Meetbare winst: het teken-lichaam van `first_trace`
 zakt van ~60 regels naar ~5. Die meting is de go/no-go voor meer werkwoorden.
 
-## Kandidaten voor later (NIET nu bouwen — alleen richting)
-- `score(rows, x, y, w, h, opts)` — de herhaalbare datascore van `signal_score`
+## Kandidaten voor later (NIET nu bouwen - alleen richting)
+- `score(rows, x, y, w, h, opts)` - de herhaalbare datascore van `signal_score`
   (meerdere `path`-signalen + notatie + pieken) als één datagedreven call.
 - Fontfallback als plot-optie: `new GysinPlot({ font })` zodat elk werkwoord dat
   automatisch erft (geen per-call `if (font)`-gedoe meer).
 - `calibrationSheet(page)` en de export-workflow zijn al vrij declaratief; laag
   prioriteit.
 
-UI (knoppen/sliders) blijft in de sketch — dat is niet de taak van de library.
+UI (knoppen/sliders) blijft in de sketch - dat is niet de taak van de library.
 
 ## Aanpak, gefaseerd
 1. **Alleen `decayText()`** implementeren in `p5.gysin.js`, met snapshot-tests

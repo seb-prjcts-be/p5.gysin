@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════
-//  plotter_export — one layered plate, exported to SVG, JSON and HPGL
+//  plotter_export - one layered plate, exported to SVG, JSON and HPGL
 // ═══════════════════════════════════════════════════════════════════
 //  New to p5.gysin? The whole library is three lines:
 //
@@ -9,7 +9,7 @@
 //
 //  Every option below (wobble, dropout, fill, cut-up, per-pen layers,
 //  page + export…) is OPTIONAL on top of that core. The defaults are
-//  all zero, so a call with no options just draws clean — nothing here
+//  all zero, so a call with no options just draws clean - nothing here
 //  is required to use the library. This sketch stacks the layers one at
 //  a time; read the numbered sections in shapesFor() from top to bottom.
 //  Each is a compositional layer, drawn back to front, and can be
@@ -101,9 +101,9 @@ const FRAME_CORNERS = [
 ];
 
 // Per-variation composition tuning. A reroll advances `variation`, which walks
-// these tables, so each plate reads as a distinctly different plate — a new
+// these tables, so each plate reads as a distinctly different plate - a new
 // symbol set, a re-angled/re-spaced cross-hatch and a re-angled mid-tone accent
-// — not just re-jittered glyphs. Symbols stay inside the bitmap alphabet's safe
+// - not just re-jittered glyphs. Symbols stay inside the bitmap alphabet's safe
 // punctuation. The array lengths are coprime (4·5·3·4) so 60 plates pass before
 // a full combination repeats. Index 0 is the canonical plate that Reset returns.
 const SYMBOL_SETS = ["/:;-!", "()/-:", ":;.,_", "!?-/'"];

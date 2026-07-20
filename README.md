@@ -62,9 +62,9 @@ plot.draw();
 
 ## Intent verbs
 
-The calls above are primitives — you compose them yourself. `rub()` is the first
+The calls above are primitives - you compose them yourself. `rub()` is the first
 *intent verb*: one call that composes `text`, `textCutup`, and `asemic` into a
-finished gesture — a word worn away in three copies (legible, cut up, asemic
+finished gesture - a word worn away in three copies (legible, cut up, asemic
 scribble). Strong defaults make the one-liner complete; every option is an opt-in
 escape hatch, and the primitives stay underneath.
 
@@ -84,7 +84,7 @@ plot.rub("RUB OUT", 46, 248, { font: outlineFont }); // fills the legible head
 
 `rub()` returns the id of every copy and tangle, so each can be `freeze`d,
 `reroll`ed, updated, or exported like any other shape. Same seed, same result. See
-the `worn_word` example — the whole sketch is this one call.
+the `worn_word` example - the whole sketch is this one call.
 
 ## Selective ink build-up
 
@@ -126,11 +126,11 @@ plot.text("RUB OUT", 60, 200, {
 - `hatchSpacing` (default 2) is the distance between the fill lines; minimum 0.25.
 - `hatchAngle` (default 0) rotates the hatching, in degrees.
 - `fill: "cross"` lays two hatchings perpendicular to each other; that reads more
-  even and solid than single strokes — nicer for filled typography.
+  even and solid than single strokes - nicer for filled typography.
 
 **Readability of filled text.** The outline is always drawn as well, so filled
 letters have sharp edges and a filled body. Practical rule of thumb: use fill for
-**display sizes (≥~16px)** — there `"cross"` reads solid and legible — and leave
+**display sizes (≥~16px)** - there `"cross"` reads solid and legible - and leave
 **small text outline-only or single-stroke**.
 
 **Pen width and small text (plotter).** With a real pen, the double lines of a
@@ -162,7 +162,7 @@ headings, not small fields.
 
 ### Every letter unique
 
-No two rendered letters are identical — not even the same letter twice. Every
+No two rendered letters are identical - not even the same letter twice. Every
 glyph gets its own, independent variation (small rotation, shift, and scale
 around its centroid). The fill inherits this, since it is computed from the
 varied contour.

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════
-//  permutation_poem — one phrase, permuted and cut up into an A3 poster
+//  permutation_poem - one phrase, permuted and cut up into an A3 poster
 // ═══════════════════════════════════════════════════════════════════
 //  New to p5.gysin? The whole library is three lines:
 //
@@ -115,7 +115,7 @@ function typeStyle(overrides) {
 
 // One decay curve, fully resolved: a higher index bites deeper, lightens the
 // pen, and fades out. Callers hand it their layer/overrides and read back a
-// single ready-to-draw set of disturbance params — no second merge downstream.
+// single ready-to-draw set of disturbance params - no second merge downstream.
 // `boost` lifts the whole weight/pressure ramp without flattening its slope, so
 // the lead order can dominate while still decaying top-to-bottom.
 function decay(i, seedTag, overrides, boost = 0) {
@@ -336,7 +336,7 @@ function drawPermutationGrid() {
   }
 
   const order = ORDERS[orderIndex];
-  plot.text(`ONE PHRASE / ORDER ${order.toUpperCase()} — ${ORDER_NOTES[order].toUpperCase()} / SEED ${posterSeed}`, BAND_X, FOOTER_Y, typeStyle({
+  plot.text(`ONE PHRASE / ORDER ${order.toUpperCase()} - ${ORDER_NOTES[order].toUpperCase()} / SEED ${posterSeed}`, BAND_X, FOOTER_Y, typeStyle({
     size: 12,
     letterSpacing: 1.08,
     dropout: 0.018,
@@ -414,9 +414,9 @@ function wireActions() {
     // when the legend grows, so the extra rows read as a wider key, not noise.
     const uniqueWords = new Set(phrase.toUpperCase().split(/\s+/).filter(Boolean)).size;
     const recycle = uniqueWords > CODE_SET.length
-      ? ` — ${uniqueWords} unique words, so code symbols recycle with a suffix`
+      ? ` - ${uniqueWords} unique words, so code symbols recycle with a suffix`
       : "";
-    setStatus(`${lead ? lead + " — " : ""}${state}: ${permutations.join(" / ")}${recycle}`);
+    setStatus(`${lead ? lead + " - " : ""}${state}: ${permutations.join(" / ")}${recycle}`);
     redraw();
   }
 

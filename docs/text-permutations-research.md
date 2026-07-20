@@ -32,10 +32,10 @@ latere **cut-up**-modus (brokken uit een of meer langere teksten mengen).
 
 Bronnen:
 
-- [Spencer Museum of Art — *I Am That I Am*](https://spencerart.ku.edu/art/collections-online/object/25857)
-- [WorldCat — *Permutations*](https://search.worldcat.org/title/Permutations/oclc/1289922133)
-- [Brion Gysin — Cut ups](https://www.briongysin.com/cut-ups/)
-- [David Pocknee — The Permutated Poems of Brion Gysin](https://davidpocknee.ricercata.org/gysin/)
+- [Spencer Museum of Art - *I Am That I Am*](https://spencerart.ku.edu/art/collections-online/object/25857)
+- [WorldCat - *Permutations*](https://search.worldcat.org/title/Permutations/oclc/1289922133)
+- [Brion Gysin - Cut ups](https://www.briongysin.com/cut-ups/)
+- [David Pocknee - The Permutated Poems of Brion Gysin](https://davidpocknee.ricercata.org/gysin/)
 
 ## Aanbevolen eerste versie
 

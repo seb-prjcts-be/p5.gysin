@@ -21,12 +21,12 @@
     <div class="demo-header">
       <div class="demo-number">path() · line() · asemic() · polygon(fill) · layers</div>
       <h1>Signal Score</h1>
-      <p>Five paths read as fragile signals, each with its own waveform and voice, labelled <code>S1</code>&ndash;<code>S5</code> in the margin. Every signal is marked at its loudest point by a diamond sized to &mdash; and now printed with &mdash; that loudness as a percent, and a thin thread drops from each diamond to the asemic notation cell that transcribes it. The red row (<code>S3</code>) leads the five, anchored by a red hatch band and baseline. A small <strong>legend</strong> in the bottom margin names the three marks, so you can decode the score straight from the image. Click the composition or press <code>R</code> for a new reading; the wave forms reshape while the row structure stays put.</p>
+      <p>Five paths read as fragile signals, each with its own waveform and voice, labelled <code>S1</code>&ndash;<code>S5</code> in the margin. Every signal is marked at its loudest point by a diamond sized to - and now printed with - that loudness as a percent, and a thin thread drops from each diamond to the asemic notation cell that transcribes it. The red row (<code>S3</code>) leads the five, anchored by a red hatch band and baseline. A small <strong>legend</strong> in the bottom margin names the three marks, so you can decode the score straight from the image. Click the composition or press <code>R</code> for a new reading; the wave forms reshape while the row structure stays put.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">// The whole library, in three lines — this alone is a complete sketch:
+        <pre><code class="language-javascript">// The whole library, in three lines - this alone is a complete sketch:
 const plot = new GysinPlot({ seed: 40017 });
 plot.path([[52, 200], [668, 200]], { stroke: "#171717" });   // one clean signal
 plot.draw();
@@ -34,7 +34,7 @@ plot.draw();
 // Everything below is OPTIONAL, layered on top. Defaults are all zero, so
 // options are opt-in. This score adds, back to front:
 
-// 1) five signal paths — the accent row (S3) red and heavy, the rest lighter
+// 1) five signal paths - the accent row (S3) red and heavy, the rest lighter
 plot.path(signal, {
   stroke: accent ? "#b5362b" : "#171717",
   strokeWeight: accent ? 2 : 1, alpha: accent ? 0.9 : 0.6, layer: "signal"
@@ -56,7 +56,7 @@ plot.draw();</code></pre>
       </div>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch" role="img" aria-label="An abstract machine score: five wavering signal lines, hatched diamond markers labelled with a loudness percent and linked by thin threads to a row of asemic notation, one faint vertical reading head on the loudest column, and a small labelled legend in the bottom margin."></div>
-        <div class="demo-note"><strong>Start with the red row (<code>S3</code>):</strong> it runs unbroken from signal to marker to notation while the four ink voices sit back as backdrop. Then read the rest &mdash; each line <code>S1</code>&ndash;<code>S5</code> is a signal, darker and heavier the louder its voice; each diamond is a loudest-point marker, sized and labelled with its loudness percent; a thread ties it to the asemic notation cell that transcribes it. The lone faint vertical is the <strong>reading head</strong> on the loudest column, tagged with its level and named in the caption above. <strong>New reading</strong> reshapes the wave forms; <strong>Download SVG</strong> exports the plot. <code>R</code> and <code>S</code> do the same from the keyboard.</div>
+        <div class="demo-note"><strong>Start with the red row (<code>S3</code>):</strong> it runs unbroken from signal to marker to notation while the four ink voices sit back as backdrop. Then read the rest - each line <code>S1</code>&ndash;<code>S5</code> is a signal, darker and heavier the louder its voice; each diamond is a loudest-point marker, sized and labelled with its loudness percent; a thread ties it to the asemic notation cell that transcribes it. The lone faint vertical is the <strong>reading head</strong> on the loudest column, tagged with its level and named in the caption above. <strong>New reading</strong> reshapes the wave forms; <strong>Download SVG</strong> exports the plot. <code>R</code> and <code>S</code> do the same from the keyboard.</div>
       </div>
     </div>
   </main>

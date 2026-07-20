@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════
-//  p5 Editor Starter — a sliced title that returns lower and forgets itself
+//  p5 Editor Starter - a sliced title that returns lower and forgets itself
 // ═══════════════════════════════════════════════════════════════════
 //  New to p5.gysin? The whole library is three lines:
 //
@@ -9,16 +9,16 @@
 //
 //  Every option below (wobble, dropout, rubout, cut-up, hatch fill,
 //  asemic…) is OPTIONAL disturbance layered on top of that core. The
-//  defaults are all zero, so a call with no options just draws clean —
+//  defaults are all zero, so a call with no options just draws clean -
 //  nothing here is required to use the library. This sketch builds the
 //  layers up in draw order; read the numbered sections in buildPlot()
 //  from top to bottom. Each is a compositional layer, drawn back to
 //  front, and can be deleted on its own without breaking the rest.
 // ═══════════════════════════════════════════════════════════════════
 
-// p5.gysin — "CUT UP" starter for the p5.js Web Editor.
+// p5.gysin - "CUT UP" starter for the p5.js Web Editor.
 // The plate acts out its title: a line of type is sliced, then REMEMBERS returns
-// lower, ringed in red, and forgets itself — its tail decaying through a wrong
+// lower, ringed in red, and forgets itself - its tail decaying through a wrong
 // letter, then a printed sign, then a pure scribble as you steer decay. As the
 // machine forgets, the hatched anchor erodes too. What you see is what you plot.
 // Buttons drive everything; the R H + - 0 S keys mirror them.
@@ -146,7 +146,7 @@ function buildPlot() {
   });
 
   // ── 1 · the anchor ──────────────────────────────────────────────
-  // Anchor — cross-hatched block that grounds the plate. Its ink drops out and
+  // Anchor - cross-hatched block that grounds the plate. Its ink drops out and
   // rubs away as decay rises, so "the machine forgets" reaches the whole plate,
   // not only the word.
   const a = LAYOUT.anchor;
@@ -173,7 +173,7 @@ function buildPlot() {
   });
 
   // ── 2 · the right-hand field ────────────────────────────────────
-  // Right-hand field — a light machine index in the hatch grey that fills the
+  // Right-hand field - a light machine index in the hatch grey that fills the
   // void and counterweights the red ring. Its glyphs and frame thin with decay.
   const f = LAYOUT.field;
   plot.symbols(f.x, f.y, f.w, f.h, {
@@ -197,7 +197,7 @@ function buildPlot() {
   });
 
   // ── 3 · the red ring ────────────────────────────────────────────
-  // Red ring — centred on the degrade word from the same layout + advance the
+  // Red ring - centred on the degrade word from the same layout + advance the
   // word is drawn with, so it always circles REMEMBERS. Red stays on the ring
   // and the returning word, so the two read as one figure.
   const dg = LAYOUT.degrade;
@@ -213,7 +213,7 @@ function buildPlot() {
   });
 
   // ── 4 · the title ───────────────────────────────────────────────
-  // Title — largest surface; pressure varies its weight, hesitate breaks it.
+  // Title - largest surface; pressure varies its weight, hesitate breaks it.
   const t = LAYOUT.title;
   plot.text("CUT UP", t.x, t.y, {
     ...hand,
@@ -226,7 +226,7 @@ function buildPlot() {
   });
 
   // ── 5 · the sentence ────────────────────────────────────────────
-  // Sentence — sliced once, how hard depends on the seed's grain.
+  // Sentence - sliced once, how hard depends on the seed's grain.
   const cu = LAYOUT.cutup;
   plot.textCutup("THE MACHINE REMEMBERS", cu.x, cu.y, {
     ...hand,
@@ -245,8 +245,8 @@ function buildPlot() {
 }
 
 // Draw a word whose tail dissolves and return how many glyphs were lost. Each
-// lost glyph decays through three alphabets as `t` runs 0→1 across the tail — its
-// own letter shaken loose, then a printed sign, then a pure scribble — while
+// lost glyph decays through three alphabets as `t` runs 0→1 across the tail - its
+// own letter shaken loose, then a printed sign, then a pure scribble - while
 // wobble, drift and dropout climb with every step. So the tail is a gradient of
 // noise, a real failing alphabet, not the same scribble nine times over.
 function degradeWord(word, x, y, size, decay, hand) {
@@ -291,7 +291,7 @@ function forgetGlyph(glyph, gx, top, w, size, t, mark) {
   else plot.asemic(gx, top, w, size, mark);
 }
 
-// Live plotter cost plus the three steerable axes — seed, hand and decay —
+// Live plotter cost plus the three steerable axes - seed, hand and decay -
 // read off in one place, followed by how much the machine forgot this decay.
 function showStats() {
   const el = document.getElementById("stats");

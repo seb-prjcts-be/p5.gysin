@@ -1,23 +1,23 @@
-# Compositie-laag — stappenplan
+# Compositie-laag - stappenplan
 
 **Doel (de noordster).** De library moet Brion Gysin / William Burroughs'
-*"RUB OUT THE WORD"* (1961) kunnen bouwen met korte, logische functies — niet met
+*"RUB OUT THE WORD"* (1961) kunnen bouwen met korte, logische functies - niet met
 honderden regels handmatige coördinaat-rekenkunde zoals nu in
 `examples/permutation_poem/sketch.js`.
 
 Die referentie bestaat uit **vijf lagen**:
 
-1. **Woordpermutatie-blok** — leesbare permutaties in een uitgelijnd raster met
+1. **Woordpermutatie-blok** - leesbare permutaties in een uitgelijnd raster met
    scheidingsglyphs (`+ & " //`).
-2. **Letter-verval-veld** — woorden zakken door naar losse letters die permuteren
+2. **Letter-verval-veld** - woorden zakken door naar losse letters die permuteren
    en herhalen; hier en daar duikt weer een woord op.
-3. **Symbool-textuur** — een blok met alleen typemachine-operatoren.
-4. **Asemisch gebaren-raster** — kalligrafische pen-lussen, één gebaar per cel.
-5. **Modulair kader-raster** — inkt-doorgelopen zwarte cellen, sommige verschoven.
+3. **Symbool-textuur** - een blok met alleen typemachine-operatoren.
+4. **Asemisch gebaren-raster** - kalligrafische pen-lussen, één gebaar per cel.
+5. **Modulair kader-raster** - inkt-doorgelopen zwarte cellen, sommige verschoven.
 
 ## Twee materiaal-eisen (van Seb)
 
-- **Gevulde letters.** Lettervormen zijn niet enkel omtrek, maar *ingevuld* — de
+- **Gevulde letters.** Lettervormen zijn niet enkel omtrek, maar *ingevuld* - de
   solide type in het beeld. → **hatch-vulling** (parallelle plotterlijnen).
 - **Verval met enkele plotterpunten.** Het letter-verval en de tabellen worden
   gerealiseerd met *losse plotterpunten*; de puntdichtheid ís het verval. →
@@ -46,12 +46,12 @@ gelijk. De permutatie-engine (`GysinText`) blijft losgekoppeld en geeft strings.
 
 | # | Stap | Levert | Status |
 |---|------|--------|--------|
-| 1 | **Vul-engine — hatch** | `fill: "hatch"` op vormen + outline-tekst = gevulde letters. Hergebruikt het lijn-trace-model, geen export-wijziging. | klaar |
+| 1 | **Vul-engine - hatch** | `fill: "hatch"` op vormen + outline-tekst = gevulde letters. Hergebruikt het lijn-trace-model, geen export-wijziging. | klaar |
 | 1b | **Per-glyph variatie** | `glyphJitter` (standaard 0.35): elke letter krijgt een eigen affiene variatie zodat geen twee letters gelijk zijn; de vulling erft dat mee. | klaar |
-| 2 | **Vul-engine — dots + verval** | `fill: "dots"` met dichtheids-gradiënt = losse plotterpunten; nieuwe "dab"-trace + SVG/HPGL-export. Realiseert laag 2 en de tabellen. | te doen |
+| 2 | **Vul-engine - dots + verval** | `fill: "dots"` met dichtheids-gradiënt = losse plotterpunten; nieuwe "dab"-trace + SVG/HPGL-export. Realiseert laag 2 en de tabellen. | te doen |
 | 3 | **Grid-ruggengraat** | `plot.grid(x,y,w,h,cols,rows,opts)` tekent een ink-bled kaderraster en geeft de cel-rechthoeken terug. Basis staat; `span/at`-API nog niet. | basis klaar |
 | 4 | **Velden** | `plot.letters()` (verval-veld) en `plot.symbols()` (operator-textuur, `cluster`-optie) staan. `GysinText.permute` met `unit:"letter"` nog te doen. | grotendeels klaar |
-| 5 | **Asemic** | `plot.asemic(x,y,w,h,opts)` — vloeiende cursieve gebaren via een draaiende walk met centrum-drift. | klaar |
+| 5 | **Asemic** | `plot.asemic(x,y,w,h,opts)` - vloeiende cursieve gebaren via een draaiende walk met centrum-drift. | klaar |
 
 ## Bereikt (reproductie-loop, 5 iteraties)
 

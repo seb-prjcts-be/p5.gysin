@@ -1,4 +1,4 @@
-# Selectieve inktopbouw — ontwerpnotitie
+# Selectieve inktopbouw - ontwerpnotitie
 
 Status: geïmplementeerd in de core op 14 juli 2026; deze notitie bewaart de materiaal- en veiligheidsbeslissingen achter de API.
 
@@ -6,8 +6,8 @@ Status: geïmplementeerd in de core op 14 juli 2026; deze notitie bewaart de mat
 
 De historische Gysin-referentie die Seb op 14 juli 2026 aanleverde toont twee tegengestelde processen:
 
-1. **inkt wegnemen** — tekstdelen vallen uit, worden onderbroken of uitgewist;
-2. **inkt opbouwen** — bepaalde tekstfragmenten worden enkele keren opnieuw geraakt en krijgen daardoor de densiteit van bleed, overprint of een versleten lint dat plaatselijk blijft hangen.
+1. **inkt wegnemen** - tekstdelen vallen uit, worden onderbroken of uitgewist;
+2. **inkt opbouwen** - bepaalde tekstfragmenten worden enkele keren opnieuw geraakt en krijgen daardoor de densiteit van bleed, overprint of een versleten lint dat plaatselijk blijft hangen.
 
 `dropout` en `rubout` modelleren vandaag vooral het eerste proces. Het bestaande `repeat` + `drift` herhaalt een volledige vorm en is te grof voor het tweede proces. Bij bijna identieke volledige contouren kan het bovendien papier beschadigen.
 

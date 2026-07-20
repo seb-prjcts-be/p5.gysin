@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════
-//  signal_score — five wavering signals notated as an abstract machine score
+//  signal_score - five wavering signals notated as an abstract machine score
 // ═══════════════════════════════════════════════════════════════════
 //  New to p5.gysin? The whole library is three lines:
 //
@@ -9,7 +9,7 @@
 //
 //  Every option below (wobble, dropout, rubout, hatch fill, asemic, layers…)
 //  is OPTIONAL disturbance layered on top of that core. The defaults are
-//  all zero, so a call with no options just draws clean — nothing here is
+//  all zero, so a call with no options just draws clean - nothing here is
 //  required to use the library. This sketch builds the score up in layers;
 //  read the numbered sections in buildPlot() from top to bottom. Each is a
 //  compositional layer, drawn back to front, and can be deleted on its own

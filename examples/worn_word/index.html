@@ -25,13 +25,13 @@
     <div class="demo-header">
       <div class="demo-number">rub()</div>
       <h1>Worn Word</h1>
-      <p>One word, worn away. <strong>rub()</strong> is an intent verb: it composes <code>text</code>, <code>textCutup</code>, and <code>asemic</code> into a single decaying gesture &mdash; the same word drawn three times, from a solid legible head to an asemic scribble that buries the last, ghostly copy. This whole sketch is <strong>one call</strong>. It is the <a href="../first_trace/">First Trace</a> gesture, which builds the same thing by hand in ~40 lines, collapsed into one.</p>
+      <p>One word, worn away. <strong>rub()</strong> is an intent verb: it composes <code>text</code>, <code>textCutup</code>, and <code>asemic</code> into a single decaying gesture - the same word drawn three times, from a solid legible head to an asemic scribble that buries the last, ghostly copy. This whole sketch is <strong>one call</strong>. It is the <a href="../first_trace/">First Trace</a> gesture, which builds the same thing by hand in ~40 lines, collapsed into one.</p>
       <p><strong>The decay knob</strong> (<em>Decay &plus;/&minus;</em> or the &uarr;/&darr; arrow keys) scales the whole disturbance at once, from <em>0&times; fully clean</em> to <em>2.5&times; fully worn</em>. Every option is optional; the defaults alone draw the full gesture.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">// The whole library, in three lines — this alone is a complete sketch:
+        <pre><code class="language-javascript">// The whole library, in three lines - this alone is a complete sketch:
 const plot = new GysinPlot({ seed: 1960 });
 plot.rub("WORN", 46, 248);   // legible → cut up → asemic, in one gesture
 plot.draw();
@@ -41,7 +41,7 @@ plot.draw();
 plot.rub("WORN", 46, 248, { decay: 2, font: outlineFont });
 
 // rub() returns the id of every copy and tangle, so each can be frozen,
-// rerolled, or exported on its own — like any other p5.gysin shape.</code></pre>
+// rerolled, or exported on its own - like any other p5.gysin shape.</code></pre>
       </div>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch" role="img" aria-label="One word drawn three times down the sheet, each copy more worn than the last: a solid legible head, a cut-up middle, and an asemic scribble burying the final copy."></div>
@@ -51,7 +51,7 @@ plot.rub("WORN", 46, 248, { decay: 2, font: outlineFont });
           <button type="button" id="reroll-button">New variation</button>
           <button type="button" id="svg-button">Download SVG</button>
         </div>
-        <div class="demo-note">Decay <strong id="decay-readout">1.0&times;</strong> &middot; seed <strong id="seed-readout">1960</strong> &mdash; both printed on the sheet. Click the canvas or <strong>New variation</strong> for the next word; <strong>Download SVG</strong> saves the plotter-ready file.</div>
+        <div class="demo-note">Decay <strong id="decay-readout">1.0&times;</strong> &middot; seed <strong id="seed-readout">1960</strong> - both printed on the sheet. Click the canvas or <strong>New variation</strong> for the next word; <strong>Download SVG</strong> saves the plotter-ready file.</div>
       </div>
     </div>
   </main>

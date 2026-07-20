@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════
-//  parameter_lab — one slider owns one element, each in its own colour
+//  parameter_lab - one slider owns one element, each in its own colour
 // ═══════════════════════════════════════════════════════════════════
 //  New to p5.gysin? The whole library is three lines:
 //
@@ -10,7 +10,7 @@
 //  Every option below (wobble, dropout, repeat, rubout, cut-up, hatch
 //  fill, letter field…) is OPTIONAL disturbance layered on top of that
 //  core. The defaults are all zero, so a call with no options just draws
-//  clean — nothing here is required to use the library. This sketch adds
+//  clean - nothing here is required to use the library. This sketch adds
 //  the layers one at a time; read the numbered sections in buildPlot()
 //  from top to bottom. Each is a compositional layer, drawn back to
 //  front, and can be deleted on its own without breaking the rest.
@@ -35,7 +35,7 @@ const CONTROLS = {
 // actually dragged). The shown element gets extra ink (EMPHASIS) while the rest
 // fade to a quiet ground (DIM), on screen and in the exported SVG. DIM keeps a
 // legible minimum stroke so the four muted elements stay a readable grey
-// skeleton — isolation never hollows the plate out to near-blank.
+// skeleton - isolation never hollows the plate out to near-blank.
 let activeId = null;
 let hoverId = null;
 const EMPHASIS = {
@@ -175,7 +175,7 @@ function buildPlot() {
   registrationMarks();
 
   // ── 2 · the title ───────────────────────────────────────────────
-  // Title — owned by WOBBLE only. Wobble re-cuts the slices (count and offset)
+  // Title - owned by WOBBLE only. Wobble re-cuts the slices (count and offset)
   // and drifts the trace, so the whole word breathes; the other sliders leave it
   // untouched. glyphJitter keeps each letter a hand-set shape.
   plot.textCutup("RUB OUT", 70, 150, {
@@ -195,7 +195,7 @@ function buildPlot() {
   });
 
   // ── 3 · the word ────────────────────────────────────────────────
-  // Word — owned by RUBOUT only. The slider visibly eats this line away while
+  // Word - owned by RUBOUT only. The slider visibly eats this line away while
   // everything around it holds together.
   plot.textCutup("ERASE", 70, 214, {
     layer: CONTROLS.rubout.layer,
@@ -210,7 +210,7 @@ function buildPlot() {
   });
 
   // ── 4 · the line band ───────────────────────────────────────────
-  // Line band — owned by REPEAT only. Each row is drawn `repeat` times by the
+  // Line band - owned by REPEAT only. Each row is drawn `repeat` times by the
   // engine, ghosted apart by a drift that grows with repeat, so more copies also
   // spread visibly wider. Rows swing in alternating phase with an amplitude that
   // deepens downward, so neighbours overrun and cross into a woven mesh rather
@@ -226,7 +226,7 @@ function buildPlot() {
       repeat: value("repeat"),
       drift: value("repeat") * 1.2,
       // Ends overrun (further with each added pass) and the trace hesitates, so
-      // the row-ends visibly overlap their neighbours — the weave becomes a
+      // the row-ends visibly overlap their neighbours - the weave becomes a
       // graphic fact, not just a caption. overshoot only extends open paths.
       overshoot: 2 + value("repeat"),
       hesitate: 0.12,
@@ -239,7 +239,7 @@ function buildPlot() {
   }
 
   // ── 5 · the hatch bar ───────────────────────────────────────────
-  // Filled bar — owned by DROPOUT only. Dropout both loosens the cross-hatch
+  // Filled bar - owned by DROPOUT only. Dropout both loosens the cross-hatch
   // spacing and breaks up the strokes, so the anchor plane opens as you raise it.
   // Aligned to the band above (70..490) so the owned elements form a clean grid.
   plot.rect(70, 428, 420, 64, {
@@ -299,7 +299,7 @@ function updateStats() {
   const shown = shownId();
   if (shown) {
     const own = s.layers[CONTROLS[shown].layer];
-    if (own) line += `  —  ${shown} owns ${round(own.drawnLength)} px`;
+    if (own) line += `  -  ${shown} owns ${round(own.drawnLength)} px`;
   }
   document.getElementById("stats").textContent = line;
 }

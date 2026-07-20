@@ -407,7 +407,7 @@ assert.equal(JSON.stringify(glyphVaryPlot2.get("hp_1").paths), JSON.stringify(gl
 glyphVaryPlot.reroll(glyphVaryId);
 assert.notEqual(JSON.stringify(glyphVaryPlot.get(glyphVaryId).paths), JSON.stringify(glyphPaths));
 
-// glyphJitter: 0 opts out — the two identical squares stay identical
+// glyphJitter: 0 opts out - the two identical squares stay identical
 const noJitterPlot = new SourcePlot();
 const noJitterId = noJitterPlot.text("HI", 0, 0, { size: 10, font: twoGlyphFont, glyphJitter: 0, simplify: 0, minSegmentLength: 0 });
 const noJitterPaths = noJitterPlot.get(noJitterId).paths;

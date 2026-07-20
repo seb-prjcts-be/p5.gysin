@@ -29,18 +29,18 @@
     <div class="demo-header">
       <div class="demo-number">line() + text() + textCutup() + asemic()</div>
       <h1>First Trace</h1>
-      <p>One word, one gesture, drawn three times down a single faint backbone line &mdash; from a solid, cross-hatch-filled head to a hollow, broken tail. <strong>Read it top to bottom.</strong> Each reseed steps one word further along a five-word sentence (<em>FIRST TRACE &rarr; SLOW HAND &rarr; LOST WORD &rarr; OPEN MARK &rarr; GONE SOON</em>); the seed and decay printed on the sheet reproduce any variation.</p>
+      <p>One word, one gesture, drawn three times down a single faint backbone line - from a solid, cross-hatch-filled head to a hollow, broken tail. <strong>Read it top to bottom.</strong> Each reseed steps one word further along a five-word sentence (<em>FIRST TRACE &rarr; SLOW HAND &rarr; LOST WORD &rarr; OPEN MARK &rarr; GONE SOON</em>); the seed and decay printed on the sheet reproduce any variation.</p>
       <ul class="legend">
-        <li><strong>legible</strong> &mdash; the word cross-hatch filled: solid, ink-heavy head</li>
-        <li><strong>cut-up</strong> &mdash; sliced and drifting: outline only, coming apart</li>
-        <li><strong>asemic</strong> &mdash; buried under a scribble: the hollow, near-empty tail</li>
+        <li><strong>legible</strong> - the word cross-hatch filled: solid, ink-heavy head</li>
+        <li><strong>cut-up</strong> - sliced and drifting: outline only, coming apart</li>
+        <li><strong>asemic</strong> - buried under a scribble: the hollow, near-empty tail</li>
       </ul>
       <p><strong>The decay knob</strong> (<em>Decay &plus;/&minus;</em> or the &uarr;/&darr; arrow keys) scales wobble, dropout <em>and rubout</em> across the whole trace at once, from <em>0&times; fully clean</em> to <em>2.5&times; fully wiped</em>.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">// The whole library, in three lines — this alone is a complete sketch:
+        <pre><code class="language-javascript">// The whole library, in three lines - this alone is a complete sketch:
 const plot = new GysinPlot({ seed: 1960 });
 plot.text("FIRST TRACE", 46, 248);   // clean, mechanical text
 plot.draw();
@@ -54,7 +54,7 @@ const decayed = (o) => ({ ...o,
   rubout: (o.rubout ?? 0) * decay, fray: (o.fray ?? 0) * decay });
 
 // 2) the same word drawn three times, decaying from a solid, cross-hatch
-//    filled head to a hollow, broken tail — one pass over a stage table
+//    filled head to a hollow, broken tail - one pass over a stage table
 for (const stage of STAGES) {
   const opts = decayed({ size: 46, ...stage.extra, rubout: stage.rubout });
   if (font && stage.fill) opts.fill = stage.fill;   // only the head is filled
@@ -76,7 +76,7 @@ plot.draw();</code></pre>
           <button type="button" id="reroll-button">New variation</button>
           <button type="button" id="svg-button">Download SVG</button>
         </div>
-        <div class="demo-note">Decay <strong id="decay-readout">1.0&times;</strong> &middot; seed <strong id="seed-readout">1960</strong> &mdash; both printed on the sheet, so an exported SVG records its own setting. Click the canvas or <strong>New variation</strong> for the next word; <strong>Download SVG</strong> saves the plotter-ready file.</div>
+        <div class="demo-note">Decay <strong id="decay-readout">1.0&times;</strong> &middot; seed <strong id="seed-readout">1960</strong> - both printed on the sheet, so an exported SVG records its own setting. Click the canvas or <strong>New variation</strong> for the next word; <strong>Download SVG</strong> saves the plotter-ready file.</div>
       </div>
     </div>
   </main>

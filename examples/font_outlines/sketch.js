@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════
-//  font_outlines — the same glyphs, hatch-filled two ways, then undone
+//  font_outlines - the same glyphs, hatch-filled two ways, then undone
 // ═══════════════════════════════════════════════════════════════════
 //  New to p5.gysin? The whole library is three lines:
 //
@@ -10,7 +10,7 @@
 //  A real outline font is the ONLY extra this example needs: with it, fill can
 //  hatch the letter bodies and leave the inner counters empty. Every other
 //  option below (fill mode, weave spacing/angle, wobble, cut-up, asemic…) is
-//  OPTIONAL disturbance layered on top, and every default is zero — a call with
+//  OPTIONAL disturbance layered on top, and every default is zero - a call with
 //  no options draws clean. This sketch adds the layers one at a time; read the
 //  numbered sections in buildPlot() from top to bottom. Each is a compositional
 //  layer, drawn back to front, and can be deleted on its own without breaking
@@ -216,7 +216,7 @@ function buildPlot() {
 }
 
 // Fill needs a real outline font; the weave sliders need Fill on too. When they
-// can do nothing, hide them entirely — a vanished control reads as a choice,
+// can do nothing, hide them entirely - a vanished control reads as a choice,
 // where a greyed-out one reads as a bug.
 function setControlsEnabled(hasFont) {
   document.getElementById("fill-button").disabled = !hasFont;
@@ -229,7 +229,7 @@ function setControlsEnabled(hasFont) {
   });
 }
 
-// One short, live measurement — seed plus pen/fill totals — so the aria-live
+// One short, live measurement - seed plus pen/fill totals - so the aria-live
 // region announces a number per tick, not a paragraph. The fixed explanation
 // lives in the HTML subtitle.
 function updateStatus() {

@@ -67,16 +67,16 @@
       <ul class="demo-hint">
         <li><strong>First order (01)</strong> leads: it is the source phrase, printed in a heavier pen so the eye lands there first.</li>
         <li><strong>Left column</strong> = the words. They press hard at the top of each order and fade downward.</li>
-        <li><strong>Right column</strong> = the same words as code. Each distinct word gets its own symbol (poster <strong>legend</strong>); the clean top row of every group is the key — decode it against the legend to read the same order as the words on the left. The rows beneath smear into stable dark texture.</li>
+        <li><strong>Right column</strong> = the same words as code. Each distinct word gets its own symbol (poster <strong>legend</strong>); the clean top row of every group is the key - decode it against the legend to read the same order as the words on the left. The rows beneath smear into stable dark texture.</li>
         <li><strong>The band</strong> underneath is the phrase dissolving into a decaying letter field.</li>
         <li><strong>The grid</strong> at the bottom is a light-to-dark tonal staircase of the word orders; each cell repeats its <strong>01–06 index</strong> from the left margin, so you can compare the orders directly.</li>
       </ul>
-      <p class="demo-hint"><strong>Type your own phrase</strong> and press Enter to run it through <code>permute()</code> (empty or symbol-only input falls back to <code>I LOVE YOU</code>). <strong>New order</strong> cycles the strategy — walk (random swaps), rotate (cyclic shifts), lexical (alphabetical), random (seeded shuffle); <strong>New seed</strong> reshuffles without changing it. The HPGL export plots the code column and grid in a second pen colour. <em>The faint paper grain and centre fold are screen-only and left out of the SVG/HPGL export.</em></p>
+      <p class="demo-hint"><strong>Type your own phrase</strong> and press Enter to run it through <code>permute()</code> (empty or symbol-only input falls back to <code>I LOVE YOU</code>). <strong>New order</strong> cycles the strategy - walk (random swaps), rotate (cyclic shifts), lexical (alphabetical), random (seeded shuffle); <strong>New seed</strong> reshuffles without changing it. The HPGL export plots the code column and grid in a second pen colour. <em>The faint paper grain and centre fold are screen-only and left out of the SVG/HPGL export.</em></p>
     </div>
     <div class="demo-layout poster-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">// The whole library, in three lines — this alone is a complete sketch:
+        <pre><code class="language-javascript">// The whole library, in three lines - this alone is a complete sketch:
 const plot = new GysinPlot({ seed: 1960 });
 plot.textCutup("I LOVE YOU", 64, 120);   // one line, sliced and reset
 plot.draw();
@@ -89,7 +89,7 @@ const regels = GysinText.permute(phrase, {
   seed: posterSeed, limit: GROUPS, order: ORDERS[orderIndex]
 }).slice(0, GROUPS);
 
-// 2) each order printed as repeated cut-up rows that press hard, then fade —
+// 2) each order printed as repeated cut-up rows that press hard, then fade -
 //    one decay curve returns the full param set for every repeat
 function decay(i, seedTag, overrides, boost = 0) {
   return {
@@ -107,7 +107,7 @@ plot.rect(x, y, w, h, { fill: "hatch", hatchSpacing: 14 - i * 2 });
 
 plot.draw();</code></pre>
         <div class="demo-actions" aria-label="Permutation poster actions">
-          <input type="text" id="phrase-input" aria-label="Your phrase for permute() — empty or symbol-only input falls back to I LOVE YOU" title="Empty or symbol-only input falls back to I LOVE YOU" placeholder="Your phrase…" maxlength="40">
+          <input type="text" id="phrase-input" aria-label="Your phrase for permute() - empty or symbol-only input falls back to I LOVE YOU" title="Empty or symbol-only input falls back to I LOVE YOU" placeholder="Your phrase…" maxlength="40">
           <button type="button" id="reroll-button">New order</button>
           <button type="button" id="seed-button">New seed</button>
           <button type="button" id="svg-button">Download A3 SVG</button>
