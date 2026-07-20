@@ -54,14 +54,25 @@ function buildPlot() {
     seed: seedValue,
     width: width,
     height: height,
-    style: { stroke: "#151515", strokeWeight: 1.1, alpha: 0.9 }
+    style: {
+      stroke: "#151515",
+      strokeWeight: 1.1,
+      alpha: 0.9
+    }
   });
 
-  plot.rub(word, 46, 248, { decay: decay, font: font });
+  plot.rub(word, 46, 248, {
+    decay: decay,
+    font: font
+  });
 
   // A small caption, so an exported SVG records its own seed and knob setting.
-  plot.text("seed " + seedValue + "  ·  decay " + decay.toFixed(1) + "x", 46, 600,
-    { size: 13, glyphJitter: 0.1, wobble: 0.5, stroke: "#8a8a8a" });
+  plot.text("seed " + seedValue + "  ·  decay " + decay.toFixed(1) + "x", 46, 600, {
+    size: 13,
+    glyphJitter: 0.1,
+    wobble: 0.5,
+    stroke: "#8a8a8a"
+  });
 
   document.getElementById("seed-readout").textContent = seedValue + " · " + word;
 }

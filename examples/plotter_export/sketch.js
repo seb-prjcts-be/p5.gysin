@@ -35,8 +35,17 @@ const STATS_OPTIONS = {
 
 // Pen map: layer == pen == ink. Canvas, legend and HPGL export all read these,
 // so what you see on screen is what each pen plots.
-const PEN_MAP = { frame: 1, type: 2, hatch: 3, registration: 1 };
-const PEN_INK = { 1: "#151515", 2: "#b5362b", 3: "#244f73" };
+const PEN_MAP = {
+  frame: 1,
+  type: 2,
+  hatch: 3,
+  registration: 1
+};
+const PEN_INK = {
+  1: "#151515",
+  2: "#b5362b",
+  3: "#244f73"
+};
 
 const PEN_LEGEND = [
   { layer: "frame", label: "FRAME" },
@@ -47,7 +56,11 @@ const PEN_LEGEND = [
 
 // Plate geometry derived once. INNER is the type area; every row is an offset
 // from INNER, so the whole plate rescales as one unit when FRAME changes.
-const FRAME = { x: 78, y: 78, size: 404 };
+const FRAME = {
+  x: 78,
+  y: 78,
+  size: 404
+};
 const PAD = 40;
 const INNER = {
   x: FRAME.x + PAD,
@@ -73,7 +86,12 @@ const CROSS_X = INNER.x + SYMBOLS_W + BAND_GAP;   // 312
 
 // A mid-tone single-hatch block in the gap above the symbol field. It gives the
 // eye a second, lighter mass so the dark cross-hatch is not the only tone.
-const ACCENT = { x: INNER.x, y: ROW.sub + 12, w: SYMBOLS_W, h: 36 };
+const ACCENT = {
+  x: INNER.x,
+  y: ROW.sub + 12,
+  w: SYMBOLS_W,
+  h: 36
+};
 
 const FRAME_CORNERS = [
   [FRAME.x, FRAME.y],
@@ -107,51 +125,138 @@ function composition(v) {
 // `comp` carries the per-variation tuning. Tonal hierarchy is deliberate: light
 // fields (alpha 0.3/0.35) and a mid-tone accent (0.5) versus the dark cross-hatch
 // anchor (0.82), so airy field, second rest point and heavy anchor all contrast.
-const ARM = { alpha: 0.7, wobble: 0.6, dropout: 0.02, overshoot: 4, fray: 1.2 };
+const ARM = {
+  alpha: 0.7,
+  wobble: 0.6,
+  dropout: 0.02,
+  overshoot: 4,
+  fray: 1.2
+};
 function shapesFor(comp) {
   return [
     // ── 1 · frame ───────────────────────────────
     // Pen 1 - plate frame; hesitates mid-edge like a hand-ruled boundary.
     ["frame", "rect", [FRAME.x, FRAME.y, FRAME.size, FRAME.size],
-      { segmentLength: 12, wobble: 0.45, drift: 0.8, dropout: 0.015, hesitate: 0.35, repeat: 2 }],
+      {
+        segmentLength: 12,
+        wobble: 0.45,
+        drift: 0.8,
+        dropout: 0.015,
+        hesitate: 0.35,
+        repeat: 2
+      }],
 
     // ── 2 · hero word ───────────────────────────
     // Pen 2 - hero word; per-glyph jitter reshapes it on reroll.
     ["type", "text", ["PLOT", INNER.x, ROW.hero],
-      { size: 88, segmentLength: 8, wobble: 1.5, drift: 2, dropout: 0.07, repeat: 2, rubout: 0.1, pressure: 0.25, glyphJitter: 0.7 }],
+      {
+        size: 88,
+        segmentLength: 8,
+        wobble: 1.5,
+        drift: 2,
+        dropout: 0.07,
+        repeat: 2,
+        rubout: 0.1,
+        pressure: 0.25,
+        glyphJitter: 0.7
+      }],
 
     // ── 3 · cut-up subtitle ─────────────────────
     // Pen 2 - cut-up subtitle spelling the four export layers.
     ["type", "textCutup", ["FRAME/TYPE/HATCH/REG", INNER.x, ROW.sub],
-      { size: 24, segmentLength: 7, slices: 5, sliceOffset: 10, sliceDropout: 0.14, wobble: 1.2, drift: 1.6, dropout: 0.08, glyphJitter: 0.4 }],
+      {
+        size: 24,
+        segmentLength: 7,
+        slices: 5,
+        sliceOffset: 10,
+        sliceDropout: 0.14,
+        wobble: 1.2,
+        drift: 1.6,
+        dropout: 0.08,
+        glyphJitter: 0.4
+      }],
 
     // ── 4 · letter field ────────────────────────
     // Pen 3 - decaying letter field, kept lightest so the hero dominates.
     ["hatch", "letters", ["PLOTTER", INNER.x, ROW.letters, INNER.w, LETTERS_H],
-      { size: 11, segmentLength: 7, wobble: 0.8, drift: 1, dropout: 0.05, glyphJitter: 0.5, alpha: 0.3 }],
+      {
+        size: 11,
+        segmentLength: 7,
+        wobble: 0.8,
+        drift: 1,
+        dropout: 0.05,
+        glyphJitter: 0.5,
+        alpha: 0.3
+      }],
 
     // ── 5 · accent block ────────────────────────
     // Pen 3 - mid-tone single-direction hatch: a second, lighter tonal mass.
     ["hatch", "rect", [ACCENT.x, ACCENT.y, ACCENT.w, ACCENT.h],
-      { segmentLength: 9, fill: "hatch", hatchAngle: comp.accentAngle, hatchSpacing: 5, wobble: 0.6, drift: 1, dropout: 0.03, alpha: 0.5 }],
+      {
+        segmentLength: 9,
+        fill: "hatch",
+        hatchAngle: comp.accentAngle,
+        hatchSpacing: 5,
+        wobble: 0.6,
+        drift: 1,
+        dropout: 0.03,
+        alpha: 0.5
+      }],
 
     // ── 6 · symbol field ────────────────────────
     // Pen 3 - airy field of procedural operator glyphs, left of the anchor.
     ["hatch", "symbols", [INNER.x, ROW.band, SYMBOLS_W, BAND_H],
-      { set: comp.symbolSet, cluster: true, size: 13, lineHeight: 1.3, segmentLength: 7, wobble: 0.7, drift: 1.2, dropout: 0.04, glyphJitter: 0.4, alpha: 0.35 }],
+      {
+        set: comp.symbolSet,
+        cluster: true,
+        size: 13,
+        lineHeight: 1.3,
+        segmentLength: 7,
+        wobble: 0.7,
+        drift: 1.2,
+        dropout: 0.04,
+        glyphJitter: 0.4,
+        alpha: 0.35
+      }],
 
     // ── 7 · cross-hatch anchor ──────────────────
     // Pen 3 - dense cross-hatch: the dark tonal anchor grounding the plate.
     ["hatch", "rect", [CROSS_X, ROW.band, CROSS_W, BAND_H],
-      { segmentLength: 10, fill: "cross", hatchAngle: comp.hatchAngle, hatchSpacing: comp.hatchSpacing, wobble: 0.6, drift: 1, dropout: 0.03, alpha: 0.82 }],
+      {
+        segmentLength: 10,
+        fill: "cross",
+        hatchAngle: comp.hatchAngle,
+        hatchSpacing: comp.hatchSpacing,
+        wobble: 0.6,
+        drift: 1,
+        dropout: 0.03,
+        alpha: 0.82
+      }],
 
     // ── 8 · registration marks ──────────────────
     // Pen 1 - registration marks on the diagonal; light enough to read as
     // registration, not as dark noise beside the hatch anchor.
     ["registration", "circle", [404, 152, 78],
-      { alpha: 0.7, density: 1.0, wobble: 1.3, drift: 1.8, dropout: 0.08, repeat: 2, rubout: 0.08, fray: 0.5 }],
+      {
+        alpha: 0.7,
+        density: 1.0,
+        wobble: 1.3,
+        drift: 1.8,
+        dropout: 0.08,
+        repeat: 2,
+        rubout: 0.08,
+        fray: 0.5
+      }],
     ["registration", "polygon", [[[156, 372], [125, 426], [187, 426]]],
-      { alpha: 0.7, wobble: 1.3, drift: 1.8, dropout: 0.08, repeat: 2, rubout: 0.08, fray: 0.5 }],
+      {
+        alpha: 0.7,
+        wobble: 1.3,
+        drift: 1.8,
+        dropout: 0.08,
+        repeat: 2,
+        rubout: 0.08,
+        fray: 0.5
+      }],
 
     // ── 9 · corner crosses ──────────────────────
     // Pen 1 - a cross in every frame corner; arms overshoot and fray at the tips.
@@ -242,11 +347,19 @@ function buildPlot() {
     width: width,
     height: height,
     page: EXPORT_PAGE,
-    style: { stroke: PEN_INK[1], strokeWeight: 0.9, alpha: 0.86 }
+    style: {
+      stroke: PEN_INK[1],
+      strokeWeight: 0.9,
+      alpha: 0.86
+    }
   });
 
   for (const [layer, method, geom, opts] of shapesFor(composition(variation))) {
-    plot[method](...geom, { layer, stroke: PEN_INK[PEN_MAP[layer]], ...humanize(opts) });
+    plot[method](...geom, {
+      layer,
+      stroke: PEN_INK[PEN_MAP[layer]],
+      ...humanize(opts)
+    });
   }
 
   for (let i = 0; i < variation; i++) plot.reroll();
@@ -256,7 +369,10 @@ function buildPlot() {
 
 function wireButtons() {
   onClick("svg-button", function() {
-    plot.downloadSVG("p5-gysin-plotter-export.svg", { page: EXPORT_PAGE, optimize: true });
+    plot.downloadSVG("p5-gysin-plotter-export.svg", {
+      page: EXPORT_PAGE,
+      optimize: true
+    });
     report("SVG exported");
   });
 
@@ -307,8 +423,18 @@ const CHROME_FONT = "monospace";
 const CHROME_INK = "#9a9a9a";
 const PAGE_INSET = 36;                             // page border inset
 const HINT_Y = 22;                                 // top caption baseline
-const METER = { x: 22, y: 36, w: 120, h: 6 };      // CLEAN..ROUGH track
-const LEGEND = { y: 498, x0: 20, gap: 135, swatch: 10 };  // pen row geometry
+const METER = {
+  x: 22,
+  y: 36,
+  w: 120,
+  h: 6
+};      // CLEAN..ROUGH track
+const LEGEND = {
+  y: 498,
+  x0: 20,
+  gap: 135,
+  swatch: 10
+};  // pen row geometry
 
 // One place for the monospace chrome type: set font, size, colour and alignment,
 // then draw. Keeps the chrome helpers about their geometry, not their boilerplate.
@@ -354,7 +480,10 @@ function drawLegend(stats) {
 // Top caption: export coordinates + live controls, plus a CLEAN..ROUGH meter.
 function drawHint() {
   label(`SEED ${SEED} · VAR ${variation} · HUMAN x${humanScale.toFixed(2)}`, METER.x, HINT_Y, { size: 11 });
-  label("R = REROLL · ↑↓ = HUMAN SCALE", width - METER.x, HINT_Y, { size: 11, align: RIGHT });
+  label("R = REROLL · ↑↓ = HUMAN SCALE", width - METER.x, HINT_Y, {
+    size: 11,
+    align: RIGHT
+  });
   drawHumanMeter();
 }
 
@@ -369,6 +498,13 @@ function drawHumanMeter() {
   stroke("#c4c4c4");
   strokeWeight(1);
   line(x + w / 2, y - 2, x + w / 2, y + h + 2);
-  label("CLEAN", x, y + h + 8, { size: 9, ink: "#b8b8b8" });
-  label("ROUGH", x + w, y + h + 8, { size: 9, ink: "#b8b8b8", align: RIGHT });
+  label("CLEAN", x, y + h + 8, {
+    size: 9,
+    ink: "#b8b8b8"
+  });
+  label("ROUGH", x + w, y + h + 8, {
+    size: 9,
+    ink: "#b8b8b8",
+    align: RIGHT
+  });
 }

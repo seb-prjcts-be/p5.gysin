@@ -32,7 +32,12 @@ let letterJitter = 0.4;    // how far each glyph drifts off its axis; driven by 
 const SEED = 19600319;
 
 // Shared hand-drawn defaults; every element only states how it differs.
-const base = { segmentLength: 8, pressure: 0.3, drift: 2.5, wobble: 1.6 };
+const base = {
+  segmentLength: 8,
+  pressure: 0.3,
+  drift: 2.5,
+  wobble: 1.6
+};
 
 // The rub-out deepens with depth: one slider, read as a top-to-bottom gradient.
 // A baseline y (0 at the head, 900 at the foot) is turned into a multiple of the
@@ -52,7 +57,11 @@ function setup() {
     seed: SEED,
     width: 900,
     height: 900,
-    style: { stroke: "#161616", strokeWeight: 1.15, alpha: 0.9 }
+    style: {
+      stroke: "#161616",
+      strokeWeight: 1.15,
+      alpha: 0.9
+    }
   });
 
   paper = makePaper();
@@ -69,17 +78,46 @@ function buildPlot() {
   // Both title lines get the same treatment; each line states only how it differs.
   // Their rubout is the lightest step of the gradient; glyphJitter drifts every
   // letter on its own axis.
-  const titleOpts = { ...base, size: 96, density: 1.15, glyphJitter: letterJitter };
-  titleId = plot.text("RUB OUT", 75, 145, { ...titleOpts, rubout: ruboutAt(145), wobble: 1.8, dropout: 0.08, repeat: 2, drift: 2 });
-  plot.text("THE WORD", 76, 235, { ...titleOpts, rubout: ruboutAt(235), wobble: 2.2, dropout: 0.14, repeat: 3, drift: 3, pressure: 0.4 });
+  const titleOpts = {
+    ...base,
+    size: 96,
+    density: 1.15,
+    glyphJitter: letterJitter
+  };
+  titleId = plot.text("RUB OUT", 75, 145, {
+    ...titleOpts,
+    rubout: ruboutAt(145),
+    wobble: 1.8,
+    dropout: 0.08,
+    repeat: 2,
+    drift: 2
+  });
+  plot.text("THE WORD", 76, 235, {
+    ...titleOpts,
+    rubout: ruboutAt(235),
+    wobble: 2.2,
+    dropout: 0.14,
+    repeat: 3,
+    drift: 3,
+    pressure: 0.4
+  });
 
   // ── 2 · the cut-up quotation ────────────────────────────────────
   // Cut-up quotation: sliced and re-offset so the sentence stutters.
   plot.textCutup("I THINK THEREFORE I AM", 76, 370, {
     ...base,
-    size: 55, slices: 9, sliceOffset: 24, sliceDropout: 0.18,
-    density: 1, wobble: 1.4, dropout: 0.09, repeat: 2, drift: 2,
-    rubout: ruboutAt(370), pressure: 0.25, segmentLength: 6
+    size: 55,
+    slices: 9,
+    sliceOffset: 24,
+    sliceDropout: 0.18,
+    density: 1,
+    wobble: 1.4,
+    dropout: 0.09,
+    repeat: 2,
+    drift: 2,
+    rubout: ruboutAt(370),
+    pressure: 0.25,
+    segmentLength: 6
   });
 
   // ── 3 · the ruled band ──────────────────────────────────────────
@@ -90,9 +128,16 @@ function buildPlot() {
     const y = 448 + i * 18;
     plot.line(80 + i * 8, y, 820, y + i * 5, {
       ...base,
-      wobble: 0.9, drift: 1.4, dropout: 0.04 + i * 0.03, overshoot: 9,
-      repeat: i % 3 === 0 ? 2 : 1, pressure: 0.2, segmentLength: 10,
-      strokeWeight: 0.85, alpha: 0.72, rubout: ruboutAt(y)
+      wobble: 0.9,
+      drift: 1.4,
+      dropout: 0.04 + i * 0.03,
+      overshoot: 9,
+      repeat: i % 3 === 0 ? 2 : 1,
+      pressure: 0.2,
+      segmentLength: 10,
+      strokeWeight: 0.85,
+      alpha: 0.72,
+      rubout: ruboutAt(y)
     });
   }
 
@@ -101,9 +146,19 @@ function buildPlot() {
   // Its wobble rides the break-apart slider, so the mass shakes with the letters.
   plot.polygon(tiltedRect(310, 672, 440, 165, -7), {
     ...base,
-    fill: "hatch", hatchAngle: 52, hatchSpacing: 8,
-    density: 1, wobble: 1.3 + letterJitter * 1.2, dropout: 0.08, repeat: 3, rubout: ruboutAt(672),
-    fray: 0.55, pressure: 0.25, segmentLength: 9, strokeWeight: 0.9, alpha: 0.5
+    fill: "hatch",
+    hatchAngle: 52,
+    hatchSpacing: 8,
+    density: 1,
+    wobble: 1.3 + letterJitter * 1.2,
+    dropout: 0.08,
+    repeat: 3,
+    rubout: ruboutAt(672),
+    fray: 0.55,
+    pressure: 0.25,
+    segmentLength: 9,
+    strokeWeight: 0.9,
+    alpha: 0.5
   });
 
   // ── 5 · the right mass ──────────────────────────────────────────
@@ -111,9 +166,17 @@ function buildPlot() {
   // Its fray rides the same slider, so the disc frays open as the poster breaks up.
   plot.circle(705, 672, 160, {
     ...base,
-    fill: "cross", hatchSpacing: 6,
-    density: 1.6, wobble: 2.5, dropout: 0.13, repeat: 2, drift: 4,
-    rubout: ruboutAt(672), fray: 0.25 + letterJitter * 0.4, pressure: 0.35, alpha: 0.82
+    fill: "cross",
+    hatchSpacing: 6,
+    density: 1.6,
+    wobble: 2.5,
+    dropout: 0.13,
+    repeat: 2,
+    drift: 4,
+    rubout: ruboutAt(672),
+    fray: 0.25 + letterJitter * 0.4,
+    pressure: 0.35,
+    alpha: 0.82
   });
 
   // ── 6 · the letter field ────────────────────────────────────────
@@ -121,8 +184,13 @@ function buildPlot() {
   // step of the gradient, dissolving into a letter field driven by both sliders.
   plot.letters("RUB OUT THE WORD", 90, 795, 720, 105, {
     ...base,
-    size: 26, wobble: 1.4, dropout: 0.2 + titleRubout, rubout: ruboutAt(795),
-    drift: 1.2, glyphJitter: letterJitter, alpha: 0.7
+    size: 26,
+    wobble: 1.4,
+    dropout: 0.2 + titleRubout,
+    rubout: ruboutAt(795),
+    drift: 1.2,
+    glyphJitter: letterJitter,
+    alpha: 0.7
   });
 
   plot.freeze(titleId);

@@ -60,11 +60,18 @@ const SEG = 7;     // shared grain of the disturbance
 const CAPTION = "#8a8a8a";
 
 // Shared type fields for every word block; per-stage differences spread over it.
-const BASE = { size: SIZE, segmentLength: SEG };
+const BASE = {
+  size: SIZE,
+  segmentLength: SEG
+};
 
 // One caption look for every small label and footnote on the sheet. Captions keep
 // the crisp single-stroke bitmap alphabet (no font), so small text stays legible.
-const CAPTION_STYLE = { glyphJitter: 0.1, wobble: 0.5, stroke: CAPTION };
+const CAPTION_STYLE = {
+  glyphJitter: 0.1,
+  wobble: 0.5,
+  stroke: CAPTION
+};
 
 // The decay knob: scale the disturbance verbs of any block by the live multiplier,
 // so one control drives wobble, drift, dropout AND erasure across the whole trace
@@ -152,7 +159,11 @@ function buildPlot() {
     seed: seedValue,
     width: width,
     height: height,
-    style: { stroke: "#151515", strokeWeight: 1.1, alpha: 0.88 }
+    style: {
+      stroke: "#151515",
+      strokeWeight: 1.1,
+      alpha: 0.88
+    }
   });
 
   // ── 1 · the backbone ────────────────────────────────────────────
@@ -162,25 +173,43 @@ function buildPlot() {
   // Its shake and doubling scale with decay like everything else on the sheet.
   const spine = [[92, 110], [470, 124], ...STAGES.map((s) => [s.x, s.y])];
   plot.path(spine, decayed({
-    stroke: "#151515", strokeWeight: 0.5, alpha: 0.4,
-    wobble: 0.9, drift: 1.2, repeat: 2, hesitate: 0.4, segmentLength: SEG
+    stroke: "#151515",
+    strokeWeight: 0.5,
+    alpha: 0.4,
+    wobble: 0.9,
+    drift: 1.2,
+    repeat: 2,
+    hesitate: 0.4,
+    segmentLength: SEG
   }));
 
   const label = (stage) =>
-    plot.text(stage.name, stage.x, stage.labelY, { ...CAPTION_STYLE, size: 13 });
+    plot.text(stage.name, stage.x, stage.labelY, {
+      ...CAPTION_STYLE,
+      size: 13
+    });
 
   // ── 2 · the origin node ─────────────────────────────────────────
   // Origin: a dense, hard-pressed ink node - the heavy head of the diagonal.
   plot.circle(92, 110, 80, decayed({
-    fill: "cross", hatchSpacing: 1.8, density: 1.6,
-    wobble: 1.4, dropout: 0.05, pressure: 0.82
+    fill: "cross",
+    hatchSpacing: 1.8,
+    density: 1.6,
+    wobble: 1.4,
+    dropout: 0.05,
+    pressure: 0.82
   }));
 
   // ── 3 · the first stroke ────────────────────────────────────────
   // First stroke: firm and confident, already hesitating and fraying.
   plot.line(146, 110, 470, 124, decayed({
-    wobble: 1.2, dropout: 0.04, overshoot: 10,
-    hesitate: 0.6, fray: 0.5, pressure: 0.65, segmentLength: 9
+    wobble: 1.2,
+    dropout: 0.04,
+    overshoot: 10,
+    hesitate: 0.6,
+    fray: 0.5,
+    pressure: 0.65,
+    segmentLength: 9
   }));
 
   // ── 4 · the word, three decays ──────────────────────────────────
@@ -191,9 +220,13 @@ function buildPlot() {
   for (const stage of STAGES) {
     label(stage);
     const opts = decayed({
-      ...BASE, ...stage.extra,
-      strokeWeight: stage.weight, alpha: stage.alpha,
-      dropout: stage.dropout, rubout: stage.rubout, fray: stage.fray
+      ...BASE,
+      ...stage.extra,
+      strokeWeight: stage.weight,
+      alpha: stage.alpha,
+      dropout: stage.dropout,
+      rubout: stage.rubout,
+      fray: stage.fray
     });
     if (font) {
       opts.font = font;
@@ -208,14 +241,23 @@ function buildPlot() {
   const asemic = STAGES[2];
   for (const t of TANGLES) {
     plot.asemic(asemic.x + t.dx * decay, asemic.y + t.dy * decay, t.w * decay, t.h * decay, decayed({
-      wobble: 1.4, dropout: t.dropout, strokeWeight: t.weight, pressure: t.pressure
+      wobble: 1.4,
+      dropout: t.dropout,
+      strokeWeight: t.weight,
+      pressure: t.pressure
     }));
   }
 
   // ── 6 · captions ────────────────────────────────────────────────
   // Print seed AND decay on the sheet, so an exported SVG records its own knob setting.
-  plot.text("seed " + seedValue, 44, 610, { ...CAPTION_STYLE, size: 14 });
-  plot.text("decay " + decay.toFixed(1) + "x", 300, 610, { ...CAPTION_STYLE, size: 14 });
+  plot.text("seed " + seedValue, 44, 610, {
+    ...CAPTION_STYLE,
+    size: 14
+  });
+  plot.text("decay " + decay.toFixed(1) + "x", 300, 610, {
+    ...CAPTION_STYLE,
+    size: 14
+  });
 
   document.getElementById("seed-readout").textContent = seedValue + " · " + word;
 }

@@ -37,7 +37,13 @@ const ORDER_NOTES = {
 // Base symbols for the code column; symbolMapFor() keeps every word unique.
 const CODE_SET = ["|", "§§", "%", "=", "#", "//", "×", "¶"];
 // Shared look for every rule line on the poster.
-const RULE = { wobble: 0.14, dropout: 0.012, strokeWeight: 0.42, alpha: 0.34, layer: "rules" };
+const RULE = {
+  wobble: 0.14,
+  dropout: 0.012,
+  strokeWeight: 0.42,
+  alpha: 0.34,
+  layer: "rules"
+};
 
 // One source for the vertical rhythm; every layout anchor below derives from it.
 const GROUPS = 6;                      // permutation orders stacked down the poster
@@ -135,7 +141,11 @@ function label(i) {
 function buildPoster() {
   const order = ORDERS[orderIndex];
   // Take exactly GROUPS orders for the layout.
-  permutations = GysinText.permute(phrase, { seed: posterSeed, limit: GROUPS, order }).slice(0, GROUPS);
+  permutations = GysinText.permute(phrase, {
+    seed: posterSeed,
+    limit: GROUPS,
+    order
+  }).slice(0, GROUPS);
   const symbols = symbolMapFor(phrase);
   const wordCount = phrase.trim().split(/\s+/).length;
 
@@ -143,13 +153,21 @@ function buildPoster() {
   // Only the truly shared basis: size, cut-up granularity, font. Every disturbance
   // param (wobble/dropout/slices…) comes from decay() or the caller, so a reader
   // never weighs two layers of defaults against each other.
-  cutupBase = { size: 18.5, segmentLength: 3.6, ...glyphFont };
+  cutupBase = {
+    size: 18.5,
+    segmentLength: 3.6,
+    ...glyphFont
+  };
 
   plot = new GysinPlot({
     seed: posterSeed,
     width: POSTER_WIDTH,
     height: POSTER_HEIGHT,
-    style: { stroke: INK, strokeWeight: 0.72, alpha: 0.88 }
+    style: {
+      stroke: INK,
+      strokeWeight: 0.72,
+      alpha: 0.88
+    }
   });
 
   // ── 1 · the frame ───────────────────────────────────────────────
@@ -160,19 +178,38 @@ function buildPoster() {
   // ── 2 · the heading ─────────────────────────────────────────────
   // The title line: what the poster is, in the heavier "type" pen.
   plot.text(`PERMUTATION POEM / ${phrase.toUpperCase()} / ${wordCount} WORDS`, TEXT_X, 69, typeStyle({
-    size: 16, letterSpacing: 1.05, dropout: 0.012, strokeWeight: 0.82, layer: "type"
+    size: 16,
+    letterSpacing: 1.05,
+    dropout: 0.012,
+    strokeWeight: 0.82,
+    layer: "type"
   }));
 
   // ── 3 · column headings + legend ────────────────────────────────
   // The two column headings and the decode legend, so the symbolic code column
   // to the right is genuinely readable against these signs.
-  plot.text("TEXT", TEXT_X, 100, typeStyle({ size: 11, strokeWeight: 0.55, alpha: 0.62, layer: "notes" }));
-  plot.text("CODE / KEY", CODE_X, 100, typeStyle({ size: 11, strokeWeight: 0.55, alpha: 0.62, layer: "notes" }));
+  plot.text("TEXT", TEXT_X, 100, typeStyle({
+    size: 11,
+    strokeWeight: 0.55,
+    alpha: 0.62,
+    layer: "notes"
+  }));
+  plot.text("CODE / KEY", CODE_X, 100, typeStyle({
+    size: 11,
+    strokeWeight: 0.55,
+    alpha: 0.62,
+    layer: "notes"
+  }));
   // Legend so the symbolic column is genuinely decodable: read the clean top row
   // of any code group against these signs. It rides the "code" layer, printing in
   // the same second pen as the column below.
   const legend = Object.entries(symbols).map(([word, sign]) => `${sign} = ${word}`).join("   ");
-  plot.text(legend, CODE_X, 114, typeStyle({ size: 9, strokeWeight: 0.44, alpha: 0.6, layer: "code" }));
+  plot.text(legend, CODE_X, 114, typeStyle({
+    size: 9,
+    strokeWeight: 0.44,
+    alpha: 0.6,
+    layer: "code"
+  }));
 
   // ── 4 · the permutation groups ──────────────────────────────────
   // The body of the poster: one group per permutation order. Each group prints
@@ -187,7 +224,12 @@ function buildPoster() {
     const boost = g === 0 ? 0.7 : 0;
 
     // Marginal index so each order maps onto its cell in the grid below.
-    plot.text(label(g), 46, top + 6, { size: 9, strokeWeight: 0.5, alpha: 0.55, layer: "notes" });
+    plot.text(label(g), 46, top + 6, {
+      size: 9,
+      strokeWeight: 0.5,
+      alpha: 0.55,
+      layer: "notes"
+    });
 
     for (let r = 0; r < REPEATS; r++) {
       const y = top + r * 16;
@@ -197,7 +239,8 @@ function buildPoster() {
       cutupLine(strip, TEXT_X, y, decay(r, `text:${g}:${r}`, { layer: "type" }, boost));
       cutupLine(code, CODE_X, y, decay(r, `code:${g}:${r}`, {
         // The lead order's key row prints a touch larger, sharpening the start of the read.
-        size: key && g === 0 ? 20 : 18, layer: "code",
+        size: key && g === 0 ? 20 : 18,
+        layer: "code",
         strokeWeight: key ? 1.4 : 1.05,
         pressure: key ? 0 : 0.14,
         alpha: key ? 0.95 : 0.68,
@@ -221,11 +264,19 @@ function buildPoster() {
 
 // The words dissolve into a decaying letter field; letters() jitters each glyph.
 function drawLetterBand() {
-  plot.line(RULE_X0, BAND_Y, RULE_X1, BAND_Y, { wobble: 0.2, strokeWeight: 0.7, alpha: 0.58, layer: "rules" });
+  plot.line(RULE_X0, BAND_Y, RULE_X1, BAND_Y, {
+    wobble: 0.2,
+    strokeWeight: 0.7,
+    alpha: 0.58,
+    layer: "rules"
+  });
 
   // Caption so the letter-soup below is self-describing, like the 01-06 indexes.
   plot.text(`${phrase.toUpperCase()} DISSOLVING INTO A LETTER FIELD`, BAND_X, BAND_Y - 6, typeStyle({
-    size: 9, strokeWeight: 0.5, alpha: 0.55, layer: "notes"
+    size: 9,
+    strokeWeight: 0.5,
+    alpha: 0.55,
+    layer: "notes"
   }));
 
   plot.letters(permutations.join(""), BAND_X, BAND_Y + 4, BAND_W, 120, typeStyle({
@@ -254,32 +305,62 @@ function drawPermutationGrid() {
 
     // Tonal engine: hatch tightens from 14 (faint) to 4 (dense) as a light-to-dark staircase.
     plot.rect(x, y, cellWidth, cellHeight, {
-      fill: "hatch", hatchSpacing: 14 - i * 2, hatchAngle: -18,
-      wobble: 0.5, dropout: 0.02, strokeWeight: 0.6, alpha: 0.6, layer: "grid"
+      fill: "hatch",
+      hatchSpacing: 14 - i * 2,
+      hatchAngle: -18,
+      wobble: 0.5,
+      dropout: 0.02,
+      strokeWeight: 0.6,
+      alpha: 0.6,
+      layer: "grid"
     });
 
     // Index matches the margin above; the word scales down so long phrases stay inside the cell.
-    plot.text(label(i), x + 13, y + 18, { size: 10, strokeWeight: 0.5, alpha: 0.7, layer: "grid-type" });
+    plot.text(label(i), x + 13, y + 18, {
+      size: 10,
+      strokeWeight: 0.5,
+      alpha: 0.7,
+      layer: "grid-type"
+    });
     cutupLine(permutations[i], x + 13, y + 47, {
       // Scale to fit the cell, but never below 9px so long phrases stay legible.
       size: Math.max(9, Math.min(24, 260 / permutations[i].length)),
-      wobble: 0.16, dropout: 0.008, sliceDropout: 0.02, strokeWeight: 1.05, alpha: 0.95,
-      seed: `${posterSeed}:grid:${i}`, layer: "grid-type"
+      wobble: 0.16,
+      dropout: 0.008,
+      sliceDropout: 0.02,
+      strokeWeight: 1.05,
+      alpha: 0.95,
+      seed: `${posterSeed}:grid:${i}`,
+      layer: "grid-type"
     });
   }
 
   const order = ORDERS[orderIndex];
   plot.text(`ONE PHRASE / ORDER ${order.toUpperCase()} — ${ORDER_NOTES[order].toUpperCase()} / SEED ${posterSeed}`, BAND_X, FOOTER_Y, typeStyle({
-    size: 12, letterSpacing: 1.08, dropout: 0.018, strokeWeight: 0.52, alpha: 0.62, layer: "notes"
+    size: 12,
+    letterSpacing: 1.08,
+    dropout: 0.018,
+    strokeWeight: 0.52,
+    alpha: 0.62,
+    layer: "notes"
   }));
 }
 
 function drawFrame() {
   plot.rect(42, 42, POSTER_WIDTH - 84, POSTER_HEIGHT - 84, {
-    wobble: 0.45, dropout: 0.006, strokeWeight: 0.62, alpha: 0.64, layer: "frame"
+    wobble: 0.45,
+    dropout: 0.006,
+    strokeWeight: 0.62,
+    alpha: 0.64,
+    layer: "frame"
   });
 
-  const cross = { wobble: 0.18, strokeWeight: 0.52, alpha: 0.55, layer: "frame" };
+  const cross = {
+    wobble: 0.18,
+    strokeWeight: 0.52,
+    alpha: 0.55,
+    layer: "frame"
+  };
   [[42, 42], [798, 42], [42, 1146], [798, 1146]].forEach(function(p) {
     plot.line(p[0] - 9, p[1], p[0] + 9, p[1], cross);
     plot.line(p[0], p[1] - 9, p[0], p[1] + 9, cross);
@@ -373,7 +454,16 @@ function wireActions() {
     // Two pens: the code column and the whole word grid plot in a second colour.
     plot.downloadHPGL("p5-gysin-permutation-poem-a3.hpgl", {
       page: a3Page(),
-      penMap: { frame: 1, type: 1, notes: 1, rules: 1, band: 1, code: 2, grid: 2, "grid-type": 2 },
+      penMap: {
+        frame: 1,
+        type: 1,
+        notes: 1,
+        rules: 1,
+        band: 1,
+        code: 2,
+        grid: 2,
+        "grid-type": 2
+      },
       speed: 18
     });
   });
@@ -386,7 +476,14 @@ function updateLabels(orderButton, seedButton) {
 }
 
 function a3Page() {
-  return { width: 297, height: 420, units: "mm", margin: 10, scale: 277 / POSTER_WIDTH, clip: true };
+  return {
+    width: 297,
+    height: 420,
+    units: "mm",
+    margin: 10,
+    scale: 277 / POSTER_WIDTH,
+    clip: true
+  };
 }
 
 function setStatus(message) {

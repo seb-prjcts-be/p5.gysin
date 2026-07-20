@@ -53,7 +53,13 @@ const LAYOUT = {
 // forgotten tail stays flush with the kept letters at any size.
 const GLYPH_ADVANCE_UNITS = 5.9;
 
-const base = { wobble: 1.4, drift: 1.8, pressure: 0.22, segmentLength: 8, alpha: 0.8 };
+const base = {
+  wobble: 1.4,
+  drift: 1.8,
+  pressure: 0.22,
+  segmentLength: 8,
+  alpha: 0.8
+};
 const RED = "#c0392b"; // second pen: the returning word and the ring around it
 const INK = "#151515"; // hatch grey, reused by the right-hand field
 
@@ -107,7 +113,11 @@ function buildPlot() {
   // Seed steers structure; the Hand button scales disturbance; decay erodes.
   randomSeed(seedValue);
   const nerve = calm ? 0.35 : 1.6;
-  const hand = { ...base, wobble: base.wobble * nerve, drift: base.drift * nerve };
+  const hand = {
+    ...base,
+    wobble: base.wobble * nerve,
+    drift: base.drift * nerve
+  };
   const breath = 0.12 + random(0.3); // anchor pressure, new every reseed
 
   // Seed-driven grain so each plot reads as its own work, not the same picture
@@ -128,7 +138,11 @@ function buildPlot() {
     seed: seedValue,
     width,
     height,
-    style: { stroke: INK, strokeWeight: 1, alpha: 0.88 }
+    style: {
+      stroke: INK,
+      strokeWeight: 1,
+      alpha: 0.88
+    }
   });
 
   // ── 1 · the anchor ──────────────────────────────────────────────
@@ -137,16 +151,25 @@ function buildPlot() {
   // not only the word.
   const a = LAYOUT.anchor;
   plot.rect(a.x, a.y, a.w, a.h, {
-    ...hand, fill: "cross",
-    hatchSpacing: grain.crossSpacing, hatchAngle: grain.crossAngle,
-    pressure: breath, repeat: 2, fray: 0.3, alpha: 0.7,
-    dropout: 0.05 + decay * 0.35, rubout: decay * 0.22
+    ...hand,
+    fill: "cross",
+    hatchSpacing: grain.crossSpacing,
+    hatchAngle: grain.crossAngle,
+    pressure: breath,
+    repeat: 2,
+    fray: 0.3,
+    alpha: 0.7,
+    dropout: 0.05 + decay * 0.35,
+    rubout: decay * 0.22
   });
   // Sparse slanted second hatch for tonal depth.
   plot.rect(a.x, a.y, a.w, a.h, {
-    ...hand, fill: "hatch",
-    hatchAngle: grain.hatchAngle, hatchSpacing: grain.hatchSpacing,
-    dropout: 0.05, alpha: 0.25
+    ...hand,
+    fill: "hatch",
+    hatchAngle: grain.hatchAngle,
+    hatchSpacing: grain.hatchSpacing,
+    dropout: 0.05,
+    alpha: 0.25
   });
 
   // ── 2 · the right-hand field ────────────────────────────────────
@@ -154,11 +177,23 @@ function buildPlot() {
   // void and counterweights the red ring. Its glyphs and frame thin with decay.
   const f = LAYOUT.field;
   plot.symbols(f.x, f.y, f.w, f.h, {
-    ...hand, size: 15, stroke: INK, alpha: 0.35,
-    drift: decay * 0.5, dropout: 0.05 + decay * 0.5, glyphJitter: 0.4
+    ...hand,
+    size: 15,
+    stroke: INK,
+    alpha: 0.35,
+    drift: decay * 0.5,
+    dropout: 0.05 + decay * 0.5,
+    glyphJitter: 0.4
   });
   plot.grid(f.x, f.y, f.w, f.h, f.cols, f.rows, {
-    frame: { stroke: INK, strokeWeight: 0.9, alpha: 0.38, wobble: 0.7, bleed: 0.18, dropout: 0.06 + decay * 0.4 }
+    frame: {
+      stroke: INK,
+      strokeWeight: 0.9,
+      alpha: 0.38,
+      wobble: 0.7,
+      bleed: 0.18,
+      dropout: 0.06 + decay * 0.4
+    }
   });
 
   // ── 3 · the red ring ────────────────────────────────────────────
@@ -168,25 +203,40 @@ function buildPlot() {
   const dg = LAYOUT.degrade;
   const wordWidth = WORD.length * (dg.size / 7) * GLYPH_ADVANCE_UNITS;
   plot.circle(dg.x + wordWidth / 2, dg.y - dg.size / 2, LAYOUT.ring.d, {
-    ...hand, stroke: RED, density: 1.35, dropout: 0.1,
-    repeat: grain.ringRepeat, rubout: grain.ringRubout, alpha: 0.7
+    ...hand,
+    stroke: RED,
+    density: 1.35,
+    dropout: 0.1,
+    repeat: grain.ringRepeat,
+    rubout: grain.ringRubout,
+    alpha: 0.7
   });
 
   // ── 4 · the title ───────────────────────────────────────────────
   // Title — largest surface; pressure varies its weight, hesitate breaks it.
   const t = LAYOUT.title;
   plot.text("CUT UP", t.x, t.y, {
-    ...hand, size: t.size, pressure: 0.4,
-    hesitate: grain.titleHesitate, dropout: 0.08, repeat: 2, rubout: 0.06
+    ...hand,
+    size: t.size,
+    pressure: 0.4,
+    hesitate: grain.titleHesitate,
+    dropout: 0.08,
+    repeat: 2,
+    rubout: 0.06
   });
 
   // ── 5 · the sentence ────────────────────────────────────────────
   // Sentence — sliced once, how hard depends on the seed's grain.
   const cu = LAYOUT.cutup;
   plot.textCutup("THE MACHINE REMEMBERS", cu.x, cu.y, {
-    ...hand, size: cu.size,
-    slices: grain.cutSlices, sliceOffset: grain.cutOffset, sliceDropout: 0.16,
-    dropout: 0.09, repeat: 2, rubout: 0.14
+    ...hand,
+    size: cu.size,
+    slices: grain.cutSlices,
+    sliceOffset: grain.cutOffset,
+    sliceDropout: 0.16,
+    dropout: 0.09,
+    repeat: 2,
+    rubout: 0.14
   });
 
   // ── 6 · the forgetting word ─────────────────────────────────────
@@ -206,16 +256,23 @@ function degradeWord(word, x, y, size, decay, hand) {
 
   if (kept > 0) {
     plot.textCutup(word.slice(0, kept), x, y, {
-      ...hand, size, stroke: RED,
-      slices: floor(random(12, 19)), sliceOffset: random(30, 54),
-      sliceDropout: 0.3, dropout: 0.14, rubout: 0.22
+      ...hand,
+      size,
+      stroke: RED,
+      slices: floor(random(12, 19)),
+      sliceOffset: random(30, 54),
+      sliceDropout: 0.3,
+      dropout: 0.14,
+      rubout: 0.22
     });
   }
   for (let i = kept; i < word.length; i++) {
     const fade = i - kept;
     const t = lost > 1 ? fade / (lost - 1) : 1; // 0 first-lost → 1 last-lost
     forgetGlyph(word[i], x + i * advance, y - size, advance, size, t, {
-      ...hand, stroke: RED, size,
+      ...hand,
+      stroke: RED,
+      size,
       wobble: hand.wobble + fade * 0.5,
       drift: hand.drift + fade * 0.6,
       dropout: 0.08 + fade * 0.06
@@ -226,7 +283,10 @@ function degradeWord(word, x, y, size, decay, hand) {
 
 // One forgotten cell along the tail: this glyph, shaken → printed sign → scribble.
 function forgetGlyph(glyph, gx, top, w, size, t, mark) {
-  if (t < 0.34) plot.letters(glyph, gx, top, w, size, { ...mark, glyphJitter: 0.55 });
+  if (t < 0.34) plot.letters(glyph, gx, top, w, size, {
+    ...mark,
+    glyphJitter: 0.55
+  });
   else if (t < 0.67) plot.symbols(gx, top, w, size, mark);
   else plot.asemic(gx, top, w, size, mark);
 }

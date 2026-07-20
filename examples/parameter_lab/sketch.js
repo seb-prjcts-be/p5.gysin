@@ -38,8 +38,15 @@ const CONTROLS = {
 // skeleton — isolation never hollows the plate out to near-blank.
 let activeId = null;
 let hoverId = null;
-const EMPHASIS = { alpha: 1, pressure: 0.6, strokeWeight: 2.4 };
-const DIM = { alpha: 0.3, strokeWeight: 1 };
+const EMPHASIS = {
+  alpha: 1,
+  pressure: 0.6,
+  strokeWeight: 2.4
+};
+const DIM = {
+  alpha: 0.3,
+  strokeWeight: 1
+};
 
 function setup() {
   const canvas = createCanvas(560, 560);
@@ -155,7 +162,11 @@ function buildPlot() {
     seed: seedValue,
     width: width,
     height: height,
-    style: { stroke: "#111111", strokeWeight: 1, alpha: 1 }
+    style: {
+      stroke: "#111111",
+      strokeWeight: 1,
+      alpha: 1
+    }
   });
 
   // ── 1 · the plate ───────────────────────────────────────────────
@@ -268,7 +279,11 @@ function buildPlot() {
 // and drawn on every state so screen and export read as a composed plate rather
 // than loose elements floating on the flat background.
 function registrationMarks() {
-  const mark = { stroke: "#b8b8b8", strokeWeight: 0.8, wobble: 0.6 };
+  const mark = {
+    stroke: "#b8b8b8",
+    strokeWeight: 0.8,
+    wobble: 0.6
+  };
   plot.rect(32, 32, width - 64, height - 64, mark);
   plot.line(44, 44, 96, 44, mark);
   plot.line(44, 44, 44, 96, mark);

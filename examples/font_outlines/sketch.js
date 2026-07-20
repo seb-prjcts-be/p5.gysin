@@ -119,9 +119,20 @@ function caption() {
 // only reading the word "counter". The built-in single-stroke alphabet keeps the
 // small label crisp; a thin red arrow dips into the O's counter.
 function annotateCounter() {
-  const ink = { stroke: "#b5362b", alpha: 0.95, layer: "labels" };
-  plot.text("counter", 66, 84, Object.assign({ size: 14, wobble: 0.5, dropout: 0.02 }, ink));
-  plot.line(100, 88, 95, 130, Object.assign({ wobble: 0.5, overshoot: 2 }, ink));
+  const ink = {
+    stroke: "#b5362b",
+    alpha: 0.95,
+    layer: "labels"
+  };
+  plot.text("counter", 66, 84, Object.assign({
+    size: 14,
+    wobble: 0.5,
+    dropout: 0.02
+  }, ink));
+  plot.line(100, 88, 95, 130, Object.assign({
+    wobble: 0.5,
+    overshoot: 2
+  }, ink));
   plot.line(95, 130, 88, 119, Object.assign({}, ink));   // arrowhead
   plot.line(95, 130, 102, 121, Object.assign({}, ink));
 }
@@ -131,7 +142,11 @@ function buildPlot() {
     seed: currentSeed,
     width: width,
     height: height,
-    style: { stroke: "#171717", strokeWeight: 1, alpha: 0.9 }
+    style: {
+      stroke: "#171717",
+      strokeWeight: 1,
+      alpha: 0.9
+    }
   });
 
   // ── 1 · the two glyph bodies ────────────────────────────────────
