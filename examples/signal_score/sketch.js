@@ -123,7 +123,11 @@ function buildPlot() {
     seed,
     width,
     height,
-    style: { stroke: INK, strokeWeight: 1, alpha: 0.82 }
+    style: {
+      stroke: INK,
+      strokeWeight: 1,
+      alpha: 0.82
+    }
   });
 
   const right = width - LEFT;
@@ -139,7 +143,11 @@ function buildPlot() {
   // Ruled paper on its own layer so the SVG export shows the same sheet.
   staffYs.forEach((y) => {
     plot.line(LEFT - 22, y, right + 22, y, {
-      wobble: 0.3, dropout: 0.02, stroke: "#dcdcdc", strokeWeight: 0.6, layer: "paper"
+      wobble: 0.3,
+      dropout: 0.02,
+      stroke: "#dcdcdc",
+      strokeWeight: 0.6,
+      layer: "paper"
     });
   });
 
@@ -153,14 +161,28 @@ function buildPlot() {
 
   // A faint vertical rule on that column, the counter-axis to the five horizontals.
   plot.line(head.x, staffYs[0], head.x, baseline, {
-    wobble: 0.6, dropout: 0.08, stroke: INK, strokeWeight: 0.8, alpha: 0.45, layer: "read"
+    wobble: 0.6,
+    dropout: 0.08,
+    stroke: INK,
+    strokeWeight: 0.8,
+    alpha: 0.45,
+    layer: "read"
   });
   // Cap it with a hatched tick and label its level as a percent of full scale.
   plot.polygon(diamond(head.x, staffYs[0], 6), {
-    fill: "hatch", hatchSpacing: 2, wobble: 0.5, stroke: INK, alpha: 0.85, layer: "read"
+    fill: "hatch",
+    hatchSpacing: 2,
+    wobble: 0.5,
+    stroke: INK,
+    alpha: 0.85,
+    layer: "read"
   });
   plot.text(nf(head.amp * 100, 2, 0) + "% level", head.x + 10, staffYs[0] - 5, {
-    size: 11, letterSpacing: 0.5, wobble: 0.4, stroke: INK, layer: "read"
+    size: 11,
+    letterSpacing: 0.5,
+    wobble: 0.4,
+    stroke: INK,
+    layer: "read"
   });
 
   // ── 3 · accent focus band ──────────────────────────────────────
@@ -169,12 +191,21 @@ function buildPlot() {
   const heroBand = cols.map((c) => [c.x, c.ys[ACCENT]]);
   heroBand.push([right, hero.y], [LEFT, hero.y]);
   plot.polygon(heroBand, {
-    fill: "hatch", hatchSpacing: 3, wobble: 0.4,
-    stroke: RED, strokeWeight: 0.6, alpha: 0.22, layer: "signal"
+    fill: "hatch",
+    hatchSpacing: 3,
+    wobble: 0.4,
+    stroke: RED,
+    strokeWeight: 0.6,
+    alpha: 0.22,
+    layer: "signal"
   });
   // A thin red baseline so the focus band still reads at plot scale, where the hatch thins out.
   plot.line(LEFT, hero.y, right, hero.y, {
-    wobble: 0.3, stroke: RED, strokeWeight: 0.8, alpha: 0.5, layer: "signal"
+    wobble: 0.3,
+    stroke: RED,
+    strokeWeight: 0.8,
+    alpha: 0.5,
+    layer: "signal"
   });
 
   // ── 4 · the five signals ───────────────────────────────────────
@@ -183,9 +214,15 @@ function buildPlot() {
     const signal = cols.map((c) => [c.x, c.ys[i]]);
     const accent = i === ACCENT;
     plot.path(signal, {
-      wobble: v.wobble, dropout: 0.05, repeat: v.repeat, drift: 1.2,
-      rubout: v.rubout, pressure: v.pressure, hesitate: v.hesitate,
-      overshoot: 8, segmentLength: 8,
+      wobble: v.wobble,
+      dropout: 0.05,
+      repeat: v.repeat,
+      drift: 1.2,
+      rubout: v.rubout,
+      pressure: v.pressure,
+      hesitate: v.hesitate,
+      overshoot: 8,
+      segmentLength: 8,
       stroke: accent ? RED : INK,
       strokeWeight: accent ? 2 : map(v.amp, 12, 30, 0.6, 1.4, true),
       alpha: accent ? 0.9 : map(v.amp, 12, 30, 0.34, 0.62, true),
@@ -228,18 +265,31 @@ function buildPlot() {
     const cell = cells[cellIndex(px, cellW)];
     const accent = i === ACCENT;
     plot.line(px, py, cell.cx, cell.top, {
-      wobble: 0.4, dropout: 0.35, stroke: "#8a8a8a", strokeWeight: 0.6,
-      alpha: accent ? 0.55 : 0.3, layer: "link"
+      wobble: 0.4,
+      dropout: 0.35,
+      stroke: "#8a8a8a",
+      strokeWeight: 0.6,
+      alpha: accent ? 0.55 : 0.3,
+      layer: "link"
     });
     const r = map(pk.loudness, 10, 36, 8, 22, true);
     plot.polygon(diamond(px, py, r), {
-      fill: accent ? "cross" : "hatch", hatchSpacing: 2.4, wobble: 0.65, rubout: 0.04,
-      stroke: accent ? RED : "#244f73", alpha: accent ? 0.85 : 0.5, layer: "markers"
+      fill: accent ? "cross" : "hatch",
+      hatchSpacing: 2.4,
+      wobble: 0.65,
+      rubout: 0.04,
+      stroke: accent ? RED : "#244f73",
+      alpha: accent ? 0.85 : 0.5,
+      layer: "markers"
     });
     const pct = constrain(pk.loudness / (voices[i].amp + voices[i].harmAmp) * 100, 0, 100);
     plot.text(nf(pct, 2, 0) + "%", px + r + 4, py + 3, {
-      size: 9, letterSpacing: 0.5, wobble: 0.4,
-      stroke: accent ? RED : "#244f73", alpha: accent ? 0.9 : 0.55, layer: "markers"
+      size: 9,
+      letterSpacing: 0.5,
+      wobble: 0.4,
+      stroke: accent ? RED : "#244f73",
+      alpha: accent ? 0.9 : 0.55,
+      layer: "markers"
     });
   });
 
@@ -247,15 +297,22 @@ function buildPlot() {
   // Row labels in the left margin (S1..S5); the accent row is labelled in red.
   voices.forEach((v, i) => {
     plot.text("S" + (i + 1), 14, v.y + 4, {
-      size: 12, letterSpacing: 0.5, wobble: 0.4,
-      stroke: i === ACCENT ? RED : INK, layer: "label"
+      size: 12,
+      letterSpacing: 0.5,
+      wobble: 0.4,
+      stroke: i === ACCENT ? RED : INK,
+      layer: "label"
     });
   });
 
   // ── 8 · title ──────────────────────────────────────────────────
   // Title in the top margin so the partituur concept reads on its own.
   plot.text("SIGNAL / NOTATION", LEFT, 52, {
-    size: 15, letterSpacing: 1.1, wobble: 0.4, stroke: INK, layer: "label"
+    size: 15,
+    letterSpacing: 1.1,
+    wobble: 0.4,
+    stroke: INK,
+    layer: "label"
   });
 
   // ── 9 · legend ─────────────────────────────────────────────────
@@ -265,14 +322,23 @@ function buildPlot() {
   // ── 10 · control hint ──────────────────────────────────────────
   // On-canvas control hint so the composition announces it is rerollable.
   plot.text("click / R = new reading  ·  S = SVG", LEFT, height - 22, {
-    size: 10, letterSpacing: 0.6, wobble: 0.4, stroke: "#8a8a8a", layer: "label"
+    size: 10,
+    letterSpacing: 0.6,
+    wobble: 0.4,
+    stroke: "#8a8a8a",
+    layer: "label"
   });
 
   // ── 11 · frame ─────────────────────────────────────────────────
   // The border, drawn last so it sits on top and boxes the whole score.
   plot.rect(LEFT, 64, right - LEFT, height - 128, {
-    wobble: 0.4, dropout: 0.015, repeat: 2, drift: 0.5,
-    stroke: INK, alpha: 0.65, layer: "frame"
+    wobble: 0.4,
+    dropout: 0.015,
+    repeat: 2,
+    drift: 0.5,
+    stroke: INK,
+    alpha: 0.65,
+    layer: "frame"
   });
 
   showReading();
@@ -292,22 +358,44 @@ function diamond(cx, cy, r) {
 // The three visual verbs of the score, drawn small and labelled in three equal
 // columns derived from 'right', so the legend rescales with the canvas width.
 function drawLegend(y, right) {
-  const label = { size: 10, letterSpacing: 0.5, wobble: 0.4, stroke: INK, layer: "label" };
+  const label = {
+    size: 10,
+    letterSpacing: 0.5,
+    wobble: 0.4,
+    stroke: INK,
+    layer: "label"
+  };
   const colW = (right - LEFT) / 3;
   const col = (n) => LEFT + n * colW;
 
   const wave = [];
   for (let t = 0; t <= 6; t++) wave.push([col(0) + t * 5, y + sin(t) * 4]);
-  plot.path(wave, { wobble: 0.6, drift: 0.8, stroke: INK, strokeWeight: 1, layer: "label" });
+  plot.path(wave, {
+    wobble: 0.6,
+    drift: 0.8,
+    stroke: INK,
+    strokeWeight: 1,
+    layer: "label"
+  });
   plot.text("signal", col(0) + 42, y + 4, label);
 
   plot.polygon(diamond(col(1) + 7, y, 7), {
-    fill: "hatch", hatchSpacing: 2.4, wobble: 0.5, stroke: "#244f73", alpha: 0.85, layer: "label"
+    fill: "hatch",
+    hatchSpacing: 2.4,
+    wobble: 0.5,
+    stroke: "#244f73",
+    alpha: 0.85,
+    layer: "label"
   });
   plot.text("peak = loudness", col(1) + 22, y + 4, label);
 
   plot.asemic(col(2), y - 10, 18, 20, {
-    loops: 4, wobble: 0.5, strokeWeight: 0.8, stroke: "#3a3a3a", alpha: 0.75, layer: "label"
+    loops: 4,
+    wobble: 0.5,
+    strokeWeight: 0.8,
+    stroke: "#3a3a3a",
+    alpha: 0.75,
+    layer: "label"
   });
   plot.text("notation", col(2) + 26, y + 4, label);
 }
