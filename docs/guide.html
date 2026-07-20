@@ -23,16 +23,24 @@
   <header class="page-header">
     <div class="section-tag">API guide</div>
     <h1>Guide</h1>
-    <p>p5.gysin captures vector shapes first, then turns them into plotter-friendly traces. The generated paths are the same paths used for drawing, SVG, JSON, and HPGL export.</p>
+    <p>A complete permutation sketch loads three scripts: p5.js, the p5.gysin core, and the separate p5.gysin text addon. Your own <code>sketch.js</code> always comes last.</p>
   </header>
 
   <main class="section guide-layout">
     <section class="guide-block">
-      <h2>Setup</h2>
+      <div class="section-tag">Start here</div>
+      <h2>p5.gysin has two library files</h2>
+      <p><strong><code>p5.js</code> is the creative-coding foundation.</strong> Load it when you want <code>GysinPlot</code> to draw the generated paths on a canvas.</p>
+      <p><strong><code>p5.gysin.min.js</code> is the core library.</strong> It provides <code>GysinPlot</code>, drawing methods such as <code>textCutup()</code>, and SVG, JSON, and HPGL export.</p>
+      <p><strong><code>p5.gysin.text.min.js</code> is the text addon.</strong> It provides <code>GysinText.permute()</code>. Load this second file whenever you want to generate permutation poems.</p>
+      <p>For sketches that combine permutations with drawing, load the scripts in this order:</p>
       <div class="code-preview">
         <code>&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
-&lt;script src="../p5.gysin.min.js"&gt;&lt;/script&gt;</code>
+&lt;script src="../p5.gysin.min.js"&gt;&lt;/script&gt;
+&lt;script src="../p5.gysin.text.min.js"&gt;&lt;/script&gt;
+&lt;script src="sketch.js"&gt;&lt;/script&gt;</code>
       </div>
+      <p>You only need <code>p5.gysin.text.min.js</code> for <code>GysinText</code>. The addon is dependency-free and can also be used without p5.js or <code>GysinPlot</code>.</p>
     </section>
 
     <section class="guide-block">
@@ -40,7 +48,8 @@
       <p>In the p5.js Web Editor, add the library script to the <code>index.html</code> tab before <code>sketch.js</code>.</p>
       <div class="code-preview">
         <code>&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.2.0/p5.gysin.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://seb-prjcts-be.github.io/p5.gysin/p5.gysin.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://seb-prjcts-be.github.io/p5.gysin/p5.gysin.text.min.js"&gt;&lt;/script&gt;
 &lt;script src="sketch.js"&gt;&lt;/script&gt;</code>
       </div>
     </section>
@@ -88,7 +97,7 @@ function setup() {
 
     <section class="guide-block">
       <h2>Optional Text Permutations</h2>
-      <p><code>p5.gysin.text.min.js</code> is a separate dependency-free addon. It works without p5.js and without <code>GysinPlot</code>, returning ordinary strings that can optionally be drawn through the existing core.</p>
+      <p><code>p5.gysin.text.min.js</code> returns ordinary strings that can be used on their own or drawn through the core library.</p>
       <div class="code-preview">
         <code>&lt;script src="../p5.gysin.text.min.js"&gt;&lt;/script&gt;
 
