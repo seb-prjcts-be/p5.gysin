@@ -511,6 +511,37 @@ assert.equal(p5V2Shape.bounds.height, 40);
 assert.equal(p5Pushes, 1);
 assert.equal(p5Pops, 1);
 
+// --- rub(): the decay intent verb ------------------------------------------
+function buildRub(Plot) {
+  const plot = new Plot({ seed: 1960, width: 520, height: 620 });
+  const ids = plot.rub("FIRST TRACE", 46, 248);
+  return { plot, ids };
+}
+const rubA = buildRub(SourcePlot);
+const rubB = buildRub(SourcePlot);
+const rubMin = buildRub(MinPlot);
+assert.equal(rubA.ids.length, 6, "rub default = 3 stages + 3 tangles");
+assert.equal(
+  JSON.stringify(rubA.ids.map((id) => rubA.plot.get(id).type)),
+  JSON.stringify(["text", "textCutup", "text", "path", "path", "path"])
+);
+// deterministic, and identical between source and min build
+const rubJSON = JSON.stringify(rubA.ids.map((id) => rubA.plot.get(id).generated));
+assert.equal(JSON.stringify(rubB.ids.map((id) => rubB.plot.get(id).generated)), rubJSON);
+assert.equal(JSON.stringify(rubMin.ids.map((id) => rubMin.plot.get(id).generated)), rubJSON);
+// every copy is addressable and can be frozen on its own
+assert.ok(rubA.plot.get(rubA.ids[0]), "rub id is addressable");
+assert.ok(rubA.plot.freeze(rubA.ids[3]), "an individual rub trace can be frozen");
+// decay 0 leaves the word unburied (the three copies, no asemic tail)
+assert.equal(new SourcePlot({ seed: 1960 }).rub("X", 10, 10, { decay: 0 }).length, 3);
+// tail:false opts out of burial
+assert.equal(new SourcePlot({ seed: 3 }).rub("X", 0, 0, { tail: false }).length, 3);
+// custom stages drive the copy count; verbs are validated
+assert.equal(new SourcePlot({ seed: 4 }).rub("X", 0, 0, { stages: [{ verb: "text" }], tail: false }).length, 1);
+assert.throws(() => new SourcePlot().rub("X", 0, 0, { stages: [{ verb: "circle" }] }), /must be "text" or "textCutup"/);
+assert.throws(() => new SourcePlot().rub("X", 0, 0, { stages: [] }), /non-empty array/);
+assert.throws(() => new SourcePlot().rub("X", Infinity, 0), /finite number/);
+
 const root = path.join(__dirname, "..");
 const manifest = JSON.parse(fs.readFileSync(
   path.join(root, "docs", "p5.gysin.manifest.json"),
