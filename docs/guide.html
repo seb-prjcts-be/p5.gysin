@@ -108,12 +108,14 @@ const lines = GysinText.permute("I LOVE YOU", {
 });
 
 lines.forEach((line, index) =&gt; {
-  plot.textCutup(line, 70, 140 + index * 90, {
-    slices: 7 + index,
-    sliceOffset: 14 + index * 6
+  plot.textCutup(line, 40, 65 + index * 55, {
+    size: 28,
+    slices: 12 + index,
+    sliceOffset: 1 + index
   });
 });</code>
       </div>
+      <p>The first line stays almost completely readable. Each following line increases the slice offset by one pixel, so the poem gradually moves from legible text toward a stronger cut-up.</p>
       <p>Orders: <code>walk</code>, <code>random</code>, <code>lexical</code>, and <code>rotate</code>. The source line stays first, duplicate words produce only unique lines, and <code>limit</code> is capped at 1,000.</p>
     </section>
 
