@@ -4,9 +4,51 @@ const FONT_URL = "../font_outlines/assets/Oswald-Regular.otf";
 const PAPER = "#eee9dc";
 const INK = "#17140f";
 
+// Strategies the "New order" button cycles through, each with a one-line gloss
+// so walk/rotate/lexical/random are readable on the poster and in the status.
+const ORDERS = ["walk", "rotate", "lexical", "random"];
+const ORDER_NOTES = {
+  walk: "random swaps",
+  rotate: "cyclic shifts",
+  lexical: "alphabetical",
+  random: "seeded shuffle"
+};
+// Base symbols for the code column; symbolMapFor() keeps every word unique.
+const CODE_SET = ["|", "§§", "%", "=", "#", "//", "×", "¶"];
+// Shared look for every rule line on the poster.
+const RULE = { wobble: 0.14, dropout: 0.012, strokeWeight: 0.42, alpha: 0.34, layer: "rules" };
+
+// One source for the vertical rhythm; every layout anchor below derives from it.
+const GROUPS = 6;                      // permutation orders stacked down the poster
+const REPEATS = 6;                     // fading echo rows under each order
+const COLS = 3;                        // columns in the bottom tonal grid
+const ROWS = Math.ceil(GROUPS / COLS); // grid rows needed to hold every order
+
+// Vertical anchors, derived from GROUPS so the band and grid follow the orders.
+const GROUP_TOP = 124;                       // first order's top edge
+const GROUP_H = 112;                         // vertical stride between orders
+const BAND_Y = GROUP_TOP + GROUPS * GROUP_H; // letter band, under the last order
+const GRID_Y = BAND_Y + 146;                 // tonal grid, under the band
+const FOOTER_Y = 1147;                        // colophon baseline at the page foot
+const GRID_FOOT_GAP = 44;                     // clearance kept between grid and colophon
+
+// Horizontal anchors for the two columns, the group rules, and the band.
+const TEXT_X = 64;     // left word column and its heading
+const CODE_X = 602;    // symbolic code column and its heading/legend
+const RULE_X0 = 56;    // group rules + band underline start
+const RULE_X1 = 784;   // group rules + band underline end
+const RULE_DY = 91;    // rule offset below each group top
+const BAND_X = 58;     // letter band, its caption, and the footer colophon
+const BAND_W = 726;    // letter band width
+
 let outlineFont = null;
+let glyphFont = {};
+// Cut-up defaults + current font, merged once per rebuild (not per line).
+let cutupBase = {};
 let plot;
+let phrase = "I LOVE YOU";
 let posterSeed = 1960;
+let orderIndex = 0;
 let permutations = [];
 
 async function setup() {
@@ -14,7 +56,7 @@ async function setup() {
   canvas.parent("sketch");
   pixelDensity(1);
   noLoop();
-  describe("A monochrome A3 permutation poem: six groups of repeated cut-up text, a symbolic code column, a dense letter band, and a modular word grid.");
+  describe("A monochrome A3 permutation poem: six groups of repeated cut-up text, a symbolic code column, a dense decaying letter band, and a modular word grid.");
 
   try {
     outlineFont = await loadFont(FONT_URL);
@@ -29,259 +71,282 @@ async function setup() {
 
 function draw() {
   background(PAPER);
-  drawPaper();
+  drawScreenTexture();
   plot.draw();
 }
 
+// One flat merge: shared cut-up base (with font) + this line's differences.
+function cutupLine(text, x, y, overrides) {
+  return plot.textCutup(text, x, y, { ...cutupBase, ...overrides });
+}
+
+// The plain-type counterpart of cutupLine: the shared font + this label's tweaks,
+// so the outline font lives in one place instead of a merge per caption.
+function typeStyle(overrides) {
+  return { ...glyphFont, ...overrides };
+}
+
+// One decay curve, fully resolved: a higher index bites deeper, lightens the
+// pen, and fades out. Callers hand it their layer/overrides and read back a
+// single ready-to-draw set of disturbance params — no second merge downstream.
+// `boost` lifts the whole weight/pressure ramp without flattening its slope, so
+// the lead order can dominate while still decaying top-to-bottom.
+function decay(i, seedTag, overrides, boost = 0) {
+  return {
+    slices: 4 + (i % 5),
+    sliceOffset: 0.7 + i * 0.72,
+    sliceDropout: 0.02 + i * 0.006,
+    wobble: 0.08 + i * 0.03,
+    dropout: 0.006 + i * 0.002,
+    strokeWeight: Math.max(0.4, 1.3 + boost - i * 0.17),
+    pressure: Math.min(0.8, boost + i * 0.14),
+    alpha: Math.max(0.18, 1 - i * 0.16),
+    seed: `${posterSeed}:${seedTag}`,
+    ...overrides
+  };
+}
+
+// Two-digit index shared by the text groups and the grid cells.
+function label(i) {
+  return String(i + 1).padStart(2, "0");
+}
+
 function buildPoster() {
-  permutations = GysinText.permute("I LOVE YOU", {
-    seed: posterSeed,
-    limit: 6,
-    order: "walk"
-  });
+  const order = ORDERS[orderIndex];
+  // Take exactly GROUPS orders for the layout.
+  permutations = GysinText.permute(phrase, { seed: posterSeed, limit: GROUPS, order }).slice(0, GROUPS);
+  const symbols = symbolMapFor(phrase);
+  const wordCount = phrase.trim().split(/\s+/).length;
+
+  glyphFont = outlineFont ? { font: outlineFont } : {};
+  // Only the truly shared basis: size, cut-up granularity, font. Every disturbance
+  // param (wobble/dropout/slices…) comes from decay() or the caller, so a reader
+  // never weighs two layers of defaults against each other.
+  cutupBase = { size: 18.5, segmentLength: 3.6, ...glyphFont };
 
   plot = new GysinPlot({
     seed: posterSeed,
     width: POSTER_WIDTH,
     height: POSTER_HEIGHT,
-    style: {
-      stroke: INK,
-      strokeWeight: 0.72,
-      alpha: 0.88
-    }
+    style: { stroke: INK, strokeWeight: 0.72, alpha: 0.88 }
   });
 
-  const font = outlineFont ? { font: outlineFont } : {};
   drawFrame();
 
-  plot.text("PERMUTATION POEM / I LOVE YOU / 3 WORDS / 6 ORDERS", 64, 69, Object.assign({}, font, {
-    size: 16,
-    letterSpacing: 1.05,
-    dropout: 0.012,
-    strokeWeight: 0.82,
-    layer: "type"
+  plot.text(`PERMUTATION POEM / ${phrase.toUpperCase()} / ${wordCount} WORDS`, TEXT_X, 69, typeStyle({
+    size: 16, letterSpacing: 1.05, dropout: 0.012, strokeWeight: 0.82, layer: "type"
   }));
 
-  plot.text("TEXT", 64, 100, Object.assign({}, font, {
-    size: 11,
-    strokeWeight: 0.55,
-    alpha: 0.62,
-    layer: "notes"
-  }));
-  plot.text("CODE", 602, 100, Object.assign({}, font, {
-    size: 11,
-    strokeWeight: 0.55,
-    alpha: 0.62,
-    layer: "notes"
-  }));
+  plot.text("TEXT", TEXT_X, 100, typeStyle({ size: 11, strokeWeight: 0.55, alpha: 0.62, layer: "notes" }));
+  plot.text("CODE / KEY", CODE_X, 100, typeStyle({ size: 11, strokeWeight: 0.55, alpha: 0.62, layer: "notes" }));
+  // Legend so the symbolic column is genuinely decodable: read the clean top row
+  // of any code group against these signs. It rides the "code" layer, printing in
+  // the same second pen as the column below.
+  const legend = Object.entries(symbols).map(([word, sign]) => `${sign} = ${word}`).join("   ");
+  plot.text(legend, CODE_X, 114, typeStyle({ size: 9, strokeWeight: 0.44, alpha: 0.6, layer: "code" }));
 
-  permutations.forEach(function(regel, groupIndex) {
-    const groupTop = 124 + groupIndex * 112;
-    const textField = Array(4).fill(regel).join("  ");
-    const encoded = encodePermutation(regel);
+  permutations.forEach(function(regel, g) {
+    const top = GROUP_TOP + g * GROUP_H;
+    const strip = Array(4).fill(regel).join("  ");
+    const code = encode(regel, symbols);
+    // The first order is the source phrase; it leads the poster in a heavier pen
+    // so the eye lands there, then reads the decay downward across the others.
+    const boost = g === 0 ? 0.7 : 0;
 
-    for (let repeatIndex = 0; repeatIndex < 6; repeatIndex++) {
-      const baseline = groupTop + repeatIndex * 16;
-      const offset = 0.7 + ((groupIndex * 3 + repeatIndex) % 7) * 0.72;
+    // Marginal index so each order maps onto its cell in the grid below.
+    plot.text(label(g), 46, top + 6, { size: 9, strokeWeight: 0.5, alpha: 0.55, layer: "notes" });
 
-      plot.textCutup(textField, 64 + (repeatIndex === 4 ? 8 : 0), baseline, Object.assign({}, font, {
-        size: 18.5,
-        slices: 4 + ((groupIndex + repeatIndex) % 5),
-        sliceOffset: offset,
-        sliceDropout: 0.018 + repeatIndex * 0.004,
-        wobble: 0.08 + repeatIndex * 0.018,
-        dropout: 0.006 + groupIndex * 0.002,
-        rubout: repeatIndex === 3 ? 0.012 : 0,
-        segmentLength: 3.8,
-        strokeWeight: repeatIndex === 0 ? 1.08 : 0.9,
-        alpha: repeatIndex === 3 ? 0.7 : 0.94,
-        layer: "type",
-        seed: `${posterSeed}:text:${groupIndex}:${repeatIndex}`
-      }));
-
-      plot.textCutup(encoded, 602, baseline, Object.assign({}, font, {
-        size: 18,
-        slices: 4 + ((repeatIndex + 2) % 4),
-        sliceOffset: 0.5 + groupIndex * 0.35,
-        sliceDropout: 0.02,
-        wobble: 0.07,
-        dropout: 0.006,
-        segmentLength: 3.6,
-        strokeWeight: 0.92,
-        alpha: 0.9,
-        layer: "code",
-        seed: `${posterSeed}:code:${groupIndex}:${repeatIndex}`
+    for (let r = 0; r < REPEATS; r++) {
+      const y = top + r * 16;
+      // Words fade down the column (the lead order fades from heavier). The code
+      // column prints its top row clean as the legend key, then smears to texture.
+      const key = r === 0;
+      cutupLine(strip, TEXT_X, y, decay(r, `text:${g}:${r}`, { layer: "type" }, boost));
+      cutupLine(code, CODE_X, y, decay(r, `code:${g}:${r}`, {
+        // The lead order's key row prints a touch larger, sharpening the start of the read.
+        size: key && g === 0 ? 20 : 18, layer: "code",
+        strokeWeight: key ? 1.4 : 1.05,
+        pressure: key ? 0 : 0.14,
+        alpha: key ? 0.95 : 0.68,
+        rubout: key ? 0 : 0.05 + r * 0.02
       }));
     }
 
-    plot.line(56, groupTop + 91, 784, groupTop + 91, {
-      wobble: 0.14,
-      dropout: 0.012,
-      strokeWeight: 0.42,
-      alpha: 0.34,
-      layer: "rules"
-    });
+    plot.line(RULE_X0, top + RULE_DY, RULE_X1, top + RULE_DY, RULE);
   });
 
-  drawLetterBand(font);
-  drawPermutationGrid(font);
+  drawLetterBand();
+  drawPermutationGrid();
 }
 
-function drawLetterBand(font) {
-  const compact = permutations.map(function(regel) {
-    return regel.replace(/\s+/g, "");
-  });
+// The words dissolve into a decaying letter field; letters() jitters each glyph.
+function drawLetterBand() {
+  plot.line(RULE_X0, BAND_Y, RULE_X1, BAND_Y, { wobble: 0.2, strokeWeight: 0.7, alpha: 0.58, layer: "rules" });
 
-  plot.line(56, 812, 784, 812, {
-    wobble: 0.2,
-    strokeWeight: 0.7,
-    alpha: 0.58,
-    layer: "rules"
-  });
+  // Caption so the letter-soup below is self-describing, like the 01-06 indexes.
+  plot.text(`${phrase.toUpperCase()} DISSOLVING INTO A LETTER FIELD`, BAND_X, BAND_Y - 6, typeStyle({
+    size: 9, strokeWeight: 0.5, alpha: 0.55, layer: "notes"
+  }));
 
-  for (let row = 0; row < 7; row++) {
-    const unit = `${compact[row % compact.length]}${compact[(row + 2) % compact.length]}${compact[(row + 4) % compact.length]}`;
-    const text = unit + unit;
-    plot.textCutup(text, 58 - (row % 3) * 7, 836 + row * 14, Object.assign({}, font, {
-      size: 13.5,
-      slices: 3 + row,
-      sliceOffset: 2 + row * 1.2,
-      sliceDropout: 0.025 + row * 0.006,
-      wobble: 0.12,
-      dropout: 0.012 + row * 0.004,
-      rubout: row === 4 ? 0.025 : 0,
-      segmentLength: 3.2,
-      strokeWeight: 0.82,
-      alpha: 0.8,
-      layer: "band",
-      seed: `${posterSeed}:band:${row}`
-    }));
-  }
+  plot.letters(permutations.join(""), BAND_X, BAND_Y + 4, BAND_W, 120, typeStyle({
+    size: 13.5,
+    lineHeight: 1.05,
+    wobble: 0.5,
+    dropout: 0.04,
+    glyphJitter: 0.8,
+    strokeWeight: 0.82,
+    alpha: 0.8,
+    layer: "band",
+    seed: `${posterSeed}:band`
+  }));
 }
 
-function drawPermutationGrid(font) {
-  const gridX = 56;
-  const gridY = 958;
+function drawPermutationGrid() {
+  const gridX = RULE_X0;
+  const gridY = GRID_Y;
   const cellWidth = 242;
-  const cellHeight = 80;
+  // Fit every grid row in the space left above the colophon, so more orders never overrun the footer.
+  const cellHeight = Math.floor((FOOTER_Y - GRID_Y - GRID_FOOT_GAP) / ROWS);
 
-  for (let index = 0; index < permutations.length; index++) {
-    const column = index % 3;
-    const row = Math.floor(index / 3);
-    const x = gridX + column * cellWidth;
-    const y = gridY + row * cellHeight;
+  for (let i = 0; i < permutations.length; i++) {
+    const x = gridX + (i % COLS) * cellWidth;
+    const y = gridY + Math.floor(i / COLS) * cellHeight;
 
+    // Tonal engine: hatch tightens from 14 (faint) to 4 (dense) as a light-to-dark staircase.
     plot.rect(x, y, cellWidth, cellHeight, {
-      wobble: 0.65,
-      dropout: 0.02,
-      strokeWeight: 0.68,
-      alpha: 0.68,
-      layer: "grid"
+      fill: "hatch", hatchSpacing: 14 - i * 2, hatchAngle: -18,
+      wobble: 0.5, dropout: 0.02, strokeWeight: 0.6, alpha: 0.6, layer: "grid"
     });
 
-    plot.textCutup(permutations[index], x + 13, y + 47, Object.assign({}, font, {
-      size: 24,
-      slices: 6 + index,
-      sliceOffset: 4 + index * 1.4,
-      sliceDropout: 0.035 + index * 0.006,
-      wobble: 0.2 + index * 0.035,
-      dropout: 0.012,
-      rubout: index === 2 ? 0.025 : 0,
-      segmentLength: 3.4,
-      strokeWeight: 0.94,
-      alpha: 0.92,
-      layer: "grid-type",
-      seed: `${posterSeed}:grid:${index}`
-    }));
+    // Index matches the margin above; the word scales down so long phrases stay inside the cell.
+    plot.text(label(i), x + 13, y + 18, { size: 10, strokeWeight: 0.5, alpha: 0.7, layer: "grid-type" });
+    cutupLine(permutations[i], x + 13, y + 47, {
+      // Scale to fit the cell, but never below 9px so long phrases stay legible.
+      size: Math.max(9, Math.min(24, 260 / permutations[i].length)),
+      wobble: 0.16, dropout: 0.008, sliceDropout: 0.02, strokeWeight: 1.05, alpha: 0.95,
+      seed: `${posterSeed}:grid:${i}`, layer: "grid-type"
+    });
   }
 
-  plot.text("ONE PHRASE / NO FINAL READING / SEED " + posterSeed, 58, 1147, Object.assign({}, font, {
-    size: 12,
-    letterSpacing: 1.08,
-    dropout: 0.018,
-    strokeWeight: 0.52,
-    alpha: 0.62,
-    layer: "notes"
+  const order = ORDERS[orderIndex];
+  plot.text(`ONE PHRASE / ORDER ${order.toUpperCase()} — ${ORDER_NOTES[order].toUpperCase()} / SEED ${posterSeed}`, BAND_X, FOOTER_Y, typeStyle({
+    size: 12, letterSpacing: 1.08, dropout: 0.018, strokeWeight: 0.52, alpha: 0.62, layer: "notes"
   }));
 }
 
 function drawFrame() {
   plot.rect(42, 42, POSTER_WIDTH - 84, POSTER_HEIGHT - 84, {
-    wobble: 0.45,
-    dropout: 0.006,
-    strokeWeight: 0.62,
-    alpha: 0.64,
-    layer: "frame"
+    wobble: 0.45, dropout: 0.006, strokeWeight: 0.62, alpha: 0.64, layer: "frame"
   });
 
-  const crosses = [[42, 42], [798, 42], [42, 1146], [798, 1146]];
-  crosses.forEach(function(point) {
-    plot.line(point[0] - 9, point[1], point[0] + 9, point[1], {
-      wobble: 0.18,
-      strokeWeight: 0.52,
-      alpha: 0.55,
-      layer: "frame"
-    });
-    plot.line(point[0], point[1] - 9, point[0], point[1] + 9, {
-      wobble: 0.18,
-      strokeWeight: 0.52,
-      alpha: 0.55,
-      layer: "frame"
-    });
+  const cross = { wobble: 0.18, strokeWeight: 0.52, alpha: 0.55, layer: "frame" };
+  [[42, 42], [798, 42], [42, 1146], [798, 1146]].forEach(function(p) {
+    plot.line(p[0] - 9, p[1], p[0] + 9, p[1], cross);
+    plot.line(p[0], p[1] - 9, p[0], p[1] + 9, cross);
   });
 }
 
-function encodePermutation(regel) {
-  const symbols = { I: "|", LOVE: "§§", YOU: "%" };
-  return regel.split(" ").map(function(word) {
+// Each distinct word gets a unique symbol; a suffix keeps the legend 1-to-1 past CODE_SET.
+function symbolMapFor(text) {
+  const map = {};
+  let i = 0;
+  text.toUpperCase().split(/\s+/).forEach(function(word) {
+    if (!word || word in map) return;
+    const base = CODE_SET[i % CODE_SET.length];
+    const cycle = Math.floor(i / CODE_SET.length);
+    map[word] = cycle ? base + (cycle + 1) : base;
+    i++;
+  });
+  return map;
+}
+
+function encode(regel, symbols) {
+  return regel.toUpperCase().split(/\s+/).map(function(word) {
     return symbols[word] || "·";
   }).join("  ");
 }
 
-function drawPaper() {
+// Screen-only decoration (paper grain + centre fold), drawn with bare p5 so it
+// stays out of the plotter export; the pen draws exactly plot.draw().
+function drawScreenTexture() {
   randomSeed(44);
   stroke("#d4ccbe");
   strokeWeight(0.45);
-  for (let index = 0; index < 1000; index++) {
-    point(random(width), random(height));
-  }
+  for (let i = 0; i < 1000; i++) point(random(width), random(height));
   stroke("#d9d1c3");
   line(width * 0.505, 42, width * 0.5, height - 42);
 }
 
 function wireActions() {
-  document.getElementById("reroll-button").addEventListener("click", function() {
-    posterSeed += 1;
+  const orderButton = document.getElementById("reroll-button");
+  const seedButton = document.getElementById("seed-button");
+  const phraseInput = document.getElementById("phrase-input");
+
+  // Build first, then report. Order and seed are always shown, whatever changed,
+  // so the status stays a consistent readout after a phrase edit too.
+  function rebuild(lead) {
     buildPoster();
-    setStatus(`Seed ${posterSeed}: ${permutations.join(" / ")}`);
+    updateLabels(orderButton, seedButton);
+    const order = ORDERS[orderIndex];
+    const state = `order ${order} (${ORDER_NOTES[order]}), seed ${posterSeed}`;
+    // Past CODE_SET's supply of signs, symbolMapFor() recycles them with a suffix; say so
+    // when the legend grows, so the extra rows read as a wider key, not noise.
+    const uniqueWords = new Set(phrase.toUpperCase().split(/\s+/).filter(Boolean)).size;
+    const recycle = uniqueWords > CODE_SET.length
+      ? ` — ${uniqueWords} unique words, so code symbols recycle with a suffix`
+      : "";
+    setStatus(`${lead ? lead + " — " : ""}${state}: ${permutations.join(" / ")}${recycle}`);
     redraw();
+  }
+
+  updateLabels(orderButton, seedButton);
+  if (phraseInput) phraseInput.value = phrase;
+
+  // Order and seed are separate controls: hold one, vary the other.
+  orderButton.addEventListener("click", function() {
+    orderIndex = (orderIndex + 1) % ORDERS.length;
+    rebuild();
   });
+
+  seedButton.addEventListener("click", function() {
+    posterSeed += 1;
+    rebuild();
+  });
+
+  if (phraseInput) {
+    phraseInput.addEventListener("change", function() {
+      const next = phraseInput.value.trim();
+      // The letter band needs at least one letter or digit; otherwise fall back,
+      // and say so in the status so the fallback is not silent.
+      const usable = /[a-z0-9]/i.test(next);
+      phrase = usable ? next : "I LOVE YOU";
+      phraseInput.value = phrase;
+      rebuild(usable ? `Phrase "${phrase}" through permute()` : `Empty input, fell back to "${phrase}"`);
+    });
+  }
 
   document.getElementById("svg-button").addEventListener("click", function() {
     plot.downloadSVG("p5-gysin-permutation-poem-a3.svg", { page: a3Page() });
   });
 
   document.getElementById("hpgl-button").addEventListener("click", function() {
+    // Two pens: the code column and the whole word grid plot in a second colour.
     plot.downloadHPGL("p5-gysin-permutation-poem-a3.hpgl", {
       page: a3Page(),
-      penMap: {
-        frame: 1, type: 1, code: 1, notes: 1, rules: 1,
-        band: 1, grid: 1, "grid-type": 1
-      },
+      penMap: { frame: 1, type: 1, notes: 1, rules: 1, band: 1, code: 2, grid: 2, "grid-type": 2 },
       speed: 18
     });
   });
 }
 
+function updateLabels(orderButton, seedButton) {
+  const order = ORDERS[orderIndex];
+  if (orderButton) orderButton.textContent = `New order: ${order} (${ORDER_NOTES[order]})`;
+  if (seedButton) seedButton.textContent = `New seed: ${posterSeed}`;
+}
+
 function a3Page() {
-  return {
-    width: 297,
-    height: 420,
-    units: "mm",
-    margin: 10,
-    scale: 277 / POSTER_WIDTH,
-    clip: true
-  };
+  return { width: 297, height: 420, units: "mm", margin: 10, scale: 277 / POSTER_WIDTH, clip: true };
 }
 
 function setStatus(message) {

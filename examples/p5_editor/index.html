@@ -22,7 +22,7 @@
     <div class="demo-header">
       <div class="demo-number">editor.p5js.org starter</div>
       <h1>p5 Editor Starter</h1>
-      <p>A paste-ready starter for the p5.js Web Editor. Add the CDN script in <code>index.html</code>, then paste the sketch into <code>sketch.js</code>.</p>
+      <p>A paste-ready starter for the p5.js Web Editor. The plate acts out its title: <code>THE MACHINE REMEMBERS</code> is sliced once, then the word <code>REMEMBERS</code> returns lower and <em>forgets itself</em> &mdash; each lost letter decaying through its own shape shaken loose, then a printed sign, then a pure scribble. Raise decay and the hatched anchor and the machine-grid on the right erode too, so the forgetting reaches the whole plate. Everything on the canvas is real vector, so what you see is exactly what the SVG plots. Add the CDN script in <code>index.html</code>, then paste the sketch into <code>sketch.js</code>.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
@@ -31,22 +31,47 @@
 &lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.2.0/p5.gysin.min.js"&gt;&lt;/script&gt;
 &lt;script src="sketch.js"&gt;&lt;/script&gt;</code></pre>
         <div class="code-label">sketch.js core</div>
-        <pre><code class="language-javascript">seedValue = 19600319;
+        <pre><code class="language-javascript">const RED = "#c0392b";             // second pen: the returning word + ring
 
-function setup() {
-  createCanvas(720, 720);
-  noLoop();
-  buildPlot();
+// The tail is a GRADIENT of noise: each lost glyph decays through three
+// alphabets as t runs 0 -&gt; 1 across the tail, while wobble/drift/dropout climb.
+function degradeWord(word, x, y, size, decay, hand) {
+  const advance = (size / 7) * GLYPH_ADVANCE_UNITS;
+  const lost = floor(decay * word.length);
+  const kept = word.length - lost;
+  if (kept &gt; 0) plot.textCutup(word.slice(0, kept), x, y, { ...hand, size, stroke: RED });
+  for (let i = kept; i &lt; word.length; i++) {
+    const fade = i - kept;
+    const t = lost &gt; 1 ? fade / (lost - 1) : 1;
+    forgetGlyph(word[i], x + i * advance, y - size, advance, size, t, {
+      ...hand, stroke: RED, size,
+      wobble: hand.wobble + fade * 0.5,
+      drift: hand.drift + fade * 0.6,
+      dropout: 0.08 + fade * 0.06
+    });
+  }
+  return lost;
 }
 
-function draw() {
-  background(245);
-  plot.draw();
+// this glyph, shaken loose -> printed sign -> pure scribble
+function forgetGlyph(glyph, gx, top, w, size, t, mark) {
+  if (t &lt; 0.34) plot.letters(glyph, gx, top, w, size, { ...mark, glyphJitter: 0.55 });
+  else if (t &lt; 0.67) plot.symbols(gx, top, w, size, mark);
+  else plot.asemic(gx, top, w, size, mark);
 }</code></pre>
       </div>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch" role="img" aria-label="A compact starter composition for copying into the p5.js Web Editor."></div>
-        <div class="demo-note">Press <code>R</code> to reseed. Press <code>S</code> to download SVG.</div>
+        <div class="demo-actions">
+          <button type="button" onclick="reseed()">Reseed</button>
+          <button type="button" id="handBtn" onclick="toggleHand()">Hand: nervous</button>
+          <button type="button" id="decayDownBtn" onclick="decayDown()">Decay − (0.45)</button>
+          <button type="button" id="decayUpBtn" onclick="decayUp()">Decay + (0.45)</button>
+          <button type="button" onclick="decayReset()">Decay reset (0.45)</button>
+          <button type="button" onclick="exportSVG()">Download SVG</button>
+        </div>
+        <div class="demo-stats" id="stats" aria-live="polite">Loading plotter cost&hellip;</div>
+        <div class="demo-note"><strong>Watch:</strong> press <em>Decay +</em> and see <code>REMEMBERS</code> forget its last letters &mdash; each drops from its own shape shaken loose to a printed sign to a pure scribble, and the hatched anchor and right-hand grid erode with it. <em>Decay &minus;</em> brings it back; <em>Decay reset</em> jumps to the <code>0.45</code> baseline, where several letters have already gone. The buttons show the live value and the stats line reads all three steerable axes &mdash; seed, hand and decay &mdash; plus how many of the nine letters went. <em>Reseed</em> redraws a visibly different work each time; <em>Hand</em> toggles the marks between steady and nervous. Nothing here is screen-only decoration, so <em>Download SVG</em> plots exactly what you see. The buttons match the <code>R</code>, <code>H</code>, <code>+</code>&thinsp;/&thinsp;<code>&minus;</code>, <code>0</code> and <code>S</code> keys.</div>
       </div>
     </div>
   </main>

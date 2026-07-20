@@ -5,6 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Parameter Lab | p5.gysin examples</title>
   <link rel="stylesheet" href="../showcase.css">
+  <style>
+    /* Each control carries its element's colour, so slider and shape read as a
+       pair. --accent is set per row and drives both the swatch and the range. */
+    .control-row .swatch {
+      display: inline-block;
+      width: 0.7em;
+      height: 0.7em;
+      border-radius: 2px;
+      background: var(--accent, #151515);
+      margin-right: 0.45em;
+      vertical-align: baseline;
+    }
+    .control-row input[type="range"] { accent-color: var(--accent, #151515); }
+    .stat-readout {
+      display: block;
+      margin-top: 0.6rem;
+      font-family: ui-monospace, monospace;
+      font-size: 0.85rem;
+      opacity: 0.75;
+    }
+    /* Compact colour legend: one row per slider, its swatch dot then the rule. */
+    .legend {
+      list-style: none;
+      margin: 0.6rem 0 0;
+      padding: 0;
+      display: grid;
+      gap: 0.3rem;
+      font-size: 0.95rem;
+    }
+    .legend .dot {
+      display: inline-block;
+      width: 0.7em;
+      height: 0.7em;
+      border-radius: 2px;
+      margin-right: 0.5em;
+      vertical-align: baseline;
+    }
+    /* Legend rows double as touch controls: a tap isolates that element. */
+    .legend li[data-focus] {
+      cursor: pointer;
+      padding: 0.15rem 0.3rem;
+      margin: -0.15rem -0.3rem;
+      border-radius: 3px;
+    }
+    .legend li[data-focus]:hover { background: rgba(0, 0, 0, 0.05); }
+    .intro-sub { margin-top: 0.8rem; opacity: 0.85; font-size: 0.92rem; }
+  </style>
 </head>
 <body>
   <nav id="navbar">
@@ -22,46 +69,62 @@
     <div class="demo-header">
       <div class="demo-number">wobble · dropout · repeat · rubout</div>
       <h1>Parameter Lab</h1>
-      <p>A small control surface for the trace engine. The sliders rebuild the same composition so the effect of each parameter stays readable.</p>
+      <p>One slider owns one element, in its own colour. Hover a control — or <strong>tap a legend row</strong> on touch — to preview which element it owns; drag the slider and only that element moves — darkening to a strong figure while the rest fade to a quiet ground, in the canvas <em>and</em> the exported SVG.</p>
+      <ul class="legend" aria-label="Tap a row to isolate its element">
+        <li data-focus="wobble"><span class="dot" style="background:#b26a00"></span><span style="color:#b26a00">Wobble</span> bends the <strong>title</strong></li>
+        <li data-focus="rubout"><span class="dot" style="background:#b0203a"></span><span style="color:#b0203a">Rubout</span> tears <strong>ERASE</strong> away</li>
+        <li data-focus="repeat"><span class="dot" style="background:#2b4fb0"></span><span style="color:#2b4fb0">Repeat</span> thickens the <strong>line band</strong></li>
+        <li data-focus="dropout"><span class="dot" style="background:#0f7a6c"></span><span style="color:#0f7a6c">Dropout</span> loosens the <strong>hatch bar</strong></li>
+      </ul>
+      <p class="intro-sub">The letter field and corner marks obey no slider — fixed reference ink that travels into the SVG. The <code>stats()</code> readout shows total plot cost and the shown element's share of it.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
-        <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">plot.textCutup("RUB OUT", 58, 170, {
-  size: 72,
-  slices: 7,
-  sliceOffset: 18,
-  wobble: wobbleValue,
-  dropout: dropoutValue,
-  repeat: repeatValue,
-  rubout: ruboutValue
-});</code></pre>
+        <div class="code-label">Band snippet (repeat is the only slider it obeys)</div>
+        <pre><code class="language-javascript">// Each row is drawn `repeat` times, ghosted apart by a drift
+// that grows with repeat: more copies also spread wider. Rows
+// alternate phase with a deepening amplitude, so neighbours
+// cross into a weave instead of parallel stripes.
+const bandTop = 250, bandBottom = 410, rows = 6;
+for (let i = 0; i &lt; rows; i++) {
+  const depth = i / (rows - 1); // 0 top row, 1 bottom row
+  const y = bandTop + (bandBottom - bandTop) * depth;
+  plot.path(waveRow(70, 490, y, 3 + depth * 12, i * PI), {
+    repeat: value("repeat"),       // the only slider it reads
+    drift: value("repeat") * 1.2,  // wider as repeat climbs
+    stroke: inkOf("repeat"),
+    segmentLength: 10,
+    alpha: 0.7
+  });
+}</code></pre>
         <div class="control-grid" aria-label="Trace parameters">
-          <label class="control-row">
-            <span>Wobble <output id="wobble-value">1.4</output></span>
+          <label class="control-row" style="--accent:#b26a00">
+            <span><i class="swatch"></i>Wobble &middot; title <output id="wobble-value">1.4</output></span>
             <input id="wobble" type="range" min="0" max="4" step="0.1" value="1.4">
           </label>
-          <label class="control-row">
-            <span>Dropout <output id="dropout-value">0.08</output></span>
-            <input id="dropout" type="range" min="0" max="0.28" step="0.01" value="0.08">
+          <label class="control-row" style="--accent:#0f7a6c">
+            <span><i class="swatch"></i>Dropout &middot; hatch bar <output id="dropout-value">0.16</output></span>
+            <input id="dropout" type="range" min="0" max="0.28" step="0.01" value="0.16">
           </label>
-          <label class="control-row">
-            <span>Repeat <output id="repeat-value">2</output></span>
+          <label class="control-row" style="--accent:#2b4fb0">
+            <span><i class="swatch"></i>Repeat &middot; line band <output id="repeat-value">2</output></span>
             <input id="repeat" type="range" min="1" max="5" step="1" value="2">
           </label>
-          <label class="control-row">
-            <span>Rubout <output id="rubout-value">0.12</output></span>
-            <input id="rubout" type="range" min="0" max="0.35" step="0.01" value="0.12">
+          <label class="control-row" style="--accent:#b0203a">
+            <span><i class="swatch"></i>Rubout &middot; ERASE <output id="rubout-value">0.12</output></span>
+            <input id="rubout" type="range" min="0" max="0.6" step="0.02" value="0.12">
           </label>
         </div>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas" id="sketch" role="img" aria-label="A parameter-controlled cut-up title, repeated horizontal traces, and a distressed frame."></div>
+        <div class="demo-canvas" id="sketch" role="img" aria-label="A cut-up title bent by every slider, a word that only rubout erases, a line band whose count follows repeat, and a hatch-filled bar."></div>
         <div class="demo-actions" aria-label="Parameter Lab actions">
+          <button type="button" id="reset-button">Reset sliders</button>
           <button type="button" id="reroll-button">New variation</button>
           <button type="button" id="svg-button">Download SVG</button>
+          <output id="stats" class="stat-readout" aria-label="Plot cost">measuring…</output>
         </div>
-        <div class="demo-note">Use the buttons or press <code>R</code> and <code>S</code>.</div>
+        <div class="demo-note">Watch: hover a slider (or tap a legend row on touch) to preview its element, then drag it — the element darkens while the rest fade back and the readout names its share of the ink. Sweep <span style="color:#b0203a">rubout</span> to tear ERASE from intact to shredded, or <span style="color:#2b4fb0">repeat</span> to see the woven band thicken and spread wider with every added pass. Hit <strong>Reset sliders</strong> to return every element to full ink. Use the buttons, or press <code>R</code> (new variation) and <code>S</code> (save SVG).</div>
       </div>
     </div>
   </main>

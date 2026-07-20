@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>First Trace | p5.gysin examples</title>
   <link rel="stylesheet" href="../showcase.css">
+  <style>
+    /* The sheet is clickable (reroll); the pointer makes that affordance visible. */
+    #sketch { cursor: pointer; }
+    /* Three-line legend: one row per decay stage, read at a glance. */
+    .legend { list-style: none; margin: 0.6rem 0 0; padding: 0; }
+    .legend li { color: var(--muted); padding: 0.15rem 0; }
+    .legend strong { color: var(--ink); }
+  </style>
 </head>
 <body>
   <nav id="navbar">
@@ -20,37 +28,58 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">line() + text() + circle()</div>
+      <div class="demo-number">line() + text() + textCutup() + asemic()</div>
       <h1>First Trace</h1>
-      <p>A minimal composition that shows the core idea: define clean vector forms, then let p5.gysin redraw them as unstable plotter traces. Click the canvas to reseed the drawing.</p>
+      <p>One word, one gesture, drawn three times down a single faint backbone line &mdash; from a solid, cross-hatch-filled head to a hollow, broken tail. <strong>Read it top to bottom.</strong> Each reseed steps one word further along a five-word sentence (<em>FIRST TRACE &rarr; SLOW HAND &rarr; LOST WORD &rarr; OPEN MARK &rarr; GONE SOON</em>); the seed and decay printed on the sheet reproduce any variation.</p>
+      <ul class="legend">
+        <li><strong>legible</strong> &mdash; the word cross-hatch filled: solid, ink-heavy head</li>
+        <li><strong>cut-up</strong> &mdash; sliced and drifting: outline only, coming apart</li>
+        <li><strong>asemic</strong> &mdash; buried under a scribble: the hollow, near-empty tail</li>
+      </ul>
+      <p><strong>The decay knob</strong> (<em>Decay &plus;/&minus;</em> or the &uarr;/&darr; arrow keys) scales wobble, dropout <em>and rubout</em> across the whole trace at once, from <em>0&times; fully clean</em> to <em>2.5&times; fully wiped</em>.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+        <pre><code class="language-javascript">const word = WORDS[seed % WORDS.length];   // consecutive reseeds walk the sentence
 
-plot.line(70, 160, 450, 178, {
-  wobble: 1.2,
-  dropout: 0.04,
-  overshoot: 8
-});
+// one control scales wobble, drift, dropout, rubout and fray on any block
+const decayed = (o) => ({ ...o,
+  wobble: (o.wobble ?? 0) * decay, drift: (o.drift ?? 0) * decay,
+  dropout: (o.dropout ?? 0) * decay, rubout: (o.rubout ?? 0) * decay,
+  fray: (o.fray ?? 0) * decay });
 
-plot.text("FIRST TRACE", 68, 255, {
-  size: 54,
-  wobble: 1.4,
-  dropout: 0.08,
-  repeat: 2
-});
+// the backbone: one faint line joining the origin and every decay anchor
+plot.path([[92,110], [470,124], ...STAGES.map(s => [s.x, s.y])],
+  decayed({ strokeWeight: 0.5, alpha: 0.4, wobble: 0.9, drift: 1.2, repeat: 2 }));
+
+// same word, three decays - one pass over the stage table. Only the legible
+// head carries fill:"cross" (solid); the cut-up and asemic tail stay hollow.
+for (const stage of STAGES) {
+  const opts = decayed({ size: 46, ...stage.extra,
+    strokeWeight: stage.weight, alpha: stage.alpha,
+    dropout: stage.dropout, rubout: stage.rubout, fray: stage.fray });
+  if (font) { opts.font = font; if (stage.fill) opts.fill = stage.fill; }
+  plot[stage.verb](word, stage.x, stage.y, opts);   // text / textCutup / text
+}
+
+// the ghost word gets buried by asemic tangles, offset from the asemic stage
+for (const t of TANGLES) {
+  plot.asemic(asemic.x + t.dx * decay, asemic.y + t.dy * decay,
+    t.w * decay, t.h * decay, decayed({ strokeWeight: t.weight, dropout: t.dropout }));
+}
 
 plot.draw();</code></pre>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas" id="sketch" role="img" aria-label="A fragile typographic composition with a line, the words First Trace, and a repeated circle."></div>
+        <div class="demo-canvas" id="sketch" role="img" aria-label="A mark decaying in stages, top to bottom: a cross-hatched origin dot, a firm first stroke, then the words First Trace rendered legibly, cut up, and as an illegible asemic scribble that drifts right and fades to a thin line."></div>
         <div class="demo-actions" aria-label="First Trace actions">
+          <button type="button" id="decay-down" aria-label="Less decay">&minus; Decay</button>
+          <button type="button" id="decay-up" aria-label="More decay">Decay &plus;</button>
           <button type="button" id="reroll-button">New variation</button>
           <button type="button" id="svg-button">Download SVG</button>
         </div>
-        <div class="demo-note">Use the buttons, click the canvas, or press <code>S</code> to download SVG.</div>
+        <div class="demo-note">Decay <strong id="decay-readout">1.0&times;</strong> &middot; seed <strong id="seed-readout">1960</strong> &mdash; both printed on the sheet, so an exported SVG records its own setting. Click the canvas or <strong>New variation</strong> for the next word; <strong>Download SVG</strong> saves the plotter-ready file.</div>
       </div>
     </div>
   </main>

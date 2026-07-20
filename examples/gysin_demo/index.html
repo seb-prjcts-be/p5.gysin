@@ -20,34 +20,62 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">textCutup() + vector traces</div>
+      <div class="demo-number">textCutup() + hatch fill + letter field</div>
       <h1>Gysin Demo</h1>
-      <p>Cut-up typography, repeated contours, rubout gaps, uncertain plotter lines, and exportable vector output. Press <code>S</code> for SVG, <code>J</code> for JSON, or <code>R</code> for a new seeded variation.</p>
+      <p>A cut-up typographic poster on the theme "rub out the word". The title comes apart letter by letter (<code>glyphJitter</code>), the lower shapes gain tonal mass through parallel and cross hatching (<code>fill</code>), and the word itself dissolves into a decaying letter field (<code>letters()</code>). Everything exports as clean plotter vectors.</p>
+      <p class="demo-context"><strong>The reference:</strong> "Rub out the word" is Brion Gysin's cut-up battle cry &mdash; the artist who, with William Burroughs, sliced text apart to break language open. This poster performs the phrase: it rubs itself out. Seed <code>19600319</code> fixes the noise, so every reload is the same print.</p>
+      <p class="demo-look"><strong>What to look for:</strong> follow the word down the page in zones &mdash; the rubbed-out titles, the ruled band that fans and tapers, the airy tilted slab weighed against the dense dark disc, and at the foot the word breaking apart into a decaying letter field. The rub-out is a <em>gradient</em>: light at the titles, heaviest at the field. Drag <em>rub out</em> to deepen that gradient top to bottom; drag <em>break apart</em> to shake every letter off its axis; hit <em>New variation</em> to re-decay everything except the frozen top title.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
         <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 19600319 });
 
-plot.textCutup("I THINK THEREFORE I AM", 76, 370, {
-  size: 55,
-  slices: 9,
-  sliceOffset: 24,
-  dropout: 0.09,
-  repeat: 2,
-  rubout: 0.12
-});
+// One slider, read as a top-to-bottom gradient: light at the head, worn at the foot.
+const ruboutAt = y =&gt; titleRubout * (0.5 + y / 900 * 2);
 
+titleId = plot.text("RUB OUT",  75, 145, { size: 96, rubout: ruboutAt(145), glyphJitter: letterJitter });
+plot.text("THE WORD", 76, 235, { size: 96, rubout: ruboutAt(235), glyphJitter: letterJitter });
+
+// Two masses in balance - both feel the break-apart slider too.
+plot.polygon(slab,           { fill: "hatch", hatchSpacing: 8, wobble: 1.3 + letterJitter * 1.2 });
+plot.circle(705, 672, 160,   { fill: "cross", hatchSpacing: 6, fray:  0.25 + letterJitter * 0.4 });
+
+// The field sits at the foot - the heaviest step of the same gradient.
+plot.letters("RUB OUT THE WORD", 90, 795, 720, 105, { size: 26, rubout: ruboutAt(795) });
+
+plot.freeze(titleId); // reroll leaves the top title untouched
 plot.draw();</code></pre>
+        <p class="demo-note" id="code-caption">now driving the code above: rubout 0.14 &middot; glyphJitter 0.40</p>
+        <div class="control-grid">
+          <label class="control-row" for="rubout-slider">
+            <span>Rub out the poster <output id="rubout-value">0.14</output></span>
+            <input type="range" id="rubout-slider" min="0" max="0.6" step="0.02" value="0.14">
+          </label>
+          <label class="control-row" for="jitter-slider">
+            <span>Break the letters apart <output id="jitter-value">0.40</output></span>
+            <input type="range" id="jitter-slider" min="0" max="1.2" step="0.05" value="0.4">
+          </label>
+        </div>
         <div class="demo-actions" aria-label="Demo actions">
           <button type="button" id="svg-button">Download SVG</button>
           <button type="button" id="json-button">Download JSON</button>
+          <button type="button" id="hpgl-button">Download HPGL</button>
           <button type="button" id="reroll-button">New variation</button>
         </div>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas" id="sketch" role="img" aria-label="A cut-up typographic poster with rubbed-out words, repeated contours, and uncertain lines."></div>
-        <div class="demo-note">Keyboard: <code>S</code> SVG, <code>J</code> JSON, <code>R</code> new variation.</div>
+        <div class="demo-canvas" id="sketch" role="img" aria-label="A cut-up typographic poster with rubbed-out titles, a ruled band, two hatched tonal blocks, and a decaying letter field."></div>
+        <ol class="demo-note" style="margin:0.6rem 0 0;padding-left:1.4rem;line-height:1.5;">
+          <li><strong>Titles</strong> &mdash; the word being rubbed out, letter by letter</li>
+          <li><strong>Ruled band</strong> &mdash; liniatuur that fans out and tapers away</li>
+          <li><strong>Two masses</strong> &mdash; an airy hatch slab weighed against a dense cross-hatched disc</li>
+          <li><strong>Letter field</strong> &mdash; the word decaying into loose glyphs</li>
+        </ol>
+        <p class="demo-note">Reading top to bottom, the word dissolves through all four zones.</p>
+        <p class="demo-note"><strong>R</strong> re-decays everything except the frozen top title, so it stays sharp while the rest finds a new variation. <strong>Download HPGL</strong> gives the plotter-native path.</p>
+        <p class="demo-note" id="plot-stats">plot cost</p>
+        <p class="demo-note">Keyboard: <code>S</code> SVG, <code>J</code> JSON, <code>H</code> HPGL, <code>R</code> new variation.</p>
       </div>
     </div>
   </main>

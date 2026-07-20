@@ -1,123 +1,235 @@
+// p5.gysin — "CUT UP" starter for the p5.js Web Editor.
+// The plate acts out its title: a line of type is sliced, then REMEMBERS returns
+// lower, ringed in red, and forgets itself — its tail decaying through a wrong
+// letter, then a printed sign, then a pure scribble as you steer decay. As the
+// machine forgets, the hatched anchor erodes too. What you see is what you plot.
+// Buttons drive everything; the R H + - 0 S keys mirror them.
+
 let plot;
 let seedValue = 19600319;
+let calm = false;    // steady vs nervous hand
+let forgotten = 0;   // glyphs the current decay dissolved
+
+const WORD = "REMEMBERS";
+const DECAY_START = 0.45;
+const DECAY_STEP = 0.18;
+const DECAY_MIN = 0;
+const DECAY_MAX = 0.95;
+
+let decay = DECAY_START;
+
+// All positions in one place; canvas is square, coordinates in canvas pixels.
+// The ring centre and the forgetting tail are both derived from `degrade`, so
+// the red ring can never drift off the word it orbits.
+const LAYOUT = {
+  canvas: 720,
+  anchor: { x: 88, y: 470, w: 544, h: 160 },
+  title: { x: 82, y: 150, size: 96 },
+  cutup: { x: 82, y: 262, size: 46 },
+  degrade: { x: 82, y: 360, size: 46 },
+  ring: { d: 350 },
+  field: { x: 470, y: 274, w: 196, h: 186, cols: 3, rows: 3 } // right-hand void
+};
+
+// Built-in font sits on a size/7 grid; each glyph advances 5.9 units, so the
+// forgotten tail stays flush with the kept letters at any size.
+const GLYPH_ADVANCE_UNITS = 5.9;
+
+const base = { wobble: 1.4, drift: 1.8, pressure: 0.22, segmentLength: 8, alpha: 0.8 };
+const RED = "#c0392b"; // second pen: the returning word and the ring around it
+const INK = "#151515"; // hatch grey, reused by the right-hand field
 
 function setup() {
-  const canvas = createCanvas(720, 720);
+  const canvas = createCanvas(LAYOUT.canvas, LAYOUT.canvas);
   const holder = document.getElementById("sketch");
   if (holder) canvas.parent(holder);
-  describe("A compact starter composition for copying into the p5.js Web Editor.");
+  describe("Cut-up typography whose title word forgets itself into scribbles over an eroding hatched anchor.");
   pixelDensity(1);
   noLoop();
   buildPlot();
+  syncHandLabel();
+  syncDecayLabel();
 }
 
 function draw() {
   background(245);
-  drawPaper();
   plot.draw();
+  showStats();
 }
 
-function keyPressed() {
-  if (key === "r" || key === "R") {
-    seedValue = floor(random(1000000));
-    buildPlot();
-    redraw();
-  }
+// Reseed reshuffles the cut-up and re-breathes the plate (decay is kept).
+window.reseed = () => { seedValue = floor(random(1000000)); buildPlot(); redraw(); };
 
-  if (key === "s" || key === "S") {
-    plot.downloadSVG("p5-gysin-editor-starter.svg", {
-      width: width,
-      height: height
-    });
-  }
+// Toggle the hand between steady and nervous so the disturbance is felt live.
+window.toggleHand = () => { calm = !calm; buildPlot(); redraw(); syncHandLabel(); };
+
+// Steer forgetting both ways, clamped to the effect's range.
+const setDecay = (next) => {
+  decay = constrain(next, DECAY_MIN, DECAY_MAX);
+  buildPlot();
+  redraw();
+  syncDecayLabel();
+};
+window.decayUp = () => setDecay(decay + DECAY_STEP);
+window.decayDown = () => setDecay(decay - DECAY_STEP);
+window.decayReset = () => setDecay(DECAY_START);
+
+window.exportSVG = () => plot.downloadSVG("p5-gysin-editor-starter.svg", { width, height });
+
+function keyPressed() {
+  if (key === "r" || key === "R") window.reseed();
+  if (key === "h" || key === "H") window.toggleHand();
+  if (key === "+" || key === "=") window.decayUp();
+  if (key === "-" || key === "_") window.decayDown();
+  if (key === "0") window.decayReset();
+  if (key === "s" || key === "S") window.exportSVG();
 }
 
 function buildPlot() {
+  // Seed steers structure; the Hand button scales disturbance; decay erodes.
+  randomSeed(seedValue);
+  const nerve = calm ? 0.35 : 1.6;
+  const hand = { ...base, wobble: base.wobble * nerve, drift: base.drift * nerve };
+  const breath = 0.12 + random(0.3); // anchor pressure, new every reseed
+
+  // Seed-driven grain so each plot reads as its own work, not the same picture
+  // rewobbled. Drawn once, reused per layer.
+  const grain = {
+    crossSpacing: random(6, 9),
+    crossAngle: random(0, 22),
+    hatchSpacing: random(12, 18),
+    hatchAngle: random(24, 48),
+    ringRepeat: floor(random(2, 5)),
+    ringRubout: random(0.06, 0.2),
+    titleHesitate: random(0.35, 0.7),
+    cutSlices: floor(random(6, 11)),
+    cutOffset: random(10, 22)
+  };
+
   plot = new GysinPlot({
     seed: seedValue,
-    width: width,
-    height: height,
-    style: {
-      stroke: "#151515",
-      strokeWeight: 1,
-      alpha: 0.88
-    }
+    width,
+    height,
+    style: { stroke: INK, strokeWeight: 1, alpha: 0.88 }
   });
 
-  plot.text("CUT UP", 82, 145, {
-    size: 92,
-    wobble: 1.8,
-    dropout: 0.08,
-    repeat: 2,
-    drift: 2,
-    rubout: 0.06,
-    pressure: 0.25,
-    segmentLength: 7
+  // Anchor — cross-hatched block that grounds the plate. Its ink drops out and
+  // rubs away as decay rises, so "the machine forgets" reaches the whole plate,
+  // not only the word.
+  const a = LAYOUT.anchor;
+  plot.rect(a.x, a.y, a.w, a.h, {
+    ...hand, fill: "cross",
+    hatchSpacing: grain.crossSpacing, hatchAngle: grain.crossAngle,
+    pressure: breath, repeat: 2, fray: 0.3, alpha: 0.7,
+    dropout: 0.05 + decay * 0.35, rubout: decay * 0.22
+  });
+  // Sparse slanted second hatch for tonal depth.
+  plot.rect(a.x, a.y, a.w, a.h, {
+    ...hand, fill: "hatch",
+    hatchAngle: grain.hatchAngle, hatchSpacing: grain.hatchSpacing,
+    dropout: 0.05, alpha: 0.25
   });
 
-  plot.textCutup("THE MACHINE REMEMBERS", 82, 265, {
-    size: 48,
-    slices: 8,
-    sliceOffset: 18,
-    sliceDropout: 0.16,
-    wobble: 1.3,
-    dropout: 0.09,
-    repeat: 2,
-    drift: 1.7,
-    rubout: 0.14,
-    pressure: 0.2,
-    segmentLength: 7
+  // Right-hand field — a light machine index in the hatch grey that fills the
+  // void and counterweights the red ring. Its glyphs and frame thin with decay.
+  const f = LAYOUT.field;
+  plot.symbols(f.x, f.y, f.w, f.h, {
+    ...hand, size: 15, stroke: INK, alpha: 0.35,
+    drift: decay * 0.5, dropout: 0.05 + decay * 0.5, glyphJitter: 0.4
+  });
+  plot.grid(f.x, f.y, f.w, f.h, f.cols, f.rows, {
+    frame: { stroke: INK, strokeWeight: 0.9, alpha: 0.38, wobble: 0.7, bleed: 0.18, dropout: 0.06 + decay * 0.4 }
   });
 
-  for (let i = 0; i < 13; i++) {
-    const y = 360 + i * 18;
-    plot.line(92, y, 628, y + sin(i * 0.65) * 10, {
-      wobble: 0.9,
-      dropout: 0.045,
-      overshoot: 9,
-      repeat: i % 4 === 0 ? 2 : 1,
-      drift: 1.1,
-      pressure: 0.18,
-      segmentLength: 10,
-      alpha: 0.7
-    });
-  }
-
-  plot.circle(540, 168, 92, {
-    density: 1.35,
-    wobble: 1.7,
-    dropout: 0.1,
-    repeat: 3,
-    drift: 2.4,
-    rubout: 0.1,
-    pressure: 0.25,
-    alpha: 0.68
+  // Red ring — centred on the degrade word from the same layout + advance the
+  // word is drawn with, so it always circles REMEMBERS. Red stays on the ring
+  // and the returning word, so the two read as one figure.
+  const dg = LAYOUT.degrade;
+  const wordWidth = WORD.length * (dg.size / 7) * GLYPH_ADVANCE_UNITS;
+  plot.circle(dg.x + wordWidth / 2, dg.y - dg.size / 2, LAYOUT.ring.d, {
+    ...hand, stroke: RED, density: 1.35, dropout: 0.1,
+    repeat: grain.ringRepeat, rubout: grain.ringRubout, alpha: 0.7
   });
 
-  plot.rect(88, 565, 544, 72, {
-    wobble: 1,
-    dropout: 0.06,
-    repeat: 2,
-    drift: 1.5,
-    rubout: 0.1,
-    fray: 0.35,
-    pressure: 0.2,
-    segmentLength: 9,
-    alpha: 0.72
+  // Title — largest surface; pressure varies its weight, hesitate breaks it.
+  const t = LAYOUT.title;
+  plot.text("CUT UP", t.x, t.y, {
+    ...hand, size: t.size, pressure: 0.4,
+    hesitate: grain.titleHesitate, dropout: 0.08, repeat: 2, rubout: 0.06
   });
+
+  // Sentence — sliced once, how hard depends on the seed's grain.
+  const cu = LAYOUT.cutup;
+  plot.textCutup("THE MACHINE REMEMBERS", cu.x, cu.y, {
+    ...hand, size: cu.size,
+    slices: grain.cutSlices, sliceOffset: grain.cutOffset, sliceDropout: 0.16,
+    dropout: 0.09, repeat: 2, rubout: 0.14
+  });
+
+  // The word returns lower and forgets itself.
+  forgotten = degradeWord(WORD, dg.x, dg.y, dg.size, decay, hand);
 }
 
-function drawPaper() {
-  randomSeed(99);
-  stroke("#dddddd");
-  strokeWeight(0.5);
+// Draw a word whose tail dissolves and return how many glyphs were lost. Each
+// lost glyph decays through three alphabets as `t` runs 0→1 across the tail — its
+// own letter shaken loose, then a printed sign, then a pure scribble — while
+// wobble, drift and dropout climb with every step. So the tail is a gradient of
+// noise, a real failing alphabet, not the same scribble nine times over.
+function degradeWord(word, x, y, size, decay, hand) {
+  const advance = (size / 7) * GLYPH_ADVANCE_UNITS;
+  const lost = floor(decay * word.length);
+  const kept = word.length - lost;
 
-  for (let y = 52; y < height; y += 34) {
-    line(54, y + random(-0.7, 0.7), width - 54, y + random(-0.7, 0.7));
+  if (kept > 0) {
+    plot.textCutup(word.slice(0, kept), x, y, {
+      ...hand, size, stroke: RED,
+      slices: floor(random(12, 19)), sliceOffset: random(30, 54),
+      sliceDropout: 0.3, dropout: 0.14, rubout: 0.22
+    });
   }
+  for (let i = kept; i < word.length; i++) {
+    const fade = i - kept;
+    const t = lost > 1 ? fade / (lost - 1) : 1; // 0 first-lost → 1 last-lost
+    forgetGlyph(word[i], x + i * advance, y - size, advance, size, t, {
+      ...hand, stroke: RED, size,
+      wobble: hand.wobble + fade * 0.5,
+      drift: hand.drift + fade * 0.6,
+      dropout: 0.08 + fade * 0.06
+    });
+  }
+  return lost;
+}
 
-  stroke("#d0d0d0");
-  for (let i = 0; i < 160; i++) {
-    point(random(width), random(height));
-  }
+// One forgotten cell along the tail: this glyph, shaken → printed sign → scribble.
+function forgetGlyph(glyph, gx, top, w, size, t, mark) {
+  if (t < 0.34) plot.letters(glyph, gx, top, w, size, { ...mark, glyphJitter: 0.55 });
+  else if (t < 0.67) plot.symbols(gx, top, w, size, mark);
+  else plot.asemic(gx, top, w, size, mark);
+}
+
+// Live plotter cost plus the three steerable axes — seed, hand and decay —
+// read off in one place, followed by how much the machine forgot this decay.
+function showStats() {
+  const el = document.getElementById("stats");
+  if (!el) return;
+  const s = plot.stats();
+  el.textContent =
+    `seed ${seedValue} · hand ${calm ? "steady" : "nervous"} · decay ${decay.toFixed(2)} · ` +
+    `${forgotten}/${WORD.length} letters forgotten · ` +
+    `${s.paths} strokes · pen-down ${round(s.drawnLength)} px · pen-up ${round(s.travelLength)} px`;
+}
+
+function syncHandLabel() {
+  const b = document.getElementById("handBtn");
+  if (b) b.textContent = calm ? "Hand: steady" : "Hand: nervous";
+}
+
+// Both Decay buttons read the value live, so the core of the demo is reachable
+// without touching the keyboard.
+function syncDecayLabel() {
+  const value = decay.toFixed(2);
+  const up = document.getElementById("decayUpBtn");
+  const down = document.getElementById("decayDownBtn");
+  if (up) up.textContent = `Decay + (${value})`;
+  if (down) down.textContent = `Decay − (${value})`;
 }

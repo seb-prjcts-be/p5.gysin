@@ -22,36 +22,72 @@
     <div class="demo-header">
       <div class="demo-number">SVG · JSON · HPGL</div>
       <h1>Plotter Export</h1>
-      <p>A compact export workflow for pen plotters and vector tools. The same generated traces are drawn on canvas and exported as SVG, JSON, or HPGL.</p>
+      <p>A compact export workflow for pen plotters and vector tools. The same generated traces are drawn on canvas and exported as SVG, JSON, or HPGL. Each layer is stroked in its export-pen colour, so the canvas already <em>is</em> the pen map.</p>
+      <p><strong>How to read it</strong></p>
+      <ul>
+        <li><strong>Pen 1</strong> (ink) — the frame and the registration work: a cross in every corner plus a circle and triangle on the diagonal. The frame <em>hesitates</em> mid-edge and the crosses <em>overshoot</em> and <em>fray</em>, the way a hand-set mark runs past its own centre.</li>
+        <li><strong>Pen 2</strong> (red) — the type: the hero word and the cut-up subtitle, which spells the four export layers <strong>FRAME / TYPE / HATCH / REG</strong> so the plate captions its own pen map.</li>
+        <li><strong>Pen 3</strong> (blue) — the texture that bridges type into tone: a decaying letter field, a mid-tone accent block, an airy field of operator glyphs, and a dense cross-hatch that anchors the plate in solid, dark tone.</li>
+        <li><strong>Legend</strong> — names which pen draws which layer, its path count, and roughly how many seconds it keeps the machine busy (drawn length ÷ draw speed). The <strong>status line</strong> adds the total paths, millimetres of ink, and estimated plot time.</li>
+      </ul>
+      <p><strong>Controls</strong></p>
+      <ul>
+        <li><strong>New variation</strong> — or press <strong>R</strong> — rerolls the plate: a new symbol set, a re-angled cross-hatch and accent, and freshly reshaped glyphs, so every variation reads as a different plate.</li>
+        <li><strong>Rougher +</strong> / <strong>Cleaner −</strong> — or the <strong>↑ / ↓</strong> keys — scale every perturbation from a clean plot up toward heavily hand-disturbed. The <strong>CLEAN … ROUGH</strong> meter shows where the human scale sits between 0 and 2.</li>
+        <li><strong>Reset</strong> — returns the plate to its canonical state (variation 0, human x1.00), always one click away.</li>
+        <li><strong>Download SVG / JSON / HPGL</strong> — takes the exact plate on screen to a plotter or vector tool. Seed, variation and human scale are printed on the plate, so any export is reproducible.</li>
+      </ul>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">const page = {
-  width: 210, height: 210, units: "mm",
-  margin: 5, scale: 0.375, clip: true
-};
+        <pre><code class="language-javascript">const penMap = { frame: 1, type: 2, hatch: 3, registration: 1 };
+const ink = { 1: "#151515", 2: "#b5362b", 3: "#244f73" };
 
-const svg = plot.exportSVG({ page, optimize: true });
+// Plate geometry derived once. Rows are offsets from INNER.y, so the whole plate
+// rescales as one unit (INNER = 118, 118, 324, 324; ROW.hero = INNER.y + 70).
+const FRAME = { x: 78, y: 78, size: 404 };
+const INNER = { x: FRAME.x + 40, y: FRAME.y + 40, w: FRAME.size - 80, h: FRAME.size - 80 };
+const ROW = { hero: INNER.y + 70, sub: INNER.y + 126, band: INNER.y + 182 };
 
-const json = plot.exportJSON({
-  includeGenerated: true
-});
+// The composition as data: [layer, method, geometry, perturbation]. The stroke
+// is derived from the pen map, so the array describes the plate, not the pen. A
+// reroll advances `variation`, and composition(variation) walks small tables so
+// each plate gets a new symbol set, a re-angled cross-hatch and a re-angled
+// mid-tone accent -- the plate shifts, not just its glyphs.
+const shapesFor = (comp) => [
+  ["frame", "rect", [FRAME.x, FRAME.y, FRAME.size, FRAME.size], { hesitate: 0.35 }],
+  ["type",  "text", ["PLOT", INNER.x, ROW.hero], { size: 88, glyphJitter: 0.7 }],
+  ["hatch", "rect", [ACCENT.x, ACCENT.y, ACCENT.w, ACCENT.h], { fill: "hatch", hatchAngle: comp.accentAngle, alpha: 0.5 }],
+  ["hatch", "symbols", [INNER.x, ROW.band, 174, 130], { set: comp.symbolSet, cluster: true, size: 13 }],
+  ["hatch", "rect", [312, ROW.band, 130, 130], { fill: "cross", hatchAngle: comp.hatchAngle, hatchSpacing: comp.hatchSpacing }]
+  // ...letters field + registration marks, same shape
+];
 
-const hpgl = plot.exportHPGL({
-  page, penMap: { frame: 1, type: 2 }, speed: 20
-});
+// buildPlot() iterates the array; humanize() scales wobble/drift/... by a live
+// factor so a button can slide the plate from machine-clean to hand-disturbed.
+for (const [layer, method, geom, opts] of shapesFor(composition(variation))) {
+  plot[method](...geom, { layer, stroke: ink[penMap[layer]], ...humanize(opts) });
+}
 
-const stats = plot.stats({ page, drawSpeed: 20 });</code></pre>
+const hpgl = plot.exportHPGL({ page, penMap, speed: 20 });
+
+const stats = plot.stats({ page, drawSpeed: 20, travelSpeed: 60 });
+// per pen: paths and work time -> stats.layers.type.drawnLength / drawSpeed
+// whole plate: stats.estimatedSeconds -> total plot time</code></pre>
         <div class="demo-actions" aria-label="Export actions">
           <button type="button" id="svg-button">Download SVG</button>
           <button type="button" id="json-button">Download JSON</button>
           <button type="button" id="hpgl-button">Download HPGL</button>
+          <button type="button" id="reroll-button">New variation</button>
+          <button type="button" id="rougher-button">Rougher +</button>
+          <button type="button" id="cleaner-button">Cleaner −</button>
+          <button type="button" id="reset-button">Reset</button>
         </div>
       </div>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch" role="img" aria-label="A layered plotter composition prepared for SVG, JSON, and HPGL export."></div>
-        <div class="demo-note" id="export-status" role="status" aria-live="polite">Ready to export.</div>
+        <div class="demo-note" id="export-status" role="status" aria-live="polite">Building composition…</div>
       </div>
     </div>
   </main>

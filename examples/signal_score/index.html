@@ -20,35 +20,41 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">path() · polygon() · layers</div>
+      <div class="demo-number">path() · line() · asemic() · polygon(fill) · layers</div>
       <h1>Signal Score</h1>
-      <p>No letters: this score treats paths as fragile signals. Click the composition or press <code>R</code> to generate a new machine reading while keeping the same score structure.</p>
+      <p>Five paths read as fragile signals, each with its own waveform and voice, labelled <code>S1</code>&ndash;<code>S5</code> in the margin. Every signal is marked at its loudest point by a diamond sized to &mdash; and now printed with &mdash; that loudness as a percent, and a thin thread drops from each diamond to the asemic notation cell that transcribes it. The red row (<code>S3</code>) leads the five, anchored by a red hatch band and baseline. A small <strong>legend</strong> in the bottom margin names the three marks, so you can decode the score straight from the image. Click the composition or press <code>R</code> for a new reading; the wave forms reshape while the row structure stays put.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">const signal = [];
-for (let x = 0; x &lt;= 620; x += 8) {
-  signal.push([x, y + sin(x * 0.04) * 28]);
-}
-
-plot.path(signal, {
-  wobble: 1.2,
-  dropout: 0.07,
-  repeat: 2,
-  rubout: 0.16,
-  layer: "signal"
+        <pre><code class="language-javascript">// hero anchor: a faint red hatch fills the band between the accent signal and
+// its baseline, giving S3 one clear focus (polygon has a fillable interior)
+plot.polygon(heroBand, {
+  fill: "hatch", hatchSpacing: 3, stroke: "#b5362b", alpha: 0.15, layer: "signal"
 });
 
-plot.polygon(nodes, { layer: "markers" });</code></pre>
+// louder voices sit darker and heavier, quieter ones recede -> depth
+plot.path(signal, {
+  stroke: accent ? "#b5362b" : "#171717",
+  strokeWeight: accent ? 2 : map(v.amp, 12, 30, 0.6, 1.4, true),
+  alpha: accent ? 0.9 : map(v.amp, 12, 30, 0.5, 0.85, true), layer: "signal"
+});
+
+// the notation cell that receives S3's thread is inked red, so the accent runs
+// unbroken from signal to marker to notation
+plot.asemic(x, top, w, h, {
+  strokeWeight: 0.6 + amp * 1.4 + (linked ? 0.5 : 0),
+  stroke: i === accentCell ? "#b5362b" : "#3a3a3a", layer: "notation"
+});</code></pre>
         <div class="demo-actions" aria-label="Signal score actions">
           <button type="button" id="reroll-button">New reading</button>
           <button type="button" id="svg-button">Download SVG</button>
         </div>
+        <p id="reading-caption" class="demo-note" aria-live="polite">Each reading has a reproducible seed, path count and reading-head channel.</p>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas" id="sketch" role="img" aria-label="An abstract signal score made from wavering paths, marks, and distressed labels."></div>
-        <div class="demo-note">Click the score or press <code>R</code> for a new variation. Press <code>S</code> to export SVG.</div>
+        <div class="demo-canvas" id="sketch" role="img" aria-label="An abstract machine score: five wavering signal lines, hatched diamond markers labelled with a loudness percent and linked by thin threads to a row of asemic notation, one faint vertical reading head on the loudest column, and a small labelled legend in the bottom margin."></div>
+        <div class="demo-note"><strong>Start with the red row (<code>S3</code>):</strong> it runs unbroken from signal to marker to notation while the four ink voices sit back as backdrop. Then read the rest &mdash; each line <code>S1</code>&ndash;<code>S5</code> is a signal, darker and heavier the louder its voice; each diamond is a loudest-point marker, sized and labelled with its loudness percent; a thread ties it to the asemic notation cell that transcribes it. The lone faint vertical is the <strong>reading head</strong> on the loudest column, tagged with its level and named in the caption above. <strong>New reading</strong> reshapes the wave forms; <strong>Download SVG</strong> exports the plot. <code>R</code> and <code>S</code> do the same from the keyboard.</div>
       </div>
     </div>
   </main>

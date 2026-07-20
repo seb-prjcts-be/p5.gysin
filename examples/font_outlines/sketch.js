@@ -1,7 +1,19 @@
-const FONT_URL = "assets/Oswald-Regular.otf";
+const FONT_URLS = {
+  Oswald: "assets/Oswald-Regular.otf",
+  Anton: "assets/Anton-Regular.ttf"
+};
 
-let outlineFont;
+const CROSS_TWIST = 23;  // the woven side sits this many degrees off the single hatch
+
+let fonts = {};        // name -> loaded p5.Font (lazy)
+let activeFont = "Oswald";
 let plot;
+
+let currentSeed = 8088; // bumped by "New variation" so a reroll survives a rebuild
+let fillOn = true;      // toggled live so the fill lines can be seen appearing
+let wobbleAmount = 0.9;
+let hatchSpacing = 4;   // weave density: fewer lines = more paper showing
+let hatchAngle = 22;    // off-axis weave reads more handmade than a flat 0
 
 async function setup() {
   const canvas = createCanvas(760, 560);
@@ -9,15 +21,9 @@ async function setup() {
   pixelDensity(1);
   noLoop();
 
-  try {
-    outlineFont = await loadFont(FONT_URL);
-    document.getElementById("font-status").textContent = "Oswald outlines loaded. O, 8, B, and R keep their counters.";
-  } catch (error) {
-    document.getElementById("font-status").textContent = "The remote font could not load, so this preview uses the built-in vector alphabet.";
-  }
-
+  await loadOutlineFont("Oswald");
   buildPlot();
-  wireActions();
+  wireControls();
 }
 
 function draw() {
@@ -26,36 +32,105 @@ function draw() {
   plot.draw();
 }
 
+// Loads a font once and keeps it; a failed load falls back to the bitmap alphabet.
+async function loadOutlineFont(name) {
+  if (fonts[name] === undefined) {
+    try {
+      fonts[name] = await loadFont(FONT_URLS[name]);
+    } catch (error) {
+      fonts[name] = null;
+    }
+  }
+  if (fonts[name]) activeFont = name;
+}
+
+// Attaches the active outline font to an options object when one is loaded, so
+// the "fill needs real contours" guard lives in one place instead of three.
+function withFont(options) {
+  const font = fonts[activeFont];
+  if (font) options.font = font;
+  return options;
+}
+
+// Weave density: 0 (open, lots of paper) .. 6 (tight, solid). One source of
+// truth so the bodies, the cut-up and the asemic field all breathe together.
+function weaveDensity() {
+  return 8 - hatchSpacing;
+}
+
+// One glyph body; only the fill mode and the weave angle differ between sides.
+// A tighter weave (higher density) also presses harder and frays more, so the
+// slider and "New variation" read as a change in ink weight, not just count.
+function glyphBody(fillMode, angle) {
+  const density = weaveDensity();
+  const body = withFont({
+    size: 130,
+    wobble: wobbleAmount,
+    dropout: 0.025,
+    rubout: 0.08,
+    fray: 0.3 + density * 0.04,
+    pressure: 0.25 + density * 0.03,
+    segmentLength: 6,
+    glyphJitter: 0.5,
+    layer: "contours"
+  });
+  if (fillOn && body.font) {
+    body.fill = fillMode;                   // "hatch" (single) or "cross" (woven)
+    body.hatchSpacing = hatchSpacing;
+    body.hatchAngle = angle;
+    body.glyphJitter += density * 0.05;
+  }
+  return body;
+}
+
+// A fresh caption options object each call, so withFont() can mutate it safely.
+function caption() {
+  return {
+    size: 18,
+    wobble: 0.5,
+    dropout: 0.03,
+    segmentLength: 6,
+    stroke: "#171717",
+    alpha: 0.5,
+    layer: "labels"
+  };
+}
+
+// Point once at the hollow O so a viewer sees which part stays empty, instead of
+// only reading the word "counter". The built-in single-stroke alphabet keeps the
+// small label crisp; a thin red arrow dips into the O's counter.
+function annotateCounter() {
+  const ink = { stroke: "#b5362b", alpha: 0.95, layer: "labels" };
+  plot.text("counter", 66, 84, Object.assign({ size: 14, wobble: 0.5, dropout: 0.02 }, ink));
+  plot.line(100, 88, 95, 130, Object.assign({ wobble: 0.5, overshoot: 2 }, ink));
+  plot.line(95, 130, 88, 119, Object.assign({}, ink));   // arrowhead
+  plot.line(95, 130, 102, 121, Object.assign({}, ink));
+}
+
 function buildPlot() {
   plot = new GysinPlot({
-    seed: 8088,
+    seed: currentSeed,
     width: width,
     height: height,
-    style: {
-      stroke: "#171717",
-      strokeWeight: 1,
-      alpha: 0.9
-    }
+    style: { stroke: "#171717", strokeWeight: 1, alpha: 0.9 }
   });
 
-  const fontOptions = outlineFont ? { font: outlineFont } : {};
+  // Same glyphs on both sides so the fill mode is the ONLY variable: single
+  // hatch left, woven cross-hatch right, twisted apart so the weave out-reads.
+  plot.text("O8", 64, 190, glyphBody("hatch", hatchAngle));
+  plot.text("O8", 384, 190, glyphBody("cross", hatchAngle + CROSS_TWIST));
 
-  plot.text("O8BR", 70, 190, Object.assign({}, fontOptions, {
-    size: 150,
-    wobble: 0.9,
-    dropout: 0.025,
-    repeat: 2,
-    drift: 1.1,
-    rubout: 0.08,
-    pressure: 0.2,
-    segmentLength: 6,
-    layer: "contours"
-  }));
+  if (fonts[activeFont]) annotateCounter();
 
-  plot.textCutup("COUNTER MEMORY", 72, 360, Object.assign({}, fontOptions, {
+  plot.text("SINGLE HATCH", 64, 228, withFont(caption()));
+  plot.text("WOVEN CROSS", 384, 228, withFont(caption()));
+
+  // The weave slider drives the cut-up too: a tighter weave slices the word harder.
+  const density = weaveDensity();                // 0 (open) .. 6 (tight)
+  plot.textCutup("COUNTER MEMORY", 72, 404, withFont({
     size: 48,
-    slices: 8,
-    sliceOffset: 15,
+    slices: 4 + Math.round(density),
+    sliceOffset: 8 + density * 3,
     sliceDropout: 0.11,
     wobble: 1,
     dropout: 0.06,
@@ -67,26 +142,122 @@ function buildPlot() {
     layer: "cutup"
   }));
 
-  for (let index = 0; index < 8; index++) {
-    const y = 438 + index * 12;
-    plot.line(78, y, 682, y + sin(index * 0.8) * 6, {
-      wobble: 0.65,
-      dropout: 0.035,
-      overshoot: 6,
-      stroke: "#244f73",
-      alpha: 0.62,
-      layer: "baseline"
+  // One hand-inked rule under COUNTER MEMORY: doubled by repeat, run past the ends.
+  plot.line(72, 428, 588, 428, {
+    repeat: 2,
+    drift: 1.6,
+    wobble: 0.6,
+    dropout: 0.03,
+    overshoot: 8,
+    stroke: "#171717",
+    alpha: 0.6,
+    layer: "baseline"
+  });
+
+  // Past the rule the phrase stops being words: it scatters into asemic marks,
+  // memory pulled apart into illegible signs instead of spelled out again. Set
+  // clear of the cut-up so weave / cut-up / field each read on their own. Tighter
+  // weave tangles each mark more, so the field decays in step with the bodies.
+  const marks = 8;
+  const markW = 516 / marks;
+  for (let i = 0; i < marks; i++) {
+    plot.asemic(72 + i * markW, 478, markW, 66, {
+      loops: 3 + Math.round(density),
+      wobble: 0.6,
+      dropout: 0.05,
+      pressure: 0.2 + density * 0.05,
+      stroke: "#171717",
+      alpha: 0.22,
+      layer: "field"
     });
   }
+
+  updateStatus();
 }
 
-function wireActions() {
+// Fill needs a real outline font; the weave sliders need Fill on too. When they
+// can do nothing, hide them entirely — a vanished control reads as a choice,
+// where a greyed-out one reads as a bug.
+function setControlsEnabled(hasFont) {
+  document.getElementById("fill-button").disabled = !hasFont;
+  document.getElementById("wobble-range").disabled = !hasFont;
+  const weaveLive = hasFont && fillOn;
+  ["hatch-range", "angle-range"].forEach((id) => {
+    const range = document.getElementById(id);
+    range.disabled = !weaveLive;
+    range.closest("label").style.display = weaveLive ? "flex" : "none";
+  });
+}
+
+// One short, live measurement — seed plus pen/fill totals — so the aria-live
+// region announces a number per tick, not a paragraph. The fixed explanation
+// lives in the HTML subtitle.
+function updateStatus() {
+  const status = document.getElementById("font-status");
+  const hasFont = Boolean(fonts[activeFont]);
+  setControlsEnabled(hasFont);
+
+  const stats = plot.stats();
+  if (!hasFont) {
+    status.textContent = `built-in alphabet · seed ${currentSeed} · ${stats.paths} pen lines`;
+    return;
+  }
+  if (!fillOn) {
+    status.textContent = `${activeFont} · outline only · seed ${currentSeed} · ${stats.paths} pen lines`;
+    return;
+  }
+  // Name the angle the slider sets on EACH side, so its subtle pull on the
+  // single-hatch reads as a value even when the woven side steals the eye.
+  const crossAngle = hatchAngle + CROSS_TWIST;
+  status.textContent = `${activeFont} · seed ${currentSeed} · weave ${hatchAngle}° / ${crossAngle}° · ${stats.paths} pen · ${stats.fillPaths} fill lines`;
+}
+
+function wireControls() {
+  wireSlider("wobble-range", "wobble-value", (value) => { wobbleAmount = value; });
+  wireSlider("hatch-range", "hatch-value", (value) => { hatchSpacing = value; });
+  wireSlider("angle-range", "angle-value", (value) => { hatchAngle = value; });
+
+  const fillButton = document.getElementById("fill-button");
+  fillButton.addEventListener("click", function() {
+    fillOn = !fillOn;
+    fillButton.textContent = fillOn ? "Fill: on" : "Fill: off";
+    fillButton.setAttribute("aria-pressed", String(fillOn));
+    buildPlot();
+    redraw();
+  });
+
+  const fontButton = document.getElementById("font-button");
+  fontButton.addEventListener("click", async function() {
+    fontButton.disabled = true;
+    await loadOutlineFont(activeFont === "Oswald" ? "Anton" : "Oswald");
+    fontButton.textContent = `Font: ${activeFont}`;
+    fontButton.disabled = false;
+    buildPlot();
+    redraw();
+  });
+
   document.getElementById("reroll-button").addEventListener("click", function() {
-    plot.reroll();
+    currentSeed++;          // a new variation that survives the next slider rebuild
+    buildPlot();
     redraw();
   });
   document.getElementById("svg-button").addEventListener("click", function() {
     plot.downloadSVG("p5-gysin-font-outlines.svg", { width: width, height: height });
+  });
+  document.getElementById("hpgl-button").addEventListener("click", function() {
+    plot.downloadHPGL("p5-gysin-font-outlines.hpgl");
+  });
+}
+
+// One rebuild-and-redraw path shared by every slider.
+function wireSlider(rangeId, valueId, apply) {
+  const range = document.getElementById(rangeId);
+  const value = document.getElementById(valueId);
+  range.addEventListener("input", function() {
+    apply(parseFloat(range.value));
+    if (value) value.textContent = range.value;
+    buildPlot();
+    redraw();
   });
 }
 

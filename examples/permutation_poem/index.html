@@ -15,6 +15,31 @@
       background: #f1ecdf;
     }
 
+    #phrase-input {
+      flex: 1 1 160px;
+      min-width: 140px;
+      padding: 0.5rem 0.7rem;
+      font: inherit;
+      font-size: 0.85rem;
+      color: inherit;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid currentColor;
+      border-radius: 4px;
+    }
+
+    .demo-header ul.demo-hint {
+      max-width: 760px;
+      margin: 0.5rem 0 0;
+      padding-left: 1.2rem;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .demo-header ul.demo-hint li {
+      margin-bottom: 0.35rem;
+    }
+
     @media (max-width: 900px) {
       .poster-layout {
         grid-template-columns: 1fr;
@@ -39,26 +64,42 @@
       <div class="demo-number">GysinText.permute() → textCutup() → plotter paths</div>
       <h1>Permutation Poem</h1>
       <p>The optional text module rearranges the sentence. The original cut-up engine then passes every permutation through repeated type, a symbolic code column, damaged letter bands, and a modular grid. Meaning and letterform are disturbed in two separate passes.</p>
+      <p class="demo-hint"><strong>How to read it:</strong> one phrase runs through four passes; follow the numbered order top to bottom.</p>
+      <ul class="demo-hint">
+        <li><strong>First order (01)</strong> leads: it is the source phrase, printed in a heavier pen so the eye lands there first.</li>
+        <li><strong>Left column</strong> = the words. They press hard at the top of each order and fade downward.</li>
+        <li><strong>Right column</strong> = the same words as code. Each distinct word gets its own symbol (poster <strong>legend</strong>); the clean top row of every group is the key — decode it against the legend to read the same order as the words on the left. The rows beneath smear into stable dark texture.</li>
+        <li><strong>The band</strong> underneath is the phrase dissolving into a decaying letter field.</li>
+        <li><strong>The grid</strong> at the bottom is a light-to-dark tonal staircase of the word orders; each cell repeats its <strong>01–06 index</strong> from the left margin, so you can compare the orders directly.</li>
+      </ul>
+      <p class="demo-hint"><strong>Type your own phrase</strong> and press Enter to run it through <code>permute()</code> (empty or symbol-only input falls back to <code>I LOVE YOU</code>). <strong>New order</strong> cycles the strategy — walk (random swaps), rotate (cyclic shifts), lexical (alphabetical), random (seeded shuffle); <strong>New seed</strong> reshuffles without changing it. The HPGL export plots the code column and grid in a second pen colour. <em>The faint paper grain and centre fold are screen-only and left out of the SVG/HPGL export.</em></p>
     </div>
     <div class="demo-layout poster-layout">
       <div class="demo-code">
-        <div class="code-label">Two independent layers</div>
-        <pre><code class="language-javascript">const regels = GysinText.permute("I LOVE YOU", {
-  seed: 1960,
-  limit: 6,
-  order: "walk"
-});
+        <div class="code-label">One decay curve; the grid is the tonal engine</div>
+        <pre><code class="language-javascript">// One source for the rhythm; the grid rows follow from it, nothing is hard-coded twice.
+const GROUPS = 6, REPEATS = 6, COLS = 3, ROWS = Math.ceil(GROUPS / COLS);
+const regels = GysinText.permute(phrase, {
+  seed: posterSeed, limit: GROUPS, order: ORDERS[orderIndex]
+}).slice(0, GROUPS);
 
-regels.forEach((regel, index) =&gt; {
-  plot.textCutup(regel, x[index], y[index], {
-    font: outlineFont,
-    slices: 7 + index,
-    sliceOffset: 14 + index * 6,
-    dropout: 0.02 + index * 0.01
-  });
-});</code></pre>
+// One curve drives every repeat: top rows press hard, echoes tremble + fade.
+// It returns the full param set, so no second merge is needed downstream.
+// `boost` lifts the lead order (01) so it dominates without losing its decay.
+function decay(i, seedTag, overrides, boost = 0) {
+  return {
+    strokeWeight: Math.max(0.4, 1.3 + boost - i * 0.17), // felt weight decay
+    pressure: Math.min(0.8, boost + i * 0.14),           // deeper = more tremor
+    slices: 4 + (i % 5), seed: `${posterSeed}:${seedTag}`, ...overrides
+  };
+}
+
+// The COLS-wide grid is the tonal engine: hatch tightens 14 -> 4, light to dark.
+plot.rect(x, y, w, h, { fill: "hatch", hatchSpacing: 14 - i * 2 });</code></pre>
         <div class="demo-actions" aria-label="Permutation poster actions">
+          <input type="text" id="phrase-input" aria-label="Your phrase for permute() — empty or symbol-only input falls back to I LOVE YOU" title="Empty or symbol-only input falls back to I LOVE YOU" placeholder="Your phrase…" maxlength="40">
           <button type="button" id="reroll-button">New order</button>
+          <button type="button" id="seed-button">New seed</button>
           <button type="button" id="svg-button">Download A3 SVG</button>
           <button type="button" id="hpgl-button">Download HPGL</button>
         </div>

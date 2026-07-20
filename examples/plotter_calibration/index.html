@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Plotter Calibration | p5.gysin examples</title>
   <link rel="stylesheet" href="../showcase.css">
+  <style>
+    #pen-legend { display: flex; flex-wrap: wrap; gap: .3rem .9rem; margin-top: .6rem; }
+    .pen-chip { display: inline-flex; align-items: center; gap: .4rem; font-size: .78rem; opacity: .85; }
+    .pen-chip i { width: .8rem; height: .8rem; border-radius: 2px; display: inline-block; }
+    .live-control { display: flex; align-items: center; gap: .6rem; margin-top: .8rem; font-size: .82rem; flex-wrap: wrap; }
+    .live-control label { display: inline-flex; align-items: center; gap: .35rem; }
+    .live-control input[type="range"] { flex: 1 1 12rem; min-width: 9rem; }
+    .live-control output { font-variant-numeric: tabular-nums; min-width: 2.6rem; }
+  </style>
 </head>
 <body>
   <nav id="navbar">
@@ -22,36 +31,44 @@
     <div class="demo-header">
       <div class="demo-number">page · mm · pens · stats</div>
       <h1>Plotter Calibration</h1>
-      <p>A practical A4 calibration sheet: margins, circles, squares, overshoot, dropout and three pens. Export it before a real plotting session and inspect its path statistics.</p>
+      <p>A readable A4 calibration instrument, plotted the way you actually plot&nbsp;&mdash;&nbsp;with just <strong>three pens</strong>. Black carries all the structure, text and measurement; a single <strong>red</strong> pen is reserved for the rings, so they read as the focal point rather than one accent among many; and a muted <strong>tint</strong> lays down the hatch-fill mass. That restraint gives the plate a real pen hierarchy and makes the HPGL export honest. The title is drawn through the composition layer&nbsp;&mdash;&nbsp;per-glyph jitter and a doubled stroke&nbsp;&mdash;&nbsp;so the header itself demonstrates the disturbance the sheet measures, with a small <code>plot.letters()</code> specimen beside it. Below it, every zone isolates one parameter: a mm ruler with numbered ticks; concentric rings labelled by diameter with a centre registration cross and a cross-hatched core, flanked by a <code>pressure</code>-toned cross-hatched ink mass and a dense field of true <em>asemic</em> marks from <code>plot.asemic()</code>; a mirrored ramp where dropout climbs 0.0&nbsp;&rarr;&nbsp;0.4 on the left and <em>wobble</em> climbs 0.0&nbsp;&rarr;&nbsp;the slider value on the right; a hatch-density gradient of five diamonds, spacing 0.8&nbsp;&rarr;&nbsp;2.4&nbsp;mm with a sweeping angle; a pen-weight ramp of bars with rising strokeWeight; and four segments isolating <em>hesitate</em>, <em>fray</em>, <em>pressure</em> and <em>rubout</em>, each above a straight shadow line so the effect reads against a true zero, closed by a full-width <code>plot.symbols()</code> band. Captions are kept small and light on purpose, so the rings and ink mass carry the image. All text is the built-in single-stroke alphabet, so the sheet stays plotter-safe.</p>
+      <p><strong>How to read it:</strong> drag the <em>Live wobble</em> slider and watch the right-hand ramp&nbsp;&mdash;&nbsp;the zero line stays put at the top and fans out further as wobble rises, so you can <em>see</em> what the parameter does. The note under the canvas shows the live path cost (seed · paths · mm drawn · mm travel), and the legend maps each pen colour to its physical pen number for the HPGL export. Hit <em>Reroll seed</em> to jump the seed and watch that cost change, <em>Reference sheet</em> to snap back to the reproducible plate, then export to SVG or HPGL. The buttons are mirrored on the keyboard: <kbd>0</kbd>, <kbd>R</kbd>, <kbd>S</kbd>, <kbd>H</kbd>.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">const page = {
-  width: 210,
-  height: 297,
-  units: "mm",
-  margin: 10,
-  scale: 1 / 3,
-  clip: true
-};
+        <pre><code class="language-javascript">const mm = (v) =&gt; v * MM;   // millimetres -&gt; canvas pixels
 
-plot.downloadHPGL("calibration.hpgl", {
-  page,
-  penMap: { frame: 1, circle: 2, hatch: 3 },
-  speed: 20
-});
+// A ruler tick plus its number, both plotter-safe.
+plot.line(x, y, x, y - mm(5), { layer: "label" });
+plot.text("50", x, y + mm(6), { size: mm(3), layer: "label" });
 
-const stats = plot.stats({ page, drawSpeed: 20 });</code></pre>
+// A cross-hatched ink mass; pressure makes it read as tonal ink over the area.
+plot.circle(cx, cy, d, { fill: "cross", hatchSpacing: mm(0.9), pressure: 0.4, layer: "fill" });
+
+// A type specimen: the built-in alphabet dissolved into a field of varied glyphs.
+plot.letters("P5 GYSIN", x, y, w, h, { glyphJitter: 0.6, layer: "label" });
+
+// Path cost shown up front, before any export.
+const s = plot.stats({ page: PAGE, drawSpeed: 20, travelSpeed: 60 });</code></pre>
         <div class="demo-actions" aria-label="Calibration export actions">
           <button type="button" id="svg-button">Download SVG</button>
           <button type="button" id="hpgl-button">Download HPGL</button>
-          <button type="button" id="reroll-button">New dropout</button>
+          <button type="button" id="reroll-button">Reroll seed</button>
+          <button type="button" id="reset-button">Reference sheet</button>
         </div>
+        <div class="live-control">
+          <label for="wobble-range">Live wobble <span class="footer-sub">(ramp zone)</span></label>
+          <input type="range" id="wobble-range" min="0" max="1" step="0.05" value="1"
+                 aria-label="Live wobble on the ramp zone, 0 to 1">
+          <output id="wobble-readout" for="wobble-range">1.00</output>
+        </div>
+        <p class="footer-sub">Shortcuts: <kbd>0</kbd> reference &middot; <kbd>R</kbd> reroll &middot; <kbd>S</kbd> SVG &middot; <kbd>H</kbd> HPGL</p>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas" id="sketch" role="img" aria-label="An A4 pen-plotter calibration sheet with margins, measurement marks, and three pen layers."></div>
-        <div class="demo-note" id="calibration-status" role="status" aria-live="polite">Ready: 10 mm margins, three pen layers.</div>
+        <div class="demo-canvas" id="sketch" role="img" aria-label="An A4 pen-plotter calibration sheet with margins, measurement marks, and colour-coded pen layers. Keyboard shortcuts: 0 restores the reference sheet, R rerolls the seed, S downloads the SVG, H downloads the HPGL."></div>
+        <div class="demo-note" id="calibration-status" role="status" aria-live="polite">Measuring path cost&hellip;</div>
+        <div id="pen-legend" aria-label="Pen legend: on-screen colour to physical pen number"></div>
       </div>
     </div>
   </main>

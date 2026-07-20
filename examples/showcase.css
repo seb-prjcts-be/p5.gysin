@@ -204,6 +204,17 @@ canvas:focus-visible {
   font-size: 14px;
 }
 
+.demo-stats {
+  margin: 0 18px 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--ink);
+  background: var(--white);
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
 .demo-actions {
   display: flex;
   flex-wrap: wrap;
