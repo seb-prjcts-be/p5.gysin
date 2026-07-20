@@ -353,8 +353,8 @@
       return this._addShape("textCutup", params, false, options);
     }
 
-    // One word, worn away. rub() is the intent verb: it draws the same text three
-    // times down a diagonal, each copy more decayed than the last - legible, then
+    // One word, worn away - rub out the word, after Gysin. rub() draws the same text
+    // three times down a diagonal, each copy more decayed than the last - legible, then
     // cut up, then an asemic scribble that buries it. It composes the existing
     // text/textCutup/asemic primitives with strong defaults, so `plot.rub("WORD",
     // x, y)` is a complete gesture. Every option is optional; `decay` scales the

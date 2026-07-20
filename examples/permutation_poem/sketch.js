@@ -13,7 +13,8 @@
 //  optional and defaults to zero, so nothing else here is required to draw.
 //  The one addon this example loads is the text module (p5.gysin.text.min.js);
 //  its GysinText.permute() rearranges the phrase into orders before any of it
-//  is drawn. This sketch builds the poster one layer at a time; read the
+//  is drawn. The permutation poem was Gysin's own invention. This sketch builds
+//  the poster one layer at a time; read the
 //  numbered sections in buildPoster() from top to bottom. Each is a
 //  compositional layer, drawn back to front, and can be deleted on its own
 //  without breaking the rest.

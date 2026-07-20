@@ -66,7 +66,8 @@ The calls above are primitives - you compose them yourself. `rub()` is the first
 *intent verb*: one call that composes `text`, `textCutup`, and `asemic` into a
 finished gesture - a word worn away in three copies (legible, cut up, asemic
 scribble). Strong defaults make the one-liner complete; every option is an opt-in
-escape hatch, and the primitives stay underneath.
+escape hatch, and the primitives stay underneath. `rub` is Gysin's own phrase:
+rub out the word.
 
 ```js
 plot.rub("RUB OUT", 46, 248);                        // the whole gesture, defaults

@@ -98,7 +98,7 @@ function setup() {
     <section class="guide-block">
       <h2>Intent Verbs</h2>
       <p>The methods above are primitives that you compose yourself. An <em>intent verb</em> is one call that composes several primitives into a finished gesture, with strong defaults, so the common case is a single line. The primitives stay underneath as the escape hatch.</p>
-      <p><code>plot.rub(text, x, y, options)</code> draws a word worn away in three copies - legible, cut up, then an asemic scribble that buries the last one. It composes <code>text</code>, <code>textCutup</code>, and <code>asemic</code>.</p>
+      <p><code>plot.rub(text, x, y, options)</code> draws a word worn away in three copies - legible, cut up, then an asemic scribble that buries the last one. It composes <code>text</code>, <code>textCutup</code>, and <code>asemic</code>. The name is Gysin's own: rub out the word.</p>
       <div class="code-preview">
         <code>plot.rub("RUB OUT", 46, 248);                        // the whole gesture, defaults
 plot.rub("RUB OUT", 46, 248, { decay: 2 });          // one knob scales the wear
