@@ -27,7 +27,8 @@
     "permutation_poem",
     "plotter_calibration",
     "plotter_export",
-    "signal_score"
+    "signal_score",
+    "worn_word"
   ],
   "removed_apis": [],
   "added_apis": [

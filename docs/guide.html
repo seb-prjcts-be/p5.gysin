@@ -96,6 +96,24 @@ function setup() {
     </section>
 
     <section class="guide-block">
+      <h2>Intent Verbs</h2>
+      <p>The methods above are primitives that you compose yourself. An <em>intent verb</em> is one call that composes several primitives into a finished gesture, with strong defaults, so the common case is a single line. The primitives stay underneath as the escape hatch.</p>
+      <p><code>plot.rub(text, x, y, options)</code> draws a word worn away in three copies &mdash; legible, cut up, then an asemic scribble that buries the last one. It composes <code>text</code>, <code>textCutup</code>, and <code>asemic</code>.</p>
+      <div class="code-preview">
+        <code>plot.rub("RUB OUT", 46, 248);                        // the whole gesture, defaults
+plot.rub("RUB OUT", 46, 248, { decay: 2 });          // one knob scales the wear
+plot.rub("RUB OUT", 46, 248, { font: outlineFont }); // fills the legible head</code>
+      </div>
+      <ul>
+        <li><code>decay</code>: scales wobble/drift/dropout/rubout/fray across every copy at once; default <code>1</code>, <code>0</code> draws clean.</li>
+        <li><code>size</code> (default <code>46</code>), <code>font</code> (fills the legible head), <code>stroke</code>.</li>
+        <li><code>tail</code>: the asemic burial of the last copy; default <code>true</code>, set <code>false</code> to leave the word unburied.</li>
+        <li><code>stepX</code>/<code>stepY</code>: the drift between copies. <code>stages</code>/<code>tangles</code> replace the built-in recipe wholesale.</li>
+      </ul>
+      <p><code>rub()</code> returns the id of every copy and tangle, so each can be frozen, rerolled, updated, or exported like any other shape. The <code>worn_word</code> example is this one call.</p>
+    </section>
+
+    <section class="guide-block">
       <h2>Optional Text Permutations</h2>
       <p><code>p5.gysin.text.min.js</code> returns ordinary strings that can be used on their own or drawn through the core library.</p>
       <div class="code-preview">

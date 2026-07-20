@@ -60,6 +60,32 @@ plot.draw();
 }
 ```
 
+## Intent verbs
+
+The calls above are primitives — you compose them yourself. `rub()` is the first
+*intent verb*: one call that composes `text`, `textCutup`, and `asemic` into a
+finished gesture — a word worn away in three copies (legible, cut up, asemic
+scribble). Strong defaults make the one-liner complete; every option is an opt-in
+escape hatch, and the primitives stay underneath.
+
+```js
+plot.rub("RUB OUT", 46, 248);                        // the whole gesture, defaults
+plot.rub("RUB OUT", 46, 248, { decay: 2 });          // one knob scales the wear
+plot.rub("RUB OUT", 46, 248, { font: outlineFont }); // fills the legible head
+```
+
+- `decay` (default 1) scales wobble/drift/dropout/rubout/fray across every copy at
+  once; `0` draws clean, higher wears the word away and buries it wider.
+- `size` (default 46), `font` (fills the legible head), `stroke`.
+- `tail` (default true) is the asemic burial of the last copy; set `false` to leave
+  the word unburied.
+- `stepX`/`stepY` set the drift between copies; `stages`/`tangles` replace the
+  built-in recipe wholesale.
+
+`rub()` returns the id of every copy and tangle, so each can be `freeze`d,
+`reroll`ed, updated, or exported like any other shape. Same seed, same result. See
+the `worn_word` example — the whole sketch is this one call.
+
 ## Selective ink build-up
 
 `dropout` and `rubout` remove line material. `bleed` is the additive
@@ -224,6 +250,7 @@ Available examples:
 - `font_outlines` - real font contours with separate counters
 - `plotter_calibration` - physical A4 sizes, margins, and pen layers
 - `signal_score` - abstract paths and repeatable data scores
+- `worn_word` - one word worn away: the `rub()` intent verb in a single call
 
 ## Plotter export
 

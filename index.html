@@ -42,8 +42,29 @@
   <section id="examples" class="section">
     <div class="section-header">
       <div class="section-tag">Public examples &middot; v0.2.0</div>
-      <h2>Nine live <span class="accent">examples</span></h2>
+      <h2>Ten live <span class="accent">examples</span></h2>
       <p class="section-desc">Each preview is a live sketch. Open the full example for the complete page and source file. The snippets show the transferable idea, not every line.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-tag">rub()</div>
+      <h2>Worn <span class="accent">Word</span></h2>
+      <p class="section-desc">One intent verb. rub() composes text, cut-up, and asemic into a single decaying gesture &mdash; the whole piece in one call, defaults and all.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-worn-word" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+
+// one word, worn away — legible → cut up → asemic, in one call
+plot.rub("WORN", 46, 248);
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="examples/worn_word/" target="_blank">-&gt; full example</a>
+        <a class="ex-full-link" href="examples/worn_word/sketch.js" target="_blank">-&gt; source sketch</a>
+      </div>
     </div>
   </section>
 
@@ -434,6 +455,22 @@ function setup() {
       dropout: 0.08,
       repeat: 2,
       rubout: 0.08
+    });
+    return plot;
+  });
+
+  makePreview("ex-worn-word", function(p, canvasW, canvasH) {
+    const plot = new GysinPlot({
+      p: p,
+      seed: 1960,
+      width: canvasW,
+      height: canvasH
+    });
+    // The whole preview is one intent verb, scaled to the small canvas.
+    plot.rub("WORN", 40, canvasH * 0.24, {
+      size: canvasW * 0.08,
+      stepX: canvasW * 0.06,
+      stepY: canvasH * 0.24
     });
     return plot;
   });
