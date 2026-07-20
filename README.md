@@ -1,32 +1,32 @@
 # p5.gysin
 
-[Open de publieke p5.gysin-site](https://seb-prjcts-be.github.io/p5.gysin/)
+[Open the public p5.gysin site](https://seb-prjcts-be.github.io/p5.gysin/)
 
-p5.gysin is een vector-first p5.js-library voor generatieve, plotbare
-tekeningen: cut-up tekst, rubout-zones, wobble, dropout, selectieve ink bleed en
-export naar SVG, JSON en HPGL. Versie 0.2.0 voegt fysieke pagina-instellingen,
-lagen/penmapping, optionele route-optimalisatie en plotstatistieken toe.
+p5.gysin is a vector-first p5.js library for generative, plottable drawings:
+cut-up text, rubout zones, wobble, dropout, selective ink bleed, and export to
+SVG, JSON, and HPGL. Version 0.2.0 adds physical page settings, layers/pen
+mapping, optional route optimization, and plot statistics.
 
-De repository volgt dezelfde publicatiestructuur als `p5.waves`: de library
-staat op root, GitHub Pages gebruikt `index.html` en `docs/`, en voorbeelden
-leven als standalone pagina's onder `examples/`.
+The repository follows the same publishing structure as `p5.waves`: the library
+lives at the root, GitHub Pages uses `index.html` and `docs/`, and examples live
+as standalone pages under `examples/`.
 
-## Structuur
+## Structure
 
 - `p5.gysin.js` - source library
-- `p5.gysin.min.js` - semantisch identieke browserbuild voor examples/docs; bewust niet agressief geminified
-- `p5.gysin.text.js` - optionele, zelfstandige tekstpermutaties; draait zonder p5.js en zonder de core
-- `p5.gysin.text.min.js` - semantisch identieke browserbuild van de tekstmodule
+- `p5.gysin.min.js` - semantically identical browser build for examples/docs; intentionally not aggressively minified
+- `p5.gysin.text.js` - optional, standalone text permutations; runs without p5.js and without the core
+- `p5.gysin.text.min.js` - semantically identical browser build of the text module
 - `index.html` - Pages showcase
-- `docs/examples.html` - overzicht van voorbeelden
-- `docs/guide.html` - publieke handleiding
-- `docs/about.html` - context en status
-- `docs/technical-blueprint.md` - technische blauwdruk
-- `docs/ink-bleed-design.md` - ontwerp en veiligheidsmodel voor additieve inktopbouw
+- `docs/examples.html` - overview of examples
+- `docs/guide.html` - public guide
+- `docs/about.html` - context and status
+- `docs/technical-blueprint.md` - technical blueprint
+- `docs/ink-bleed-design.md` - design and safety model for additive ink build-up
 - `examples/gysin_demo/` - standalone demo
-- `tests/snapshot.js` - minimale runtime/snapshot-check
+- `tests/snapshot.js` - minimal runtime/snapshot check
 
-## Basisgebruik
+## Basic usage
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
@@ -60,143 +60,142 @@ plot.draw();
 }
 ```
 
-## Selectieve inktopbouw
+## Selective ink build-up
 
-`dropout` en `rubout` halen lijnmateriaal weg. `bleed` is de additieve
-tegenhanger: de core kiest deterministisch aaneengesloten fragmenten en geeft
-alleen die één of meer extra, licht verschoven passages.
+`dropout` and `rubout` remove line material. `bleed` is the additive
+counterpart: the core deterministically selects contiguous fragments and gives
+only those one or more extra, slightly shifted passes.
 
 ```js
 plot.textCutup("RUB OUT THE WORD", 80, 180, {
-  bleed: 0.22,       // aandeel van de geschreven contourlengte
-  bleedPasses: 2,    // maximaal aantal extra passages, begrensd op 3
-  bleedSpread: 0.8,  // coherente verschuiving; minimaal 0.1 bij actieve bleed
-  bleedCluster: 18   // gewenste lengte van een inktcluster
+  bleed: 0.22,       // share of the written contour length
+  bleedPasses: 2,    // max number of extra passes, capped at 3
+  bleedSpread: 0.8,  // coherent shift; at least 0.1 when bleed is active
+  bleedCluster: 18   // desired length of an ink cluster
 });
 ```
 
-De extra traces krijgen in SVG/JSON `role: "bleed"` en een fysiek
-passagenummer. `plot.stats()` rapporteert `bleedPaths`, `bleedLength`,
-`overdrawRatio` en `maxLocalPasses`. Voor snijgereedschap filtert
-`tool: "blade"` alle tweede en latere passages uit de export; `tool: "pen"`
-behoudt de inktopbouw.
+The extra traces get `role: "bleed"` and a physical pass number in SVG/JSON.
+`plot.stats()` reports `bleedPaths`, `bleedLength`, `overdrawRatio`, and
+`maxLocalPasses`. For cutting tools, `tool: "blade"` filters all second and
+later passes out of the export; `tool: "pen"` keeps the ink build-up.
 
-## Gevulde vormen en letters
+## Filled shapes and letters
 
-Lettervormen en gesloten vormen zijn standaard alleen omtrek. `fill: "hatch"`
-vult het binnenwerk met parallelle plotterlijnen, zodat type solide wordt in
-plaats van hol:
+Letterforms and closed shapes are outline-only by default. `fill: "hatch"`
+fills the interior with parallel plotter lines, so type becomes solid instead of
+hollow:
 
 ```js
 plot.rect(40, 40, 200, 120, { fill: "hatch", hatchSpacing: 3, hatchAngle: 30 });
 
 plot.text("RUB OUT", 60, 200, {
   size: 96,
-  font: outlineFont,   // vulling vereist echte fontcontouren
+  font: outlineFont,   // fill requires real font contours
   fill: "hatch",
   hatchSpacing: 2
 });
 ```
 
-- `hatchSpacing` (standaard 2) is de afstand tussen de vullijnen; minimaal 0.25.
-- `hatchAngle` (standaard 0) draait de arcering, in graden.
-- `fill: "cross"` legt twee arceringen haaks op elkaar; dat leest egaler en
-  soliede dan enkele strepen — prettiger voor gevulde typografie.
+- `hatchSpacing` (default 2) is the distance between the fill lines; minimum 0.25.
+- `hatchAngle` (default 0) rotates the hatching, in degrees.
+- `fill: "cross"` lays two hatchings perpendicular to each other; that reads more
+  even and solid than single strokes — nicer for filled typography.
 
-**Leesbaarheid van gevulde tekst.** De outline wordt altijd mee getekend, dus
-gevulde letters hebben scherpe randen én een gevuld lijf. Vuistregel uit de
-praktijk: gebruik vulling voor **displaymaten (≥~16px)** — daar leest `"cross"`
-solide en leesbaar — en laat **kleine tekst enkel outline of single-stroke**.
+**Readability of filled text.** The outline is always drawn as well, so filled
+letters have sharp edges and a filled body. Practical rule of thumb: use fill for
+**display sizes (≥~16px)** — there `"cross"` reads solid and legible — and leave
+**small text outline-only or single-stroke**.
 
-**Pendikte en kleine tekst (plotter).** Bij een echte pen lopen de dubbele
-lijnen van een klein outline- of gevuld letter dicht tot een vlek. Gebruik voor
-kleine tekst het **ingebouwde single-stroke alfabet** (laat `font` weg): daar is
-de pendikte zélf de streek, dus het schaalt mee. Dat font tekent op een
-`size/7`-raster, dus de strepen blijven los zolang:
+**Pen width and small text (plotter).** With a real pen, the double lines of a
+small outline or filled letter close up into a blot. For small text, use the
+**built-in single-stroke alphabet** (omit `font`): there the pen width itself is
+the stroke, so it scales along. That font draws on a `size/7` grid, so the
+strokes stay separate as long as:
 
 ```text
-glyph-grootte  ≳  7–8 × pendikte
+glyph size  ≳  7–8 × pen width
 ```
 
-Voorbeeld: met een pen van 1.7px is `size 14` de leesbare ondergrens; met een
-dikkere pen schuift die mee omhoog. Houd `glyphJitter` laag (~0.1) voor kleine
-tekst. Gevulde/outline-fonts hebben ~2–3× méér grootte nodig om leesbaar te
-blijven, dus die zijn voor koppen, niet voor kleine velden.
-- De vulling gebruikt de even-odd-regel, dus letter-counters en gaten (de holte
-  in `O`, `A`, `e`) blijven open.
-- Vulling werkt op `rect`, `circle`, `polygon` en op `text`/`textCutup` met een
-  outline-font. Open vormen (`line`, `path`) en het ingebouwde bitmap-alfabet
-  hebben geen binnenwerk en worden overgeslagen.
-- Vullijnen krijgen `role: "fill"`; `plot.stats()` rapporteert `fillPaths` en
-  `fillLength`. `tool: "blade"` laat álle vulling weg (een mes vult geen vlak),
-  `tool: "pen"` behoudt ze.
+Example: with a 1.7px pen, `size 14` is the legible lower bound; with a thicker
+pen it shifts up accordingly. Keep `glyphJitter` low (~0.1) for small text.
+Filled/outline fonts need ~2–3× more size to stay legible, so they are for
+headings, not small fields.
+- The fill uses the even-odd rule, so letter counters and holes (the cavity in
+  `O`, `A`, `e`) stay open.
+- Fill works on `rect`, `circle`, `polygon`, and on `text`/`textCutup` with an
+  outline font. Open shapes (`line`, `path`) and the built-in bitmap alphabet
+  have no interior and are skipped.
+- Fill lines get `role: "fill"`; `plot.stats()` reports `fillPaths` and
+  `fillLength`. `tool: "blade"` leaves out all fill (a blade doesn't fill an
+  area), `tool: "pen"` keeps them.
 
-> Roadmap: `fill: "dots"` (losse plotterpunten met een dichtheids-gradiënt voor
-> letter-verval en tabellen) staat als volgende stap in
+> Roadmap: `fill: "dots"` (loose plotter dots with a density gradient for letter
+> decay and tables) is the next step in
 > [`docs/composition-plan.md`](docs/composition-plan.md).
 
-### Elke letter uniek
+### Every letter unique
 
-Geen twee gerenderde letters zijn identiek — ook niet twee keer dezelfde letter.
-Iedere glyph krijgt een eigen, onafhankelijke variatie (kleine rotatie,
-verschuiving en schaal rond zijn zwaartepunt). De vulling erft dat mee, want die
-wordt uit de gevarieerde contour berekend.
+No two rendered letters are identical — not even the same letter twice. Every
+glyph gets its own, independent variation (small rotation, shift, and scale
+around its centroid). The fill inherits this, since it is computed from the
+varied contour.
 
 ```js
 plot.text("RUB OUT THE WORD", 60, 200, {
   size: 72,
   font: outlineFont,
-  glyphJitter: 0.6   // 0 = uit (exacte fontvorm), hoger = meer afwijking
+  glyphJitter: 0.6   // 0 = off (exact font shape), higher = more deviation
 });
 ```
 
-`glyphJitter` staat standaard op `0.35`. De variatie is deterministisch: dezelfde
-seed geeft dezelfde letters, `reroll()` geeft een nieuwe set. Werkt op `text` en
-`textCutup` (outline- en bitmap-alfabet). Zet `glyphJitter: 0` voor mechanisch
-exacte type.
+`glyphJitter` defaults to `0.35`. The variation is deterministic: the same seed
+gives the same letters, `reroll()` gives a new set. Works on `text` and
+`textCutup` (outline and bitmap alphabet). Set `glyphJitter: 0` for mechanically
+exact type.
 
-## Optionele tekstpermutaties
+## Optional text permutations
 
-Laad de tekstmodule alleen wanneer je zinnen wilt herordenen. De module heeft
-geen p5.js of `GysinPlot` nodig en retourneert gewone strings:
+Load the text module only when you want to reorder sentences. The module needs
+no p5.js or `GysinPlot` and returns plain strings:
 
 ```html
 <script src="p5.gysin.text.min.js"></script>
 ```
 
 ```js
-const regels = GysinText.permute("I LOVE YOU", {
+const rows = GysinText.permute("I LOVE YOU", {
   seed: 1960,
   limit: 6,
   order: "walk"
 });
 ```
 
-Combineer beide modules om iedere permutatie door de bestaande grafische
-cut-up te sturen:
+Combine both modules to run each permutation through the existing graphic
+cut-up:
 
 ```js
-regels.forEach((regel, index) => {
-  plot.textCutup(regel, 70, 150 + index * 100, {
+rows.forEach((row, index) => {
+  plot.textCutup(row, 70, 150 + index * 100, {
     slices: 7 + index,
     sliceOffset: 14 + index * 6
   });
 });
 ```
 
-Beschikbare ordeningen zijn `walk`, `random`, `lexical` en `rotate`. De
-originele zin staat altijd eerst; dubbele woorden leveren geen dubbele regels
-op. `limit` is standaard 24 en maximaal 1.000.
+Available orderings are `walk`, `random`, `lexical`, and `rotate`. The original
+sentence always comes first; duplicate words don't produce duplicate lines.
+`limit` defaults to 24 and maxes at 1,000.
 
-De taal- en beeldbewerking blijven bewust gescheiden: `GysinText.permute()`
-deconstrueert de woordvolgorde, waarna `textCutup()` elke gekozen regel opnieuw
-versnijdt als lettercontour. Het voorbeeld `permutation_poem` gebruikt die
-tweestapsmethode voor een monochrome A3-compositie met herhaalde tekstvelden,
-een symbolische codekolom en een modulair raster.
+The language and image processing stay deliberately separate:
+`GysinText.permute()` deconstructs the word order, after which `textCutup()`
+re-slices each chosen line as letter contours. The `permutation_poem` example
+uses this two-step method for a monochrome A3 composition with repeated text
+fields, a symbolic code column, and a modular grid.
 
-## Voorbeelden
+## Examples
 
-Open lokaal:
+Open locally:
 
 ```text
 index.html
@@ -208,28 +207,28 @@ examples/parameter_lab/index.html
 examples/plotter_export/index.html
 ```
 
-De voorbeelden volgen dezelfde drie-lagenstructuur als `p5.waves`:
+The examples follow the same three-layer structure as `p5.waves`:
 
-- live preview en snippet in `docs/examples.html`
-- standalone pagina in `examples/<naam>/index.html`
-- volledige sketch in `examples/<naam>/sketch.js`
+- live preview and snippet in `docs/examples.html`
+- standalone page in `examples/<name>/index.html`
+- full sketch in `examples/<name>/sketch.js`
 
-Beschikbare voorbeelden:
+Available examples:
 
-- `first_trace` - minimale trace-compositie
-- `gysin_demo` - cut-up typography en rubout
-- `permutation_poem` - A3-poster waarin alle woordpermutaties opnieuw door `textCutup()` gaan
-- `p5_editor` - copy-paste starter voor editor.p5js.org
-- `parameter_lab` - live controle over trace-parameters
-- `plotter_export` - SVG/JSON/HPGL exportworkflow
-- `font_outlines` - echte fontcontouren met afzonderlijke counters
-- `plotter_calibration` - fysieke A4-maten, marges en penlagen
-- `signal_score` - abstracte paths en herhaalbare datascores
+- `first_trace` - minimal trace composition
+- `gysin_demo` - cut-up typography and rubout
+- `permutation_poem` - A3 poster where all word permutations run through `textCutup()` again
+- `p5_editor` - copy-paste starter for editor.p5js.org
+- `parameter_lab` - live control over trace parameters
+- `plotter_export` - SVG/JSON/HPGL export workflow
+- `font_outlines` - real font contours with separate counters
+- `plotter_calibration` - physical A4 sizes, margins, and pen layers
+- `signal_score` - abstract paths and repeatable data scores
 
-## Plotterexport
+## Plotter export
 
-Gebruik een optioneel page model om dezelfde trace-data naar fysieke SVG- en
-HPGL-uitvoer te brengen:
+Use an optional page model to bring the same trace data to physical SVG and HPGL
+output:
 
 ```js
 const page = {
@@ -252,25 +251,25 @@ plot.downloadHPGL("drawing.hpgl", {
 console.log(plot.stats({ page, tool: "pen", drawSpeed: 20, travelSpeed: 60 }));
 ```
 
-Maak een veilige variant voor een mes zonder de compositie opnieuw te bouwen:
+Make a safe variant for a blade without rebuilding the composition:
 
 ```js
 plot.downloadSVG("drawing-blade.svg", { page, tool: "blade" });
 ```
 
-`regenerate()` behoudt de seed; gebruik `reroll()` om alleen niet-bevroren
-vormen een nieuwe variant te geven. Niet-eindige geometrie, dubbele ids en
-extreme sampling worden vroeg afgewezen met een duidelijke fout.
+`regenerate()` keeps the seed; use `reroll()` to give only unfrozen shapes a new
+variant. Non-finite geometry, duplicate ids, and extreme sampling are rejected
+early with a clear error.
 
-## Compatibiliteit
+## Compatibility
 
-Versie 0.2.0 ondersteunt p5.js 2.x in global mode en instance mode. Maak in
-instance mode na `p.createCanvas()` een gekoppelde plot met
-`p.createGysinPlot(options)`. De vector- en exportkern heeft geen p5-runtime
-nodig, maar p5.js 1.x behoort niet tot de geteste supportmatrix.
+Version 0.2.0 supports p5.js 2.x in global mode and instance mode. In instance
+mode, create a linked plot after `p.createCanvas()` with
+`p.createGysinPlot(options)`. The vector and export core needs no p5 runtime,
+but p5.js 1.x is not part of the tested support matrix.
 
-De distributie is bedoeld als browser-script via GitHub/jsDelivr. Het package
-is momenteel niet ingericht als npm-, ESM-, CommonJS- of TypeScript-package.
+The distribution is intended as a browser script via GitHub/jsDelivr. The
+package is currently not set up as an npm, ESM, CommonJS, or TypeScript package.
 
 ## Test
 
@@ -278,7 +277,7 @@ is momenteel niet ingericht als npm-, ESM-, CommonJS- of TypeScript-package.
 npm test
 ```
 
-Releasebestanden opnieuw genereren:
+Regenerate release files:
 
 ```powershell
 node tools/build-min.js
