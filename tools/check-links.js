@@ -6,7 +6,7 @@ const pages = ["index.html", ...findHtmlPages(path.join(root, "docs")), ...findH
 const broken = [];
 
 for (const page of pages) {
-  const source = fs.readFileSync(path.join(root, page), "utf8");
+  const source = stripCodeSamples(fs.readFileSync(path.join(root, page), "utf8"));
   for (const match of source.matchAll(/(?:href|src)="([^"#?]+)"/g)) {
     const target = match[1];
     if (/^(https?:|mailto:|data:)/.test(target)) continue;
@@ -22,6 +22,12 @@ if (broken.length) {
 }
 
 console.log(`p5.gysin local links ok (${pages.length} pages)`);
+
+function stripCodeSamples(source) {
+  return source
+    .replace(/<pre\b[^>]*>[\s\S]*?<\/pre>/gi, "")
+    .replace(/<code\b[^>]*>[\s\S]*?<\/code>/gi, "");
+}
 
 function findHtmlPages(directory) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {

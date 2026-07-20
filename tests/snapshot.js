@@ -516,7 +516,8 @@ const manifest = JSON.parse(fs.readFileSync(
   path.join(root, "docs", "p5.gysin.manifest.json"),
   "utf8"
 ));
-const examplesPage = fs.readFileSync(path.join(root, "docs", "examples.html"), "utf8");
+const showcasePage = fs.readFileSync(path.join(root, "index.html"), "utf8");
+const examplesRedirectPage = fs.readFileSync(path.join(root, "docs", "examples.html"), "utf8");
 const examplesDir = path.join(root, "examples");
 const exampleDirs = fs.readdirSync(examplesDir, { withFileTypes: true })
   .filter(function(entry) {
@@ -528,12 +529,14 @@ const exampleDirs = fs.readdirSync(examplesDir, { withFileTypes: true })
   .sort();
 
 assert.deepEqual(manifest.examples, exampleDirs);
+assert.match(examplesRedirectPage, /href="\.\.\/index\.html#examples"/);
+assert.match(examplesRedirectPage, /location\.replace\("\.\.\/index\.html#examples"\)/);
 
 for (const name of manifest.examples) {
   assert.ok(fs.existsSync(path.join(examplesDir, name, "index.html")), `${name} index.html`);
   assert.ok(fs.existsSync(path.join(examplesDir, name, "sketch.js")), `${name} sketch.js`);
-  assert.match(examplesPage, new RegExp(`\\.\\./examples/${name}/`));
-  assert.match(examplesPage, new RegExp(`\\.\\./examples/${name}/sketch\\.js`));
+  assert.match(showcasePage, new RegExp(`href="examples/${name}/"`));
+  assert.match(showcasePage, new RegExp(`href="examples/${name}/sketch\\.js"`));
 }
 
 console.log("p5.gysin snapshot ok");
