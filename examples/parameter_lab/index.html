@@ -79,23 +79,32 @@
     </div>
     <div class="demo-layout">
       <div class="demo-code">
-        <div class="code-label">Band snippet (repeat is the only slider it obeys)</div>
-        <pre><code class="language-javascript">// Each row is drawn `repeat` times, ghosted apart by a drift
-// that grows with repeat: more copies also spread wider. Rows
-// alternate phase with a deepening amplitude, so neighbours
-// cross into a weave instead of parallel stripes.
-const bandTop = 250, bandBottom = 410, rows = 6;
-for (let i = 0; i &lt; rows; i++) {
-  const depth = i / (rows - 1); // 0 top row, 1 bottom row
-  const y = bandTop + (bandBottom - bandTop) * depth;
-  plot.path(waveRow(70, 490, y, 3 + depth * 12, i * PI), {
-    repeat: value("repeat"),       // the only slider it reads
-    drift: value("repeat") * 1.2,  // wider as repeat climbs
-    stroke: inkOf("repeat"),
-    segmentLength: 10,
-    alpha: 0.7
-  });
-}</code></pre>
+        <div class="code-label">Core snippet</div>
+        <pre><code class="language-javascript">// The whole library, in three lines — this alone is a complete sketch:
+const plot = new GysinPlot({ seed: 8319 });
+plot.text("RUB OUT", 70, 150);   // clean, mechanical text
+plot.draw();
+
+// Everything below is OPTIONAL disturbance layered on top. Defaults are
+// all zero, so options are opt-in. This example builds, back to front:
+
+// 1) a plate: thin border + corner registration marks (fixed grey ink)
+// 2) the title "RUB OUT", cut up and bent — owned by the WOBBLE slider
+plot.textCutup("RUB OUT", 70, 150, { wobble: value("wobble") });
+
+// 3) the word "ERASE", torn away — owned by the RUBOUT slider
+plot.textCutup("ERASE", 70, 214, { rubout: value("rubout") });
+
+// 4) a woven line band — each row drawn `repeat` times, owned by REPEAT
+plot.path(waveRow(70, 490, y, amp, phase), { repeat: value("repeat") });
+
+// 5) a cross-hatch bar that opens up — owned by the DROPOUT slider
+plot.rect(70, 428, 420, 64, { fill: "cross", dropout: value("dropout") });
+
+// 6) a dense letter field: fixed reference ink, obeys no slider
+plot.letters("GYSIN", 300, 150, 190, 100, { size: 10 });
+
+plot.draw();</code></pre>
         <div class="control-grid" aria-label="Trace parameters">
           <label class="control-row" style="--accent:#b26a00">
             <span><i class="swatch"></i>Wobble &middot; title <output id="wobble-value">1.4</output></span>

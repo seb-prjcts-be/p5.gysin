@@ -40,32 +40,30 @@
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">const word = WORDS[seed % WORDS.length];   // consecutive reseeds walk the sentence
+        <pre><code class="language-javascript">// The whole library, in three lines — this alone is a complete sketch:
+const plot = new GysinPlot({ seed: 1960 });
+plot.text("FIRST TRACE", 46, 248);   // clean, mechanical text
+plot.draw();
 
-// one control scales wobble, drift, dropout, rubout and fray on any block
+// Everything below is OPTIONAL disturbance layered on top. Defaults are all
+// zero, so options are opt-in. This example adds, in order:
+
+// 1) one "decay" knob scaling wobble/drift/dropout/rubout/fray on any block
 const decayed = (o) => ({ ...o,
-  wobble: (o.wobble ?? 0) * decay, drift: (o.drift ?? 0) * decay,
-  dropout: (o.dropout ?? 0) * decay, rubout: (o.rubout ?? 0) * decay,
-  fray: (o.fray ?? 0) * decay });
+  wobble: (o.wobble ?? 0) * decay, dropout: (o.dropout ?? 0) * decay,
+  rubout: (o.rubout ?? 0) * decay, fray: (o.fray ?? 0) * decay });
 
-// the backbone: one faint line joining the origin and every decay anchor
-plot.path([[92,110], [470,124], ...STAGES.map(s => [s.x, s.y])],
-  decayed({ strokeWeight: 0.5, alpha: 0.4, wobble: 0.9, drift: 1.2, repeat: 2 }));
-
-// same word, three decays - one pass over the stage table. Only the legible
-// head carries fill:"cross" (solid); the cut-up and asemic tail stay hollow.
+// 2) the same word drawn three times, decaying from a solid, cross-hatch
+//    filled head to a hollow, broken tail — one pass over a stage table
 for (const stage of STAGES) {
-  const opts = decayed({ size: 46, ...stage.extra,
-    strokeWeight: stage.weight, alpha: stage.alpha,
-    dropout: stage.dropout, rubout: stage.rubout, fray: stage.fray });
-  if (font) { opts.font = font; if (stage.fill) opts.fill = stage.fill; }
+  const opts = decayed({ size: 46, ...stage.extra, rubout: stage.rubout });
+  if (font && stage.fill) opts.fill = stage.fill;   // only the head is filled
   plot[stage.verb](word, stage.x, stage.y, opts);   // text / textCutup / text
 }
 
-// the ghost word gets buried by asemic tangles, offset from the asemic stage
+// 3) an asemic scribble that buries the last, ghostly copy of the word
 for (const t of TANGLES) {
-  plot.asemic(asemic.x + t.dx * decay, asemic.y + t.dy * decay,
-    t.w * decay, t.h * decay, decayed({ strokeWeight: t.weight, dropout: t.dropout }));
+  plot.asemic(t.x, t.y, t.w, t.h, decayed({ dropout: t.dropout }));
 }
 
 plot.draw();</code></pre>

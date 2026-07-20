@@ -1,3 +1,23 @@
+// ═══════════════════════════════════════════════════════════════════
+//  plotter_calibration — an A4 pen-plotter test sheet drawn on three pens
+// ═══════════════════════════════════════════════════════════════════
+//  New to p5.gysin? The whole library is three lines:
+//
+//      const plot = new GysinPlot({ seed: 210297 });
+//      plot.text("P5.GYSIN CALIBRATION", 48, 39);   // clean, mechanical text
+//      plot.draw();
+//
+//  Every option below (wobble, dropout, fill, pressure, hatch, asemic…)
+//  is OPTIONAL disturbance layered on top of that core. The defaults are
+//  all zero, so a call with no options just draws clean — nothing here is
+//  required to use the library. This sheet is a physical instrument: it
+//  works in millimetres on an A4 page (mm() converts mm -> canvas pixels)
+//  and maps every layer to one of three pens. It builds up in zones drawn
+//  back to front; read the numbered sections in buildPlot() from top to
+//  bottom. Each zone is a compositional layer and can be deleted on its
+//  own without breaking the rest.
+// ═══════════════════════════════════════════════════════════════════
+
 const MM = 3;                 // pixels per millimetre on the preview canvas
 const mm = (v) => v * MM;     // millimetres -> canvas pixels
 
@@ -68,12 +88,25 @@ function buildPlot(seed) {
     seed, width, height, page: PAGE,
     style: { stroke: INK, strokeWeight: 0.75, alpha: 0.86 }
   });
+  // ── frame · border, registration crosses, title masthead ──
   drawFrame();
+
+  // ── 1 · scale — the mm ruler ──────────────────────────────
   drawScale();      // 1 · mm ruler with tick marks and numbers
+
+  // ── 2 · rings — ink mass, red rings, asemic field ─────────
   drawRings();      // 2 · rings between a cross-hatched ink mass and asemic marks
+
+  // ── 3 · ramp — dropout vs wobble ──────────────────────────
   drawRamp();       // 3 · mirrored ramp: dropout 0->0.4, wobble 0->live
+
+  // ── 4 · gradient — hatch density ──────────────────────────
   drawGradient();   // 4 · hatch-density gradient, spacing 0.8->2.4 mm
+
+  // ── 5 · weights — pen-weight bars ─────────────────────────
   drawWeights();    // 5 · bars with rising strokeWeight
+
+  // ── 6 · verbs — disturbance verbs + symbols foot ──────────
   drawVerbs();      // 6 · four disturbance verbs + a symbols() texture foot
 }
 

@@ -1,3 +1,22 @@
+// ═══════════════════════════════════════════════════════════════════
+//  plotter_export — one layered plate, exported to SVG, JSON and HPGL
+// ═══════════════════════════════════════════════════════════════════
+//  New to p5.gysin? The whole library is three lines:
+//
+//      const plot = new GysinPlot({ seed: 7475 });
+//      plot.text("PLOT", 118, 188);   // clean, mechanical text
+//      plot.draw();
+//
+//  Every option below (wobble, dropout, fill, cut-up, per-pen layers,
+//  page + export…) is OPTIONAL on top of that core. The defaults are
+//  all zero, so a call with no options just draws clean — nothing here
+//  is required to use the library. This sketch stacks the layers one at
+//  a time; read the numbered sections in shapesFor() from top to bottom.
+//  Each is a compositional layer, drawn back to front, and can be
+//  deleted on its own without breaking the rest. Export is just handing
+//  the same plot to plot.downloadSVG() / downloadJSON() / downloadHPGL().
+// ═══════════════════════════════════════════════════════════════════
+
 const SEED = 7475;
 const EXPORT_PAGE = {
   width: 210,
@@ -91,34 +110,42 @@ function composition(v) {
 const ARM = { alpha: 0.7, wobble: 0.6, dropout: 0.02, overshoot: 4, fray: 1.2 };
 function shapesFor(comp) {
   return [
+    // ── 1 · frame ───────────────────────────────
     // Pen 1 - plate frame; hesitates mid-edge like a hand-ruled boundary.
     ["frame", "rect", [FRAME.x, FRAME.y, FRAME.size, FRAME.size],
       { segmentLength: 12, wobble: 0.45, drift: 0.8, dropout: 0.015, hesitate: 0.35, repeat: 2 }],
 
+    // ── 2 · hero word ───────────────────────────
     // Pen 2 - hero word; per-glyph jitter reshapes it on reroll.
     ["type", "text", ["PLOT", INNER.x, ROW.hero],
       { size: 88, segmentLength: 8, wobble: 1.5, drift: 2, dropout: 0.07, repeat: 2, rubout: 0.1, pressure: 0.25, glyphJitter: 0.7 }],
 
+    // ── 3 · cut-up subtitle ─────────────────────
     // Pen 2 - cut-up subtitle spelling the four export layers.
     ["type", "textCutup", ["FRAME/TYPE/HATCH/REG", INNER.x, ROW.sub],
       { size: 24, segmentLength: 7, slices: 5, sliceOffset: 10, sliceDropout: 0.14, wobble: 1.2, drift: 1.6, dropout: 0.08, glyphJitter: 0.4 }],
 
+    // ── 4 · letter field ────────────────────────
     // Pen 3 - decaying letter field, kept lightest so the hero dominates.
     ["hatch", "letters", ["PLOTTER", INNER.x, ROW.letters, INNER.w, LETTERS_H],
       { size: 11, segmentLength: 7, wobble: 0.8, drift: 1, dropout: 0.05, glyphJitter: 0.5, alpha: 0.3 }],
 
+    // ── 5 · accent block ────────────────────────
     // Pen 3 - mid-tone single-direction hatch: a second, lighter tonal mass.
     ["hatch", "rect", [ACCENT.x, ACCENT.y, ACCENT.w, ACCENT.h],
       { segmentLength: 9, fill: "hatch", hatchAngle: comp.accentAngle, hatchSpacing: 5, wobble: 0.6, drift: 1, dropout: 0.03, alpha: 0.5 }],
 
+    // ── 6 · symbol field ────────────────────────
     // Pen 3 - airy field of procedural operator glyphs, left of the anchor.
     ["hatch", "symbols", [INNER.x, ROW.band, SYMBOLS_W, BAND_H],
       { set: comp.symbolSet, cluster: true, size: 13, lineHeight: 1.3, segmentLength: 7, wobble: 0.7, drift: 1.2, dropout: 0.04, glyphJitter: 0.4, alpha: 0.35 }],
 
+    // ── 7 · cross-hatch anchor ──────────────────
     // Pen 3 - dense cross-hatch: the dark tonal anchor grounding the plate.
     ["hatch", "rect", [CROSS_X, ROW.band, CROSS_W, BAND_H],
       { segmentLength: 10, fill: "cross", hatchAngle: comp.hatchAngle, hatchSpacing: comp.hatchSpacing, wobble: 0.6, drift: 1, dropout: 0.03, alpha: 0.82 }],
 
+    // ── 8 · registration marks ──────────────────
     // Pen 1 - registration marks on the diagonal; light enough to read as
     // registration, not as dark noise beside the hatch anchor.
     ["registration", "circle", [404, 152, 78],
@@ -126,6 +153,7 @@ function shapesFor(comp) {
     ["registration", "polygon", [[[156, 372], [125, 426], [187, 426]]],
       { alpha: 0.7, wobble: 1.3, drift: 1.8, dropout: 0.08, repeat: 2, rubout: 0.08, fray: 0.5 }],
 
+    // ── 9 · corner crosses ──────────────────────
     // Pen 1 - a cross in every frame corner; arms overshoot and fray at the tips.
     ...FRAME_CORNERS.flatMap(([cx, cy]) => [
       ["registration", "line", [cx - 10, cy, cx + 10, cy], ARM],

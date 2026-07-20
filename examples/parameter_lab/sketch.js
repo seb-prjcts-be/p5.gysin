@@ -1,3 +1,21 @@
+// ═══════════════════════════════════════════════════════════════════
+//  parameter_lab — one slider owns one element, each in its own colour
+// ═══════════════════════════════════════════════════════════════════
+//  New to p5.gysin? The whole library is three lines:
+//
+//      const plot = new GysinPlot({ seed: 8319 });
+//      plot.text("RUB OUT", 70, 150);   // clean, mechanical text
+//      plot.draw();
+//
+//  Every option below (wobble, dropout, repeat, rubout, cut-up, hatch
+//  fill, letter field…) is OPTIONAL disturbance layered on top of that
+//  core. The defaults are all zero, so a call with no options just draws
+//  clean — nothing here is required to use the library. This sketch adds
+//  the layers one at a time; read the numbered sections in buildPlot()
+//  from top to bottom. Each is a compositional layer, drawn back to
+//  front, and can be deleted on its own without breaking the rest.
+// ═══════════════════════════════════════════════════════════════════
+
 let plot;
 let seedValue = 8319;
 
@@ -140,8 +158,12 @@ function buildPlot() {
     style: { stroke: "#111111", strokeWeight: 1, alpha: 1 }
   });
 
+  // ── 1 · the plate ───────────────────────────────────────────────
+  // Drawn first so every element sits on top of it: a thin border and
+  // corner registration marks in quiet grey (see registrationMarks()).
   registrationMarks();
 
+  // ── 2 · the title ───────────────────────────────────────────────
   // Title — owned by WOBBLE only. Wobble re-cuts the slices (count and offset)
   // and drifts the trace, so the whole word breathes; the other sliders leave it
   // untouched. glyphJitter keeps each letter a hand-set shape.
@@ -161,6 +183,7 @@ function buildPlot() {
     ...focus("wobble")
   });
 
+  // ── 3 · the word ────────────────────────────────────────────────
   // Word — owned by RUBOUT only. The slider visibly eats this line away while
   // everything around it holds together.
   plot.textCutup("ERASE", 70, 214, {
@@ -175,6 +198,7 @@ function buildPlot() {
     ...focus("rubout")
   });
 
+  // ── 4 · the line band ───────────────────────────────────────────
   // Line band — owned by REPEAT only. Each row is drawn `repeat` times by the
   // engine, ghosted apart by a drift that grows with repeat, so more copies also
   // spread visibly wider. Rows swing in alternating phase with an amplitude that
@@ -203,6 +227,7 @@ function buildPlot() {
     });
   }
 
+  // ── 5 · the hatch bar ───────────────────────────────────────────
   // Filled bar — owned by DROPOUT only. Dropout both loosens the cross-hatch
   // spacing and breaks up the strokes, so the anchor plane opens as you raise it.
   // Aligned to the band above (70..490) so the owned elements form a clean grid.
@@ -220,6 +245,7 @@ function buildPlot() {
     ...focus("dropout")
   });
 
+  // ── 6 · the letter field ────────────────────────────────────────
   // Unowned ink: a dense letter field, right of ERASE, that counterweights the
   // middle row and travels into the SVG as fixed reference ink. A smaller size
   // packs more rows into the same box, so it reads as a solid textured block and

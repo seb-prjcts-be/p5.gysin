@@ -1,3 +1,22 @@
+// ═══════════════════════════════════════════════════════════════════
+//  font_outlines — the same glyphs, hatch-filled two ways, then undone
+// ═══════════════════════════════════════════════════════════════════
+//  New to p5.gysin? The whole library is three lines:
+//
+//      const plot = new GysinPlot({ seed: 8088 });
+//      plot.text("O8", 64, 190, { font });   // an outline font -> real letter bodies
+//      plot.draw();
+//
+//  A real outline font is the ONLY extra this example needs: with it, fill can
+//  hatch the letter bodies and leave the inner counters empty. Every other
+//  option below (fill mode, weave spacing/angle, wobble, cut-up, asemic…) is
+//  OPTIONAL disturbance layered on top, and every default is zero — a call with
+//  no options draws clean. This sketch adds the layers one at a time; read the
+//  numbered sections in buildPlot() from top to bottom. Each is a compositional
+//  layer, drawn back to front, and can be deleted on its own without breaking
+//  the rest.
+// ═══════════════════════════════════════════════════════════════════
+
 const FONT_URLS = {
   Oswald: "assets/Oswald-Regular.otf",
   Anton: "assets/Anton-Regular.ttf"
@@ -115,16 +134,20 @@ function buildPlot() {
     style: { stroke: "#171717", strokeWeight: 1, alpha: 0.9 }
   });
 
+  // ── 1 · the two glyph bodies ────────────────────────────────────
   // Same glyphs on both sides so the fill mode is the ONLY variable: single
   // hatch left, woven cross-hatch right, twisted apart so the weave out-reads.
   plot.text("O8", 64, 190, glyphBody("hatch", hatchAngle));
   plot.text("O8", 384, 190, glyphBody("cross", hatchAngle + CROSS_TWIST));
 
+  // ── 2 · the counter arrow ───────────────────────────────────────
   if (fonts[activeFont]) annotateCounter();
 
+  // ── 3 · the side captions ───────────────────────────────────────
   plot.text("SINGLE HATCH", 64, 228, withFont(caption()));
   plot.text("WOVEN CROSS", 384, 228, withFont(caption()));
 
+  // ── 4 · the cut-up phrase ───────────────────────────────────────
   // The weave slider drives the cut-up too: a tighter weave slices the word harder.
   const density = weaveDensity();                // 0 (open) .. 6 (tight)
   plot.textCutup("COUNTER MEMORY", 72, 404, withFont({
@@ -142,6 +165,7 @@ function buildPlot() {
     layer: "cutup"
   }));
 
+  // ── 5 · the inked rule ──────────────────────────────────────────
   // One hand-inked rule under COUNTER MEMORY: doubled by repeat, run past the ends.
   plot.line(72, 428, 588, 428, {
     repeat: 2,
@@ -154,6 +178,7 @@ function buildPlot() {
     layer: "baseline"
   });
 
+  // ── 6 · the asemic field ────────────────────────────────────────
   // Past the rule the phrase stops being words: it scatters into asemic marks,
   // memory pulled apart into illegible signs instead of spelled out again. Set
   // clear of the cut-up so weave / cut-up / field each read on their own. Tighter

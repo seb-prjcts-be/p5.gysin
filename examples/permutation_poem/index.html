@@ -75,16 +75,22 @@
     </div>
     <div class="demo-layout poster-layout">
       <div class="demo-code">
-        <div class="code-label">One decay curve; the grid is the tonal engine</div>
-        <pre><code class="language-javascript">// One source for the rhythm; the grid rows follow from it, nothing is hard-coded twice.
-const GROUPS = 6, REPEATS = 6, COLS = 3, ROWS = Math.ceil(GROUPS / COLS);
+        <div class="code-label">Core snippet</div>
+        <pre><code class="language-javascript">// The whole library, in three lines — this alone is a complete sketch:
+const plot = new GysinPlot({ seed: 1960 });
+plot.textCutup("I LOVE YOU", 64, 120);   // one line, sliced and reset
+plot.draw();
+
+// Everything below is OPTIONAL, layered on top. This example adds, in order:
+
+// 1) the text addon (p5.gysin.text.min.js): permute() rearranges the phrase
+//    into orders before any of it is drawn
 const regels = GysinText.permute(phrase, {
   seed: posterSeed, limit: GROUPS, order: ORDERS[orderIndex]
 }).slice(0, GROUPS);
 
-// One curve drives every repeat: top rows press hard, echoes tremble + fade.
-// It returns the full param set, so no second merge is needed downstream.
-// `boost` lifts the lead order (01) so it dominates without losing its decay.
+// 2) each order printed as repeated cut-up rows that press hard, then fade —
+//    one decay curve returns the full param set for every repeat
 function decay(i, seedTag, overrides, boost = 0) {
   return {
     strokeWeight: Math.max(0.4, 1.3 + boost - i * 0.17), // felt weight decay
@@ -93,8 +99,13 @@ function decay(i, seedTag, overrides, boost = 0) {
   };
 }
 
-// The COLS-wide grid is the tonal engine: hatch tightens 14 -> 4, light to dark.
-plot.rect(x, y, w, h, { fill: "hatch", hatchSpacing: 14 - i * 2 });</code></pre>
+// 3) a letter band where the phrase dissolves into jittered glyphs
+plot.letters(regels.join(""), 58, BAND_Y, 726, 120, { glyphJitter: 0.8 });
+
+// 4) a tonal grid: one hatch-filled cell per order, tightening 14 -> 4, light to dark
+plot.rect(x, y, w, h, { fill: "hatch", hatchSpacing: 14 - i * 2 });
+
+plot.draw();</code></pre>
         <div class="demo-actions" aria-label="Permutation poster actions">
           <input type="text" id="phrase-input" aria-label="Your phrase for permute() — empty or symbol-only input falls back to I LOVE YOU" title="Empty or symbol-only input falls back to I LOVE YOU" placeholder="Your phrase…" maxlength="40">
           <button type="button" id="reroll-button">New order</button>

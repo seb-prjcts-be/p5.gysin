@@ -1,3 +1,21 @@
+// ═══════════════════════════════════════════════════════════════════
+//  signal_score — five wavering signals notated as an abstract machine score
+// ═══════════════════════════════════════════════════════════════════
+//  New to p5.gysin? The whole library is three lines:
+//
+//      const plot = new GysinPlot({ seed: 40017 });
+//      plot.path([[52, 200], [668, 200]], { stroke: "#171717" });   // one clean signal
+//      plot.draw();
+//
+//  Every option below (wobble, dropout, rubout, hatch fill, asemic, layers…)
+//  is OPTIONAL disturbance layered on top of that core. The defaults are
+//  all zero, so a call with no options just draws clean — nothing here is
+//  required to use the library. This sketch builds the score up in layers;
+//  read the numbered sections in buildPlot() from top to bottom. Each is a
+//  compositional layer, drawn back to front, and can be deleted on its own
+//  without breaking the rest.
+// ═══════════════════════════════════════════════════════════════════
+
 let plot;
 let seed = 40017;
 let loudestChannel = "";   // which S# the reading head sits on, shown in the caption
@@ -117,6 +135,7 @@ function buildPlot() {
   for (let y = STAFF_TOP; y < height - 72; y += STAFF_GAP) staffYs.push(y);
   const baseline = staffYs[staffYs.length - 1];
 
+  // ── 1 · ruled paper ────────────────────────────────────────────
   // Ruled paper on its own layer so the SVG export shows the same sheet.
   staffYs.forEach((y) => {
     plot.line(LEFT - 22, y, right + 22, y, {
@@ -124,6 +143,7 @@ function buildPlot() {
     });
   });
 
+  // ── 2 · reading head ───────────────────────────────────────────
   // Reading head: the loudest combined column, and the channel that dominates it.
   let head = cols[0];
   for (const c of cols) if (c.amp > head.amp) head = c;
@@ -143,6 +163,7 @@ function buildPlot() {
     size: 11, letterSpacing: 0.5, wobble: 0.4, stroke: INK, layer: "read"
   });
 
+  // ── 3 · accent focus band ──────────────────────────────────────
   // Hero anchor: a faint red hatch band between the accent signal and its baseline gives S3 one clear focus.
   const hero = voices[ACCENT];
   const heroBand = cols.map((c) => [c.x, c.ys[ACCENT]]);
@@ -156,6 +177,7 @@ function buildPlot() {
     wobble: 0.3, stroke: RED, strokeWeight: 0.8, alpha: 0.5, layer: "signal"
   });
 
+  // ── 4 · the five signals ───────────────────────────────────────
   // Five signals. The red accent leads; the four ink voices sit lighter so they read as backdrop, not clones.
   voices.forEach((v, i) => {
     const signal = cols.map((c) => [c.x, c.ys[i]]);
@@ -176,6 +198,7 @@ function buildPlot() {
   const linkedCells = new Set(peaks.map((pk) => cellIndex(pk.col.x, cellW)));
   const accentCell = cellIndex(peaks[ACCENT].col.x, cellW);
 
+  // ── 5 · notation row ───────────────────────────────────────────
   // Notation row: one asemic mark per column, taller/denser where the score is louder.
   // Every other cell is nudged shorter so the row reads as a rhythm, not an even wall.
   // The accent cell inks red and stays full; the four ink voices dim so the red run leads.
@@ -197,6 +220,7 @@ function buildPlot() {
     });
   }
 
+  // ── 6 · peak markers ───────────────────────────────────────────
   // Per peak: a dropout thread to its notation cell, then a diamond sized to the voice's loudness.
   // The accent peak keeps a red cross and full weight; the ink voices' threads and markers dim behind it.
   peaks.forEach((pk, i) => {
@@ -219,6 +243,7 @@ function buildPlot() {
     });
   });
 
+  // ── 7 · row labels ─────────────────────────────────────────────
   // Row labels in the left margin (S1..S5); the accent row is labelled in red.
   voices.forEach((v, i) => {
     plot.text("S" + (i + 1), 14, v.y + 4, {
@@ -227,19 +252,24 @@ function buildPlot() {
     });
   });
 
+  // ── 8 · title ──────────────────────────────────────────────────
   // Title in the top margin so the partituur concept reads on its own.
   plot.text("SIGNAL / NOTATION", LEFT, 52, {
     size: 15, letterSpacing: 1.1, wobble: 0.4, stroke: INK, layer: "label"
   });
 
+  // ── 9 · legend ─────────────────────────────────────────────────
   // A legend in the bottom margin so the composition decodes from the image itself.
   drawLegend(height - 46, right);
 
+  // ── 10 · control hint ──────────────────────────────────────────
   // On-canvas control hint so the composition announces it is rerollable.
   plot.text("click / R = new reading  ·  S = SVG", LEFT, height - 22, {
     size: 10, letterSpacing: 0.6, wobble: 0.4, stroke: "#8a8a8a", layer: "label"
   });
 
+  // ── 11 · frame ─────────────────────────────────────────────────
+  // The border, drawn last so it sits on top and boxes the whole score.
   plot.rect(LEFT, 64, right - LEFT, height - 128, {
     wobble: 0.4, dropout: 0.015, repeat: 2, drift: 0.5,
     stroke: INK, alpha: 0.65, layer: "frame"

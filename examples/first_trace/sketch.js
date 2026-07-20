@@ -1,3 +1,21 @@
+// ═══════════════════════════════════════════════════════════════════
+//  first_trace — one word decaying down a single faint backbone line
+// ═══════════════════════════════════════════════════════════════════
+//  New to p5.gysin? The whole library is three lines:
+//
+//      const plot = new GysinPlot({ seed: 1960 });
+//      plot.text("FIRST TRACE", 46, 248);   // clean, mechanical text
+//      plot.draw();
+//
+//  Every option below (wobble, dropout, rubout, fill, cut-up, asemic…)
+//  is OPTIONAL disturbance layered on top of that core. The defaults are
+//  all zero, so a call with no options just draws clean — nothing here is
+//  required to use the library. This sketch adds the layers one at a time;
+//  read the numbered sections in buildPlot() from top to bottom. Each is a
+//  compositional layer, drawn back to front, and can be deleted on its own
+//  without breaking the rest.
+// ═══════════════════════════════════════════════════════════════════
+
 let plot;
 let seedValue = 1960;
 let decay = 1;      // live disturbance multiplier, driven by the decay knob
@@ -137,6 +155,7 @@ function buildPlot() {
     style: { stroke: "#151515", strokeWeight: 1.1, alpha: 0.88 }
   });
 
+  // ── 1 · the backbone ────────────────────────────────────────────
   // The backbone, drawn first so every mark sits on top of it: one faint, searching
   // line that literally joins the origin node, the end of the first stroke and each
   // decay anchor - the 'one continuous mark' drawn, not just implied by placement.
@@ -150,18 +169,21 @@ function buildPlot() {
   const label = (stage) =>
     plot.text(stage.name, stage.x, stage.labelY, { ...CAPTION_STYLE, size: 13 });
 
+  // ── 2 · the origin node ─────────────────────────────────────────
   // Origin: a dense, hard-pressed ink node - the heavy head of the diagonal.
   plot.circle(92, 110, 80, decayed({
     fill: "cross", hatchSpacing: 1.8, density: 1.6,
     wobble: 1.4, dropout: 0.05, pressure: 0.82
   }));
 
+  // ── 3 · the first stroke ────────────────────────────────────────
   // First stroke: firm and confident, already hesitating and fraying.
   plot.line(146, 110, 470, 124, decayed({
     wobble: 1.2, dropout: 0.04, overshoot: 10,
     hesitate: 0.6, fray: 0.5, pressure: 0.65, segmentLength: 9
   }));
 
+  // ── 4 · the word, three decays ──────────────────────────────────
   // Same word, three decays. The whole gradient is one pass over the stage table:
   // only verb, position, fill and the disturbance amounts differ from row to row.
   // With the outline font loaded the head is cross-hatch filled (solid) while the
@@ -180,6 +202,7 @@ function buildPlot() {
     plot[stage.verb](word, stage.x, stage.y, opts);
   }
 
+  // ── 5 · the asemic tail ─────────────────────────────────────────
   // The last stage's word survives only as a ghost: asemic tangles bury it and drift
   // down-right. Their spread scales with decay, so a higher knob buries it wider.
   const asemic = STAGES[2];
@@ -189,6 +212,7 @@ function buildPlot() {
     }));
   }
 
+  // ── 6 · captions ────────────────────────────────────────────────
   // Print seed AND decay on the sheet, so an exported SVG records its own knob setting.
   plot.text("seed " + seedValue, 44, 610, { ...CAPTION_STYLE, size: 14 });
   plot.text("decay " + decay.toFixed(1) + "x", 300, 610, { ...CAPTION_STYLE, size: 14 });

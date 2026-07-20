@@ -1,3 +1,24 @@
+// ═══════════════════════════════════════════════════════════════════
+//  permutation_poem — one phrase, permuted and cut up into an A3 poster
+// ═══════════════════════════════════════════════════════════════════
+//  New to p5.gysin? The whole library is three lines:
+//
+//      const plot = new GysinPlot({ seed: 1960 });
+//      plot.textCutup("I LOVE YOU", 64, 120);   // one line, sliced + reset
+//      plot.draw();
+//
+//  textCutup() is this poster's core verb: it slices a line of type and
+//  offsets the pieces (slices default to 7, so it disturbs on its own). Every
+//  OTHER option below (letters, hatch fill, wobble, dropout, pressure…) is
+//  optional and defaults to zero, so nothing else here is required to draw.
+//  The one addon this example loads is the text module (p5.gysin.text.min.js);
+//  its GysinText.permute() rearranges the phrase into orders before any of it
+//  is drawn. This sketch builds the poster one layer at a time; read the
+//  numbered sections in buildPoster() from top to bottom. Each is a
+//  compositional layer, drawn back to front, and can be deleted on its own
+//  without breaking the rest.
+// ═══════════════════════════════════════════════════════════════════
+
 const POSTER_WIDTH = 840;
 const POSTER_HEIGHT = 1188;
 const FONT_URL = "../font_outlines/assets/Oswald-Regular.otf";
@@ -131,12 +152,20 @@ function buildPoster() {
     style: { stroke: INK, strokeWeight: 0.72, alpha: 0.88 }
   });
 
+  // ── 1 · the frame ───────────────────────────────────────────────
+  // The registration frame and corner crosses, drawn first so every mark sits
+  // inside it: the plotter-ready border of the sheet.
   drawFrame();
 
+  // ── 2 · the heading ─────────────────────────────────────────────
+  // The title line: what the poster is, in the heavier "type" pen.
   plot.text(`PERMUTATION POEM / ${phrase.toUpperCase()} / ${wordCount} WORDS`, TEXT_X, 69, typeStyle({
     size: 16, letterSpacing: 1.05, dropout: 0.012, strokeWeight: 0.82, layer: "type"
   }));
 
+  // ── 3 · column headings + legend ────────────────────────────────
+  // The two column headings and the decode legend, so the symbolic code column
+  // to the right is genuinely readable against these signs.
   plot.text("TEXT", TEXT_X, 100, typeStyle({ size: 11, strokeWeight: 0.55, alpha: 0.62, layer: "notes" }));
   plot.text("CODE / KEY", CODE_X, 100, typeStyle({ size: 11, strokeWeight: 0.55, alpha: 0.62, layer: "notes" }));
   // Legend so the symbolic column is genuinely decodable: read the clean top row
@@ -145,6 +174,10 @@ function buildPoster() {
   const legend = Object.entries(symbols).map(([word, sign]) => `${sign} = ${word}`).join("   ");
   plot.text(legend, CODE_X, 114, typeStyle({ size: 9, strokeWeight: 0.44, alpha: 0.6, layer: "code" }));
 
+  // ── 4 · the permutation groups ──────────────────────────────────
+  // The body of the poster: one group per permutation order. Each group prints
+  // the words (left) and their coded form (right) as repeated cut-up rows that
+  // press hard at the top and fade downward, closed off by a rule line.
   permutations.forEach(function(regel, g) {
     const top = GROUP_TOP + g * GROUP_H;
     const strip = Array(4).fill(regel).join("  ");
@@ -175,7 +208,14 @@ function buildPoster() {
     plot.line(RULE_X0, top + RULE_DY, RULE_X1, top + RULE_DY, RULE);
   });
 
+  // ── 5 · the letter band ─────────────────────────────────────────
+  // The phrase dissolving into a decaying letter field: letters() jitters each
+  // glyph so meaning breaks down into pure letterform.
   drawLetterBand();
+
+  // ── 6 · the tonal grid ──────────────────────────────────────────
+  // The modular grid at the foot: one hatch-filled cell per order, tightening
+  // from light to dark, with the order printed back inside each cell.
   drawPermutationGrid();
 }
 

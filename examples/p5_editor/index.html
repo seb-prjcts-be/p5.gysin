@@ -30,34 +30,36 @@
 &lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.2.0/p5.gysin.min.js"&gt;&lt;/script&gt;
 &lt;script src="sketch.js"&gt;&lt;/script&gt;</code></pre>
         <div class="code-label">sketch.js core</div>
-        <pre><code class="language-javascript">const RED = "#c0392b";             // second pen: the returning word + ring
+        <pre><code class="language-javascript">// The whole library, in three lines — this alone is a complete sketch:
+const plot = new GysinPlot({ seed: 19600319 });
+plot.text("CUT UP", 82, 150);   // clean, mechanical text
+plot.draw();
 
-// The tail is a GRADIENT of noise: each lost glyph decays through three
-// alphabets as t runs 0 -&gt; 1 across the tail, while wobble/drift/dropout climb.
-function degradeWord(word, x, y, size, decay, hand) {
-  const advance = (size / 7) * GLYPH_ADVANCE_UNITS;
-  const lost = floor(decay * word.length);
-  const kept = word.length - lost;
-  if (kept &gt; 0) plot.textCutup(word.slice(0, kept), x, y, { ...hand, size, stroke: RED });
-  for (let i = kept; i &lt; word.length; i++) {
-    const fade = i - kept;
-    const t = lost &gt; 1 ? fade / (lost - 1) : 1;
-    forgetGlyph(word[i], x + i * advance, y - size, advance, size, t, {
-      ...hand, stroke: RED, size,
-      wobble: hand.wobble + fade * 0.5,
-      drift: hand.drift + fade * 0.6,
-      dropout: 0.08 + fade * 0.06
-    });
-  }
-  return lost;
-}
+// Everything below is OPTIONAL disturbance layered on top. Defaults are all
+// zero, so options are opt-in. buildPlot() stacks six layers, back to front:
 
-// this glyph, shaken loose -> printed sign -> pure scribble
-function forgetGlyph(glyph, gx, top, w, size, t, mark) {
-  if (t &lt; 0.34) plot.letters(glyph, gx, top, w, size, { ...mark, glyphJitter: 0.55 });
-  else if (t &lt; 0.67) plot.symbols(gx, top, w, size, mark);
-  else plot.asemic(gx, top, w, size, mark);
-}</code></pre>
+// 1) anchor — a cross-hatch-filled block that grounds the plate
+plot.rect(88, 470, 544, 160, { fill: "cross", dropout: 0.05 + decay * 0.35 });
+
+// 2) right-hand field — a light machine index (symbols over a grid)
+plot.symbols(470, 274, 196, 186, { size: 15, dropout: 0.05 + decay * 0.5 });
+plot.grid(470, 274, 196, 186, 3, 3, { frame: { stroke: INK } });
+
+// 3) red ring — circled around the returning word
+plot.circle(ringX, ringY, 350, { stroke: RED, repeat: 3, rubout: 0.1 });
+
+// 4) title — the largest surface; hesitate breaks it up
+plot.text("CUT UP", 82, 150, { size: 96, hesitate: 0.5, rubout: 0.06 });
+
+// 5) sentence — sliced once by the seed's grain
+plot.textCutup("THE MACHINE REMEMBERS", 82, 262, { slices: 8, rubout: 0.14 });
+
+// 6) the word returns lower and forgets itself, letter by letter —
+//    each lost glyph decays: its own shape shaken loose (letters) →
+//    a printed sign (symbols) → a pure scribble (asemic)
+degradeWord("REMEMBERS", 82, 360, 46, decay, hand);
+
+plot.draw();</code></pre>
       </div>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch" role="img" aria-label="A compact starter composition for copying into the p5.js Web Editor."></div>

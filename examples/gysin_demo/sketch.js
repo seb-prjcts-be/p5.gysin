@@ -1,3 +1,21 @@
+// ═══════════════════════════════════════════════════════════════════
+//  gysin_demo — a cut-up poster that rubs its own words away
+// ═══════════════════════════════════════════════════════════════════
+//  New to p5.gysin? The whole library is three lines:
+//
+//      const plot = new GysinPlot({ seed: 19600319 });
+//      plot.text("RUB OUT", 75, 145);   // clean, mechanical text
+//      plot.draw();
+//
+//  Every option below (wobble, dropout, rubout, fill, cut-up, letters…)
+//  is OPTIONAL disturbance layered on top of that core. The defaults are
+//  all zero, so a call with no options just draws clean — nothing here is
+//  required to use the library. This sketch adds the layers one at a time;
+//  read the numbered sections in buildPlot() from top to bottom. Each is a
+//  compositional layer, drawn back to front, and can be deleted on its own
+//  without breaking the rest.
+// ═══════════════════════════════════════════════════════════════════
+
 // p5.gysin demo - "RUB OUT THE WORD"
 // A cut-up typographic poster read in clear zones: two titles, a ruled band, two
 // tonal blocks that weigh against each other, and the word dissolving into a
@@ -47,6 +65,7 @@ function setup() {
 function buildPlot() {
   plot.clear();
 
+  // ── 1 · the titles ──────────────────────────────────────────────
   // Both title lines get the same treatment; each line states only how it differs.
   // Their rubout is the lightest step of the gradient; glyphJitter drifts every
   // letter on its own axis.
@@ -54,6 +73,7 @@ function buildPlot() {
   titleId = plot.text("RUB OUT", 75, 145, { ...titleOpts, rubout: ruboutAt(145), wobble: 1.8, dropout: 0.08, repeat: 2, drift: 2 });
   plot.text("THE WORD", 76, 235, { ...titleOpts, rubout: ruboutAt(235), wobble: 2.2, dropout: 0.14, repeat: 3, drift: 3, pressure: 0.4 });
 
+  // ── 2 · the cut-up quotation ────────────────────────────────────
   // Cut-up quotation: sliced and re-offset so the sentence stutters.
   plot.textCutup("I THINK THEREFORE I AM", 76, 370, {
     ...base,
@@ -62,6 +82,7 @@ function buildPlot() {
     rubout: ruboutAt(370), pressure: 0.25, segmentLength: 6
   });
 
+  // ── 3 · the ruled band ──────────────────────────────────────────
   // Ruled band: six lines step in from the left and fan downward, dropout ramping
   // so the band tapers off asymmetrically. Fewer, wider-spaced lines than the text
   // above, to give the lower half air and let this read as its own block.
@@ -75,6 +96,7 @@ function buildPlot() {
     });
   }
 
+  // ── 4 · the left mass ───────────────────────────────────────────
   // Left block: an airy hatched slab, tilted off the horizontal to break the stack.
   // Its wobble rides the break-apart slider, so the mass shakes with the letters.
   plot.polygon(tiltedRect(310, 672, 440, 165, -7), {
@@ -84,6 +106,7 @@ function buildPlot() {
     fray: 0.55, pressure: 0.25, segmentLength: 9, strokeWeight: 0.9, alpha: 0.5
   });
 
+  // ── 5 · the right mass ──────────────────────────────────────────
   // Right block: a dense cross-hatched disc, the dark counterweight to the slab.
   // Its fray rides the same slider, so the disc frays open as the poster breaks up.
   plot.circle(705, 672, 160, {
@@ -93,6 +116,7 @@ function buildPlot() {
     rubout: ruboutAt(672), fray: 0.25 + letterJitter * 0.4, pressure: 0.35, alpha: 0.82
   });
 
+  // ── 6 · the letter field ────────────────────────────────────────
   // The word made literal: dropped to the foot as its own block, it is the heaviest
   // step of the gradient, dissolving into a letter field driven by both sliders.
   plot.letters("RUB OUT THE WORD", 90, 795, 720, 105, {

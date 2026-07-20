@@ -40,39 +40,35 @@
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">const penMap = { frame: 1, type: 2, hatch: 3, registration: 1 };
+        <pre><code class="language-javascript">// The whole library, in three lines — this alone is a complete sketch:
+const plot = new GysinPlot({ seed: 7475 });
+plot.text("PLOT", 118, 188);   // clean, mechanical text
+plot.draw();
+
+// Everything below is OPTIONAL on top. Defaults are all zero, so options are
+// opt-in. This example adds, in order:
+
+// 1) per-pen layers: tag each call with a { layer } so one pen == one ink,
+//    and the same tags drive the HPGL pen map on export
+const penMap = { frame: 1, type: 2, hatch: 3, registration: 1 };
 const ink = { 1: "#151515", 2: "#b5362b", 3: "#244f73" };
 
-// Plate geometry derived once. Rows are offsets from INNER.y, so the whole plate
-// rescales as one unit (INNER = 118, 118, 324, 324; ROW.hero = INNER.y + 70).
-const FRAME = { x: 78, y: 78, size: 404 };
-const INNER = { x: FRAME.x + 40, y: FRAME.y + 40, w: FRAME.size - 80, h: FRAME.size - 80 };
-const ROW = { hero: INNER.y + 70, sub: INNER.y + 126, band: INNER.y + 182 };
-
-// The composition as data: [layer, method, geometry, perturbation]. The stroke
-// is derived from the pen map, so the array describes the plate, not the pen. A
-// reroll advances `variation`, and composition(variation) walks small tables so
-// each plate gets a new symbol set, a re-angled cross-hatch and a re-angled
-// mid-tone accent -- the plate shifts, not just its glyphs.
-const shapesFor = (comp) => [
-  ["frame", "rect", [FRAME.x, FRAME.y, FRAME.size, FRAME.size], { hesitate: 0.35 }],
-  ["type",  "text", ["PLOT", INNER.x, ROW.hero], { size: 88, glyphJitter: 0.7 }],
-  ["hatch", "rect", [ACCENT.x, ACCENT.y, ACCENT.w, ACCENT.h], { fill: "hatch", hatchAngle: comp.accentAngle, alpha: 0.5 }],
-  ["hatch", "symbols", [INNER.x, ROW.band, 174, 130], { set: comp.symbolSet, cluster: true, size: 13 }],
-  ["hatch", "rect", [312, ROW.band, 130, 130], { fill: "cross", hatchAngle: comp.hatchAngle, hatchSpacing: comp.hatchSpacing }]
-  // ...letters field + registration marks, same shape
-];
-
-// buildPlot() iterates the array; humanize() scales wobble/drift/... by a live
-// factor so a button can slide the plate from machine-clean to hand-disturbed.
+// 2) the composition as data: [layer, method, geometry, perturbation]. One pass
+//    over the array draws the plate — frame, type, hatch fields, registration —
+//    with the stroke derived from the pen map, not written per shape
 for (const [layer, method, geom, opts] of shapesFor(composition(variation))) {
   plot[method](...geom, { layer, stroke: ink[penMap[layer]], ...humanize(opts) });
 }
+plot.draw();
 
-const hpgl = plot.exportHPGL({ page, penMap, speed: 20 });
+// 3) export the exact plate on screen — same plot, three plotter-ready formats
+plot.downloadSVG("plate.svg", { page, optimize: true });
+plot.downloadJSON("plate.json", { includeGenerated: true });
+plot.downloadHPGL("plate.hpgl", { page, penMap, speed: 20 });
 
+// 4) stats() reports the plate before it plots: paths, ink length, plot time
 const stats = plot.stats({ page, drawSpeed: 20, travelSpeed: 60 });
-// per pen: paths and work time -> stats.layers.type.drawnLength / drawSpeed
+// per pen: stats.layers.type.drawnLength / drawSpeed
 // whole plate: stats.estimatedSeconds -> total plot time</code></pre>
         <div class="demo-actions" aria-label="Export actions">
           <button type="button" id="svg-button">Download SVG</button>

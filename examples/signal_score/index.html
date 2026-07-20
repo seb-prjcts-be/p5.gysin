@@ -26,25 +26,28 @@
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">// hero anchor: a faint red hatch fills the band between the accent signal and
-// its baseline, giving S3 one clear focus (polygon has a fillable interior)
-plot.polygon(heroBand, {
-  fill: "hatch", hatchSpacing: 3, stroke: "#b5362b", alpha: 0.15, layer: "signal"
-});
+        <pre><code class="language-javascript">// The whole library, in three lines — this alone is a complete sketch:
+const plot = new GysinPlot({ seed: 40017 });
+plot.path([[52, 200], [668, 200]], { stroke: "#171717" });   // one clean signal
+plot.draw();
 
-// louder voices sit darker and heavier, quieter ones recede -> depth
+// Everything below is OPTIONAL, layered on top. Defaults are all zero, so
+// options are opt-in. This score adds, back to front:
+
+// 1) five signal paths — the accent row (S3) red and heavy, the rest lighter
 plot.path(signal, {
   stroke: accent ? "#b5362b" : "#171717",
-  strokeWeight: accent ? 2 : map(v.amp, 12, 30, 0.6, 1.4, true),
-  alpha: accent ? 0.9 : map(v.amp, 12, 30, 0.5, 0.85, true), layer: "signal"
+  strokeWeight: accent ? 2 : 1, alpha: accent ? 0.9 : 0.6, layer: "signal"
 });
 
-// the notation cell that receives S3's thread is inked red, so the accent runs
-// unbroken from signal to marker to notation
-plot.asemic(x, top, w, h, {
-  strokeWeight: 0.6 + amp * 1.4 + (linked ? 0.5 : 0),
-  stroke: i === accentCell ? "#b5362b" : "#3a3a3a", layer: "notation"
-});</code></pre>
+// 2) a row of asemic notation, taller and denser where the score is louder
+plot.asemic(x, top, w, h, { loops: 3 + round(amp * 6), layer: "notation" });
+
+// 3) each signal's peak marked by a hatch-filled diamond sized to its
+//    loudness, and threaded down to the notation cell that transcribes it
+plot.polygon(diamond(px, py, r), { fill: "hatch", layer: "markers" });
+
+plot.draw();</code></pre>
         <div class="demo-actions" aria-label="Signal score actions">
           <button type="button" id="reroll-button">New reading</button>
           <button type="button" id="svg-button">Download SVG</button>

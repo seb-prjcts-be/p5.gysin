@@ -28,19 +28,29 @@
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 19600319 });
+        <pre><code class="language-javascript">// The whole library, in three lines — this alone is a complete sketch:
+const plot = new GysinPlot({ seed: 19600319 });
+plot.text("RUB OUT", 75, 145);   // clean, mechanical text
+plot.draw();
 
-// One slider, read as a top-to-bottom gradient: light at the head, worn at the foot.
-const ruboutAt = y =&gt; titleRubout * (0.5 + y / 900 * 2);
+// Everything below is OPTIONAL disturbance layered on top. Defaults are all
+// zero, so options are opt-in. This example adds, in order:
 
+// 1) the two titles, rubbed away letter by letter (rubout + glyphJitter)
 titleId = plot.text("RUB OUT",  75, 145, { size: 96, rubout: ruboutAt(145), glyphJitter: letterJitter });
 plot.text("THE WORD", 76, 235, { size: 96, rubout: ruboutAt(235), glyphJitter: letterJitter });
 
-// Two masses in balance - both feel the break-apart slider too.
-plot.polygon(slab,           { fill: "hatch", hatchSpacing: 8, wobble: 1.3 + letterJitter * 1.2 });
-plot.circle(705, 672, 160,   { fill: "cross", hatchSpacing: 6, fray:  0.25 + letterJitter * 0.4 });
+// 2) a cut-up quotation, sliced and re-offset so the sentence stutters
+plot.textCutup("I THINK THEREFORE I AM", 76, 370, { size: 55, slices: 9, sliceOffset: 24 });
 
-// The field sits at the foot - the heaviest step of the same gradient.
+// 3) a ruled band of six lines that fan out and taper away
+for (let i = 0; i &lt; 6; i++) plot.line(80 + i * 8, 448 + i * 18, 820, 448 + i * 23, { dropout: 0.04 + i * 0.03 });
+
+// 4) two hatched masses in balance — both feel the break-apart slider too
+plot.polygon(slab,         { fill: "hatch", hatchSpacing: 8, wobble: 1.3 + letterJitter * 1.2 });
+plot.circle(705, 672, 160, { fill: "cross", hatchSpacing: 6, fray:  0.25 + letterJitter * 0.4 });
+
+// 5) the word made literal, dropped to the foot as a decaying letter field
 plot.letters("RUB OUT THE WORD", 90, 795, 720, 105, { size: 26, rubout: ruboutAt(795) });
 
 plot.freeze(titleId); // reroll leaves the top title untouched

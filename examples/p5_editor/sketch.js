@@ -1,3 +1,21 @@
+// ═══════════════════════════════════════════════════════════════════
+//  p5 Editor Starter — a sliced title that returns lower and forgets itself
+// ═══════════════════════════════════════════════════════════════════
+//  New to p5.gysin? The whole library is three lines:
+//
+//      const plot = new GysinPlot({ seed: 19600319 });
+//      plot.text("CUT UP", 82, 150);   // clean, mechanical text
+//      plot.draw();
+//
+//  Every option below (wobble, dropout, rubout, cut-up, hatch fill,
+//  asemic…) is OPTIONAL disturbance layered on top of that core. The
+//  defaults are all zero, so a call with no options just draws clean —
+//  nothing here is required to use the library. This sketch builds the
+//  layers up in draw order; read the numbered sections in buildPlot()
+//  from top to bottom. Each is a compositional layer, drawn back to
+//  front, and can be deleted on its own without breaking the rest.
+// ═══════════════════════════════════════════════════════════════════
+
 // p5.gysin — "CUT UP" starter for the p5.js Web Editor.
 // The plate acts out its title: a line of type is sliced, then REMEMBERS returns
 // lower, ringed in red, and forgets itself — its tail decaying through a wrong
@@ -113,6 +131,7 @@ function buildPlot() {
     style: { stroke: INK, strokeWeight: 1, alpha: 0.88 }
   });
 
+  // ── 1 · the anchor ──────────────────────────────────────────────
   // Anchor — cross-hatched block that grounds the plate. Its ink drops out and
   // rubs away as decay rises, so "the machine forgets" reaches the whole plate,
   // not only the word.
@@ -130,6 +149,7 @@ function buildPlot() {
     dropout: 0.05, alpha: 0.25
   });
 
+  // ── 2 · the right-hand field ────────────────────────────────────
   // Right-hand field — a light machine index in the hatch grey that fills the
   // void and counterweights the red ring. Its glyphs and frame thin with decay.
   const f = LAYOUT.field;
@@ -141,6 +161,7 @@ function buildPlot() {
     frame: { stroke: INK, strokeWeight: 0.9, alpha: 0.38, wobble: 0.7, bleed: 0.18, dropout: 0.06 + decay * 0.4 }
   });
 
+  // ── 3 · the red ring ────────────────────────────────────────────
   // Red ring — centred on the degrade word from the same layout + advance the
   // word is drawn with, so it always circles REMEMBERS. Red stays on the ring
   // and the returning word, so the two read as one figure.
@@ -151,6 +172,7 @@ function buildPlot() {
     repeat: grain.ringRepeat, rubout: grain.ringRubout, alpha: 0.7
   });
 
+  // ── 4 · the title ───────────────────────────────────────────────
   // Title — largest surface; pressure varies its weight, hesitate breaks it.
   const t = LAYOUT.title;
   plot.text("CUT UP", t.x, t.y, {
@@ -158,6 +180,7 @@ function buildPlot() {
     hesitate: grain.titleHesitate, dropout: 0.08, repeat: 2, rubout: 0.06
   });
 
+  // ── 5 · the sentence ────────────────────────────────────────────
   // Sentence — sliced once, how hard depends on the seed's grain.
   const cu = LAYOUT.cutup;
   plot.textCutup("THE MACHINE REMEMBERS", cu.x, cu.y, {
@@ -166,6 +189,7 @@ function buildPlot() {
     dropout: 0.09, repeat: 2, rubout: 0.14
   });
 
+  // ── 6 · the forgetting word ─────────────────────────────────────
   // The word returns lower and forgets itself.
   forgotten = degradeWord(WORD, dg.x, dg.y, dg.size, decay, hand);
 }
