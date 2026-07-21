@@ -40,8 +40,8 @@
   <section class="section ce-module" id="grid">
     <div class="section-header">
       <div class="section-tag">01 &middot; grid()</div>
-      <h2>The frame</h2>
-      <p class="section-desc">The modular lattice that holds everything. Heavy, ink-bled black rules divide the sheet into cells you can place fields into.</p>
+      <h2>Lock the sheet</h2>
+      <p class="section-desc">The modular lattice that holds everything. Heavy, ink-bled black rules divide the sheet into cells you can place fields into. Order comes first - the rest of the page exists to pick this lock.</p>
     </div>
     <div class="ce-strip">
       <div class="ce-step"><span>start</span><h4>Divide the sheet</h4><p>Decide how many columns and rows the page is built from.</p></div>
@@ -66,7 +66,7 @@ const cells = plot.grid(60, 60, 680, 520, 4, 3, {
   <section class="section section-dark ce-module" id="permute">
     <div class="section-header">
       <div class="section-tag">02 &middot; permute() + textCutup()</div>
-      <h2>The permutation block</h2>
+      <h2>Free the words</h2>
       <p class="section-desc">The engine of the piece: reorder the words, then slice each line as letter contours. Language and image stay separate - one addon reorders, the core cuts up.</p>
     </div>
     <div class="ce-strip">
@@ -95,8 +95,8 @@ rows.forEach((row, i) =&gt; {
   <section class="section ce-module" id="letters">
     <div class="section-header">
       <div class="section-tag">03 &middot; letters()</div>
-      <h2>The letter field</h2>
-      <p class="section-desc">Where words dissolve. A box is filled with letters drawn from the phrase, each glyph independently varied, so meaning breaks down into pure letterform.</p>
+      <h2>Where words dissolve</h2>
+      <p class="section-desc">A box is filled with letters drawn from a phrase, each glyph independently varied, so meaning breaks down into pure letterform. This field sifts a different permutation line - COME TO FREE THE WORDS - and takes it literally, one letter at a time.</p>
     </div>
     <div class="ce-strip">
       <div class="ce-step"><span>start</span><h4>Give it a phrase</h4><p>The source string becomes the pool of letters the field is built from.</p></div>
@@ -107,7 +107,7 @@ rows.forEach((row, i) =&gt; {
       <div class="ce-preview"><div id="m-letters" class="ce-canvas"></div></div>
       <div class="ce-codewrap">
         <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">plot.letters("RUBOUTTHEWORD", 60, 60, 680, 520, {
+        <pre><code class="language-javascript">plot.letters("COME TO FREE THE WORDS", 60, 60, 680, 520, {
   size: 16,
   glyphJitter: 0.7,   // every letter varies
   wobble: 0.5,
@@ -121,7 +121,7 @@ rows.forEach((row, i) =&gt; {
   <section class="section section-dark ce-module" id="symbols">
     <div class="section-header">
       <div class="section-tag">04 &middot; symbols()</div>
-      <h2>The symbol band</h2>
+      <h2>The operator chorus</h2>
       <p class="section-desc">A texture of typewriter operators - the rhythmic noise band under the words. Same idea as the letter field, but the pool is punctuation instead of letters.</p>
     </div>
     <div class="ce-strip">
@@ -147,7 +147,7 @@ rows.forEach((row, i) =&gt; {
   <section class="section ce-module" id="asemic">
     <div class="section-header">
       <div class="section-tag">05 &middot; asemic()</div>
-      <h2>The asemic gesture</h2>
+      <h2>Almost writing</h2>
       <p class="section-desc">Writing with no letters. A smooth turning walk that drifts back toward its centre reads as a compact, cursive scribble - the calligraphic tangle that buries the words.</p>
     </div>
     <div class="ce-strip">
@@ -202,8 +202,8 @@ plot.underwood("* * * * * * * *", 60, 230);  // a typed divider</code></pre>
   <section class="section ce-module ce-poster-section" id="poster">
     <div class="section-header">
       <div class="section-tag">07 &middot; assembly</div>
-      <h2>One sheet, every part</h2>
-      <p class="section-desc">The verbs stack into the whole poster: a frame holds a typed permutation block over a dissolving letter field, an operator band, and an asemic gesture at the foot. One seed, one material vocabulary, one page.</p>
+      <h2>Cut up, put back</h2>
+      <p class="section-desc">The verbs stack into the whole poster: a frame holds a typed permutation block over a dissolving letter field, an operator band, and an asemic gesture at the foot. One seed, one material vocabulary, one page - taken apart only to prove it goes back together.</p>
     </div>
     <div class="ce-poster-stage">
       <div id="m-poster" class="ce-canvas"></div>
@@ -307,7 +307,7 @@ plot.draw();</code></pre>
   // 03 letters
   makeGysinPreview('m-letters', 0.66, function (p, w, h) {
     const plot = base(p, w, h, 7);
-    plot.letters('RUBOUTTHEWORD', w * 0.08, h * 0.12, w * 0.84, h * 0.74, {
+    plot.letters('COME TO FREE THE WORDS', w * 0.08, h * 0.12, w * 0.84, h * 0.74, {
       size: w * 0.032, glyphJitter: 0.7, wobble: 0.5, dropout: 0.05, alpha: 0.85
     });
     return plot;
