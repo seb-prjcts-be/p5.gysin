@@ -103,7 +103,7 @@ function buildPlot() {
   });
 
   // ── 2 · the cut-up quotation ────────────────────────────────────
-  // Cut-up quotation: sliced and re-offset so the sentence stutters.
+  // Cut-up quotation: sliced and re-offset so the phrase stutters.
   plot.textCutup("I THINK THEREFORE I AM", 76, 370, {
     ...base,
     size: 55,

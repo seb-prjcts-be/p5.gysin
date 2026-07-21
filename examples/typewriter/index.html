@@ -22,14 +22,14 @@
       <div class="demo-number">underwood()</div>
       <h1>Typewriter</h1>
       <p>William Burroughs cut up the world on an <strong>Underwood No. 5</strong>, the flat black office standard that fixed the look of a typed page for half a century. Its keys carried one face, at one size, upright - a typebar can only strike the single shape cast on it. So a typed sheet has a voice of its own: fixed pitch, six lines to the inch, and the small wear of every strike.</p>
-      <p><strong>underwood()</strong> types in that voice. The defaults alone give a period-correct page - bundled single-stroke letterforms, <strong>10 chars-per-inch / 6 lines-per-inch</strong> (the classic Pica machine), light strike wear - so <code>plot.underwood("RUB OUT THE WORD", 60, 90)</code> is a complete gesture. Every option is opt-in.</p>
+      <p><strong>underwood()</strong> types in that voice. The defaults alone give a period-correct page - bundled single-stroke letterforms, <strong>10 chars-per-inch / 6 lines-per-inch</strong> (the classic Pica machine), light strike wear - so <code>plot.underwood("KICK THAT HABIT MAN", 60, 90)</code> is a complete gesture. Every option is opt-in.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
         <pre><code class="language-javascript">// Load the underwood module, then the whole sketch is one verb:
 const plot = new GysinPlot({ seed: 1961 });
-plot.underwood("RUB OUT THE WORD", 60, 90);   // period typewriter, defaults
+plot.underwood("KICK THAT HABIT MAN", 60, 90);   // period typewriter, defaults
 plot.draw();
 
 // Period-correct decoration, all opt-in. No bold or italic ever existed
@@ -39,10 +39,10 @@ plot.underwood("DOUBLE-STRUCK", 60, 130, { bold: true });
 plot.underwood("* * * * * * * *", 60, 170);   // a divider it could type
 
 // wear scales the whole strike irregularity from one knob (0 = clean):
-plot.underwood("RUB OUT THE WORD", 60, 210, { wear: 0 });</code></pre>
+plot.underwood("KICK THAT HABIT MAN", 60, 210, { wear: 0 });</code></pre>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas is-clickable" id="sketch" role="img" aria-label="A period-correct single-stroke typewriter sheet: RUB OUT THE WORD as an underlined heading, the phrase permuted line by line, a double-struck line, spaced emphasis, and typed symbol dividers."></div>
+        <div class="demo-canvas is-clickable" id="sketch" role="img" aria-label="A period-correct single-stroke typewriter sheet: KICK THAT HABIT MAN as an underlined heading, the phrase permuted line by line, a double-struck line, spaced emphasis, and typed symbol dividers."></div>
         <div class="demo-actions" aria-label="Typewriter actions">
           <button type="button" id="reroll-button">New variation</button>
           <button type="button" id="svg-button">Download SVG</button>
@@ -52,7 +52,7 @@ plot.underwood("RUB OUT THE WORD", 60, 210, { wear: 0 });</code></pre>
     </div>
     <div class="demo-header">
       <h2>Sperrsatz</h2>
-      <p>One face, one size - yet typed pages still shouted, whispered and ruled themselves into sections. Emphasis was mechanical, not typographic: a word was made to matter by striking it twice (the nearest thing to bold), by underlining it with a run of underscores, by setting it in CAPITALS, or by <em>S&nbsp;p&nbsp;e&nbsp;r&nbsp;r&nbsp;s&nbsp;a&nbsp;t&nbsp;z</em> - spacing the letters apart so the word opened out along the line. Rows of asterisks, hyphens and underscores divided the page; tone came from overprinting characters, never from heavier ink. What the machine could not do - a second weight, a slant, another size, a curve - simply did not happen on the page (see <a href="../../docs/typewriter-decoration-research.md">the decoration research</a>).</p>
+      <p>One face, one size - yet typed pages still shouted, whispered and ruled themselves into sections. Emphasis was mechanical, not typographic: a word was made to matter by striking it twice (the nearest thing to bold), by underlining it with a run of underscores, by setting it in CAPITALS, or by <em>S&nbsp;p&nbsp;e&nbsp;r&nbsp;r&nbsp;s&nbsp;a&nbsp;t&nbsp;z</em> - spacing the letters apart so the word opened out along the line. Rows of asterisks, hyphens and underscores divided the page; tone came from overprinting characters, never from heavier ink. What the machine could not do - a second weight, a slant, another size, a curve - simply did not happen on the page.</p>
       <p><code>underwood()</code> stays inside those limits on purpose: <code>bold: true</code> is the double strike, <code>underline: 1</code> the underscore rule, and everything else is just what the machine could actually type.</p>
     </div>
   </main>

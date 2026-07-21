@@ -27,7 +27,7 @@ let font = null;    // outline typeface for the word stages; null = built-in bit
 // bitmap alphabet and simply draws the words hollow.
 const FONT_URL = "../font_outlines/assets/Oswald-Regular.otf";
 
-// A five-word sentence, one word per reseed. Consecutive reseeds step through it
+// A five-word phrase, one word per reseed. Consecutive reseeds step through it
 // in order (FIRST TRACE -> SLOW HAND -> ...), so the variations read as a phrase.
 const WORDS = ["FIRST TRACE", "SLOW HAND", "LOST WORD", "OPEN MARK", "GONE SOON"];
 
@@ -142,7 +142,7 @@ function nudgeDecay(delta) {
 }
 
 function rerollPlot() {
-  seedValue += 1;   // one step further along the sentence and a fresh disturbance pattern
+  seedValue += 1;   // one step further along the phrase and a fresh disturbance pattern
   buildPlot();
   redraw();
 }

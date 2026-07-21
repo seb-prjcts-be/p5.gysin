@@ -21,7 +21,7 @@ let font = null;    // outline font gives the legible head a real filled body
 
 const FONT_URL = "../font_outlines/assets/Oswald-Regular.otf";
 
-// Consecutive reseeds walk a short sentence, so the variations read as a phrase.
+// Consecutive reseeds walk a short phrase, one word at a time.
 const WORDS = ["WORN", "FADE", "LOST", "GONE"];
 
 async function setup() {

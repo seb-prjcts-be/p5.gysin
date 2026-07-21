@@ -175,7 +175,7 @@ regels.forEach((regel, index) =&gt; {
     <div class="ex-preview">
       <div id="ex-typewriter" class="ex-canvas"></div>
       <pre class="ex-code-block"><code class="language-javascript">// defaults alone = a period-correct typed page
-plot.underwood("RUB OUT THE WORD", 60, 90);
+plot.underwood("KICK THAT HABIT MAN", 60, 90);
 
 // the only decoration the machine had:
 plot.underwood("HEADING", 60, 130, { underline: 1 });
@@ -457,7 +457,7 @@ function setup() {
   function makeTypewriterPreview(id) {
     makePreview(id, function(p, canvasW, canvasH) {
       const plot = new GysinPlot({ p: p, seed: 1961, width: canvasW, height: canvasH });
-      const rows = GysinText.permute("RUB OUT THE WORD", { seed: 1961, limit: 4, order: "walk" });
+      const rows = GysinText.permute("KICK THAT HABIT MAN", { seed: 1961, limit: 4, order: "walk" });
       plot.underwood(rows.join("\n"), 26, canvasH * 0.26, {
         size: canvasW * 0.032,
         stroke: "#171717"

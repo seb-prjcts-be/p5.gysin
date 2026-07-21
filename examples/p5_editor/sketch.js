@@ -225,7 +225,7 @@ function buildPlot() {
     rubout: 0.06
   });
 
-  // ── 5 · the sentence ────────────────────────────────────────────
+  // ── 5 · the phrase ────────────────────────────────────────────
   // Sentence - sliced once, how hard depends on the seed's grain.
   const cu = LAYOUT.cutup;
   plot.textCutup("THE MACHINE REMEMBERS", cu.x, cu.y, {

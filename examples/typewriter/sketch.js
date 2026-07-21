@@ -4,7 +4,7 @@
 //  New to p5.gysin? With the underwood module loaded, the whole sketch is:
 //
 //      const plot = new GysinPlot({ seed: 1961 });
-//      plot.underwood("RUB OUT THE WORD", 60, 90);   // period typewriter, defaults
+//      plot.underwood("KICK THAT HABIT MAN", 60, 90);   // period typewriter, defaults
 //      plot.draw();
 //
 //  underwood() is an intent verb: defaults alone give a period-correct typewriter
@@ -22,7 +22,7 @@ const W = 820;
 const H = 640;
 const PAPER = "#f0efe9";
 const INK = "#17140f";
-const PHRASE = "RUB OUT THE WORD";
+const PHRASE = "KICK THAT HABIT MAN";
 
 let plot;
 let seed = 1961;
@@ -32,7 +32,7 @@ function setup() {
   canvas.parent("sketch");
   pixelDensity(1);
   noLoop();
-  describe("A period-correct single-stroke typewriter sheet: RUB OUT THE WORD as a heading, a permuted block, a double-struck line, an underlined line, spaced emphasis, and typed symbol dividers.");
+  describe("A period-correct single-stroke typewriter sheet: KICK THAT HABIT MAN as a heading, a permuted block, a double-struck line, an underlined line, spaced emphasis, and typed symbol dividers.");
 
   buildSheet();
   wireActions();
@@ -53,7 +53,7 @@ function buildSheet() {
   });
 
   // ── 1 · heading, underlined (the period way to emphasise) ───────
-  plot.underwood("RUB OUT THE WORD", 60, 74, {
+  plot.underwood("KICK THAT HABIT MAN", 60, 74, {
     size: 24,
     underline: 1
   });
