@@ -31,7 +31,7 @@
     .ce-step p { margin: 0; font-size: 14px; color: var(--muted); }
 
     .ce-demo { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
-    .ce-canvas { width: 100%; background: #ece5d7; border: 1px solid var(--rule); min-height: 200px; }
+    .ce-canvas { width: 100%; background: #f0efe9; border: 1px solid var(--rule); min-height: 200px; }
     .ce-canvas canvas { display: block; }
     .ce-codewrap { position: relative; }
     .ce-codewrap pre { margin: 0; background: #14140f; color: #eee9dc; padding: 18px; overflow-x: auto; border: 1px solid var(--ink); }
@@ -65,9 +65,9 @@
     </button>
     <ul class="nav-links">
       <li><a href="../../index.html">Showcase</a></li>
+      <li><a href="index.html" class="active">Curation</a></li>
       <li><a href="../guide.html">Guide</a></li>
       <li><a href="../about.html">About</a></li>
-      <li><a href="index.html" class="active">Curation</a></li>
       <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
     </ul>
   </nav>
@@ -290,7 +290,7 @@ plot.draw();</code></pre>
   <script src="../../p5.gysin.text.min.js"></script>
   <script src="../../p5.gysin.underwood.min.js"></script>
   <script>
-  const PAPER = '#ece5d7';
+  const PAPER = '#f0efe9';
   const INK = '#17140f';
 
   function copyCode(btn) {
@@ -404,9 +404,9 @@ plot.draw();</code></pre>
     const rows = GysinText.permute('RUB OUT THE WORD', { seed: 1961, limit: 5, order: 'walk' });
     plot.underwood(rows.join('\n'), w * 0.1, h * 0.11, { size: w * 0.028, underline: 0 });
     plot.letters('RUBOUTTHEWORD', w * 0.1, h * 0.42, w * 0.8, h * 0.18, { size: w * 0.026, glyphJitter: 0.7, dropout: 0.05, alpha: 0.85 });
-    plot.underwood('+  "  #  &  /   +  "  #  &  /', w * 0.1, h * 0.68, { size: w * 0.028, wear: 0.6 });
+    plot.underwood('+  "  #  &  /  +  "  #', w * 0.1, h * 0.68, { size: w * 0.028, wear: 0.6 });
     plot.asemic(w * 0.1, h * 0.72, w * 0.8, h * 0.2, { wobble: 1.6, strokeWeight: 1 });
-    plot.underwood('P5.GYSIN / RUB OUT THE WORD / SEED 1961', w * 0.1, h * 0.955, { size: w * 0.019, wear: 0.5 });
+    plot.underwood('P5.GYSIN / RUB OUT THE WORD / SEED 1961', w * 0.1, h * 0.955, { size: w * 0.017, wear: 0.5 });
     return plot;
   });
   </script>
