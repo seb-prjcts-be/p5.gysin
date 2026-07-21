@@ -89,7 +89,7 @@ plot.draw();</code></pre>
 
   <section class="section">
     <div class="section-header">
-      <div class="section-tag">line() &middot; text() &middot; circle()</div>
+      <div class="section-tag">text() &middot; one word, three states</div>
       <h2>First <span class="accent">Trace</span></h2>
       <p class="section-desc">Start with clean vector forms and let p5.gysin turn them into uncertain plotter traces.</p>
     </div>
@@ -97,17 +97,21 @@ plot.draw();</code></pre>
       <div id="ex-first-trace" class="ex-canvas"></div>
       <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
 
-plot.line(70, 160, 450, 178, {
-  wobble: 1.2,
-  dropout: 0.04,
-  overshoot: 8
+// the same word, three states of the same trace
+plot.text("FIRST TRACE", 68, 90, {
+  size: 54,
+  wobble: 0.4
 });
-
-plot.text("FIRST TRACE", 68, 255, {
+plot.text("FIRST TRACE", 68, 180, {
   size: 54,
   wobble: 1.4,
-  dropout: 0.08,
-  repeat: 2
+  dropout: 0.08
+});
+plot.text("FIRST TRACE", 68, 270, {
+  size: 54,
+  wobble: 2.2,
+  dropout: 0.2,
+  rubout: 0.2
 });</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="examples/first_trace/" target="_blank">-> full example</a>
@@ -124,12 +128,17 @@ plot.text("FIRST TRACE", 68, 255, {
     </div>
     <div class="ex-preview">
       <div id="ex-cutup" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">plot.textCutup("I THINK THEREFORE I AM", 76, 220, {
+      <pre class="ex-code-block"><code class="language-javascript">// the same line, sliced twice - the second cut deeper
+plot.textCutup("I THINK THEREFORE I AM", 76, 140, {
   size: 42,
-  slices: 8,
-  sliceOffset: 18,
+  slices: 6,
+  sliceOffset: 8
+});
+plot.textCutup("I THINK THEREFORE I AM", 76, 260, {
+  size: 42,
+  slices: 9,
+  sliceOffset: 22,
   dropout: 0.09,
-  repeat: 2,
   rubout: 0.12
 });</code></pre>
       <div class="ex-links">
@@ -195,13 +204,23 @@ plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice</code></pre>
     </div>
     <div class="ex-preview">
       <div id="ex-parameter" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">plot.textCutup("RUB OUT", 58, 170, {
-  size: 72,
+      <pre class="ex-code-block"><code class="language-javascript">// the same call at three slider positions
+plot.textCutup("RUB OUT", 58, 90, {
   slices: 7,
-  wobble: wobbleValue,
-  dropout: dropoutValue,
-  repeat: repeatValue,
-  rubout: ruboutValue
+  wobble: 0.4,
+  dropout: 0.02
+});
+plot.textCutup("RUB OUT", 58, 180, {
+  slices: 7,
+  wobble: 1.3,
+  dropout: 0.08,
+  rubout: 0.1
+});
+plot.textCutup("RUB OUT", 58, 270, {
+  slices: 7,
+  wobble: 2.4,
+  dropout: 0.16,
+  rubout: 0.22
 });</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="examples/parameter_lab/" target="_blank">-> full example</a>
@@ -235,7 +254,7 @@ plot.text("O8BR", 70, 190, {
 
   <section class="section">
     <div class="section-header">
-      <div class="section-tag">path() &middot; polygon() &middot; no text</div>
+      <div class="section-tag">path() &middot; no text</div>
       <h2>Signal <span class="accent">Score</span></h2>
       <p class="section-desc">Treat paths as fragile signals: no typography, only a scored machine reading made from vector paths and markers.</p>
     </div>
@@ -246,10 +265,11 @@ for (let x = 0; x &lt;= 620; x += 8) {
   signal.push([x, y + sin(x * 0.04) * 28]);
 }
 
+// row after row of the same signal, each a step more worn
 plot.path(signal, {
-  dropout: 0.07,
+  dropout: 0.05 + row * 0.01,
   repeat: 2,
-  rubout: 0.16
+  rubout: 0.06 + row * 0.03
 });</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="examples/signal_score/" target="_blank">-> full example</a>
@@ -295,7 +315,7 @@ const json = plot.exportJSON({
   includeGenerated: true
 });
 
-const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2 } });</code></pre>
+const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, hatch: 3 } });</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="examples/plotter_export/" target="_blank">-> full example</a>
         <a class="ex-full-link" href="examples/plotter_export/sketch.js" target="_blank">-> source sketch</a>
@@ -433,15 +453,6 @@ function setup() {
           rubout: 0.07,
           stroke: "#171717"
         }));
-        plot.textCutup("COUNTER", 38, size.height * 0.78, Object.assign({}, fontOptions, {
-          size: size.width * 0.07,
-          slices: 7,
-          sliceOffset: 12,
-          wobble: 0.8,
-          dropout: 0.06,
-          repeat: 2,
-          stroke: "#b5362b"
-        }));
         p.redraw();
       };
 
@@ -473,24 +484,21 @@ function setup() {
       width: canvasW,
       height: canvasH
     });
-    plot.line(44, canvasH * 0.34, canvasW - 44, canvasH * 0.38, {
-      wobble: 1.2,
-      dropout: 0.04,
-      overshoot: 7,
-      segmentLength: 8
-    });
-    plot.text("FIRST TRACE", 44, canvasH * 0.58, {
+    // The same word, three states of the same trace - the card's snippet, verbatim.
+    plot.text("FIRST TRACE", 44, canvasH * 0.3, {
       size: canvasW * 0.075,
-      wobble: 1.2,
-      dropout: 0.08,
-      repeat: 2,
-      drift: 1.2
+      wobble: 0.4
     });
-    plot.circle(canvasW * 0.74, canvasH * 0.74, canvasW * 0.18, {
-      wobble: 1.2,
-      dropout: 0.08,
-      repeat: 2,
-      rubout: 0.08
+    plot.text("FIRST TRACE", 44, canvasH * 0.56, {
+      size: canvasW * 0.075,
+      wobble: 1.4,
+      dropout: 0.08
+    });
+    plot.text("FIRST TRACE", 44, canvasH * 0.82, {
+      size: canvasW * 0.075,
+      wobble: 2.2,
+      dropout: 0.2,
+      rubout: 0.2
     });
     return plot;
   });
@@ -523,33 +531,13 @@ function setup() {
         alpha: 0.88
       }
     });
-    plot.text("CUT UP", 42, canvasH * 0.32, {
-      size: canvasW * 0.14,
-      wobble: 1.6,
-      dropout: 0.08,
-      repeat: 2,
-      drift: 1.8,
-      rubout: 0.06
+    // The starter draws one thing: the smallest complete sketch, pasted as-is.
+    plot.text("CUT UP", 42, canvasH * 0.55, {
+      size: canvasW * 0.17,
+      wobble: 1.4,
+      dropout: 0.06,
+      repeat: 2
     });
-    plot.textCutup("THE MACHINE REMEMBERS", 42, canvasH * 0.56, {
-      size: canvasW * 0.065,
-      slices: 8,
-      sliceOffset: 15,
-      sliceDropout: 0.16,
-      wobble: 1.2,
-      dropout: 0.09,
-      repeat: 2,
-      rubout: 0.14
-    });
-    for (let i = 0; i < 7; i++) {
-      const y = canvasH * 0.7 + i * 12;
-      plot.line(48, y, canvasW - 48, y + p.sin(i * 0.65) * 8, {
-        wobble: 0.8,
-        dropout: 0.045,
-        overshoot: 7,
-        alpha: 0.68
-      });
-    }
     return plot;
   });
 
@@ -565,19 +553,20 @@ function setup() {
         alpha: 0.86
       }
     });
-    plot.text("RUB OUT", 42, canvasH * 0.33, {
-      size: canvasW * 0.13,
-      wobble: 1.5,
-      dropout: 0.09,
-      repeat: 2,
-      rubout: 0.08
+    // The same line, sliced twice - the second cut deeper.
+    plot.textCutup("I THINK THEREFORE I AM", 42, canvasH * 0.34, {
+      size: canvasW * 0.062,
+      slices: 6,
+      sliceOffset: 8,
+      wobble: 1.0,
+      repeat: 2
     });
-    plot.textCutup("I THINK THEREFORE I AM", 42, canvasH * 0.62, {
-      size: canvasW * 0.068,
-      slices: 8,
-      sliceOffset: 16,
+    plot.textCutup("I THINK THEREFORE I AM", 42, canvasH * 0.68, {
+      size: canvasW * 0.062,
+      slices: 9,
+      sliceOffset: 22,
       sliceDropout: 0.14,
-      wobble: 1.3,
+      wobble: 1.4,
       dropout: 0.09,
       repeat: 2,
       rubout: 0.12
@@ -598,21 +587,18 @@ function setup() {
       limit: 6,
       order: "walk"
     });
+    // One pass per permuted line, exactly as the card's snippet describes.
     regels.forEach(function(regel, index) {
-      for (let repeatIndex = 0; repeatIndex < 3; repeatIndex++) {
-        const y = 38 + index * (canvasH - 58) / 6 + repeatIndex * 11;
-        plot.textCutup(regel, 30 + (repeatIndex === 2 ? 6 : 0), y, {
-          size: canvasW * 0.041,
-          slices: 4 + index,
-          sliceOffset: 1 + index * 0.8,
-          sliceDropout: 0.02 + repeatIndex * 0.01,
-          wobble: 0.12,
-          dropout: 0.01,
-          stroke: "#171717",
-          strokeWeight: 0.65,
-          alpha: repeatIndex === 1 ? 0.62 : 0.84
-        });
-      }
+      plot.textCutup(regel, 30, 44 + index * (canvasH - 66) / 6, {
+        size: canvasW * 0.041,
+        slices: 4 + index,
+        sliceOffset: 1 + index * 0.8,
+        sliceDropout: 0.02,
+        wobble: 0.12,
+        dropout: 0.01,
+        strokeWeight: 1.05,
+        alpha: 0.95
+      });
     });
     return plot;
   });
@@ -624,26 +610,27 @@ function setup() {
       width: canvasW,
       height: canvasH
     });
-    plot.textCutup("RUB OUT", 42, canvasH * 0.36, {
-      size: canvasW * 0.12,
+    // The same call at three slider positions - the card's snippet, verbatim.
+    plot.textCutup("RUB OUT", 42, canvasH * 0.28, {
+      size: canvasW * 0.09,
       slices: 7,
-      sliceOffset: 16,
-      wobble: 2.1,
-      dropout: 0.13,
-      repeat: 3,
-      drift: 2.6,
-      rubout: 0.18
+      wobble: 0.4,
+      dropout: 0.02
     });
-    for (let i = 0; i < 8; i++) {
-      const y = canvasH * 0.62 + i * 13;
-      plot.line(44, y, canvasW - 44, y + p.sin(i) * 7, {
-        wobble: 1.1,
-        dropout: 0.08,
-        repeat: 2,
-        overshoot: 6,
-        alpha: 0.62
-      });
-    }
+    plot.textCutup("RUB OUT", 42, canvasH * 0.56, {
+      size: canvasW * 0.09,
+      slices: 7,
+      wobble: 1.3,
+      dropout: 0.08,
+      rubout: 0.1
+    });
+    plot.textCutup("RUB OUT", 42, canvasH * 0.84, {
+      size: canvasW * 0.09,
+      slices: 7,
+      wobble: 2.4,
+      dropout: 0.16,
+      rubout: 0.22
+    });
     return plot;
   });
 
@@ -662,14 +649,6 @@ function setup() {
         rubout: 0.06 + row * 0.03,
         overshoot: 6,
         stroke: row === 2 ? "#b5362b" : "#171717"
-      });
-    }
-    for (let index = 0; index < 5; index++) {
-      const x = 72 + index * ((canvasW - 144) / 4);
-      plot.polygon([[x, 38], [x + 9, 47], [x, 56], [x - 9, 47]], {
-        wobble: 0.5,
-        repeat: 2,
-        stroke: "#244f73"
       });
     }
     return plot;
