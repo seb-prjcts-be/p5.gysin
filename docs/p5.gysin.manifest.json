@@ -28,6 +28,7 @@
     "plotter_calibration",
     "plotter_export",
     "signal_score",
+    "typewriter",
     "worn_word"
   ],
   "removed_apis": [],

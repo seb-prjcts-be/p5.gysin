@@ -6,7 +6,8 @@ const packagePath = path.join(root, "package.json");
 const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8"));
 const builds = [
   ["p5.gysin.js", "p5.gysin.min.js"],
-  ["p5.gysin.text.js", "p5.gysin.text.min.js"]
+  ["p5.gysin.text.js", "p5.gysin.text.min.js"],
+  ["p5.gysin.underwood.js", "p5.gysin.underwood.min.js"]
 ];
 
 for (const [sourceName, outputName] of builds) {

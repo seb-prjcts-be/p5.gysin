@@ -42,7 +42,7 @@
   <section id="examples" class="section">
     <div class="section-header">
       <div class="section-tag">Public examples &middot; v0.2.0</div>
-      <h2>Ten live <span class="accent">examples</span></h2>
+      <h2>Eleven live <span class="accent">examples</span></h2>
       <p class="section-desc">Each preview is a live sketch. Open the full example for the complete page and source file. The snippets show the transferable idea, not every line.</p>
     </div>
   </section>
@@ -161,6 +161,27 @@ regels.forEach((regel, index) =&gt; {
       <div class="ex-links">
         <a class="ex-full-link" href="examples/permutation_poem/" target="_blank">-&gt; full poster</a>
         <a class="ex-full-link" href="examples/permutation_poem/sketch.js" target="_blank">-&gt; source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="section-header">
+      <div class="section-tag">underwood() &middot; single-stroke &middot; period</div>
+      <h2>Type<span class="accent">writer</span></h2>
+      <p class="section-desc">Burroughs' Underwood No. 5 as an intent verb. Single-stroke letters, period pitch and line height, no bold or italic - "bold" is just the same key struck twice.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-typewriter" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// defaults alone = a period-correct typed page
+plot.underwood("RUB OUT THE WORD", 60, 90);
+
+// the only decoration the machine had:
+plot.underwood("HEADING", 60, 130, { underline: 1 });
+plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="examples/typewriter/" target="_blank">-&gt; full example</a>
+        <a class="ex-full-link" href="examples/typewriter/sketch.js" target="_blank">-&gt; source sketch</a>
       </div>
     </div>
   </section>
@@ -337,6 +358,7 @@ function setup() {
   </footer>
 
   <script src="p5.gysin.text.min.js"></script>
+  <script src="p5.gysin.underwood.min.js"></script>
   <script>
   function previewSize(id) {
     const element = document.getElementById(id);
@@ -428,6 +450,19 @@ function setup() {
         if (plot) plot.draw();
       };
     }, id);
+  }
+
+  // Period single-stroke typewriter: one intent verb, no font to load.
+  function makeTypewriterPreview(id) {
+    makePreview(id, function(p, canvasW, canvasH) {
+      const plot = new GysinPlot({ p: p, seed: 1961, width: canvasW, height: canvasH });
+      const rows = GysinText.permute("RUB OUT THE WORD", { seed: 1961, limit: 4, order: "walk" });
+      plot.underwood(rows.join("\n"), 26, canvasH * 0.26, {
+        size: canvasW * 0.032,
+        stroke: "#171717"
+      });
+      return plot;
+    });
   }
 
   makePreview("ex-first-trace", function(p, canvasW, canvasH) {
@@ -666,6 +701,7 @@ function setup() {
   });
 
   makeFontPreview("ex-font-outlines");
+  makeTypewriterPreview("ex-typewriter");
 
   makePreview("ex-export", function(p, canvasW, canvasH) {
     const plot = new GysinPlot({

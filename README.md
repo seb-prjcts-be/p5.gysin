@@ -219,6 +219,31 @@ re-slices each chosen line as letter contours. The `permutation_poem` example
 uses this two-step method for a monochrome A3 composition with repeated text
 fields, a symbolic code column, and a modular grid.
 
+## Optional typewriter (underwood)
+
+Load the typewriter module for one period-correct intent verb. It bundles a
+single-stroke (Hershey) face, so it needs no external font:
+
+```html
+<script src="p5.gysin.min.js"></script>
+<script src="p5.gysin.underwood.min.js"></script>
+```
+
+```js
+plot.underwood("RUB OUT THE WORD", 60, 90);
+```
+
+Defaults alone give a period-correct typed page: single-stroke letters, fixed
+monospace pitch and line height (10 characters-per-inch, 6 lines-per-inch), and
+the small strike wear of a real sheet. Named after the Underwood No. 5, the
+machine Burroughs cut up the world on. A typewriter had no bold and no italic,
+so the only decoration is what it could actually do: `bold: true` double-strikes
+(the nearest thing to bold), `underline: 1..3` draws the underscore rule, and
+symbol dividers (`********`, `-_-_`) are just typed strings. `wear` scales the
+whole strike irregularity from one knob (`0` = mechanically clean). See
+[`docs/typewriter-decoration-research.md`](docs/typewriter-decoration-research.md)
+for what was and was not possible in that era.
+
 ## Examples
 
 Open locally:
@@ -244,6 +269,7 @@ Available examples:
 - `first_trace` - minimal trace composition
 - `gysin_demo` - cut-up typography and rubout
 - `permutation_poem` - A3 poster where all word permutations run through `textCutup()` again
+- `typewriter` - a period-correct single-stroke typewriter sheet built with the optional `underwood()` verb
 - `p5_editor` - copy-paste starter for editor.p5js.org
 - `parameter_lab` - live control over trace parameters
 - `plotter_export` - SVG/JSON/HPGL export workflow

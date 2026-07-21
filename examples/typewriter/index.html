@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Typewriter | p5.gysin examples</title>
+  <link rel="stylesheet" href="../showcase.css">
+  <style>
+    /* The sheet is clickable (new variation); the pointer shows that. */
+    #sketch { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Showcase</a></li>
+      <li><a href="../../docs/guide.html">Guide</a></li>
+      <li><a href="../../docs/about.html">About</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">underwood()</div>
+      <h1>Typewriter</h1>
+      <p><strong>underwood()</strong> is an intent verb: defaults alone give a period-correct typewriter page. Single-stroke Hershey letterforms (bundled, no font to load), fixed monospace pitch and line height (<strong>10 chars-per-inch / 6 lines-per-inch</strong>, the classic Pica machine), and the small strike wear of a real typed sheet. Every option is opt-in, so <code>plot.underwood("RUB OUT THE WORD", 60, 90)</code> is a complete gesture.</p>
+      <p>A typewriter had no bold and no italic (see <a href="../../docs/typewriter-decoration-research.md">the decoration research</a>). So the only decoration is what the machine could do: <strong>overstrike</strong> (<code>bold: true</code>, the same key struck twice), <strong>underline</strong> (the underscore rule), ALL CAPS, spacing, and typed symbol dividers. Mass comes from double-striking, never from fill.</p>
+    </div>
+    <div class="demo-layout">
+      <div class="demo-code">
+        <div class="code-label">Core snippet</div>
+        <pre><code class="language-javascript">// Load the underwood module, then the whole sketch is one verb:
+const plot = new GysinPlot({ seed: 1961 });
+plot.underwood("RUB OUT THE WORD", 60, 90);   // period typewriter, defaults
+plot.draw();
+
+// Period-correct decoration, all opt-in. No bold or italic ever existed
+// on a typewriter, so "bold" is just the same key struck twice:
+plot.underwood("HEADING", 60, 90, { size: 24, underline: 1 });
+plot.underwood("DOUBLE-STRUCK", 60, 130, { bold: true });
+plot.underwood("* * * * * * * *", 60, 170);   // a divider it could type
+
+// wear scales the whole strike irregularity from one knob (0 = clean):
+plot.underwood("RUB OUT THE WORD", 60, 210, { wear: 0 });</code></pre>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas" id="sketch" role="img" aria-label="A period-correct single-stroke typewriter sheet: RUB OUT THE WORD as an underlined heading, the phrase permuted line by line, a double-struck line, spaced emphasis, and typed symbol dividers."></div>
+        <div class="demo-actions" aria-label="Typewriter actions">
+          <button type="button" id="reroll-button">New variation</button>
+          <button type="button" id="svg-button">Download SVG</button>
+        </div>
+        <div class="demo-note">Click <strong>New variation</strong> for the next seeded permutation and strike wear; <strong>Download SVG</strong> saves the plotter-ready file. Every letter is a single pen line, so it plots as drawn.</div>
+      </div>
+    </div>
+    <div class="demo-header">
+      <h2>Sperrsatz</h2>
+      <p>William Burroughs cut up the world on an <strong>Underwood No. 5</strong>, the flat black office standard that fixed the look of a typed page for half a century. Its keys carried one face, at one size, upright. There was no bold and no italic to reach for, because a typebar can only strike the single shape cast on it.</p>
+      <p>So emphasis was mechanical, not typographic. A word was made to matter by striking it twice (the nearest thing to bold), by underlining it with a run of underscores, by setting it in CAPITALS, or by <em>Sperrsatz</em> - spacing the letters apart so the word opened out along the line. Rows of asterisks, hyphens and underscores ruled the page into sections; tone came from overprinting characters, never from heavier ink. What a typewriter could not do - a second weight, a slant, another size, a curve - simply did not happen on the page.</p>
+      <p><code>underwood()</code> stays inside those limits on purpose: one single-stroke face at one size, mass only from the double strike, decoration only from what the machine could actually type.</p>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      <a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp;
+      <a href="../../docs/guide.html">Guide</a>
+    </p>
+    <p class="footer-sub">p5.gysin v0.2.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.text.min.js"></script>
+  <script src="../../p5.gysin.underwood.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

@@ -542,6 +542,49 @@ assert.throws(() => new SourcePlot().rub("X", 0, 0, { stages: [{ verb: "circle" 
 assert.throws(() => new SourcePlot().rub("X", 0, 0, { stages: [] }), /non-empty array/);
 assert.throws(() => new SourcePlot().rub("X", Infinity, 0), /finite number/);
 
+// --- underwood(): period single-stroke typewriter (optional module) -------------
+function loadCoreWithType(coreFile, typeFile) {
+  const context = { console };
+  context.globalThis = context;
+  vm.createContext(context);
+  vm.runInContext(fs.readFileSync(coreFile, "utf8"), context, { filename: coreFile });
+  vm.runInContext(fs.readFileSync(typeFile, "utf8"), context, { filename: typeFile });
+  assert.equal(typeof context.GysinPlot.prototype.underwood, "function");
+  assert.equal(typeof context.GysinUnderwood, "object");
+  return context.GysinPlot;
+}
+const TypePlot = loadCoreWithType(
+  path.join(__dirname, "..", "p5.gysin.js"),
+  path.join(__dirname, "..", "p5.gysin.underwood.js")
+);
+const TypeMinPlot = loadCoreWithType(
+  path.join(__dirname, "..", "p5.gysin.min.js"),
+  path.join(__dirname, "..", "p5.gysin.underwood.min.js")
+);
+function buildType(Plot, opts) {
+  const plot = new Plot({ seed: 1961, width: 600, height: 300 });
+  const ids = plot.underwood("RUB OUT", 40, 80, opts || { size: 20 });
+  return { plot, ids };
+}
+const typeA = buildType(TypePlot);
+const typeB = buildType(TypePlot);
+const typeMin = buildType(TypeMinPlot);
+assert.ok(typeA.ids.length > 0, "underwood() emits shapes");
+// deterministic, and identical between source and min build
+const typeJSON = JSON.stringify(typeA.ids.map((id) => typeA.plot.get(id).generated));
+assert.equal(JSON.stringify(typeB.ids.map((id) => typeB.plot.get(id).generated)), typeJSON);
+assert.equal(JSON.stringify(typeMin.ids.map((id) => typeMin.plot.get(id).generated)), typeJSON);
+// bold overstrikes every glyph: more shapes than the mechanically clean default
+const typeClean = new TypePlot({ seed: 1961 }).underwood("RUB OUT", 40, 80, { size: 20, wear: 0 });
+const typeBold = new TypePlot({ seed: 1961 }).underwood("RUB OUT", 40, 80, { size: 20, wear: 0, bold: true });
+assert.ok(typeBold.length > typeClean.length, "bold doubles every strike");
+// underline draws the underscore rule(s) on top of the clean glyphs
+const typeUnderline = new TypePlot({ seed: 1961 }).underwood("RUB", 40, 80, { size: 20, wear: 0, underline: 2 });
+const typeNoRule = new TypePlot({ seed: 1961 }).underwood("RUB", 40, 80, { size: 20, wear: 0 });
+assert.equal(typeUnderline.length - typeNoRule.length, 2, "underline:2 adds two rules");
+assert.throws(() => new TypePlot().underwood("X", 0, 0, { size: 0 }), /size must be greater than zero/);
+assert.throws(() => new TypePlot().underwood("X", Infinity, 0), /finite number/);
+
 const root = path.join(__dirname, "..");
 const manifest = JSON.parse(fs.readFileSync(
   path.join(root, "docs", "p5.gysin.manifest.json"),
