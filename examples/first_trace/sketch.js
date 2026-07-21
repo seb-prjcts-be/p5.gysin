@@ -103,7 +103,7 @@ async function setup() {
 }
 
 function draw() {
-  background(245);
+  background("#f0efe9");
   drawSheet();
   plot.draw();
 }

@@ -22,7 +22,7 @@
 const POSTER_WIDTH = 840;
 const POSTER_HEIGHT = 1188;
 const FONT_URL = "../font_outlines/assets/Oswald-Regular.otf";
-const PAPER = "#eee9dc";
+const PAPER = "#f0efe9";
 const INK = "#17140f";
 
 // Strategies the "New order" button cycles through, each with a one-line gloss

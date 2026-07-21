@@ -20,7 +20,7 @@
 
 const W = 820;
 const H = 640;
-const PAPER = "#eee9dc";
+const PAPER = "#f0efe9";
 const INK = "#17140f";
 const PHRASE = "RUB OUT THE WORD";
 

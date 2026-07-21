@@ -291,7 +291,7 @@ function setup() {
 }
 
 function draw() {
-  background(245);
+  background("#f0efe9");
   drawPageFrame();
   plot.draw();
   drawLegend(liveStats);

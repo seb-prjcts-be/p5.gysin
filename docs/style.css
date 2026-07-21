@@ -1,5 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap");
 
+/* One stylesheet for the whole site: showcase, docs, curation engine and all
+   example pages. The default layout is a centered column (--page-max wide);
+   backgrounds run full-bleed while content is held in the column by
+   padding-inline: var(--col-pad). */
+
 :root {
   --paper: #f5f5f5;
   --paper-deep: #e8e8e8;
@@ -10,6 +15,9 @@
   --blue: #244f73;
   --green: #37614f;
   --white: #fbfaf5;
+  --sheet: #f0efe9;
+  --page-max: 1100px;
+  --col-pad: max(28px, calc((100% - var(--page-max)) / 2));
 }
 
 * {
@@ -32,9 +40,20 @@ a {
   color: inherit;
 }
 
-code {
+code,
+pre {
   font-family: Consolas, "Courier New", monospace;
 }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+canvas:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+/* ── navbar ─────────────────────────────────────────────────────────── */
 
 #navbar {
   position: sticky;
@@ -45,7 +64,7 @@ code {
   justify-content: space-between;
   gap: 24px;
   min-height: 64px;
-  padding: 0 28px;
+  padding: 0 var(--col-pad);
   background: rgba(245, 245, 245, 0.94);
   border-bottom: 1px solid var(--rule);
   backdrop-filter: blur(10px);
@@ -84,13 +103,6 @@ code {
   color: var(--ink);
 }
 
-a:focus-visible,
-button:focus-visible,
-input:focus-visible {
-  outline: 3px solid var(--blue);
-  outline-offset: 3px;
-}
-
 .nav-hamburger {
   display: none;
   width: 40px;
@@ -106,6 +118,8 @@ input:focus-visible {
   margin: 4px auto;
   background: var(--ink);
 }
+
+/* ── hero (showcase home) ───────────────────────────────────────────── */
 
 #hero {
   position: relative;
@@ -130,13 +144,15 @@ input:focus-visible {
   min-height: calc(100vh - 64px);
   display: flex;
   align-items: center;
-  padding: 9vw;
+  padding: 9vw var(--col-pad);
   background: rgba(245, 245, 245, 0.68);
 }
 
 .hero-text {
   max-width: 660px;
 }
+
+/* ── typography ─────────────────────────────────────────────────────── */
 
 .hero-badge,
 .section-tag,
@@ -202,8 +218,10 @@ h3 {
   color: var(--ink);
 }
 
+/* ── sections (centered column by default) ──────────────────────────── */
+
 .section {
-  padding: 92px 8vw;
+  padding: 92px var(--col-pad);
 }
 
 .section-dark {
@@ -267,7 +285,7 @@ h3 {
 }
 
 .page-header {
-  padding: 84px 8vw 42px;
+  padding: 84px var(--col-pad) 42px;
   border-bottom: 1px solid var(--rule);
 }
 
@@ -305,10 +323,12 @@ h3 {
   font-weight: 700;
 }
 
+/* ── example gallery previews ───────────────────────────────────────── */
+
 .ex-page-header {
-  max-width: 1040px;
+  max-width: var(--page-max);
   margin: 0 auto;
-  padding: 86px 8vw 42px;
+  padding: 86px var(--col-pad) 42px;
   text-align: center;
 }
 
@@ -334,7 +354,7 @@ h3 {
   width: 100%;
   overflow: hidden;
   border: 1px solid var(--rule);
-  background: var(--paper);
+  background: var(--sheet);
 }
 
 .ex-canvas canvas {
@@ -362,6 +382,398 @@ h3 {
   font-family: inherit;
   font-size: inherit;
 }
+
+.ex-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.ex-full-link {
+  color: var(--muted);
+  font-family: "Oswald", Arial, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule);
+}
+
+.ex-full-link:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.section-dark .ex-full-link {
+  color: #d8d0c4;
+  border-color: #6e665b;
+}
+
+.section-dark .ex-full-link:hover {
+  color: var(--white);
+  border-color: var(--white);
+}
+
+/* ── standalone example (demo) pages ────────────────────────────────── */
+
+.demo-page {
+  min-height: calc(100vh - 64px);
+  padding: 56px var(--col-pad) 72px;
+}
+
+.demo-header {
+  max-width: 940px;
+  margin: 0 auto 28px;
+}
+
+.demo-header h1 {
+  margin: 8px 0 10px;
+  font-size: clamp(44px, 9vw, 104px);
+  line-height: 1;
+}
+
+.demo-header p {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.demo-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.78fr) minmax(340px, 1fr);
+  gap: 22px;
+  align-items: start;
+  margin: 0 auto;
+}
+
+.demo-code {
+  border: 1px solid var(--rule);
+  background: rgba(251, 250, 245, 0.72);
+}
+
+.demo-code .code-label {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.demo-code pre {
+  overflow: auto;
+  margin: 0;
+  padding: 18px;
+  background: #faf8f3;
+  color: #151515;
+  font-size: 13px;
+  line-height: 1.65;
+  white-space: pre;
+}
+
+.demo-code code {
+  font-size: inherit;
+}
+
+.demo-right {
+  display: grid;
+  gap: 12px;
+}
+
+.demo-canvas {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 420px;
+  border: 1px solid var(--rule);
+  background: var(--sheet);
+  overflow: hidden;
+}
+
+.demo-canvas canvas {
+  display: block;
+  max-width: 100%;
+  height: auto !important;
+}
+
+.demo-note {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.demo-stats {
+  margin: 0 18px 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--ink);
+  background: var(--white);
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+.demo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0 18px 18px;
+}
+
+.demo-actions button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--white);
+  font-family: "Oswald", Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.demo-actions button:hover {
+  background: #000;
+}
+
+.control-grid {
+  display: grid;
+  gap: 14px;
+  padding: 0 18px 20px;
+}
+
+.control-row {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.control-row span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.control-row output {
+  color: var(--ink);
+  font-family: Consolas, "Courier New", monospace;
+}
+
+.control-row input {
+  width: 100%;
+  accent-color: var(--red);
+}
+
+/* A clickable sheet (reroll on click) shows the pointer. */
+.is-clickable {
+  cursor: pointer;
+}
+
+/* Three-line legend: one row per decay stage, read at a glance. */
+.legend {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+}
+
+.legend li {
+  color: var(--muted);
+  padding: 0.15rem 0;
+}
+
+.legend strong {
+  color: var(--ink);
+}
+
+/* ── curation engine page ───────────────────────────────────────────── */
+
+.ce-header {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 64px var(--col-pad) 20px;
+}
+
+.ce-header h1 {
+  font-size: clamp(42px, 8vw, 96px);
+}
+
+.ce-lead {
+  max-width: 720px;
+  color: var(--muted);
+  font-size: 17px;
+  margin-top: 14px;
+}
+
+.ce-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ce-chips a {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  padding: 6px 11px;
+  border-radius: 2px;
+  background: var(--white);
+}
+
+.ce-chips a:hover {
+  border-color: var(--ink);
+}
+
+.ce-module {
+  padding: 46px var(--col-pad);
+  border-top: 1px solid var(--rule);
+}
+
+.ce-module .section-tag {
+  color: var(--red);
+}
+
+.ce-module h2 {
+  font-size: clamp(28px, 4vw, 44px);
+  margin-top: 6px;
+}
+
+.ce-module .section-desc {
+  max-width: 680px;
+  color: var(--muted);
+  margin-top: 10px;
+}
+
+.ce-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 26px 0;
+}
+
+.ce-step {
+  border: 1px solid var(--rule);
+  background: var(--white);
+  padding: 14px 16px;
+}
+
+.ce-step span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.ce-step h4 {
+  font-family: "Oswald", Arial, sans-serif;
+  font-weight: 600;
+  margin: 6px 0 4px;
+  font-size: 17px;
+}
+
+.ce-step p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.ce-demo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.ce-canvas {
+  width: 100%;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  min-height: 200px;
+}
+
+.ce-canvas canvas {
+  display: block;
+}
+
+.ce-codewrap {
+  position: relative;
+}
+
+.ce-codewrap pre {
+  margin: 0;
+  background: #14140f;
+  color: #eee9dc;
+  padding: 18px;
+  overflow-x: auto;
+  border: 1px solid var(--ink);
+}
+
+.ce-codewrap code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre;
+}
+
+.ce-copy {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #14140f;
+  background: #eee9dc;
+  border: 1px solid #eee9dc;
+  padding: 5px 9px;
+  cursor: pointer;
+}
+
+.ce-copy:hover {
+  background: #fff;
+}
+
+.ce-note {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 10px;
+}
+
+.ce-links {
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.ce-links a {
+  color: var(--blue);
+  font-weight: 700;
+  text-decoration: none;
+  margin-right: 16px;
+}
+
+.ce-poster-section {
+  border-top: 2px solid var(--ink);
+}
+
+.ce-poster-stage {
+  max-width: 720px;
+  margin: 26px auto 0;
+}
+
+.ce-poster-stage .ce-canvas {
+  min-height: 420px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.22);
+}
+
+/* ── syntax highlighting (Prism tokens) ─────────────────────────────── */
 
 .code-preview .token.comment,
 .ex-code-block .token.comment,
@@ -403,39 +815,10 @@ h3 {
   color: #b5362b;
 }
 
-.ex-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-}
-
-.ex-full-link {
-  color: var(--muted);
-  font-family: "Oswald", Arial, sans-serif;
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  text-decoration: none;
-  text-transform: uppercase;
-  border-bottom: 1px solid var(--rule);
-}
-
-.ex-full-link:hover {
-  color: var(--ink);
-  border-color: var(--ink);
-}
-
-.section-dark .ex-full-link {
-  color: #d8d0c4;
-  border-color: #6e665b;
-}
-
-.section-dark .ex-full-link:hover {
-  color: var(--white);
-  border-color: var(--white);
-}
+/* ── footer ─────────────────────────────────────────────────────────── */
 
 footer {
-  padding: 42px 8vw;
+  padding: 42px var(--col-pad);
   border-top: 1px solid var(--rule);
   color: var(--muted);
 }
@@ -444,17 +827,27 @@ footer {
   font-size: 13px;
 }
 
+/* ── responsive ─────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .demo-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-canvas {
+    min-height: 320px;
+  }
+}
+
 @media (max-width: 800px) {
   #navbar {
     align-items: flex-start;
     padding: 12px 18px;
   }
 
-  .nav-hamburger {
-    display: block;
-  }
-
-  .nav-links {
+  /* Pages with a hamburger collapse the links behind it; pages without
+     one (the example demos) keep the links visible and let them wrap. */
+  #navbar:has(.nav-hamburger) .nav-links {
     display: none;
     position: absolute;
     top: 64px;
@@ -467,8 +860,16 @@ footer {
     border: 1px solid var(--rule);
   }
 
+  #navbar:not(:has(.nav-hamburger)) .nav-links {
+    flex-wrap: wrap;
+  }
+
+  .nav-hamburger {
+    display: block;
+  }
+
   .nav-open .nav-links {
-    display: flex;
+    display: flex !important;
   }
 
   .hero-overlay {
@@ -478,6 +879,16 @@ footer {
 
   .feature-grid,
   .examples-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .ce-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .ce-demo {
     grid-template-columns: 1fr;
   }
 }

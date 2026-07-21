@@ -5,57 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Curation Engine | p5.gysin</title>
   <link rel="stylesheet" href="../style.css">
-  <style>
-    /* Curation-engine layout, built on the p5.gysin house tokens. */
-    .ce-header { padding: 64px 28px 20px; max-width: 1100px; margin: 0 auto; }
-    .ce-header h1 { font-size: clamp(42px, 8vw, 96px); }
-    .ce-lead { max-width: 720px; color: var(--muted); font-size: 17px; margin-top: 14px; }
-
-    .ce-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; padding: 0; list-style: none; }
-    .ce-chips a {
-      display: inline-block; text-decoration: none; font-size: 12px; font-weight: 700;
-      letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink);
-      border: 1px solid var(--rule); padding: 6px 11px; border-radius: 2px; background: var(--white);
-    }
-    .ce-chips a:hover { border-color: var(--ink); }
-
-    .ce-module { max-width: 1100px; margin: 0 auto; padding: 46px 28px; border-top: 1px solid var(--rule); }
-    .ce-module .section-tag { color: var(--red); }
-    .ce-module h2 { font-size: clamp(28px, 4vw, 44px); margin-top: 6px; }
-    .ce-module .section-desc { max-width: 680px; color: var(--muted); margin-top: 10px; }
-
-    .ce-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 26px 0; }
-    .ce-step { border: 1px solid var(--rule); background: var(--white); padding: 14px 16px; }
-    .ce-step span { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); }
-    .ce-step h4 { font-family: "Oswald", Arial, sans-serif; font-weight: 600; margin: 6px 0 4px; font-size: 17px; }
-    .ce-step p { margin: 0; font-size: 14px; color: var(--muted); }
-
-    .ce-demo { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
-    .ce-canvas { width: 100%; background: #f0efe9; border: 1px solid var(--rule); min-height: 200px; }
-    .ce-canvas canvas { display: block; }
-    .ce-codewrap { position: relative; }
-    .ce-codewrap pre { margin: 0; background: #14140f; color: #eee9dc; padding: 18px; overflow-x: auto; border: 1px solid var(--ink); }
-    .ce-codewrap code { font-family: Consolas, "Courier New", monospace; font-size: 13px; line-height: 1.55; white-space: pre; }
-    .ce-copy {
-      position: absolute; top: 10px; right: 10px; z-index: 2;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-      color: #14140f; background: #eee9dc; border: 1px solid #eee9dc; padding: 5px 9px; cursor: pointer;
-    }
-    .ce-copy:hover { background: #fff; }
-    .ce-note { font-size: 13px; color: var(--muted); margin-top: 10px; }
-    .ce-links { margin-top: 12px; font-size: 13px; }
-    .ce-links a { color: var(--blue); font-weight: 700; text-decoration: none; margin-right: 16px; }
-
-    /* Final poster stage, full width. */
-    .ce-poster-section { border-top: 2px solid var(--ink); }
-    .ce-poster-stage { max-width: 720px; margin: 26px auto 0; }
-    .ce-poster-stage .ce-canvas { min-height: 420px; box-shadow: 0 18px 60px rgba(0,0,0,.22); }
-
-    @media (max-width: 760px) {
-      .ce-strip { grid-template-columns: 1fr; }
-      .ce-demo { grid-template-columns: 1fr; }
-    }
-  </style>
 </head>
 <body>
   <nav id="navbar">
@@ -390,7 +339,7 @@ plot.draw();</code></pre>
   // 06 underwood
   makeGysinPreview('m-underwood', 0.66, function (p, w, h) {
     const plot = base(p, w, h, 1961);
-    plot.underwood('RUB OUT THE WORD', w * 0.07, h * 0.34, { size: w * 0.052, underline: 1 });
+    plot.underwood('RUB OUT THE WORD', w * 0.07, h * 0.34, { size: w * 0.044, underline: 1 });
     plot.underwood('DOUBLE-STRUCK', w * 0.07, h * 0.62, { size: w * 0.045, bold: true });
     plot.underwood('* * * * * * * * * *', w * 0.07, h * 0.82, { size: w * 0.036, wear: 0.6 });
     return plot;

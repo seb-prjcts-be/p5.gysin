@@ -223,7 +223,7 @@ function draw() {
 function makePaper() {
   const g = createGraphics(width, height);
   g.pixelDensity(1);
-  g.background(245);
+  g.background("#f0efe9");
   g.noFill();
   randomSeed(88);
 

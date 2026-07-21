@@ -4,15 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>First Trace | p5.gysin examples</title>
-  <link rel="stylesheet" href="../showcase.css">
-  <style>
-    /* The sheet is clickable (reroll); the pointer makes that affordance visible. */
-    #sketch { cursor: pointer; }
-    /* Three-line legend: one row per decay stage, read at a glance. */
-    .legend { list-style: none; margin: 0.6rem 0 0; padding: 0; }
-    .legend li { color: var(--muted); padding: 0.15rem 0; }
-    .legend strong { color: var(--ink); }
-  </style>
+  <link rel="stylesheet" href="../../docs/style.css">
 </head>
 <body>
   <nav id="navbar">
@@ -69,7 +61,7 @@ for (const t of TANGLES) {
 plot.draw();</code></pre>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas" id="sketch" role="img" aria-label="A mark decaying in stages, top to bottom: a cross-hatched origin dot, a firm first stroke, then the words First Trace rendered legibly, cut up, and as an illegible asemic scribble that drifts right and fades to a thin line."></div>
+        <div class="demo-canvas is-clickable" id="sketch" role="img" aria-label="A mark decaying in stages, top to bottom: a cross-hatched origin dot, a firm first stroke, then the words First Trace rendered legibly, cut up, and as an illegible asemic scribble that drifts right and fades to a thin line."></div>
         <div class="demo-actions" aria-label="First Trace actions">
           <button type="button" id="decay-down" aria-label="Less decay">&minus; Decay</button>
           <button type="button" id="decay-up" aria-label="More decay">Decay &plus;</button>
