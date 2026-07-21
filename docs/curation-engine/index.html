@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curation Engine | p5.gysin</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* Curation-engine layout, built on the p5.gysin house tokens. */
+    .ce-header { padding: 64px 28px 20px; max-width: 1100px; margin: 0 auto; }
+    .ce-header h1 { font-size: clamp(42px, 8vw, 96px); }
+    .ce-lead { max-width: 720px; color: var(--muted); font-size: 17px; margin-top: 14px; }
+
+    .ce-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; padding: 0; list-style: none; }
+    .ce-chips a {
+      display: inline-block; text-decoration: none; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink);
+      border: 1px solid var(--rule); padding: 6px 11px; border-radius: 2px; background: var(--white);
+    }
+    .ce-chips a:hover { border-color: var(--ink); }
+
+    .ce-module { max-width: 1100px; margin: 0 auto; padding: 46px 28px; border-top: 1px solid var(--rule); }
+    .ce-module .section-tag { color: var(--red); }
+    .ce-module h2 { font-size: clamp(28px, 4vw, 44px); margin-top: 6px; }
+    .ce-module .section-desc { max-width: 680px; color: var(--muted); margin-top: 10px; }
+
+    .ce-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 26px 0; }
+    .ce-step { border: 1px solid var(--rule); background: var(--white); padding: 14px 16px; }
+    .ce-step span { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); }
+    .ce-step h4 { font-family: "Oswald", Arial, sans-serif; font-weight: 600; margin: 6px 0 4px; font-size: 17px; }
+    .ce-step p { margin: 0; font-size: 14px; color: var(--muted); }
+
+    .ce-demo { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+    .ce-canvas { width: 100%; background: #ece5d7; border: 1px solid var(--rule); min-height: 200px; }
+    .ce-canvas canvas { display: block; }
+    .ce-codewrap { position: relative; }
+    .ce-codewrap pre { margin: 0; background: #14140f; color: #eee9dc; padding: 18px; overflow-x: auto; border: 1px solid var(--ink); }
+    .ce-codewrap code { font-family: Consolas, "Courier New", monospace; font-size: 13px; line-height: 1.55; white-space: pre; }
+    .ce-copy {
+      position: absolute; top: 10px; right: 10px; z-index: 2;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      color: #14140f; background: #eee9dc; border: 1px solid #eee9dc; padding: 5px 9px; cursor: pointer;
+    }
+    .ce-copy:hover { background: #fff; }
+    .ce-note { font-size: 13px; color: var(--muted); margin-top: 10px; }
+    .ce-links { margin-top: 12px; font-size: 13px; }
+    .ce-links a { color: var(--blue); font-weight: 700; text-decoration: none; margin-right: 16px; }
+
+    /* Final poster stage, full width. */
+    .ce-poster-section { border-top: 2px solid var(--ink); }
+    .ce-poster-stage { max-width: 720px; margin: 26px auto 0; }
+    .ce-poster-stage .ce-canvas { min-height: 420px; box-shadow: 0 18px 60px rgba(0,0,0,.22); }
+
+    @media (max-width: 760px) {
+      .ce-strip { grid-template-columns: 1fr; }
+      .ce-demo { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <button class="nav-hamburger" type="button" aria-label="Toggle menu" aria-expanded="false" onclick="const open=this.closest('nav').classList.toggle('nav-open');this.setAttribute('aria-expanded',String(open))">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Showcase</a></li>
+      <li><a href="../guide.html">Guide</a></li>
+      <li><a href="index.html" class="active">Curation</a></li>
+      <li><a href="../about.html">About</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <header class="ce-header">
+    <div class="section-tag">Deep guide &middot; v0.2.0</div>
+    <h1>Curation <span class="accent">Engine</span></h1>
+    <p class="ce-lead">One poster - Gysin and Burroughs' <em>RUB OUT THE WORD</em> - taken apart into its parts. Each part is one p5.gysin verb, shown on its own with a live preview and a block you can copy. At the end they assemble into the whole sheet. The page reads as one piece because every layer speaks the same material language: wobble, dropout, rubout, ink.</p>
+    <ul class="ce-chips">
+      <li><a href="#grid">01 frame</a></li>
+      <li><a href="#permute">02 permutation</a></li>
+      <li><a href="#letters">03 letter field</a></li>
+      <li><a href="#symbols">04 symbol band</a></li>
+      <li><a href="#asemic">05 asemic</a></li>
+      <li><a href="#underwood">06 typewriter</a></li>
+      <li><a href="#poster">07 the poster</a></li>
+    </ul>
+  </header>
+
+  <!-- 01 GRID -->
+  <section class="section ce-module" id="grid">
+    <div class="section-header">
+      <div class="section-tag">01 &middot; grid()</div>
+      <h2>The frame</h2>
+      <p class="section-desc">The modular lattice that holds everything. Heavy, ink-bled black rules divide the sheet into cells you can place fields into.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>start</span><h4>Divide the sheet</h4><p>Decide how many columns and rows the page is built from.</p></div>
+      <div class="ce-step"><span>build</span><h4>Draw ink-bled rules</h4><p>The frame carries bleed, so the black lines build up unevenly like a worn print.</p></div>
+      <div class="ce-step"><span>result</span><h4>Cells to place into</h4><p><code>grid()</code> returns each cell rectangle, so later layers land declaratively.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-grid" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">// a modular, ink-bled frame; returns the cell rectangles
+const cells = plot.grid(60, 60, 680, 520, 4, 3, {
+  frame: { bleed: 0.3, wobble: 0.7, strokeWeight: 2 }
+});
+// cells[i] = { x, y, w, h, col, row }</code></pre>
+      </div>
+    </div>
+    <p class="ce-links"><a href="../../index.html#examples">see it in the poster example -&gt;</a></p>
+  </section>
+
+  <!-- 02 PERMUTATION -->
+  <section class="section section-dark ce-module" id="permute">
+    <div class="section-header">
+      <div class="section-tag">02 &middot; permute() + textCutup()</div>
+      <h2>The permutation block</h2>
+      <p class="section-desc">The engine of the piece: reorder the words, then slice each line as letter contours. Language and image stay separate - one addon reorders, the core cuts up.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>start</span><h4>Reorder the words</h4><p><code>GysinText.permute()</code> returns plain strings, the source line first.</p></div>
+      <div class="ce-step"><span>build</span><h4>Cut up each line</h4><p><code>textCutup()</code> slices every line into horizontal bands and offsets them.</p></div>
+      <div class="ce-step"><span>result</span><h4>Legible drifting to torn</h4><p>Raise the slice offset per line and the poem walks from readable to ruptured.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-permute" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">const rows = GysinText.permute("RUB OUT THE WORD", {
+  seed: 1961, limit: 5, order: "walk"
+});
+rows.forEach((row, i) =&gt; {
+  plot.textCutup(row, 40, 60 + i * 60, {
+    size: 26, slices: 6 + i, sliceOffset: 2 + i * 2
+  });
+});</code></pre>
+      </div>
+    </div>
+    <p class="ce-links"><a href="../../examples/permutation_poem/" target="_blank">permutation_poem example -&gt;</a></p>
+  </section>
+
+  <!-- 03 LETTERS -->
+  <section class="section ce-module" id="letters">
+    <div class="section-header">
+      <div class="section-tag">03 &middot; letters()</div>
+      <h2>The letter field</h2>
+      <p class="section-desc">Where words dissolve. A box is filled with letters drawn from the phrase, each glyph independently varied, so meaning breaks down into pure letterform.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>start</span><h4>Give it a phrase</h4><p>The source string becomes the pool of letters the field is built from.</p></div>
+      <div class="ce-step"><span>build</span><h4>Fill a box, jitter each glyph</h4><p><code>glyphJitter</code> gives every letter its own small deviation - no two alike.</p></div>
+      <div class="ce-step"><span>result</span><h4>A decaying letter mist</h4><p>Add <code>dropout</code> and the field thins toward noise at its edges.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-letters" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">plot.letters("RUBOUTTHEWORD", 60, 60, 680, 520, {
+  size: 16,
+  glyphJitter: 0.7,   // every letter varies
+  wobble: 0.5,
+  dropout: 0.05       // the field thins into noise
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 SYMBOLS -->
+  <section class="section section-dark ce-module" id="symbols">
+    <div class="section-header">
+      <div class="section-tag">04 &middot; symbols()</div>
+      <h2>The symbol band</h2>
+      <p class="section-desc">A texture of typewriter operators - the rhythmic noise band under the words. Same idea as the letter field, but the pool is punctuation instead of letters.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>start</span><h4>Pick an operator set</h4><p>A short string of marks becomes the texture's alphabet.</p></div>
+      <div class="ce-step"><span>build</span><h4>Cluster them into runs</h4><p><code>cluster</code> repeats marks in short bursts, so the band reads as rhythm, not static.</p></div>
+      <div class="ce-step"><span>result</span><h4>A rational noise strip</h4><p>The band grounds the expressive layers with a machined, even texture.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-symbols" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">plot.symbols(60, 120, 680, 300, {
+  set: '/"()-:',   // the built-in alphabet's marks
+  cluster: true,
+  size: 16
+});</code></pre>
+      </div>
+    </div>
+    <p class="ce-note">Operator glyphs like <code>+ # &amp;</code> are not in the built-in vector alphabet. For those, type them with the <code>underwood()</code> verb (its Hershey face has them) or pass an outline font.</p>
+  </section>
+
+  <!-- 05 ASEMIC -->
+  <section class="section ce-module" id="asemic">
+    <div class="section-header">
+      <div class="section-tag">05 &middot; asemic()</div>
+      <h2>The asemic gesture</h2>
+      <p class="section-desc">Writing with no letters. A smooth turning walk that drifts back toward its centre reads as a compact, cursive scribble - the calligraphic tangle that buries the words.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>start</span><h4>Give it a box</h4><p>The gesture fills the rectangle you hand it, one tangle per cell.</p></div>
+      <div class="ce-step"><span>build</span><h4>A turning, centre-seeking walk</h4><p>The path loops and drifts home, so it looks hand-written, not like an angular net.</p></div>
+      <div class="ce-step"><span>result</span><h4>Script without language</h4><p>A grid of these reads as rows of writing you can feel but not read.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-asemic" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">// one cursive gesture per cell of a small grid
+for (let r = 0; r &lt; 2; r++) {
+  for (let c = 0; c &lt; 4; c++) {
+    plot.asemic(60 + c * 170, 60 + r * 240, 150, 210, {
+      wobble: 1.4
+    });
+  }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 UNDERWOOD -->
+  <section class="section section-dark ce-module" id="underwood">
+    <div class="section-header">
+      <div class="section-tag">06 &middot; underwood()</div>
+      <h2>The typewriter</h2>
+      <p class="section-desc">The typed voice, period-correct. Single-stroke letters at a fixed pitch, named after the Underwood No. 5 that Burroughs cut up the world on. No bold, no italic - "bold" is just the same key struck twice.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>start</span><h4>Type the line</h4><p>Defaults alone give a period page: fixed pitch, 6 lines-per-inch, light strike wear.</p></div>
+      <div class="ce-step"><span>build</span><h4>Only period decoration</h4><p><code>underline</code>, <code>bold: true</code> (double-strike), spacing, and typed dividers.</p></div>
+      <div class="ce-step"><span>result</span><h4>A real typed sheet</h4><p>Every letter is one pen line, so it plots exactly as drawn.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-underwood" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">// needs p5.gysin.underwood.min.js loaded
+plot.underwood("RUB OUT THE WORD", 60, 90, {
+  size: 30, underline: 1
+});
+plot.underwood("DOUBLE-STRUCK", 60, 170, { bold: true });
+plot.underwood("* * * * * * * *", 60, 230);  // a typed divider</code></pre>
+      </div>
+    </div>
+    <p class="ce-links"><a href="../../examples/typewriter/" target="_blank">typewriter example -&gt;</a><a href="../typewriter-decoration-research.md" target="_blank">what a typewriter could do -&gt;</a></p>
+  </section>
+
+  <!-- 07 POSTER -->
+  <section class="section ce-module ce-poster-section" id="poster">
+    <div class="section-header">
+      <div class="section-tag">07 &middot; assembly</div>
+      <h2>One sheet, every part</h2>
+      <p class="section-desc">The verbs stack into the whole poster: a frame holds a typed permutation block over a dissolving letter field, an operator band, and an asemic gesture at the foot. One seed, one material vocabulary, one page.</p>
+    </div>
+    <div class="ce-poster-stage">
+      <div id="m-poster" class="ce-canvas"></div>
+    </div>
+    <div class="ce-demo" style="margin-top:18px;">
+      <div class="ce-codewrap" style="grid-column: 1 / -1;">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 1961, width: 560, height: 760 });
+
+// frame -> typed block -> letter field -> operator band -> asemic
+plot.grid(30, 30, 500, 700, 1, 1, { frame: { bleed: 0.3, wobble: 0.6 } });
+
+const rows = GysinText.permute("RUB OUT THE WORD", { seed: 1961, limit: 5 });
+plot.underwood(rows.join("\n"), 60, 90, { size: 15 });
+
+plot.letters("RUBOUTTHEWORD", 60, 330, 440, 150, { size: 13, glyphJitter: 0.7, dropout: 0.05 });
+plot.underwood('+  "  #  &  /   +  "  #  &  /', 60, 520, { size: 15, wear: 0.6 });
+plot.asemic(60, 560, 440, 150, { wobble: 1.6 });
+
+plot.draw();</code></pre>
+      </div>
+    </div>
+    <p class="ce-links"><a href="../../index.html#examples">all examples -&gt;</a><a href="../guide.html">full guide -&gt;</a></p>
+  </section>
+
+  <footer>
+    <p><a href="../../index.html#examples">Examples</a> &nbsp;&middot;&nbsp; <a href="../guide.html">Guide</a></p>
+    <p class="footer-sub">p5.gysin v0.2.0</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.text.min.js"></script>
+  <script src="../../p5.gysin.underwood.min.js"></script>
+  <script>
+  const PAPER = '#ece5d7';
+  const INK = '#17140f';
+
+  function copyCode(btn) {
+    const code = btn.parentElement.querySelector('code');
+    navigator.clipboard.writeText(code.innerText).then(function () {
+      const old = btn.textContent;
+      btn.textContent = 'Copied';
+      setTimeout(function () { btn.textContent = old; }, 1200);
+    });
+  }
+
+  function makeGysinPreview(id, ratio, builder) {
+    new p5(function (p) {
+      let plot;
+      function size() {
+        const el = document.getElementById(id);
+        const w = Math.max(280, el.clientWidth);
+        return { w: w, h: Math.round(w * ratio) };
+      }
+      p.setup = function () {
+        const s = size();
+        p.createCanvas(s.w, s.h).parent(id);
+        p.pixelDensity(1);
+        p.noLoop();
+        plot = builder(p, s.w, s.h);
+      };
+      p.draw = function () {
+        p.background(PAPER);
+        if (plot) plot.draw();
+      };
+      p.windowResized = function () {
+        const s = size();
+        p.resizeCanvas(s.w, s.h);
+        plot = builder(p, s.w, s.h);
+        p.redraw();
+      };
+    }, id);
+  }
+
+  function base(p, w, h, seed) {
+    return new GysinPlot({ p: p, seed: seed, width: w, height: h, style: { stroke: INK, strokeWeight: 1.2, alpha: 0.9 } });
+  }
+
+  // 01 frame
+  makeGysinPreview('m-grid', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 12);
+    plot.grid(w * 0.08, h * 0.1, w * 0.84, h * 0.8, 4, 3, {
+      frame: { bleed: 0.3, wobble: 0.7, strokeWeight: 2, bleedPasses: 3 }
+    });
+    return plot;
+  });
+
+  // 02 permutation
+  makeGysinPreview('m-permute', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 1961);
+    const rows = GysinText.permute('RUB OUT THE WORD', { seed: 1961, limit: 5, order: 'walk' });
+    rows.forEach(function (row, i) {
+      plot.textCutup(row, w * 0.07, h * 0.24 + i * h * 0.155, {
+        size: w * 0.05, slices: 6 + i, sliceOffset: 2 + i * 2, wobble: 0.5
+      });
+    });
+    return plot;
+  });
+
+  // 03 letters
+  makeGysinPreview('m-letters', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 7);
+    plot.letters('RUBOUTTHEWORD', w * 0.08, h * 0.12, w * 0.84, h * 0.74, {
+      size: w * 0.032, glyphJitter: 0.7, wobble: 0.5, dropout: 0.05, alpha: 0.85
+    });
+    return plot;
+  });
+
+  // 04 symbols
+  makeGysinPreview('m-symbols', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 4);
+    plot.symbols(w * 0.08, h * 0.24, w * 0.84, h * 0.5, {
+      set: '/"()-:', cluster: true, size: w * 0.032, wobble: 0.5
+    });
+    return plot;
+  });
+
+  // 05 asemic
+  makeGysinPreview('m-asemic', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 3);
+    const cols = 4, rows = 2;
+    const gx = w * 0.06, gy = h * 0.1, gw = w * 0.88, gh = h * 0.8;
+    const cw = gw / cols, ch = gh / rows;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        plot.asemic(gx + c * cw, gy + r * ch, cw * 0.9, ch * 0.9, { wobble: 1.4, strokeWeight: 1 });
+      }
+    }
+    return plot;
+  });
+
+  // 06 underwood
+  makeGysinPreview('m-underwood', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 1961);
+    plot.underwood('RUB OUT THE WORD', w * 0.07, h * 0.34, { size: w * 0.052, underline: 1 });
+    plot.underwood('DOUBLE-STRUCK', w * 0.07, h * 0.62, { size: w * 0.045, bold: true });
+    plot.underwood('* * * * * * * * * *', w * 0.07, h * 0.82, { size: w * 0.036, wear: 0.6 });
+    return plot;
+  });
+
+  // 07 the poster (portrait)
+  makeGysinPreview('m-poster', 1.36, function (p, w, h) {
+    const plot = base(p, w, h, 1961);
+    const m = w * 0.05;
+    plot.grid(m, m, w - 2 * m, h - 2 * m, 1, 1, { frame: { bleed: 0.3, wobble: 0.6, strokeWeight: 2, bleedPasses: 3 } });
+    const rows = GysinText.permute('RUB OUT THE WORD', { seed: 1961, limit: 5, order: 'walk' });
+    plot.underwood(rows.join('\n'), w * 0.1, h * 0.11, { size: w * 0.028, underline: 0 });
+    plot.letters('RUBOUTTHEWORD', w * 0.1, h * 0.42, w * 0.8, h * 0.18, { size: w * 0.026, glyphJitter: 0.7, dropout: 0.05, alpha: 0.85 });
+    plot.underwood('+  "  #  &  /   +  "  #  &  /', w * 0.1, h * 0.68, { size: w * 0.028, wear: 0.6 });
+    plot.asemic(w * 0.1, h * 0.72, w * 0.8, h * 0.2, { wobble: 1.6, strokeWeight: 1 });
+    plot.underwood('P5.GYSIN / RUB OUT THE WORD / SEED 1961', w * 0.1, h * 0.955, { size: w * 0.019, wear: 0.5 });
+    return plot;
+  });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>
