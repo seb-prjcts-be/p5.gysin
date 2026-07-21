@@ -115,6 +115,23 @@ assert.throws(() => new SourcePlot().line(0, 0, 10, 0, {
   bleedSpread: 0
 }), /bleedSpread must be at least 0.1/);
 
+// breathe is the poetic alias for wobble: same value, same trace - and an
+// explicit breathe wins when a wobble is also present (merged-in defaults).
+{
+  const size = { width: 200, height: 100 };
+  const withWobble = new SourcePlot({ seed: 77, width: 200, height: 100 });
+  withWobble.line(10, 20, 190, 30, { wobble: 1.4, dropout: 0.02 });
+  const withBreathe = new SourcePlot({ seed: 77, width: 200, height: 100 });
+  withBreathe.line(10, 20, 190, 30, { breathe: 1.4, dropout: 0.02 });
+  assert.equal(withBreathe.exportSVG(size), withWobble.exportSVG(size));
+  const both = new SourcePlot({ seed: 77, width: 200, height: 100 });
+  both.line(10, 20, 190, 30, { wobble: 0.2, breathe: 1.4, dropout: 0.02 });
+  assert.equal(both.exportSVG(size), withWobble.exportSVG(size));
+  const minBreathe = new MinPlot({ seed: 77, width: 200, height: 100 });
+  minBreathe.line(10, 20, 190, 30, { breathe: 1.4, dropout: 0.02 });
+  assert.equal(minBreathe.exportSVG(size), withWobble.exportSVG(size));
+}
+
 function buildBleedPlot() {
   const plot = new SourcePlot({ seed: 77, width: 420, height: 180 });
   const id = plot.textCutup("INK BUILDS", 20, 100, {

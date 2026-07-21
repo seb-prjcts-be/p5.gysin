@@ -60,6 +60,13 @@ plot.draw();
 }
 ```
 
+`breathe` is the poetic name for `wobble` - the hand tremor that keeps a line
+alive. Both spellings work on every verb; when both are given, `breathe` wins.
+
+```js
+plot.line(80, 260, 720, 280, { breathe: 1 });   // the line breathes
+```
+
 ## Intent verbs
 
 The calls above are primitives - you compose them yourself. `rub()` is the first
@@ -182,7 +189,7 @@ exact type.
 
 ## Optional text permutations
 
-Load the text module only when you want to reorder sentences. The module needs
+Load the text module only when you want to reorder phrases. The module needs
 no p5.js or `GysinPlot` and returns plain strings:
 
 ```html
@@ -210,7 +217,7 @@ rows.forEach((row, index) => {
 ```
 
 Available orderings are `walk`, `random`, `lexical`, and `rotate`. The original
-sentence always comes first; duplicate words don't produce duplicate lines.
+phrase always comes first; duplicate words don't produce duplicate lines.
 `limit` defaults to 24 and maxes at 1,000.
 
 The language and image processing stay deliberately separate:
@@ -230,7 +237,7 @@ single-stroke (Hershey) face, so it needs no external font:
 ```
 
 ```js
-plot.underwood("RUB OUT THE WORD", 60, 90);
+plot.underwood("KICK THAT HABIT MAN", 60, 90);
 ```
 
 Defaults alone give a period-correct typed page: single-stroke letters, fixed
