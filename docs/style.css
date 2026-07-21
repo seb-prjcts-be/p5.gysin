@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400;1,700&display=swap");
 
 /* One stylesheet for the whole site: showcase, docs, curation engine and all
    example pages. The default layout is a centered column (--page-max wide);
@@ -43,6 +43,20 @@ a {
 code,
 pre {
   font-family: Consolas, "Courier New", monospace;
+}
+
+/* Running text reads in Alegreya; UI chrome stays in the mono voice. */
+p,
+.guide-block li,
+.legend li {
+  font-family: "Alegreya", Georgia, serif;
+}
+
+/* Card/strip copy is chrome, not running text - keep it in the mono voice. */
+.feature-grid p,
+.example-card p,
+.ce-step p {
+  font-family: inherit;
 }
 
 a:focus-visible,
@@ -585,23 +599,6 @@ h3 {
 
 /* ── curation engine page ───────────────────────────────────────────── */
 
-.ce-header {
-  max-width: var(--page-max);
-  margin: 0 auto;
-  padding: 64px var(--col-pad) 20px;
-}
-
-.ce-header h1 {
-  font-size: clamp(42px, 8vw, 96px);
-}
-
-.ce-lead {
-  max-width: 720px;
-  color: var(--muted);
-  font-size: 17px;
-  margin-top: 14px;
-}
-
 .ce-chips {
   display: flex;
   flex-wrap: wrap;
@@ -632,6 +629,11 @@ h3 {
 .ce-module {
   padding: 46px var(--col-pad);
   border-top: 1px solid var(--rule);
+}
+
+/* The page-header already draws the separator above the first module. */
+.page-header + .ce-module {
+  border-top: none;
 }
 
 .ce-module .section-tag {
