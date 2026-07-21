@@ -62,6 +62,26 @@ snippet". Die moet **openen met het complete 3-regel-minimum** ("dit alleen is
 al een volledige sketch"), en pas daarna de elaboratie tonen. Dit is wat een
 bezoeker op de site als eerste leest.
 
+## Regel 5 - Showcase-kaarten: één concept, de snippet vertelt de waarheid
+
+Voor de galerij-kaarten op de homepage (preview + korte snippet):
+
+- **De preview tekent alleen wat de snippet beschrijft.** Elk element dat in de
+  preview zichtbaar is, staat ook in de snippet - geen verborgen extra lagen,
+  lussen of calls.
+- **Liever variaties binnen één concept dan losse elementen.** Wil een kaart
+  meer tonen dan één call, herhaal dan dezelfde call in oplopende staten
+  (bv. hetzelfde woord op drie decay-niveaus, dezelfde cut-up op drie
+  sliderstanden). Dat verbeeldt het concept; heterogene elementen verwateren
+  het.
+- **Uitzondering:** meerdere elementen mogen wanneer ze sámen het concept zijn
+  én de snippet ze allemaal benoemt (Plotter Calibration: frame + cirkels +
+  arcering, alle drie in de `penMap`).
+- **Intent verbs:** een kaart rond een intent verb (zoals `rub()`) draait op de
+  defaults van dat verb; alleen wat de snippet toont (bv. `size`) wijkt af.
+
+Doorgevoerd op alle 11 kaarten (juli 2026); toets elke nieuwe kaart hieraan.
+
 ## Checklist per voorbeeld
 
 - [ ] On-ramp-kop toegevoegd, met het juiste woord/de juiste maten.
@@ -70,3 +90,5 @@ bezoeker op de site als eerste leest.
 - [ ] "Core snippet" in `index.html` opent met het 3-regel-minimum.
 - [ ] Sketch rendert nog identiek in de browser (`http://localhost/...`).
 - [ ] `npm test` groen.
+- [ ] Galerij-kaart (indien aanwezig): preview = snippet, variaties binnen één
+      concept (Regel 5).

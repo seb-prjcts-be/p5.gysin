@@ -59,7 +59,9 @@
       <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
 
 // one word, worn away - legible → cut up → asemic, in one call
-plot.rub("WORN", 46, 248);
+plot.rub("WORN", 46, 72, {
+  size: 48
+});
 
 plot.draw();</code></pre>
       <div class="ex-links">
@@ -510,11 +512,9 @@ function setup() {
       width: canvasW,
       height: canvasH
     });
-    // The whole preview is one intent verb, scaled to the small canvas.
-    plot.rub("WORN", 40, canvasH * 0.24, {
-      size: canvasW * 0.08,
-      stepX: canvasW * 0.06,
-      stepY: canvasH * 0.24
+    // One intent verb on its own defaults - only size scales to the canvas.
+    plot.rub("WORN", 46, canvasH * 0.17, {
+      size: canvasW * 0.0775
     });
     return plot;
   });
