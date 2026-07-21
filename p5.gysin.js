@@ -326,7 +326,10 @@
         ? `${this.globalSeed}:field:${this._fieldCount = (this._fieldCount || 0) + 1}`
         : options.seed;
       const rng = new SeededRandom(seedKey);
-      const perRow = Math.max(1, Math.floor(w / (size * 0.62)));
+      const letterSpacing = options.letterSpacing === undefined ? 0.9 : finiteNumber(options.letterSpacing, "letterSpacing");
+      // The bitmap font advances (5 + letterSpacing) / 7 cells per glyph; use
+      // that real advance so rows stay inside the requested box width.
+      const perRow = Math.max(1, Math.floor(w / (size * (5 + letterSpacing) / 7)));
       const rows = Math.max(1, Math.floor(h / lineHeight));
       const textOptions = Object.assign({}, options);
       delete textOptions.set;
