@@ -21,8 +21,8 @@
     <div class="demo-header">
       <div class="demo-number">underwood()</div>
       <h1>Typewriter</h1>
-      <p><strong>underwood()</strong> is an intent verb: defaults alone give a period-correct typewriter page. Single-stroke Hershey letterforms (bundled, no font to load), fixed monospace pitch and line height (<strong>10 chars-per-inch / 6 lines-per-inch</strong>, the classic Pica machine), and the small strike wear of a real typed sheet. Every option is opt-in, so <code>plot.underwood("RUB OUT THE WORD", 60, 90)</code> is a complete gesture.</p>
-      <p>A typewriter had no bold and no italic (see <a href="../../docs/typewriter-decoration-research.md">the decoration research</a>). So the only decoration is what the machine could do: <strong>overstrike</strong> (<code>bold: true</code>, the same key struck twice), <strong>underline</strong> (the underscore rule), ALL CAPS, spacing, and typed symbol dividers. Mass comes from double-striking, never from fill.</p>
+      <p>William Burroughs cut up the world on an <strong>Underwood No. 5</strong>, the flat black office standard that fixed the look of a typed page for half a century. Its keys carried one face, at one size, upright - a typebar can only strike the single shape cast on it. So a typed sheet has a voice of its own: fixed pitch, six lines to the inch, and the small wear of every strike.</p>
+      <p><strong>underwood()</strong> types in that voice. The defaults alone give a period-correct page - bundled single-stroke letterforms, <strong>10 chars-per-inch / 6 lines-per-inch</strong> (the classic Pica machine), light strike wear - so <code>plot.underwood("RUB OUT THE WORD", 60, 90)</code> is a complete gesture. Every option is opt-in.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
@@ -52,9 +52,8 @@ plot.underwood("RUB OUT THE WORD", 60, 210, { wear: 0 });</code></pre>
     </div>
     <div class="demo-header">
       <h2>Sperrsatz</h2>
-      <p>William Burroughs cut up the world on an <strong>Underwood No. 5</strong>, the flat black office standard that fixed the look of a typed page for half a century. Its keys carried one face, at one size, upright. There was no bold and no italic to reach for, because a typebar can only strike the single shape cast on it.</p>
-      <p>So emphasis was mechanical, not typographic. A word was made to matter by striking it twice (the nearest thing to bold), by underlining it with a run of underscores, by setting it in CAPITALS, or by <em>Sperrsatz</em> - spacing the letters apart so the word opened out along the line. Rows of asterisks, hyphens and underscores ruled the page into sections; tone came from overprinting characters, never from heavier ink. What a typewriter could not do - a second weight, a slant, another size, a curve - simply did not happen on the page.</p>
-      <p><code>underwood()</code> stays inside those limits on purpose: one single-stroke face at one size, mass only from the double strike, decoration only from what the machine could actually type.</p>
+      <p>One face, one size - yet typed pages still shouted, whispered and ruled themselves into sections. Emphasis was mechanical, not typographic: a word was made to matter by striking it twice (the nearest thing to bold), by underlining it with a run of underscores, by setting it in CAPITALS, or by <em>S&nbsp;p&nbsp;e&nbsp;r&nbsp;r&nbsp;s&nbsp;a&nbsp;t&nbsp;z</em> - spacing the letters apart so the word opened out along the line. Rows of asterisks, hyphens and underscores divided the page; tone came from overprinting characters, never from heavier ink. What the machine could not do - a second weight, a slant, another size, a curve - simply did not happen on the page (see <a href="../../docs/typewriter-decoration-research.md">the decoration research</a>).</p>
+      <p><code>underwood()</code> stays inside those limits on purpose: <code>bold: true</code> is the double strike, <code>underline: 1</code> the underscore rule, and everything else is just what the machine could actually type.</p>
     </div>
   </main>
 

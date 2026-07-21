@@ -52,6 +52,13 @@ p,
   font-family: "Alegreya", Georgia, serif;
 }
 
+/* Mono runs wider and taller than Alegreya - tuck inline code in a step. */
+p code,
+.guide-block li code,
+.legend li code {
+  font-size: 0.82em;
+}
+
 /* Card/strip copy is chrome, not running text - keep it in the mono voice. */
 .feature-grid p,
 .example-card p,
