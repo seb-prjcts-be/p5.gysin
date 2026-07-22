@@ -32,14 +32,15 @@
       <li><a href="#scissors">04 scissors</a></li>
       <li><a href="#arrange">05 arrange</a></li>
       <li><a href="#letterbox">06 letter box</a></li>
-      <li><a href="#markbox">07 mark box</a></li>
-      <li><a href="#label">08 typed label</a></li>
-      <li><a href="#tone">09 tone blocks</a></li>
-      <li><a href="#glue">10 glue &amp; ink</a></li>
-      <li><a href="#wear">11 wear</a></li>
-      <li><a href="#note">12 margin note</a></li>
-      <li><a href="#pens">13 pens &amp; export</a></li>
-      <li><a href="#collage">14 the collage</a></li>
+      <li><a href="#turn">07 the turn</a></li>
+      <li><a href="#markbox">08 mark box</a></li>
+      <li><a href="#label">09 typed label</a></li>
+      <li><a href="#tone">10 tone blocks</a></li>
+      <li><a href="#glue">11 glue &amp; ink</a></li>
+      <li><a href="#wear">12 wear</a></li>
+      <li><a href="#note">13 margin note</a></li>
+      <li><a href="#pens">14 pens &amp; export</a></li>
+      <li><a href="#collage">15 the collage</a></li>
     </ul>
   </header>
 
@@ -233,10 +234,46 @@ lines.forEach((line, index) =&gt; {
     </div>
   </section>
 
-  <!-- 07 MARK BOX -->
-  <section class="section ce-module" id="markbox">
+  <!-- 07 THE TURN -->
+  <section class="section ce-module" id="turn">
     <div class="section-header">
-      <div class="section-tag">07 &middot; symbols()</div>
+      <div class="section-tag">07 &middot; direction &middot; the turned sheet</div>
+      <h2>The turn</h2>
+      <p class="section-desc">Writing has a direction, and the sheet can be turned against it. The typed line runs left to right; the word answers in columns, top to bottom, written straight over what was already there. Nothing here is a new function: it is <code>text()</code> released from its row, one letter under the last, direction against direction until the page starts to weave.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>One letter at a time</h4><p>A column is the word freed from its row: each letter set under the last.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Turn the sheet</h4><p>Write across what is already written; the row keeps running underneath.</p></div>
+      <div class="ce-step"><span>glue</span><h4>The weave</h4><p>Where the directions cross, the ink thickens; the words stay, the reading dissolves.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-turn" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">// the row: a typed line, left to right
+plot.underwood("CUT ARRANGE GLUE CUT ARRANGE", 60, 320, {
+  size: 22
+});
+
+// the columns: the word written downwards, over the row
+const word = "COLLAGE";
+for (let column = 0; column &lt; 4; column++) {
+  for (let i = 0; i &lt; word.length; i++) {
+    plot.text(word[i], 90 + column * 170, 80 + i * 68, {
+      size: 44,
+      breathe: 0.9,
+      bleed: 0.2
+    });
+  }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 MARK BOX -->
+  <section class="section section-dark ce-module" id="markbox">
+    <div class="section-header">
+      <div class="section-tag">08 &middot; symbols()</div>
       <h2>The mark box</h2>
       <p class="section-desc">Next to the letters, a box of punctuation: the small hard marks that hold a page together. <code>symbols()</code> works like the letter box but pools marks instead of letters, and <code>cluster</code> repeats them in short bursts so the band reads as rhythm, not static.</p>
     </div>
@@ -259,10 +296,10 @@ lines.forEach((line, index) =&gt; {
     <p class="ce-note">Marks like <code>+ # &amp;</code> are not in the built-in vector alphabet. Type those with <code>underwood()</code> (its face has them) or pass an outline font.</p>
   </section>
 
-  <!-- 08 TYPED LABEL -->
-  <section class="section section-dark ce-module" id="label">
+  <!-- 09 TYPED LABEL -->
+  <section class="section ce-module" id="label">
     <div class="section-header">
-      <div class="section-tag">08 &middot; underwood()</div>
+      <div class="section-tag">09 &middot; underwood()</div>
       <h2>The typed label</h2>
       <p class="section-desc">Every collage carries a typed strip: the caption pasted under the image. <code>underwood()</code> types it period-correct - single-stroke letters at a fixed pitch, no bold, no italic. "Bold" is the same key struck twice; the underline is the underscore ladder.</p>
     </div>
@@ -289,10 +326,10 @@ plot.underwood("* * * * * * * *", 60, 230);</code></pre>
     <p class="ce-links"><a href="../../examples/typewriter/" target="_blank">typewriter example -&gt;</a></p>
   </section>
 
-  <!-- 09 TONE BLOCKS -->
-  <section class="section ce-module" id="tone">
+  <!-- 10 TONE BLOCKS -->
+  <section class="section section-dark ce-module" id="tone">
     <div class="section-header">
-      <div class="section-tag">09 &middot; fill: "hatch" &middot; fill: "cross"</div>
+      <div class="section-tag">10 &middot; fill: "hatch" &middot; fill: "cross"</div>
       <h2>Tone blocks</h2>
       <p class="section-desc">Collage needs dark paper too: blocks of tone to paste behind and between the words. A plotter cannot pour ink, so <code>fill</code> builds tone from strokes - <code>hatch</code> lays parallel lines, <code>cross</code> lays two perpendicular hatchings. The patch and its filling are one family: the outline is the hand-drawn <code>rect()</code>, and every hatch stroke is the same free <code>line</code> - it wobbles, runs past the edge, skips, and soaks. Craft over perfection: the mistakes are the tone.</p>
     </div>
@@ -334,10 +371,10 @@ plot.circle(380, 430, 180, {
     <p class="ce-links"><a href="../../examples/font_outlines/" target="_blank">filled letters in font_outlines -&gt;</a></p>
   </section>
 
-  <!-- 10 GLUE & INK -->
-  <section class="section section-dark ce-module" id="glue">
+  <!-- 11 GLUE & INK -->
+  <section class="section ce-module" id="glue">
     <div class="section-header">
-      <div class="section-tag">10 &middot; bleed &middot; repeat</div>
+      <div class="section-tag">11 &middot; bleed &middot; repeat</div>
       <h2>Glue &amp; ink</h2>
       <p class="section-desc">Glue, in a collage of words, is commitment: the pass that fixes the new order to the sheet. <code>bleed</code> is that commitment made visible - extra passes that thicken a trace unevenly, ink building up where the sheet was worked longest. It is selective: you decide which words soak.</p>
     </div>
@@ -368,10 +405,10 @@ plot.line(60, 360, 680, 380, {
     </div>
   </section>
 
-  <!-- 11 WEAR -->
-  <section class="section ce-module" id="wear">
+  <!-- 12 WEAR -->
+  <section class="section section-dark ce-module" id="wear">
     <div class="section-header">
-      <div class="section-tag">11 &middot; rub()</div>
+      <div class="section-tag">12 &middot; rub()</div>
       <h2>Wear</h2>
       <p class="section-desc">A fragment that is handled wears out. <code>rub()</code> is the intent verb for that whole gesture: the word appears legible, returns cut up, and is finally buried under an asemic scribble - three copies, one call, one <code>decay</code> knob to scale the wear.</p>
     </div>
@@ -393,10 +430,10 @@ plot.rub("COLLAGE", 60, 220, {
     <p class="ce-links"><a href="../../examples/worn_word/" target="_blank">worn_word example -&gt;</a></p>
   </section>
 
-  <!-- 12 MARGIN NOTE -->
-  <section class="section section-dark ce-module" id="note">
+  <!-- 13 MARGIN NOTE -->
+  <section class="section ce-module" id="note">
     <div class="section-header">
-      <div class="section-tag">12 &middot; asemic()</div>
+      <div class="section-tag">13 &middot; asemic()</div>
       <h2>The margin note</h2>
       <p class="section-desc">In the margin of every collage: handwriting that is not language. <code>asemic()</code> draws a smooth turning walk that drifts back toward its centre - a compact cursive scribble you can feel but not read. Rows of them read as the note the maker left.</p>
     </div>
@@ -421,10 +458,10 @@ for (let r = 0; r &lt; 2; r++) {
     </div>
   </section>
 
-  <!-- 13 PENS & EXPORT -->
-  <section class="section ce-module" id="pens">
+  <!-- 14 PENS & EXPORT -->
+  <section class="section section-dark ce-module" id="pens">
     <div class="section-header">
-      <div class="section-tag">13 &middot; layer &middot; penMap &middot; export</div>
+      <div class="section-tag">14 &middot; layer &middot; penMap &middot; export</div>
       <h2>Pens &amp; off the table</h2>
       <p class="section-desc">The finished collage leaves the table. Give every material its own <code>layer</code>, map layers to physical pens, and the same captured paths go out as SVG for the plotter driver, JSON for data, or HPGL for the classics. Nothing is redrawn: export is the drawing.</p>
     </div>
@@ -469,12 +506,12 @@ console.log(plot.stats({ page }));</code></pre>
     <p class="ce-links"><a href="../../examples/plotter_export/" target="_blank">plotter_export example -&gt;</a><a href="../../examples/plotter_calibration/" target="_blank">plotter_calibration example -&gt;</a></p>
   </section>
 
-  <!-- 14 THE COLLAGE -->
-  <section class="section section-dark ce-module ce-poster-section" id="collage">
+  <!-- 15 THE COLLAGE -->
+  <section class="section ce-module ce-poster-section" id="collage">
     <div class="section-header">
-      <div class="section-tag">14 &middot; assembly</div>
+      <div class="section-tag">15 &middot; assembly</div>
       <h2>The collage</h2>
-      <p class="section-desc">Cut, arranged, glued. The sheet holds a deep-cut headline, a typed permutation strip, the sifted letter box, a mark band, a soaked rule, a patch of tone, the worn word, and the margin note. One seed, one word, and every act fixing a new order of it to one sheet.</p>
+      <p class="section-desc">Stamped, written, turned, overwritten, erased, spattered. The incised table rolls over the sheet twice and lands off register; the typed strip runs left to right and the word answers top to bottom; fields collide instead of stacking; the worn word erases what it crosses, and flecks of ink let chance keep the last word. One seed, every act, no hierarchy.</p>
     </div>
     <div class="ce-poster-stage">
       <div id="m-collage" class="ce-canvas"></div>
@@ -484,37 +521,43 @@ console.log(plot.stats({ page }));</code></pre>
         <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
         <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 1919, width: 560, height: 760 });
 
-// the board
-plot.grid(30, 30, 500, 700, 1, 1, {
-  frame: { bleed: 0.3, wobble: 0.6 }
-});
+// the roller: an incised table, stamped twice, off register
+plot.grid(30, 30, 500, 700, 3, 4, { frame: { bleed: 0.4, wobble: 0.9 } });
+plot.grid(38, 24, 500, 700, 3, 4, { frame: { wobble: 1.6, dropout: 0.35 } });
 
-// deep-cut headline
-plot.textCutup("COLLAGE", 60, 120, {
-  size: 60,
-  slices: 8,
-  sliceOffset: 14
-});
-
-// typed permutation strip
+// left to right: the typed permutation strip
 const lines = GysinText.permute("CUT ARRANGE GLUE", { seed: 1919, limit: 4 });
-plot.underwood(lines.join("\n"), 60, 190, { size: 13 });
+plot.underwood(lines.join("\n"), 56, 120, { size: 14, wear: 0.5 });
 
-// the letter box, sifted from the word
-plot.letters("COLLAGE", 60, 330, 440, 120, {
-  size: 13,
-  glyphJitter: 0.7,
-  dropout: 0.05
-});
+// top to bottom: the word turned, written over the strip
+const word = "COLLAGE";
+for (let column = 0; column &lt; 3; column++) {
+  for (let i = 0; i &lt; word.length; i++) {
+    plot.text(word[i], 120 + column * 150, 90 + i * 86, {
+      size: 38,
+      breathe: 1.0,
+      bleed: 0.2,
+      dropout: 0.06
+    });
+  }
+}
 
-// mark band and a soaked rule
-plot.symbols(60, 470, 440, 50, { set: '/"()-:', cluster: true, size: 13 });
-plot.line(60, 545, 500, 550, { wobble: 0.8, bleed: 0.7 });
+// fields collide: sifted letters across the marks, tone behind
+plot.letters("COLLAGE", 56, 430, 440, 150, { size: 13, glyphJitter: 0.8, dropout: 0.08 });
+plot.symbols(200, 500, 300, 90, { set: '/"()-:', cluster: true, size: 13 });
+plot.rect(330, 560, 170, 120, { fill: "hatch", hatchSpacing: 5, hatchAngle: 30, wobble: 1.0, dropout: 0.06 });
 
-// tone patch, the worn word, the margin note
-plot.rect(320, 570, 180, 110, { fill: "hatch", hatchSpacing: 3, hatchAngle: 30 });
-plot.rub("COLLAGE", 60, 620, { size: 30 });
-plot.asemic(60, 660, 220, 60, { wobble: 1.5 });
+// erased and overwritten: the worn word drags across the field
+plot.rub("COLLAGE", 90, 620, { size: 34, decay: 1.6 });
+plot.asemic(300, 590, 200, 110, { wobble: 1.8 });
+
+// spatter: chance keeps the last word
+for (let i = 0; i &lt; 40; i++) {
+  const angle = i * 2.399;
+  const radius = 10 * Math.sqrt(i);
+  plot.line(300 + Math.cos(angle) * radius, 380 + Math.sin(angle) * radius * 1.5,
+            302 + Math.cos(angle) * radius, 382 + Math.sin(angle) * radius * 1.5, { wobble: 3 });
+}
 
 plot.draw();</code></pre>
       </div>
@@ -635,7 +678,23 @@ plot.draw();</code></pre>
     return plot;
   });
 
-  // 07 the mark box
+  // 07 the turn
+  makeGysinPreview('m-turn', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 1919);
+    plot.underwood('CUT ARRANGE GLUE CUT ARRANGE', w * 0.06, h * 0.5, { size: w * 0.036 });
+    plot.underwood('GLUE CUT ARRANGE GLUE CUT', w * 0.06, h * 0.74, { size: w * 0.036, wear: 0.5 });
+    const word = 'COLLAGE';
+    for (let c = 0; c < 4; c++) {
+      for (let i = 0; i < word.length; i++) {
+        plot.text(word[i], w * (0.11 + c * 0.24), h * (0.13 + i * 0.118), {
+          size: w * 0.072, breathe: 0.9, bleed: 0.2
+        });
+      }
+    }
+    return plot;
+  });
+
+  // 08 the mark box
   makeGysinPreview('m-markbox', 0.66, function (p, w, h) {
     const plot = base(p, w, h, 4);
     plot.symbols(w * 0.08, h * 0.24, w * 0.84, h * 0.5, {
@@ -644,7 +703,7 @@ plot.draw();</code></pre>
     return plot;
   });
 
-  // 08 the typed label
+  // 09 the typed label
   makeGysinPreview('m-label', 0.66, function (p, w, h) {
     const plot = base(p, w, h, 1919);
     plot.underwood('COLLAGE', w * 0.07, h * 0.34, { size: w * 0.052, underline: 1 });
@@ -653,7 +712,7 @@ plot.draw();</code></pre>
     return plot;
   });
 
-  // 09 tone blocks
+  // 10 tone blocks
   makeGysinPreview('m-tone', 0.66, function (p, w, h) {
     const plot = base(p, w, h, 9);
     plot.rect(w * 0.08, h * 0.14, w * 0.36, h * 0.34, { fill: 'hatch', hatchSpacing: w * 0.013, hatchAngle: 30, wobble: 0.9, overshoot: 5, bleed: 0.25 });
@@ -662,7 +721,7 @@ plot.draw();</code></pre>
     return plot;
   });
 
-  // 10 glue & ink
+  // 11 glue & ink
   makeGysinPreview('m-glue', 0.66, function (p, w, h) {
     const plot = base(p, w, h, 10);
     plot.line(w * 0.08, h * 0.2, w * 0.92, h * 0.22, { wobble: 0.8 });
@@ -671,14 +730,14 @@ plot.draw();</code></pre>
     return plot;
   });
 
-  // 11 wear
+  // 12 wear
   makeGysinPreview('m-wear', 0.66, function (p, w, h) {
     const plot = base(p, w, h, 1919);
     plot.rub('COLLAGE', w * 0.08, h * 0.42, { size: w * 0.1 });
     return plot;
   });
 
-  // 12 the margin note
+  // 13 the margin note
   makeGysinPreview('m-note', 0.66, function (p, w, h) {
     const plot = base(p, w, h, 3);
     const cols = 4, rows = 2;
@@ -692,7 +751,7 @@ plot.draw();</code></pre>
     return plot;
   });
 
-  // 13 pens & export
+  // 14 pens & export
   makeGysinPreview('m-pens', 0.66, function (p, w, h) {
     const plot = base(p, w, h, 13);
     plot.rect(w * 0.08, h * 0.1, w * 0.84, h * 0.8, { layer: 'frame', wobble: 0.9, overshoot: 6, bleed: 0.25 });
@@ -701,20 +760,40 @@ plot.draw();</code></pre>
     return plot;
   });
 
-  // 14 the collage (portrait)
+  // 15 the collage (portrait)
   makeGysinPreview('m-collage', 1.36, function (p, w, h) {
     const plot = base(p, w, h, 1919);
     const m = w * 0.05;
-    plot.grid(m, m, w - 2 * m, h - 2 * m, 1, 1, { frame: { bleed: 0.3, wobble: 0.6, strokeWeight: 2, bleedPasses: 3 } });
-    plot.textCutup('COLLAGE', w * 0.1, h * 0.14, { size: w * 0.107, slices: 8, sliceOffset: 14 });
+    // the roller: an incised table, stamped twice, off register
+    plot.grid(m, m, w - 2 * m, h - 2 * m, 3, 4, { frame: { bleed: 0.4, wobble: 0.9, strokeWeight: 2 } });
+    plot.grid(m * 1.28, m * 0.8, w - 2 * m, h - 2 * m, 3, 4, { frame: { wobble: 1.6, dropout: 0.35 } });
+    // left to right: the typed permutation strip
     const lines = GysinText.permute('CUT ARRANGE GLUE', { seed: 1919, limit: 4, order: 'walk' });
-    plot.underwood(lines.join('\n'), w * 0.1, h * 0.235, { size: w * 0.023 });
-    plot.letters('COLLAGE', w * 0.1, h * 0.42, w * 0.8, h * 0.16, { size: w * 0.023, glyphJitter: 0.7, dropout: 0.05, alpha: 0.85 });
-    plot.symbols(w * 0.1, h * 0.6, w * 0.8, h * 0.07, { set: '/"()-:', cluster: true, size: w * 0.023 });
-    plot.line(w * 0.1, h * 0.71, w * 0.9, h * 0.715, { wobble: 0.8, bleed: 0.7 });
-    plot.rect(w * 0.56, h * 0.745, w * 0.33, h * 0.145, { fill: 'hatch', hatchSpacing: w * 0.016, hatchAngle: 30, wobble: 0.9, overshoot: 4, dropout: 0.05, bleed: 0.25 });
-    plot.rub('COLLAGE', w * 0.1, h * 0.81, { size: w * 0.054 });
-    plot.asemic(w * 0.1, h * 0.86, w * 0.38, h * 0.08, { wobble: 1.5, strokeWeight: 1 });
+    plot.underwood(lines.join('\n'), w * 0.1, h * 0.16, { size: w * 0.025, wear: 0.5 });
+    // top to bottom: the word turned, written over the strip
+    const word = 'COLLAGE';
+    for (let c = 0; c < 3; c++) {
+      for (let i = 0; i < word.length; i++) {
+        plot.text(word[i], w * (0.21 + c * 0.27), h * (0.12 + i * 0.113), {
+          size: w * 0.068, breathe: 1.0, bleed: 0.2, dropout: 0.06
+        });
+      }
+    }
+    // fields collide
+    plot.letters('COLLAGE', w * 0.1, h * 0.57, w * 0.8, h * 0.19, { size: w * 0.023, glyphJitter: 0.8, dropout: 0.08, alpha: 0.85 });
+    plot.symbols(w * 0.36, h * 0.66, w * 0.54, h * 0.115, { set: '/"()-:', cluster: true, size: w * 0.023 });
+    plot.rect(w * 0.59, h * 0.735, w * 0.3, h * 0.155, { fill: 'hatch', hatchSpacing: w * 0.016, hatchAngle: 30, wobble: 1.0, dropout: 0.06 });
+    // erased and overwritten
+    plot.rub('COLLAGE', w * 0.16, h * 0.815, { size: w * 0.06, decay: 1.6 });
+    plot.asemic(w * 0.53, h * 0.775, w * 0.36, h * 0.145, { wobble: 1.8, strokeWeight: 1 });
+    // spatter: chance keeps the last word
+    for (let i = 0; i < 40; i++) {
+      const angle = i * 2.399;
+      const radius = w * 0.018 * Math.sqrt(i);
+      const sx = w * 0.53 + Math.cos(angle) * radius;
+      const sy = h * 0.5 + Math.sin(angle) * radius * 1.5;
+      plot.line(sx, sy, sx + 2, sy + 2, { wobble: 3 });
+    }
     plot.underwood('P5.GYSIN / COLLAGE / SEED 1919', w * 0.1, h * 0.955, { size: w * 0.017, wear: 0.5 });
     return plot;
   });
