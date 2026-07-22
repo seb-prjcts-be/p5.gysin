@@ -13,6 +13,9 @@
   --rule: #b8ae9d;
   --red: #b5362b;
   --blue: #244f73;
+  --red-on-dark: #df695c;
+  --blue-on-dark: #79a9cc;
+  --text-on-dark: #d8d0c4;
   --green: #37614f;
   --white: #fbfaf5;
   --sheet: #f0efe9;
@@ -276,7 +279,17 @@ h3 {
 }
 
 .section-dark .section-desc {
-  color: #c9c0b2;
+  color: var(--text-on-dark);
+}
+
+/* The base tag and accent colors are tuned for paper; on dark ground
+   they fall below readable contrast, so lift them here. */
+.section-dark .section-tag {
+  color: var(--blue-on-dark);
+}
+
+.section-dark .accent {
+  color: var(--red-on-dark);
 }
 
 .section-header {
