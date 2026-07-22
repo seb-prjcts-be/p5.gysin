@@ -62,7 +62,7 @@
     <div class="demo-header">
       <div class="demo-number">GysinText.permute() → textCutup() → plotter paths</div>
       <h1>Permutation Poem</h1>
-      <p>The optional text module rearranges the phrase. The original cut-up engine then passes every permutation through repeated type, a symbolic code column, damaged letter bands, and a modular grid. Meaning and letterform are disturbed in two separate passes.</p>
+      <p>The optional text module rearranges the phrase. The original cut-up engine then passes every permutation through repeated type, a symbolic code column, damaged letter bands, and a modular grid. Meaning and letterform are disturbed in two separate passes. <strong>chant()</strong> is that whole movement as one call; this poster performs the same two-step by hand, for control over every repeat, pen, and layer.</p>
       <p class="demo-hint"><strong>How to read it:</strong> one phrase runs through four passes; follow the numbered order top to bottom.</p>
       <ul class="demo-hint">
         <li><strong>First order (01)</strong> leads: it is the source phrase, printed in a heavier pen so the eye lands there first.</li>
@@ -76,15 +76,17 @@
     <div class="demo-layout poster-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">// The whole library, in three lines - this alone is a complete sketch:
+        <pre><code class="language-javascript">// A complete permutation poem, in three lines - chant() permutes the
+// phrase and sends every order through the cut-up, each line cut deeper:
 const plot = new GysinPlot({ seed: 1960 });
-plot.textCutup("I LOVE YOU", 64, 120);   // one line, sliced and reset
+plot.chant("I LOVE YOU", 64, 120);
 plot.draw();
 
-// Everything below is OPTIONAL, layered on top. This example adds, in order:
+// This poster performs chant()'s two-step BY HAND, for control over
+// every repeat, pen and layer. It adds, in order:
 
 // 1) the text addon (p5.gysin.text.min.js): permute() rearranges the phrase
-//    into orders before any of it is drawn
+//    into orders before any of it is drawn - chant()'s first half
 const regels = GysinText.permute(phrase, {
   seed: posterSeed, limit: GROUPS, order: ORDERS[orderIndex]
 }).slice(0, GROUPS);
