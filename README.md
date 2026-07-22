@@ -3,7 +3,7 @@
 [Open the public p5.gysin site](https://seb-prjcts-be.github.io/p5.gysin/)
 
 p5.gysin is a vector-first p5.js library for generative, plottable drawings:
-cut-up text, rubout zones, wobble, dropout, selective ink bleed, and export to
+cut-up text, rubout zones, breathe, dropout, selective ink bleed, and export to
 SVG, JSON, and HPGL. Version 0.2.0 adds physical page settings, layers/pen
 mapping, optional route optimization, and plot statistics.
 
@@ -42,7 +42,7 @@ function setup() {
 
   plot.text("RUB OUT THE WORD", 80, 180, {
     size: 72,
-    wobble: 2,
+    breathe: 2,
     dropout: 0.12,
     bleed: 0.2,
     bleedPasses: 2,
@@ -51,7 +51,7 @@ function setup() {
   });
 
   plot.line(80, 260, 720, 280, {
-    wobble: 1,
+    breathe: 1,
     dropout: 0.05,
     overshoot: 8
   });
@@ -60,8 +60,7 @@ plot.draw();
 }
 ```
 
-`breathe` is the poetic name for `wobble` - the hand tremor that keeps a line
-alive. Both spellings work on every verb; when both are given, `breathe` wins.
+`breathe` is the hand tremor that keeps a line alive. It works on every verb.
 
 ```js
 plot.line(80, 260, 720, 280, { breathe: 1 });   // the line breathes
@@ -81,7 +80,7 @@ plot.rub("RUB OUT", 46, 248, { decay: 2 });          // one knob scales the wear
 plot.rub("RUB OUT", 46, 248, { font: outlineFont }); // fills the legible head
 ```
 
-- `decay` (default 1) scales wobble/drift/dropout/rubout/fray across every copy at
+- `decay` (default 1) scales breathe/drift/dropout/rubout/fray across every copy at
   once; `0` draws clean, higher wears the word away and buries it wider.
 - `size` (default 46), `font` (fills the legible head), `stroke`.
 - `tail` (default true) is the asemic burial of the last copy; set `false` to leave

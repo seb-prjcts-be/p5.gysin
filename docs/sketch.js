@@ -49,10 +49,10 @@ function buildHeroTrace(plot) {
 
   // the roller: the table, stamped twice, off register
   plot.grid(w * 0.04, h * 0.05, w * 0.92, h * 0.88, compact ? 3 : 5, 4, {
-    frame: { bleed: 0.35, wobble: 0.8, strokeWeight: 1.6 }
+    frame: { bleed: 0.35, breathe: 0.8, strokeWeight: 1.6 }
   });
   plot.grid(w * 0.045 + 8, h * 0.05 - 6, w * 0.92, h * 0.88, compact ? 3 : 5, 4, {
-    frame: { wobble: 1.5 }
+    frame: { breathe: 1.5 }
   });
 
   // ghost behind the title: the phrase, deep cut, muted by the wash
@@ -60,7 +60,7 @@ function buildHeroTrace(plot) {
     size: Math.max(34, Math.min(64, w * 0.045)),
     slices: 8,
     sliceOffset: 16,
-    wobble: 1.6,
+    breathe: 1.6,
     dropout: 0.02,
     rubout: 0.15,
     alpha: 0.6
@@ -97,7 +97,7 @@ function buildHeroTrace(plot) {
   plot.letters("RUBOUTTHEWORD", w * 0.55, h * 0.46, w * 0.38, h * 0.18, {
     size: Math.max(10, w * 0.012),
     glyphJitter: 0.7,
-    wobble: 0.5,
+    breathe: 0.5,
     dropout: 0.03,
     alpha: 0.8
   });
@@ -108,7 +108,7 @@ function buildHeroTrace(plot) {
     wear: 0.6
   });
   plot.line(w * 0.55, h * 0.745, w * 0.94, h * 0.75, {
-    wobble: 0.9,
+    breathe: 0.9,
     bleed: 0.7
   });
 
@@ -117,7 +117,7 @@ function buildHeroTrace(plot) {
   const cw = (w * 0.9) / cells;
   for (let c = 0; c < cells; c++) {
     plot.asemic(w * 0.05 + c * cw + 6, h * (c % 2 ? 0.795 : 0.81), cw * 0.82, h * 0.13, {
-      wobble: 1.6,
+      breathe: 1.6,
       strokeWeight: 1
     });
   }
@@ -128,7 +128,7 @@ function buildHeroTrace(plot) {
     const radius = w * 0.012 * Math.sqrt(i);
     const sx = w * 0.72 + Math.cos(angle) * radius;
     const sy = h * 0.4 + Math.sin(angle) * radius * 1.4;
-    plot.line(sx, sy, sx + 2, sy + 2, { wobble: 3 });
+    plot.line(sx, sy, sx + 2, sy + 2, { breathe: 3 });
   }
 
   // the small voice, bottom right

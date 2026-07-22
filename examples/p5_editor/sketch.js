@@ -7,7 +7,7 @@
 //      plot.text("CUT UP", 82, 150);   // clean, mechanical text
 //      plot.draw();
 //
-//  Every option below (wobble, dropout, rubout, cut-up, hatch fill,
+//  Every option below (breathe, dropout, rubout, cut-up, hatch fill,
 //  asemic…) is OPTIONAL disturbance layered on top of that core. The
 //  defaults are all zero, so a call with no options just draws clean -
 //  nothing here is required to use the library. This sketch builds the
@@ -54,7 +54,7 @@ const LAYOUT = {
 const GLYPH_ADVANCE_UNITS = 5.9;
 
 const base = {
-  wobble: 1.4,
+  breathe: 1.4,
   drift: 1.8,
   pressure: 0.22,
   segmentLength: 8,
@@ -115,13 +115,13 @@ function buildPlot() {
   const nerve = calm ? 0.35 : 1.6;
   const hand = {
     ...base,
-    wobble: base.wobble * nerve,
+    breathe: base.breathe * nerve,
     drift: base.drift * nerve
   };
   const breath = 0.12 + random(0.3); // anchor pressure, new every reseed
 
   // Seed-driven grain so each plot reads as its own work, not the same picture
-  // rewobbled. Drawn once, reused per layer.
+  // rebreathed. Drawn once, reused per layer.
   const grain = {
     crossSpacing: random(6, 9),
     crossAngle: random(0, 22),
@@ -190,7 +190,7 @@ function buildPlot() {
       stroke: INK,
       strokeWeight: 0.9,
       alpha: 0.38,
-      wobble: 0.7,
+      breathe: 0.7,
       bleed: 0.18,
       dropout: 0.06 + decay * 0.4
     }
@@ -247,7 +247,7 @@ function buildPlot() {
 // Draw a word whose tail dissolves and return how many glyphs were lost. Each
 // lost glyph decays through three alphabets as `t` runs 0→1 across the tail - its
 // own letter shaken loose, then a printed sign, then a pure scribble - while
-// wobble, drift and dropout climb with every step. So the tail is a gradient of
+// breathe, drift and dropout climb with every step. So the tail is a gradient of
 // noise, a real failing alphabet, not the same scribble nine times over.
 function degradeWord(word, x, y, size, decay, hand) {
   const advance = (size / 7) * GLYPH_ADVANCE_UNITS;
@@ -273,7 +273,7 @@ function degradeWord(word, x, y, size, decay, hand) {
       ...hand,
       stroke: RED,
       size,
-      wobble: hand.wobble + fade * 0.5,
+      breathe: hand.breathe + fade * 0.5,
       drift: hand.drift + fade * 0.6,
       dropout: 0.08 + fade * 0.06
     });

@@ -7,7 +7,7 @@
 //      plot.text("RUB OUT", 75, 145);   // clean, mechanical text
 //      plot.draw();
 //
-//  Every option below (wobble, dropout, rubout, fill, cut-up, letters…)
+//  Every option below (breathe, dropout, rubout, fill, cut-up, letters…)
 //  is OPTIONAL disturbance layered on top of that core. The defaults are
 //  all zero, so a call with no options just draws clean - nothing here is
 //  required to use the library. This sketch adds the layers one at a time;
@@ -36,7 +36,7 @@ const base = {
   segmentLength: 8,
   pressure: 0.3,
   drift: 2.5,
-  wobble: 1.6
+  breathe: 1.6
 };
 
 // The rub-out deepens with depth: one slider, read as a top-to-bottom gradient.
@@ -87,7 +87,7 @@ function buildPlot() {
   titleId = plot.text("RUB OUT", 75, 145, {
     ...titleOpts,
     rubout: ruboutAt(145),
-    wobble: 1.8,
+    breathe: 1.8,
     dropout: 0.08,
     repeat: 2,
     drift: 2
@@ -95,7 +95,7 @@ function buildPlot() {
   plot.text("THE WORD", 76, 235, {
     ...titleOpts,
     rubout: ruboutAt(235),
-    wobble: 2.2,
+    breathe: 2.2,
     dropout: 0.14,
     repeat: 3,
     drift: 3,
@@ -111,7 +111,7 @@ function buildPlot() {
     sliceOffset: 24,
     sliceDropout: 0.18,
     density: 1,
-    wobble: 1.4,
+    breathe: 1.4,
     dropout: 0.09,
     repeat: 2,
     drift: 2,
@@ -128,7 +128,7 @@ function buildPlot() {
     const y = 448 + i * 18;
     plot.line(80 + i * 8, y, 820, y + i * 5, {
       ...base,
-      wobble: 0.9,
+      breathe: 0.9,
       drift: 1.4,
       dropout: 0.04 + i * 0.03,
       overshoot: 9,
@@ -143,14 +143,14 @@ function buildPlot() {
 
   // ── 4 · the left mass ───────────────────────────────────────────
   // Left block: an airy hatched slab, tilted off the horizontal to break the stack.
-  // Its wobble rides the break-apart slider, so the mass shakes with the letters.
+  // Its breathe rides the break-apart slider, so the mass shakes with the letters.
   plot.polygon(tiltedRect(310, 672, 440, 165, -7), {
     ...base,
     fill: "hatch",
     hatchAngle: 52,
     hatchSpacing: 8,
     density: 1,
-    wobble: 1.3 + letterJitter * 1.2,
+    breathe: 1.3 + letterJitter * 1.2,
     dropout: 0.08,
     repeat: 3,
     rubout: ruboutAt(672),
@@ -169,7 +169,7 @@ function buildPlot() {
     fill: "cross",
     hatchSpacing: 6,
     density: 1.6,
-    wobble: 2.5,
+    breathe: 2.5,
     dropout: 0.13,
     repeat: 2,
     drift: 4,
@@ -185,7 +185,7 @@ function buildPlot() {
   plot.letters("RUB OUT THE WORD", 90, 795, 720, 105, {
     ...base,
     size: 26,
-    wobble: 1.4,
+    breathe: 1.4,
     dropout: 0.2 + titleRubout,
     rubout: ruboutAt(795),
     drift: 1.2,

@@ -7,7 +7,7 @@
 //      plot.text("FIRST TRACE", 46, 248);   // clean, mechanical text
 //      plot.draw();
 //
-//  Every option below (wobble, dropout, rubout, fill, cut-up, asemic…)
+//  Every option below (breathe, dropout, rubout, fill, cut-up, asemic…)
 //  is OPTIONAL disturbance layered on top of that core. The defaults are
 //  all zero, so a call with no options just draws clean - nothing here is
 //  required to use the library. This sketch adds the layers one at a time;
@@ -40,11 +40,11 @@ const WORDS = ["FIRST TRACE", "SLOW HAND", "LOST WORD", "OPEN MARK", "GONE SOON"
 const STAGES = [
   //  name       labelY  y    x    weight  alpha  dropout  rubout  fray   verb          fill      extra
   { name: "legible", labelY: 216, y: 248, x: 46,  weight: 1.1,  alpha: 0.9,  dropout: 0.05, rubout: 0.06, fray: 0.4, verb: "text",      fill: "cross",
-    extra: { wobble: 1.2, glyphJitter: 0.5 } },
+    extra: { breathe: 1.2, glyphJitter: 0.5 } },
   { name: "cut-up",  labelY: 326, y: 360, x: 100, weight: 0.85, alpha: 0.55, dropout: 0.2,  rubout: 0.16, fray: 1.2, verb: "textCutup",
-    extra: { wobble: 1.5, glyphJitter: 1.1, slices: 8, sliceOffset: 22, drift: 3.4, overshoot: 6, repeat: 2 } },
+    extra: { breathe: 1.5, glyphJitter: 1.1, slices: 8, sliceOffset: 22, drift: 3.4, overshoot: 6, repeat: 2 } },
   { name: "asemic",  labelY: 424, y: 512, x: 150, weight: 0.6,  alpha: 0.18, dropout: 0.55, rubout: 0.3,  fray: 2.4, verb: "text",
-    extra: { wobble: 2.2, glyphJitter: 1.3 } }
+    extra: { breathe: 2.2, glyphJitter: 1.3 } }
 ];
 
 // The asemic tangles that bury the ghost word, placed as offsets from the asemic
@@ -69,16 +69,16 @@ const BASE = {
 // the crisp single-stroke bitmap alphabet (no font), so small text stays legible.
 const CAPTION_STYLE = {
   glyphJitter: 0.1,
-  wobble: 0.5,
+  breathe: 0.5,
   stroke: CAPTION
 };
 
 // The decay knob: scale the disturbance verbs of any block by the live multiplier,
-// so one control drives wobble, drift, dropout AND erasure across the whole trace
+// so one control drives breathe, drift, dropout AND erasure across the whole trace
 // at once. rubout/fray scale too, so higher decay literally wipes the mark out.
 const decayed = (opts) => ({
   ...opts,
-  wobble: (opts.wobble ?? 0) * decay,
+  breathe: (opts.breathe ?? 0) * decay,
   drift: (opts.drift ?? 0) * decay,
   dropout: (opts.dropout ?? 0) * decay,
   rubout: (opts.rubout ?? 0) * decay,
@@ -176,7 +176,7 @@ function buildPlot() {
     stroke: "#151515",
     strokeWeight: 0.5,
     alpha: 0.4,
-    wobble: 0.9,
+    breathe: 0.9,
     drift: 1.2,
     repeat: 2,
     hesitate: 0.4,
@@ -195,7 +195,7 @@ function buildPlot() {
     fill: "cross",
     hatchSpacing: 1.8,
     density: 1.6,
-    wobble: 1.4,
+    breathe: 1.4,
     dropout: 0.05,
     pressure: 0.82
   }));
@@ -203,7 +203,7 @@ function buildPlot() {
   // ── 3 · the first stroke ────────────────────────────────────────
   // First stroke: firm and confident, already hesitating and fraying.
   plot.line(146, 110, 470, 124, decayed({
-    wobble: 1.2,
+    breathe: 1.2,
     dropout: 0.04,
     overshoot: 10,
     hesitate: 0.6,
@@ -241,7 +241,7 @@ function buildPlot() {
   const asemic = STAGES[2];
   for (const t of TANGLES) {
     plot.asemic(asemic.x + t.dx * decay, asemic.y + t.dy * decay, t.w * decay, t.h * decay, decayed({
-      wobble: 1.4,
+      breathe: 1.4,
       dropout: t.dropout,
       strokeWeight: t.weight,
       pressure: t.pressure

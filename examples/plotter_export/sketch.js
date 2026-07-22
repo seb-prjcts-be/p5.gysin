@@ -7,7 +7,7 @@
 //      plot.text("PLOT", 118, 188);   // clean, mechanical text
 //      plot.draw();
 //
-//  Every option below (wobble, dropout, fill, cut-up, per-pen layers,
+//  Every option below (breathe, dropout, fill, cut-up, per-pen layers,
 //  page + export…) is OPTIONAL on top of that core. The defaults are
 //  all zero, so a call with no options just draws clean - nothing here
 //  is required to use the library. This sketch stacks the layers one at
@@ -127,7 +127,7 @@ function composition(v) {
 // anchor (0.82), so airy field, second rest point and heavy anchor all contrast.
 const ARM = {
   alpha: 0.7,
-  wobble: 0.6,
+  breathe: 0.6,
   dropout: 0.02,
   overshoot: 4,
   fray: 1.2
@@ -139,7 +139,7 @@ function shapesFor(comp) {
     ["frame", "rect", [FRAME.x, FRAME.y, FRAME.size, FRAME.size],
       {
         segmentLength: 12,
-        wobble: 0.45,
+        breathe: 0.45,
         drift: 0.8,
         dropout: 0.015,
         hesitate: 0.35,
@@ -152,7 +152,7 @@ function shapesFor(comp) {
       {
         size: 88,
         segmentLength: 8,
-        wobble: 1.5,
+        breathe: 1.5,
         drift: 2,
         dropout: 0.07,
         repeat: 2,
@@ -170,7 +170,7 @@ function shapesFor(comp) {
         slices: 5,
         sliceOffset: 10,
         sliceDropout: 0.14,
-        wobble: 1.2,
+        breathe: 1.2,
         drift: 1.6,
         dropout: 0.08,
         glyphJitter: 0.4
@@ -182,7 +182,7 @@ function shapesFor(comp) {
       {
         size: 11,
         segmentLength: 7,
-        wobble: 0.8,
+        breathe: 0.8,
         drift: 1,
         dropout: 0.05,
         glyphJitter: 0.5,
@@ -197,7 +197,7 @@ function shapesFor(comp) {
         fill: "hatch",
         hatchAngle: comp.accentAngle,
         hatchSpacing: 5,
-        wobble: 0.6,
+        breathe: 0.6,
         drift: 1,
         dropout: 0.03,
         alpha: 0.5
@@ -212,7 +212,7 @@ function shapesFor(comp) {
         size: 13,
         lineHeight: 1.3,
         segmentLength: 7,
-        wobble: 0.7,
+        breathe: 0.7,
         drift: 1.2,
         dropout: 0.04,
         glyphJitter: 0.4,
@@ -227,7 +227,7 @@ function shapesFor(comp) {
         fill: "cross",
         hatchAngle: comp.hatchAngle,
         hatchSpacing: comp.hatchSpacing,
-        wobble: 0.6,
+        breathe: 0.6,
         drift: 1,
         dropout: 0.03,
         alpha: 0.82
@@ -240,7 +240,7 @@ function shapesFor(comp) {
       {
         alpha: 0.7,
         density: 1.0,
-        wobble: 1.3,
+        breathe: 1.3,
         drift: 1.8,
         dropout: 0.08,
         repeat: 2,
@@ -250,7 +250,7 @@ function shapesFor(comp) {
     ["registration", "polygon", [[[156, 372], [125, 426], [187, 426]]],
       {
         alpha: 0.7,
-        wobble: 1.3,
+        breathe: 1.3,
         drift: 1.8,
         dropout: 0.08,
         repeat: 2,
@@ -269,7 +269,7 @@ function shapesFor(comp) {
 
 // Perturbation keys scaled by the live human-scale control: 0 = machine-clean,
 // 2 = heavily hand-disturbed.
-const SCALED_KEYS = ["wobble", "drift", "hesitate", "overshoot", "fray", "rubout", "glyphJitter", "dropout"];
+const SCALED_KEYS = ["breathe", "drift", "hesitate", "overshoot", "fray", "rubout", "glyphJitter", "dropout"];
 
 let plot;
 let variation = 0;

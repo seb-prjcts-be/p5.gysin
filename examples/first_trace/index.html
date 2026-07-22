@@ -27,7 +27,7 @@
         <li><strong>cut-up</strong> - sliced and drifting: outline only, coming apart</li>
         <li><strong>asemic</strong> - buried under a scribble: the hollow, near-empty tail</li>
       </ul>
-      <p><strong>The decay knob</strong> (<em>Decay &plus;/&minus;</em> or the &uarr;/&darr; arrow keys) scales wobble, dropout <em>and rubout</em> across the whole trace at once, from <em>0&times; fully clean</em> to <em>2.5&times; fully wiped</em>.</p>
+      <p><strong>The decay knob</strong> (<em>Decay &plus;/&minus;</em> or the &uarr;/&darr; arrow keys) scales breathe, dropout <em>and rubout</em> across the whole trace at once, from <em>0&times; fully clean</em> to <em>2.5&times; fully wiped</em>.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
@@ -40,9 +40,9 @@ plot.draw();
 // Everything below is OPTIONAL disturbance layered on top. Defaults are all
 // zero, so options are opt-in. This example adds, in order:
 
-// 1) one "decay" knob scaling wobble/drift/dropout/rubout/fray on any block
+// 1) one "decay" knob scaling breathe/drift/dropout/rubout/fray on any block
 const decayed = (o) => ({ ...o,
-  wobble: (o.wobble ?? 0) * decay, dropout: (o.dropout ?? 0) * decay,
+  breathe: (o.breathe ?? 0) * decay, dropout: (o.dropout ?? 0) * decay,
   rubout: (o.rubout ?? 0) * decay, fray: (o.fray ?? 0) * decay });
 
 // 2) the same word drawn three times, decaying from a solid, cross-hatch

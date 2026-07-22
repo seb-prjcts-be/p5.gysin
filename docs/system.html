@@ -66,14 +66,14 @@ function setup() {
 
   plot.textCutup("RUB OUT THE WORD", 80, 180, {
     size: 72,
-    wobble: 2,
+    breathe: 2,
     dropout: 0.12,
     repeat: 2,
     rubout: 0.25
   });
 
   plot.line(80, 260, 720, 280, {
-    wobble: 1,
+    breathe: 1,
     dropout: 0.05,
     overshoot: 8
   });
@@ -106,7 +106,7 @@ plot.rub("RUB OUT", 46, 248, { decay: 2 });          // one knob scales the wear
 plot.rub("RUB OUT", 46, 248, { font: outlineFont }); // fills the legible head</code>
       </div>
       <ul>
-        <li><code>decay</code>: scales wobble/drift/dropout/rubout/fray across every copy at once; default <code>1</code>, <code>0</code> draws clean.</li>
+        <li><code>decay</code>: scales breathe/drift/dropout/rubout/fray across every copy at once; default <code>1</code>, <code>0</code> draws clean.</li>
         <li><code>size</code> (default <code>46</code>), <code>font</code> (fills the legible head), <code>stroke</code>.</li>
         <li><code>tail</code>: the asemic burial of the last copy; default <code>true</code>, set <code>false</code> to leave the word unburied.</li>
         <li><code>stepX</code>/<code>stepY</code>: the drift between copies. <code>stages</code>/<code>tangles</code> replace the built-in recipe wholesale.</li>
@@ -142,7 +142,7 @@ lines.forEach((line, index) =&gt; {
       <h2>Trace Parameters</h2>
       <ul>
         <li><code>density</code>: positive point sampling density; default <code>1</code>.</li>
-        <li><code>wobble</code>: maximum point displacement in pixels; default <code>0</code>. <code>breathe</code> is its poetic name - both work on every verb, and when both are given, <code>breathe</code> wins.</li>
+        <li><code>breathe</code>: the hand tremor that keeps a line alive - maximum point displacement in pixels; default <code>0</code>.</li>
         <li><code>dropout</code>: clamped 0–1 probability that a point interrupts a path.</li>
         <li><code>hesitate</code>: clamped 0–1 probability of small mechanical hesitations.</li>
         <li><code>repeat</code>: whole number from 1 through 1000; default <code>1</code>.</li>
@@ -194,7 +194,7 @@ lines.forEach((line, index) =&gt; {
     <section class="guide-block">
       <h2>Addressing</h2>
       <div class="code-preview">
-        <code>const titleId = plot.text("RUB OUT", 80, 180, { wobble: 2 });
+        <code>const titleId = plot.text("RUB OUT", 80, 180, { breathe: 2 });
 
 plot.freeze(titleId);
 plot.update(titleId, { stroke: "#b5362b" });

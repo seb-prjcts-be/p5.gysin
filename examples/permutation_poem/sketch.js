@@ -9,7 +9,7 @@
 //
 //  textCutup() is this poster's core verb: it slices a line of type and
 //  offsets the pieces (slices default to 7, so it disturbs on its own). Every
-//  OTHER option below (letters, hatch fill, wobble, dropout, pressure…) is
+//  OTHER option below (letters, hatch fill, breathe, dropout, pressure…) is
 //  optional and defaults to zero, so nothing else here is required to draw.
 //  The one addon this example loads is the text module (p5.gysin.text.min.js);
 //  its GysinText.permute() rearranges the phrase into orders before any of it
@@ -38,7 +38,7 @@ const ORDER_NOTES = {
 const CODE_SET = ["|", "§§", "%", "=", "#", "//", "×", "¶"];
 // Shared look for every rule line on the poster.
 const RULE = {
-  wobble: 0.14,
+  breathe: 0.14,
   dropout: 0.012,
   strokeWeight: 0.42,
   alpha: 0.34,
@@ -123,7 +123,7 @@ function decay(i, seedTag, overrides, boost = 0) {
     slices: 4 + (i % 5),
     sliceOffset: 0.7 + i * 0.72,
     sliceDropout: 0.02 + i * 0.006,
-    wobble: 0.08 + i * 0.03,
+    breathe: 0.08 + i * 0.03,
     dropout: 0.006 + i * 0.002,
     strokeWeight: Math.max(0.4, 1.3 + boost - i * 0.17),
     pressure: Math.min(0.8, boost + i * 0.14),
@@ -151,7 +151,7 @@ function buildPoster() {
 
   glyphFont = outlineFont ? { font: outlineFont } : {};
   // Only the truly shared basis: size, cut-up granularity, font. Every disturbance
-  // param (wobble/dropout/slices…) comes from decay() or the caller, so a reader
+  // param (breathe/dropout/slices…) comes from decay() or the caller, so a reader
   // never weighs two layers of defaults against each other.
   cutupBase = {
     size: 18.5,
@@ -265,7 +265,7 @@ function buildPoster() {
 // The words dissolve into a decaying letter field; letters() jitters each glyph.
 function drawLetterBand() {
   plot.line(RULE_X0, BAND_Y, RULE_X1, BAND_Y, {
-    wobble: 0.2,
+    breathe: 0.2,
     strokeWeight: 0.7,
     alpha: 0.58,
     layer: "rules"
@@ -282,7 +282,7 @@ function drawLetterBand() {
   plot.letters(permutations.join(""), BAND_X, BAND_Y + 4, BAND_W, 120, typeStyle({
     size: 13.5,
     lineHeight: 1.05,
-    wobble: 0.5,
+    breathe: 0.5,
     dropout: 0.04,
     glyphJitter: 0.8,
     strokeWeight: 0.82,
@@ -308,7 +308,7 @@ function drawPermutationGrid() {
       fill: "hatch",
       hatchSpacing: 14 - i * 2,
       hatchAngle: -18,
-      wobble: 0.5,
+      breathe: 0.5,
       dropout: 0.02,
       strokeWeight: 0.6,
       alpha: 0.6,
@@ -325,7 +325,7 @@ function drawPermutationGrid() {
     cutupLine(permutations[i], x + 13, y + 47, {
       // Scale to fit the cell, but never below 9px so long phrases stay legible.
       size: Math.max(9, Math.min(24, 260 / permutations[i].length)),
-      wobble: 0.16,
+      breathe: 0.16,
       dropout: 0.008,
       sliceDropout: 0.02,
       strokeWeight: 1.05,
@@ -348,7 +348,7 @@ function drawPermutationGrid() {
 
 function drawFrame() {
   plot.rect(42, 42, POSTER_WIDTH - 84, POSTER_HEIGHT - 84, {
-    wobble: 0.45,
+    breathe: 0.45,
     dropout: 0.006,
     strokeWeight: 0.62,
     alpha: 0.64,
@@ -356,7 +356,7 @@ function drawFrame() {
   });
 
   const cross = {
-    wobble: 0.18,
+    breathe: 0.18,
     strokeWeight: 0.52,
     alpha: 0.55,
     layer: "frame"

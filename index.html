@@ -6,7 +6,7 @@
   <title>p5.gysin - vector traces for plotter drawings</title>
   <meta name="description" content="p5.gysin is a vector-first p5.js addon for plotter-friendly drawings, cut-up typography, rubout gaps, repeated contours, and uncertain lines.">
   <meta property="og:title" content="p5.gysin - vector traces for plotter drawings">
-  <meta property="og:description" content="Vector-first traces for cut-up text, rubout gaps, dropout lines, repeats, wobble, SVG, JSON, and HPGL export.">
+  <meta property="og:description" content="Vector-first traces for cut-up text, rubout gaps, dropout lines, repeats, breathe, SVG, JSON, and HPGL export.">
   <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="docs/style.css?v=55a1d25">
@@ -152,16 +152,16 @@ plot.draw();</code></pre>
 // the same word, three states of the same trace
 plot.text("FIRST TRACE", 68, 90, {
   size: 54,
-  wobble: 0.4
+  breathe: 0.4
 });
 plot.text("FIRST TRACE", 68, 180, {
   size: 54,
-  wobble: 1.4,
+  breathe: 1.4,
   dropout: 0.08
 });
 plot.text("FIRST TRACE", 68, 270, {
   size: 54,
-  wobble: 2.2,
+  breathe: 2.2,
   dropout: 0.2,
   rubout: 0.2
 });</code></pre>
@@ -195,7 +195,7 @@ plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice</code></pre>
 
   <section class="section section-dark">
     <div class="section-header">
-      <div class="section-tag">wobble &middot; dropout &middot; repeat</div>
+      <div class="section-tag">breathe &middot; dropout &middot; repeat</div>
       <h2>Parameter <span class="accent">Lab</span></h2>
       <p class="section-desc">Use a small control surface to see how trace parameters change the same composition.</p>
     </div>
@@ -204,18 +204,18 @@ plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice</code></pre>
       <pre class="ex-code-block"><code class="language-javascript">// the same call at three slider positions
 plot.textCutup("RUB OUT", 58, 90, {
   slices: 7,
-  wobble: 0.4,
+  breathe: 0.4,
   dropout: 0.02
 });
 plot.textCutup("RUB OUT", 58, 180, {
   slices: 7,
-  wobble: 1.3,
+  breathe: 1.3,
   dropout: 0.08,
   rubout: 0.1
 });
 plot.textCutup("RUB OUT", 58, 270, {
   slices: 7,
-  wobble: 2.4,
+  breathe: 2.4,
   dropout: 0.16,
   rubout: 0.22
 });</code></pre>
@@ -239,7 +239,7 @@ plot.textCutup("RUB OUT", 58, 270, {
 plot.text("O8BR", 70, 190, {
   font: outlineFont,
   size: 150,
-  wobble: 0.9,
+  breathe: 0.9,
   repeat: 2
 });</code></pre>
       <div class="ex-links">
@@ -359,7 +359,7 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, hatch: 3 } });
       </article>
       <article>
         <h3>Disturb</h3>
-        <p>Shape the trace with <code>wobble</code>, <code>dropout</code>, <code>repeat</code>, <code>drift</code>, <code>rubout</code>, <code>fray</code>, <code>overshoot</code>, and <code>pressure</code>.</p>
+        <p>Shape the trace with <code>breathe</code>, <code>dropout</code>, <code>repeat</code>, <code>drift</code>, <code>rubout</code>, <code>fray</code>, <code>overshoot</code>, and <code>pressure</code>.</p>
       </article>
       <article>
         <h3>Export</h3>
@@ -382,7 +382,7 @@ function setup() {
   const plot = new GysinPlot({ seed: 1960 });
   plot.textCutup("RUB OUT THE WORD", 80, 180, {
     size: 72,
-    wobble: 2,
+    breathe: 2,
     dropout: 0.12,
     repeat: 2,
     rubout: 0.25
@@ -469,7 +469,7 @@ function setup() {
         const fontOptions = outlineFont ? { font: outlineFont } : {};
         plot.text("O8BR", 36, size.height * 0.5, Object.assign({}, fontOptions, {
           size: size.width * 0.17,
-          wobble: 0.7,
+          breathe: 0.7,
           dropout: 0.025,
           repeat: 2,
           drift: 0.8,
@@ -510,16 +510,16 @@ function setup() {
     // The same word, three states of the same trace - the card's snippet, verbatim.
     plot.text("FIRST TRACE", 44, canvasH * 0.3, {
       size: canvasW * 0.075,
-      wobble: 0.4
+      breathe: 0.4
     });
     plot.text("FIRST TRACE", 44, canvasH * 0.56, {
       size: canvasW * 0.075,
-      wobble: 1.4,
+      breathe: 1.4,
       dropout: 0.08
     });
     plot.text("FIRST TRACE", 44, canvasH * 0.82, {
       size: canvasW * 0.075,
-      wobble: 2.2,
+      breathe: 2.2,
       dropout: 0.2,
       rubout: 0.2
     });
@@ -555,7 +555,7 @@ function setup() {
     // The starter draws one thing: the smallest complete sketch, pasted as-is.
     plot.text("CUT UP", 42, canvasH * 0.55, {
       size: canvasW * 0.17,
-      wobble: 1.4,
+      breathe: 1.4,
       dropout: 0.06,
       repeat: 2
     });
@@ -579,7 +579,7 @@ function setup() {
       size: canvasW * 0.062,
       slices: 6,
       sliceOffset: 8,
-      wobble: 1.0,
+      breathe: 1.0,
       repeat: 2
     });
     plot.textCutup("I THINK THEREFORE I AM", 42, canvasH * 0.68, {
@@ -587,7 +587,7 @@ function setup() {
       slices: 9,
       sliceOffset: 22,
       sliceDropout: 0.14,
-      wobble: 1.4,
+      breathe: 1.4,
       dropout: 0.09,
       repeat: 2,
       rubout: 0.12
@@ -615,7 +615,7 @@ function setup() {
         slices: 4 + index,
         sliceOffset: 1 + index * 0.8,
         sliceDropout: 0.02,
-        wobble: 0.12,
+        breathe: 0.12,
         dropout: 0.01,
         strokeWeight: 1.05,
         alpha: 0.95
@@ -635,20 +635,20 @@ function setup() {
     plot.textCutup("RUB OUT", 42, canvasH * 0.28, {
       size: canvasW * 0.09,
       slices: 7,
-      wobble: 0.4,
+      breathe: 0.4,
       dropout: 0.02
     });
     plot.textCutup("RUB OUT", 42, canvasH * 0.56, {
       size: canvasW * 0.09,
       slices: 7,
-      wobble: 1.3,
+      breathe: 1.3,
       dropout: 0.08,
       rubout: 0.1
     });
     plot.textCutup("RUB OUT", 42, canvasH * 0.84, {
       size: canvasW * 0.09,
       slices: 7,
-      wobble: 2.4,
+      breathe: 2.4,
       dropout: 0.16,
       rubout: 0.22
     });
@@ -664,7 +664,7 @@ function setup() {
         points.push([x, yBase + p.sin(x * 0.04 + row) * (10 + row * 3)]);
       }
       plot.path(points, {
-        wobble: 0.9 + row * 0.1,
+        breathe: 0.9 + row * 0.1,
         dropout: 0.05 + row * 0.01,
         repeat: row % 2 === 0 ? 2 : 1,
         rubout: 0.06 + row * 0.03,
@@ -677,12 +677,12 @@ function setup() {
 
   makePreview("ex-calibration", function(p, canvasW, canvasH) {
     const plot = new GysinPlot({ p: p, seed: 210297, width: canvasW, height: canvasH });
-    plot.rect(34, 24, canvasW - 68, canvasH - 48, { wobble: 0.25, repeat: 2, layer: "frame" });
+    plot.rect(34, 24, canvasW - 68, canvasH - 48, { breathe: 0.25, repeat: 2, layer: "frame" });
     const diameters = [canvasW * 0.1, canvasW * 0.18, canvasW * 0.28];
     for (let index = 0; index < diameters.length; index++) {
       plot.circle(canvasW * 0.5, canvasH * 0.38, diameters[index], {
         density: 1.2,
-        wobble: 0.35,
+        breathe: 0.35,
         repeat: 2,
         stroke: "#b5362b",
         layer: "circle"
@@ -691,7 +691,7 @@ function setup() {
     for (let index = 0; index < 7; index++) {
       const y = canvasH * 0.7 + index * 11;
       plot.line(58, y, canvasW - 58, y, {
-        wobble: 0.35,
+        breathe: 0.35,
         dropout: index * 0.01,
         overshoot: 7,
         stroke: "#244f73",
@@ -712,14 +712,14 @@ function setup() {
       height: canvasH
     });
     plot.rect(42, 42, canvasW - 84, canvasH - 84, {
-      wobble: 0.4,
+      breathe: 0.4,
       dropout: 0.015,
       repeat: 2,
       layer: "frame"
     });
     plot.text("PLOT", 64, canvasH * 0.42, {
       size: canvasW * 0.14,
-      wobble: 1.3,
+      breathe: 1.3,
       dropout: 0.07,
       repeat: 2,
       rubout: 0.08,
@@ -729,7 +729,7 @@ function setup() {
     for (let i = 0; i < 8; i++) {
       const y = canvasH * 0.61 + i * 12;
       plot.line(72, y, canvasW - 72, y + p.sin(i * 0.8) * 7, {
-        wobble: 0.7,
+        breathe: 0.7,
         dropout: 0.04,
         overshoot: 7,
         stroke: "#244f73",

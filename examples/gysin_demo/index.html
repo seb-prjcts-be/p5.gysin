@@ -47,7 +47,7 @@ plot.textCutup("I THINK THEREFORE I AM", 76, 370, { size: 55, slices: 9, sliceOf
 for (let i = 0; i &lt; 6; i++) plot.line(80 + i * 8, 448 + i * 18, 820, 448 + i * 23, { dropout: 0.04 + i * 0.03 });
 
 // 4) two hatched masses in balance - both feel the break-apart slider too
-plot.polygon(slab,         { fill: "hatch", hatchSpacing: 8, wobble: 1.3 + letterJitter * 1.2 });
+plot.polygon(slab,         { fill: "hatch", hatchSpacing: 8, breathe: 1.3 + letterJitter * 1.2 });
 plot.circle(705, 672, 160, { fill: "cross", hatchSpacing: 6, fray:  0.25 + letterJitter * 0.4 });
 
 // 5) the word made literal, dropped to the foot as a decaying letter field

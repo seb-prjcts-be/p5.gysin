@@ -7,7 +7,7 @@
 //      plot.text("P5.GYSIN CALIBRATION", 48, 39);   // clean, mechanical text
 //      plot.draw();
 //
-//  Every option below (wobble, dropout, fill, pressure, hatch, asemic…)
+//  Every option below (breathe, dropout, fill, pressure, hatch, asemic…)
 //  is OPTIONAL disturbance layered on top of that core. The defaults are
 //  all zero, so a call with no options just draws clean - nothing here is
 //  required to use the library. This sheet is a physical instrument: it
@@ -72,14 +72,14 @@ const EXPORT = {
 
 let plot;
 let currentSeed = SEED_A4;
-let liveWobble = 1;   // ramp-zone wobble maximum, driven by the HTML slider
+let liveBreathe = 1;   // ramp-zone breathe maximum, driven by the HTML slider
 
 function setup() {
   const drawW = PAGE.width - 2 * PAGE.margin;
   const drawH = PAGE.height - 2 * PAGE.margin;
   const canvas = createCanvas(mm(drawW), mm(drawH));
   canvas.parent("sketch");
-  describe("An A4 pen-plotter calibration sheet on three pens: a disturbed single-stroke title with a letters() specimen, a labelled mm ruler, RED centre-crossed rings with a cross-hatched core between a tinted cross-hatched ink mass and a field of asemic marks, a mirrored dropout/wobble ramp whose live-wobble side follows an on-page slider, a hatch-density gradient, a pen-weight ramp and a strip of disturbance verbs above a straight zero line. Buttons and keys: 0 reference, R reroll, S SVG, H HPGL.");
+  describe("An A4 pen-plotter calibration sheet on three pens: a disturbed single-stroke title with a letters() specimen, a labelled mm ruler, RED centre-crossed rings with a cross-hatched core between a tinted cross-hatched ink mass and a field of asemic marks, a mirrored dropout/breathe ramp whose live-breathe side follows an on-page slider, a hatch-density gradient, a pen-weight ramp and a strip of disturbance verbs above a straight zero line. Buttons and keys: 0 reference, R reroll, S SVG, H HPGL.");
   pixelDensity(1);
   noLoop();
   buildPlot(SEED_A4);
@@ -122,8 +122,8 @@ function buildPlot(seed) {
   // ── 2 · rings - ink mass, red rings, asemic field ─────────
   drawRings();      // 2 · rings between a cross-hatched ink mass and asemic marks
 
-  // ── 3 · ramp - dropout vs wobble ──────────────────────────
-  drawRamp();       // 3 · mirrored ramp: dropout 0->0.4, wobble 0->live
+  // ── 3 · ramp - dropout vs breathe ──────────────────────────
+  drawRamp();       // 3 · mirrored ramp: dropout 0->0.4, breathe 0->live
 
   // ── 4 · gradient - hatch density ──────────────────────────
   drawGradient();   // 4 · hatch-density gradient, spacing 0.8->2.4 mm
@@ -141,7 +141,7 @@ function buildPlot(seed) {
 function head(text, x, y) {
   plot.text(text, x, y, {
     size: mm(2.9),
-    wobble: 0.15,
+    breathe: 0.15,
     alpha: 0.8,
     layer: "label",
     stroke: INK
@@ -152,7 +152,7 @@ function head(text, x, y) {
 function label(text, x, y, stroke = INK, layer = "label") {
   plot.text(text, x, y, {
     size: mm(2.5),
-    wobble: 0.15,
+    breathe: 0.15,
     alpha: 0.55,
     layer,
     stroke
@@ -173,7 +173,7 @@ function ramp(zone, values, drawCell, caption = String) {
 // Border, corner registration crosses, and a title that itself shows the disturbance it measures.
 function drawFrame() {
   plot.rect(0, 0, width, height, {
-    wobble: 0.25,
+    breathe: 0.25,
     drift: 0.3,
     layer: "frame"
   });
@@ -182,17 +182,17 @@ function drawFrame() {
                    [inset, height - inset], [width - inset, height - inset]];
   for (const [cx, cy] of corners) {
     plot.line(cx - arm, cy, cx + arm, cy, {
-      wobble: 0.2,
+      breathe: 0.2,
       layer: "frame"
     });
     plot.line(cx, cy - arm, cx, cy + arm, {
-      wobble: 0.2,
+      breathe: 0.2,
       layer: "frame"
     });
   }
   plot.text("P5.GYSIN CALIBRATION", mm(16), mm(ZONES.title.label), {
     size: mm(7),
-    wobble: 0.6,
+    breathe: 0.6,
     glyphJitter: 0.8,
     drift: 0.4,
     repeat: 2,
@@ -203,7 +203,7 @@ function drawFrame() {
   plot.letters("P5 GYSIN", mx, mm(9), mm(38), mm(13), {
     size: mm(3.4),
     glyphJitter: 0.6,
-    wobble: 0.2,
+    breathe: 0.2,
     layer: "label",
     stroke: INK
   });
@@ -212,16 +212,16 @@ function drawFrame() {
 
 // Zone 1 - mm ruler: minor ticks every 10 mm, numbered every 50 mm.
 function drawScale() {
-  head("1 : SCALE MM · wobble 0.15", mm(16), mm(ZONES.scale.label));
+  head("1 : SCALE MM · breathe 0.15", mm(16), mm(ZONES.scale.label));
   const y = mm(ZONES.scale.ruler), x0 = mm(ZONES.scale.x0), span = 160;
   plot.line(x0, y, x0 + mm(span), y, {
-    wobble: 0.15,
+    breathe: 0.15,
     layer: "label"
   });
   for (let d = 0; d <= span; d += 10) {
     const x = x0 + mm(d), major = d % 50 === 0;
     plot.line(x, y, x, y - mm(major ? 5 : 2.5), {
-      wobble: 0.15,
+      breathe: 0.15,
       layer: "label"
     });
     if (major) label(String(d), x - mm(2.5), y + mm(6), INK);
@@ -230,12 +230,12 @@ function drawScale() {
 
 // Zone 2 - RED rings by diameter with a centre cross, between a tinted ink mass and an asemic field.
 function drawRings() {
-  head("2 : RINGS DIA MM · wobble 0.45 · repeat 2", mm(16), mm(ZONES.rings.label));
+  head("2 : RINGS DIA MM · breathe 0.45 · repeat 2", mm(16), mm(ZONES.rings.label));
   const cx = width / 2, cy = mm(ZONES.rings.center);
 
   const diskX = mm(ZONES.rings.diskX);
   plot.circle(diskX, cy, mm(34), {
-    wobble: 0.3,
+    breathe: 0.3,
     fill: "cross",
     hatchSpacing: mm(0.9),
     hatchAngle: 30,
@@ -249,7 +249,7 @@ function drawRings() {
   for (const d of diameters) {
     plot.circle(cx, cy, mm(d), {
       density: 1.25,
-      wobble: 0.45,
+      breathe: 0.45,
       dropout: 0.012,
       repeat: 2,
       drift: 0.4,
@@ -263,37 +263,37 @@ function drawRings() {
 
   const arm = mm(11);
   plot.line(cx - arm, cy, cx + arm, cy, {
-    wobble: 0.2,
+    breathe: 0.2,
     layer: "rings",
     stroke: RED
   });
   plot.line(cx, cy - arm, cx, cy + arm, {
-    wobble: 0.2,
+    breathe: 0.2,
     layer: "rings",
     stroke: RED
   });
 
   const ax = mm(ZONES.rings.asemicX), ay = mm(ZONES.rings.asemicY);
-  label("asemic() · wobble 0.6", ax, ay - mm(2), INK, "texture");
+  label("asemic() · breathe 0.6", ax, ay - mm(2), INK, "texture");
   const cols = 3, rows = 4, aw = mm(42) / cols, ah = mm(74) / rows;
   for (let r = 0; r < rows; r++)
     for (let c = 0; c < cols; c++)
       plot.asemic(ax + c * aw, ay + r * ah, aw, ah, {
-        wobble: 0.6,
+        breathe: 0.6,
         layer: "texture",
         stroke: INK
       });
 }
 
-// Zone 3 - mirrored rulers: dropout 0->0.4 left, wobble 0->liveWobble right (driven by the slider).
+// Zone 3 - mirrored rulers: dropout 0->0.4 left, breathe 0->liveBreathe right (driven by the slider).
 function drawRamp() {
-  head(`3 : DROPOUT 0-0.4 · WOBBLE 0-${liveWobble.toFixed(2)}`, mm(16), mm(ZONES.ramp.label));
+  head(`3 : DROPOUT 0-0.4 · BREATHE 0-${liveBreathe.toFixed(2)}`, mm(16), mm(ZONES.ramp.label));
   const xMid = width / 2, gap = mm(5), half = mm(70);
   const y0 = mm(ZONES.ramp.top), step = mm(3), lines = 12;
   for (let i = 0; i < lines; i++) {
     const y = y0 + i * step, t = i / (lines - 1);
     plot.line(xMid - gap, y, xMid - gap - half, y, {
-      wobble: 0.45,
+      breathe: 0.45,
       dropout: t * 0.4,
       overshoot: mm(4),
       repeat: i % 3 === 0 ? 2 : 1,
@@ -302,7 +302,7 @@ function drawRamp() {
       stroke: INK
     });
     plot.line(xMid + gap, y, xMid + gap + half, y, {
-      wobble: t * liveWobble,
+      breathe: t * liveBreathe,
       drift: 0.5,
       layer: "ramp",
       stroke: INK
@@ -310,7 +310,7 @@ function drawRamp() {
   }
   const yEnd = y0 + (lines - 1) * step;
   plot.line(xMid, y0, xMid, yEnd, {
-    wobble: 0.15,
+    breathe: 0.15,
     layer: "ramp",
     stroke: INK
   });
@@ -325,7 +325,7 @@ function drawRamp() {
   label("0.0", xMid - gap - half - mm(9), y0 + mm(1.5), INK, "ramp");
   label("0.4", xMid - gap - half - mm(9), yEnd + mm(1.5), INK, "ramp");
   label("0.0", xMid + gap + half + mm(2), y0 + mm(1.5), INK, "ramp");
-  label(liveWobble.toFixed(2), xMid + gap + half + mm(2), yEnd + mm(1.5), INK, "ramp");
+  label(liveBreathe.toFixed(2), xMid + gap + half + mm(2), yEnd + mm(1.5), INK, "ramp");
 }
 
 // Zone 4 - five hatch-filled diamonds, spacing 0.8->2.4 mm with a sweeping hatch angle.
@@ -336,7 +336,7 @@ function drawGradient() {
     (s, cx, i) => plot.polygon(
       [[cx, cy - hs], [cx + hs, cy], [cx, cy + hs], [cx - hs, cy]],
       {
-        wobble: 0.35,
+        breathe: 0.35,
         drift: 0.3,
         layer: "fill",
         stroke: TINT,
@@ -354,7 +354,7 @@ function drawWeights() {
   ramp(ZONES.weights, [0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
     (w, x) => plot.line(x, yt, x, yb,
       {
-        wobble: 0.2,
+        breathe: 0.2,
         drift: 0.2,
         strokeWeight: w,
         layer: "weight",
@@ -375,7 +375,7 @@ function drawVerbs() {
   ],
     (v, x) => {
       plot.line(x, y, x + len, y, {
-        wobble: 0.25,
+        breathe: 0.25,
         density: 1.5,
         layer: "texture",
         stroke: INK,
@@ -395,7 +395,7 @@ function drawVerbs() {
     {
       set: "/:;-_",
       size: mm(2),
-      wobble: 0.3,
+      breathe: 0.3,
       layer: "texture",
       stroke: INK
     });
@@ -409,10 +409,10 @@ function wireActions() {
   document.getElementById("reroll-button").addEventListener("click", rerollSeed);
   document.getElementById("reset-button").addEventListener("click", resetToReference);
 
-  const range = document.getElementById("wobble-range");
+  const range = document.getElementById("breathe-range");
   range.addEventListener("input", () => {
-    liveWobble = parseFloat(range.value);
-    document.getElementById("wobble-readout").textContent = liveWobble.toFixed(2);
+    liveBreathe = parseFloat(range.value);
+    document.getElementById("breathe-readout").textContent = liveBreathe.toFixed(2);
     buildPlot(currentSeed);
     redraw();
     showStats();

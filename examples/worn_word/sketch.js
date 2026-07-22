@@ -45,7 +45,7 @@ function draw() {
   plot.draw();
 }
 
-// The whole composition is one rub(). decay scales wobble/dropout/rubout/fray
+// The whole composition is one rub(). decay scales breathe/dropout/rubout/fray
 // across all three copies at once; font (when it loads) fills the legible head.
 function buildPlot() {
   const word = WORDS[seedValue % WORDS.length];
@@ -70,7 +70,7 @@ function buildPlot() {
   plot.text("seed " + seedValue + "  ·  decay " + decay.toFixed(1) + "x", 46, 600, {
     size: 13,
     glyphJitter: 0.1,
-    wobble: 0.5,
+    breathe: 0.5,
     stroke: "#8a8a8a"
   });
 

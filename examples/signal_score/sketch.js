@@ -7,7 +7,7 @@
 //      plot.path([[52, 200], [668, 200]], { stroke: "#171717" });   // one clean signal
 //      plot.draw();
 //
-//  Every option below (wobble, dropout, rubout, hatch fill, asemic, layers…)
+//  Every option below (breathe, dropout, rubout, hatch fill, asemic, layers…)
 //  is OPTIONAL disturbance layered on top of that core. The defaults are
 //  all zero, so a call with no options just draws clean - nothing here is
 //  required to use the library. This sketch builds the score up in layers;
@@ -23,11 +23,11 @@ let loudestChannel = "";   // which S# the reading head sits on, shown in the ca
 // Five signals, each with its own voice. harm/harmAmp are a fixed second
 // harmonic per row, so no two wave forms read alike. Row index 2 is the accent.
 const voices = [
-  { y: 120, amp: 16, freq: 0.030, harm: 2.0, harmAmp: 5,  wobble: 1.0, rubout: 0.05, repeat: 2, pressure: 0.12, hesitate: 0.05 },
-  { y: 205, amp: 24, freq: 0.045, harm: 3.4, harmAmp: 8,  wobble: 1.3, rubout: 0.10, repeat: 1, pressure: 0.40, hesitate: 0.22 },
-  { y: 290, amp: 12, freq: 0.070, harm: 4.7, harmAmp: 4,  wobble: 0.7, rubout: 0.16, repeat: 2, pressure: 0.65, hesitate: 0.10 },
-  { y: 375, amp: 30, freq: 0.022, harm: 1.7, harmAmp: 10, wobble: 1.6, rubout: 0.08, repeat: 1, pressure: 0.28, hesitate: 0.34 },
-  { y: 460, amp: 18, freq: 0.055, harm: 6.1, harmAmp: 5,  wobble: 1.1, rubout: 0.20, repeat: 2, pressure: 0.52, hesitate: 0.16 }
+  { y: 120, amp: 16, freq: 0.030, harm: 2.0, harmAmp: 5,  breathe: 1.0, rubout: 0.05, repeat: 2, pressure: 0.12, hesitate: 0.05 },
+  { y: 205, amp: 24, freq: 0.045, harm: 3.4, harmAmp: 8,  breathe: 1.3, rubout: 0.10, repeat: 1, pressure: 0.40, hesitate: 0.22 },
+  { y: 290, amp: 12, freq: 0.070, harm: 4.7, harmAmp: 4,  breathe: 0.7, rubout: 0.16, repeat: 2, pressure: 0.65, hesitate: 0.10 },
+  { y: 375, amp: 30, freq: 0.022, harm: 1.7, harmAmp: 10, breathe: 1.6, rubout: 0.08, repeat: 1, pressure: 0.28, hesitate: 0.34 },
+  { y: 460, amp: 18, freq: 0.055, harm: 6.1, harmAmp: 5,  breathe: 1.1, rubout: 0.20, repeat: 2, pressure: 0.52, hesitate: 0.16 }
 ];
 
 const LEFT = 52;
@@ -143,7 +143,7 @@ function buildPlot() {
   // Ruled paper on its own layer so the SVG export shows the same sheet.
   staffYs.forEach((y) => {
     plot.line(LEFT - 22, y, right + 22, y, {
-      wobble: 0.3,
+      breathe: 0.3,
       dropout: 0.02,
       stroke: "#dcdcdc",
       strokeWeight: 0.6,
@@ -161,7 +161,7 @@ function buildPlot() {
 
   // A faint vertical rule on that column, the counter-axis to the five horizontals.
   plot.line(head.x, staffYs[0], head.x, baseline, {
-    wobble: 0.6,
+    breathe: 0.6,
     dropout: 0.08,
     stroke: INK,
     strokeWeight: 0.8,
@@ -172,7 +172,7 @@ function buildPlot() {
   plot.polygon(diamond(head.x, staffYs[0], 6), {
     fill: "hatch",
     hatchSpacing: 2,
-    wobble: 0.5,
+    breathe: 0.5,
     stroke: INK,
     alpha: 0.85,
     layer: "read"
@@ -180,7 +180,7 @@ function buildPlot() {
   plot.text(nf(head.amp * 100, 2, 0) + "% level", head.x + 10, staffYs[0] - 5, {
     size: 11,
     letterSpacing: 0.5,
-    wobble: 0.4,
+    breathe: 0.4,
     stroke: INK,
     layer: "read"
   });
@@ -193,7 +193,7 @@ function buildPlot() {
   plot.polygon(heroBand, {
     fill: "hatch",
     hatchSpacing: 3,
-    wobble: 0.4,
+    breathe: 0.4,
     stroke: RED,
     strokeWeight: 0.6,
     alpha: 0.22,
@@ -201,7 +201,7 @@ function buildPlot() {
   });
   // A thin red baseline so the focus band still reads at plot scale, where the hatch thins out.
   plot.line(LEFT, hero.y, right, hero.y, {
-    wobble: 0.3,
+    breathe: 0.3,
     stroke: RED,
     strokeWeight: 0.8,
     alpha: 0.5,
@@ -214,7 +214,7 @@ function buildPlot() {
     const signal = cols.map((c) => [c.x, c.ys[i]]);
     const accent = i === ACCENT;
     plot.path(signal, {
-      wobble: v.wobble,
+      breathe: v.breathe,
       dropout: 0.05,
       repeat: v.repeat,
       drift: 1.2,
@@ -249,7 +249,7 @@ function buildPlot() {
     const isAccent = i === accentCell;
     plot.asemic(LEFT + i * cellW, baseline - h, cellW * 0.7, h, {
       loops: 3 + round(amp * 6),
-      wobble: 0.5,
+      breathe: 0.5,
       strokeWeight: 0.6 + amp * 1.4 + (linkedCells.has(i) ? 0.5 : 0) + (isHead ? 0.9 : 0),
       stroke: isAccent ? RED : (isHead ? INK : "#3a3a3a"),
       alpha: (isAccent || isHead ? 0.4 + amp * 0.5 : (0.4 + amp * 0.5) * 0.6),
@@ -265,7 +265,7 @@ function buildPlot() {
     const cell = cells[cellIndex(px, cellW)];
     const accent = i === ACCENT;
     plot.line(px, py, cell.cx, cell.top, {
-      wobble: 0.4,
+      breathe: 0.4,
       dropout: 0.35,
       stroke: "#8a8a8a",
       strokeWeight: 0.6,
@@ -276,7 +276,7 @@ function buildPlot() {
     plot.polygon(diamond(px, py, r), {
       fill: accent ? "cross" : "hatch",
       hatchSpacing: 2.4,
-      wobble: 0.65,
+      breathe: 0.65,
       rubout: 0.04,
       stroke: accent ? RED : "#244f73",
       alpha: accent ? 0.85 : 0.5,
@@ -286,7 +286,7 @@ function buildPlot() {
     plot.text(nf(pct, 2, 0) + "%", px + r + 4, py + 3, {
       size: 9,
       letterSpacing: 0.5,
-      wobble: 0.4,
+      breathe: 0.4,
       stroke: accent ? RED : "#244f73",
       alpha: accent ? 0.9 : 0.55,
       layer: "markers"
@@ -299,7 +299,7 @@ function buildPlot() {
     plot.text("S" + (i + 1), 14, v.y + 4, {
       size: 12,
       letterSpacing: 0.5,
-      wobble: 0.4,
+      breathe: 0.4,
       stroke: i === ACCENT ? RED : INK,
       layer: "label"
     });
@@ -310,7 +310,7 @@ function buildPlot() {
   plot.text("SIGNAL / NOTATION", LEFT, 52, {
     size: 15,
     letterSpacing: 1.1,
-    wobble: 0.4,
+    breathe: 0.4,
     stroke: INK,
     layer: "label"
   });
@@ -324,7 +324,7 @@ function buildPlot() {
   plot.text("click / R = new reading  ·  S = SVG", LEFT, height - 22, {
     size: 10,
     letterSpacing: 0.6,
-    wobble: 0.4,
+    breathe: 0.4,
     stroke: "#8a8a8a",
     layer: "label"
   });
@@ -332,7 +332,7 @@ function buildPlot() {
   // ── 11 · frame ─────────────────────────────────────────────────
   // The border, drawn last so it sits on top and boxes the whole score.
   plot.rect(LEFT, 64, right - LEFT, height - 128, {
-    wobble: 0.4,
+    breathe: 0.4,
     dropout: 0.015,
     repeat: 2,
     drift: 0.5,
@@ -361,7 +361,7 @@ function drawLegend(y, right) {
   const label = {
     size: 10,
     letterSpacing: 0.5,
-    wobble: 0.4,
+    breathe: 0.4,
     stroke: INK,
     layer: "label"
   };
@@ -371,7 +371,7 @@ function drawLegend(y, right) {
   const wave = [];
   for (let t = 0; t <= 6; t++) wave.push([col(0) + t * 5, y + sin(t) * 4]);
   plot.path(wave, {
-    wobble: 0.6,
+    breathe: 0.6,
     drift: 0.8,
     stroke: INK,
     strokeWeight: 1,
@@ -382,7 +382,7 @@ function drawLegend(y, right) {
   plot.polygon(diamond(col(1) + 7, y, 7), {
     fill: "hatch",
     hatchSpacing: 2.4,
-    wobble: 0.5,
+    breathe: 0.5,
     stroke: "#244f73",
     alpha: 0.85,
     layer: "label"
@@ -391,7 +391,7 @@ function drawLegend(y, right) {
 
   plot.asemic(col(2), y - 10, 18, 20, {
     loops: 4,
-    wobble: 0.5,
+    breathe: 0.5,
     strokeWeight: 0.8,
     stroke: "#3a3a3a",
     alpha: 0.75,

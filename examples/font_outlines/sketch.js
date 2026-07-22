@@ -9,7 +9,7 @@
 //
 //  A real outline font is the ONLY extra this example needs: with it, fill can
 //  hatch the letter bodies and leave the inner counters empty. Every other
-//  option below (fill mode, weave spacing/angle, wobble, cut-up, asemic…) is
+//  option below (fill mode, weave spacing/angle, breathe, cut-up, asemic…) is
 //  OPTIONAL disturbance layered on top, and every default is zero - a call with
 //  no options draws clean. This sketch adds the layers one at a time; read the
 //  numbered sections in buildPlot() from top to bottom. Each is a compositional
@@ -30,7 +30,7 @@ let plot;
 
 let currentSeed = 8088; // bumped by "New variation" so a reroll survives a rebuild
 let fillOn = true;      // toggled live so the fill lines can be seen appearing
-let wobbleAmount = 0.9;
+let breatheAmount = 0.9;
 let hatchSpacing = 4;   // weave density: fewer lines = more paper showing
 let hatchAngle = 22;    // off-axis weave reads more handmade than a flat 0
 
@@ -84,7 +84,7 @@ function glyphBody(fillMode, angle) {
   const density = weaveDensity();
   const body = withFont({
     size: 130,
-    wobble: wobbleAmount,
+    breathe: breatheAmount,
     dropout: 0.025,
     rubout: 0.08,
     fray: 0.3 + density * 0.04,
@@ -106,7 +106,7 @@ function glyphBody(fillMode, angle) {
 function caption() {
   return {
     size: 18,
-    wobble: 0.5,
+    breathe: 0.5,
     dropout: 0.03,
     segmentLength: 6,
     stroke: "#171717",
@@ -126,11 +126,11 @@ function annotateCounter() {
   };
   plot.text("counter", 66, 84, Object.assign({
     size: 14,
-    wobble: 0.5,
+    breathe: 0.5,
     dropout: 0.02
   }, ink));
   plot.line(100, 88, 95, 130, Object.assign({
-    wobble: 0.5,
+    breathe: 0.5,
     overshoot: 2
   }, ink));
   plot.line(95, 130, 88, 119, Object.assign({}, ink));   // arrowhead
@@ -170,7 +170,7 @@ function buildPlot() {
     slices: 4 + Math.round(density),
     sliceOffset: 8 + density * 3,
     sliceDropout: 0.11,
-    wobble: 1,
+    breathe: 1,
     dropout: 0.06,
     repeat: 2,
     drift: 1.2,
@@ -185,7 +185,7 @@ function buildPlot() {
   plot.line(72, 428, 588, 428, {
     repeat: 2,
     drift: 1.6,
-    wobble: 0.6,
+    breathe: 0.6,
     dropout: 0.03,
     overshoot: 8,
     stroke: "#171717",
@@ -203,7 +203,7 @@ function buildPlot() {
   for (let i = 0; i < marks; i++) {
     plot.asemic(72 + i * markW, 478, markW, 66, {
       loops: 3 + Math.round(density),
-      wobble: 0.6,
+      breathe: 0.6,
       dropout: 0.05,
       pressure: 0.2 + density * 0.05,
       stroke: "#171717",
@@ -220,7 +220,7 @@ function buildPlot() {
 // where a greyed-out one reads as a bug.
 function setControlsEnabled(hasFont) {
   document.getElementById("fill-button").disabled = !hasFont;
-  document.getElementById("wobble-range").disabled = !hasFont;
+  document.getElementById("breathe-range").disabled = !hasFont;
   const weaveLive = hasFont && fillOn;
   ["hatch-range", "angle-range"].forEach((id) => {
     const range = document.getElementById(id);
@@ -253,7 +253,7 @@ function updateStatus() {
 }
 
 function wireControls() {
-  wireSlider("wobble-range", "wobble-value", (value) => { wobbleAmount = value; });
+  wireSlider("breathe-range", "breathe-value", (value) => { breatheAmount = value; });
   wireSlider("hatch-range", "hatch-value", (value) => { hatchSpacing = value; });
   wireSlider("angle-range", "angle-value", (value) => { hatchAngle = value; });
 

@@ -7,7 +7,7 @@
 //      plot.text("RUB OUT", 70, 150);   // clean, mechanical text
 //      plot.draw();
 //
-//  Every option below (wobble, dropout, repeat, rubout, cut-up, hatch
+//  Every option below (breathe, dropout, repeat, rubout, cut-up, hatch
 //  fill, letter field…) is OPTIONAL disturbance layered on top of that
 //  core. The defaults are all zero, so a call with no options just draws
 //  clean - nothing here is required to use the library. This sketch adds
@@ -24,7 +24,7 @@ let seedValue = 8319;
 // drives, and the stroke colour it shares with that element so the isolation is
 // readable without the text. Change a default here and the HTML slider matches.
 const CONTROLS = {
-  wobble:  { layer: "title", tint: "#b26a00", value: 1.4 },  // title  "RUB OUT"
+  breathe:  { layer: "title", tint: "#b26a00", value: 1.4 },  // title  "RUB OUT"
   dropout: { layer: "bar",   tint: "#0f7a6c", value: 0.16 }, // hatch bar
   repeat:  { layer: "band",  tint: "#2b4fb0", value: 2 },    // line band
   rubout:  { layer: "word",  tint: "#b0203a", value: 0.12 }  // word   "ERASE"
@@ -51,7 +51,7 @@ const DIM = {
 function setup() {
   const canvas = createCanvas(560, 560);
   canvas.parent("sketch");
-  describe("A parameter lab: wobble bends the title, rubout tears ERASE, repeat thickens the line band, dropout loosens the hatch bar, and a dense letter field fills the middle row. Hover or move a slider and its own element darkens while every other element fades back, so you see exactly which one you own.");
+  describe("A parameter lab: breathe bends the title, rubout tears ERASE, repeat thickens the line band, dropout loosens the hatch bar, and a dense letter field fills the middle row. Hover or move a slider and its own element darkens while every other element fades back, so you see exactly which one you own.");
   pixelDensity(1);
   noLoop();
   wireControls();
@@ -175,23 +175,23 @@ function buildPlot() {
   registrationMarks();
 
   // ── 2 · the title ───────────────────────────────────────────────
-  // Title - owned by WOBBLE only. Wobble re-cuts the slices (count and offset)
+  // Title - owned by BREATHE only. Breathe re-cuts the slices (count and offset)
   // and drifts the trace, so the whole word breathes; the other sliders leave it
   // untouched. glyphJitter keeps each letter a hand-set shape.
   plot.textCutup("RUB OUT", 70, 150, {
-    layer: CONTROLS.wobble.layer,
+    layer: CONTROLS.breathe.layer,
     size: 68,
-    slices: 5 + round(value("wobble")),
-    sliceOffset: 12 + value("wobble") * 6,
+    slices: 5 + round(value("breathe")),
+    sliceOffset: 12 + value("breathe") * 6,
     sliceDropout: 0.14,
-    wobble: value("wobble"),
-    drift: value("wobble") * 1.4,
+    breathe: value("breathe"),
+    drift: value("breathe") * 1.4,
     glyphJitter: 0.55,
-    stroke: inkOf("wobble"),
-    // Pressure rides wobble, so the accent breathes in line weight, not just shape.
-    pressure: 0.25 + value("wobble") * 0.1,
+    stroke: inkOf("breathe"),
+    // Pressure rides breathe, so the accent breathes in line weight, not just shape.
+    pressure: 0.25 + value("breathe") * 0.1,
     segmentLength: 7,
-    ...focus("wobble")
+    ...focus("breathe")
   });
 
   // ── 3 · the word ────────────────────────────────────────────────
@@ -265,7 +265,7 @@ function buildPlot() {
     layer: "field",
     size: 10,
     stroke: "#111111",
-    wobble: 0.6,
+    breathe: 0.6,
     glyphJitter: 0.4,
     alpha: 0.92,
     ...focus("field")
@@ -282,7 +282,7 @@ function registrationMarks() {
   const mark = {
     stroke: "#b8b8b8",
     strokeWeight: 0.8,
-    wobble: 0.6
+    breathe: 0.6
   };
   plot.rect(32, 32, width - 64, height - 64, mark);
   plot.line(44, 44, 96, 44, mark);
