@@ -80,7 +80,8 @@ Voor de galerij-kaarten op de homepage (preview + korte snippet):
 - **Intent verbs:** een kaart rond een intent verb (zoals `rub()`) draait op de
   defaults van dat verb; alleen wat de snippet toont (bv. `size`) wijkt af.
 
-Doorgevoerd op alle 11 kaarten (juli 2026); toets elke nieuwe kaart hieraan.
+Doorgevoerd op alle 12 kaarten (juli 2026, Ink Bleed erbij); toets elke
+nieuwe kaart hieraan.
 
 ## Regel 6 - Homepage-volgorde: drie studies, dan methodes
 
