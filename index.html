@@ -90,9 +90,11 @@ plot.textCutup("I THINK THEREFORE I AM", 76, 260, {
     <div class="ex-preview">
       <div id="ex-permutation" class="ex-canvas"></div>
       <pre class="ex-code-block"><code class="language-javascript">// the whole permutation poem in one call: the phrase
-// through its orders, every line cut a little deeper
+// through its orders, every line cut a little deeper,
+// through real outline letterforms
 plot.chant("I LOVE YOU", 48, 90, {
-  lines: 6
+  lines: 6,
+  font: outlineFont
 });</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="examples/permutation_poem/" target="_blank">-&gt; full poster</a>
@@ -110,10 +112,12 @@ plot.chant("I LOVE YOU", 48, 90, {
     <div class="ex-preview">
       <div id="ex-worn-word" class="ex-canvas"></div>
       <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+const outlineFont = await loadFont(FONT_URL);   // fills the legible head
 
 // one word, worn away - legible → cut up → asemic, in one call
 plot.rub("WORN", 46, 72, {
-  size: 48
+  size: 48,
+  font: outlineFont
 });
 
 plot.draw();</code></pre>
@@ -141,18 +145,22 @@ plot.draw();</code></pre>
     <div class="ex-preview">
       <div id="ex-first-trace" class="ex-canvas"></div>
       <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+const outlineFont = await loadFont(FONT_URL);   // real letterforms
 
 // the same word, three states of the same trace
 plot.text("FIRST TRACE", 68, 90, {
+  font: outlineFont,
   size: 54,
   breathe: 0.4
 });
 plot.text("FIRST TRACE", 68, 180, {
+  font: outlineFont,
   size: 54,
   breathe: 1.4,
   dropout: 0.08
 });
 plot.text("FIRST TRACE", 68, 270, {
+  font: outlineFont,
   size: 54,
   breathe: 2.2,
   dropout: 0.2,
@@ -280,14 +288,17 @@ plot.path(signal, {
     </div>
     <div class="ex-preview">
       <div id="ex-ink-bleed" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">// the same whole line three times - the ink returns harder each row
-plot.text("I AM THAT I AM", 42, 90, { size: 34 });
+      <pre class="ex-code-block"><code class="language-javascript">// the same whole line three times - the ink returns harder each
+// row, gathering along real outline letterforms
+plot.text("I AM THAT I AM", 42, 90, { font: outlineFont, size: 34 });
 plot.text("I AM THAT I AM", 42, 180, {
+  font: outlineFont,
   size: 34,
   bleed: 0.22,
   bleedPasses: 2
 });
 plot.text("I AM THAT I AM", 42, 270, {
+  font: outlineFont,
   size: 34,
   bleed: 0.4,
   bleedPasses: 3,
@@ -430,7 +441,9 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });
 
   const OUTLINE_FONT_URL = "examples/font_outlines/assets/Oswald-Regular.otf";
 
-  function makeFontPreview(id) {
+  // Async twin of makePreview: loads the Oswald outline face first and hands it
+  // to the builder (null when the load fails, so builders fall back cleanly).
+  function makeOutlinePreview(id, builder) {
     new p5(function(p) {
       let plot;
 
@@ -445,17 +458,7 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });
         } catch (error) {
           outlineFont = null;
         }
-        plot = new GysinPlot({ p: p, seed: 8088, width: size.width, height: size.height });
-        const fontOptions = outlineFont ? { font: outlineFont } : {};
-        plot.text("O8BR", 36, size.height * 0.5, Object.assign({}, fontOptions, {
-          size: size.width * 0.17,
-          breathe: 0.7,
-          dropout: 0.025,
-          repeat: 2,
-          drift: 0.8,
-          rubout: 0.07,
-          stroke: "#171717"
-        }));
+        plot = builder(p, size.width, size.height, outlineFont);
         p.redraw();
       };
 
@@ -465,6 +468,23 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });
         if (plot) plot.draw();
       };
     }, id);
+  }
+
+  function makeFontPreview(id) {
+    makeOutlinePreview(id, function(p, canvasW, canvasH, outlineFont) {
+      const plot = new GysinPlot({ p: p, seed: 8088, width: canvasW, height: canvasH });
+      const fontOptions = outlineFont ? { font: outlineFont } : {};
+      plot.text("O8BR", 36, canvasH * 0.5, Object.assign({}, fontOptions, {
+        size: canvasW * 0.17,
+        breathe: 0.7,
+        dropout: 0.025,
+        repeat: 2,
+        drift: 0.8,
+        rubout: 0.07,
+        stroke: "#171717"
+      }));
+      return plot;
+    });
   }
 
   // Period single-stroke typewriter: one intent verb, no font to load.
@@ -480,43 +500,47 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });
     });
   }
 
-  makePreview("ex-first-trace", function(p, canvasW, canvasH) {
+  makeOutlinePreview("ex-first-trace", function(p, canvasW, canvasH, outlineFont) {
     const plot = new GysinPlot({
       p: p,
       seed: 1960,
       width: canvasW,
       height: canvasH
     });
-    // The same word, three states of the same trace - the card's snippet, verbatim.
-    plot.text("FIRST TRACE", 44, canvasH * 0.3, {
-      size: canvasW * 0.075,
+    // The same word, three states of the same trace - the card's snippet,
+    // verbatim, on real outline letterforms (bitmap fallback when offline).
+    const fontOptions = outlineFont ? { font: outlineFont } : {};
+    const wordSize = canvasW * (outlineFont ? 0.125 : 0.075);
+    plot.text("FIRST TRACE", 44, canvasH * 0.3, Object.assign({}, fontOptions, {
+      size: wordSize,
       breathe: 0.4
-    });
-    plot.text("FIRST TRACE", 44, canvasH * 0.56, {
-      size: canvasW * 0.075,
+    }));
+    plot.text("FIRST TRACE", 44, canvasH * 0.56, Object.assign({}, fontOptions, {
+      size: wordSize,
       breathe: 1.4,
       dropout: 0.08
-    });
-    plot.text("FIRST TRACE", 44, canvasH * 0.82, {
-      size: canvasW * 0.075,
+    }));
+    plot.text("FIRST TRACE", 44, canvasH * 0.82, Object.assign({}, fontOptions, {
+      size: wordSize,
       breathe: 2.2,
       dropout: 0.2,
       rubout: 0.2
-    });
+    }));
     return plot;
   });
 
-  makePreview("ex-worn-word", function(p, canvasW, canvasH) {
+  makeOutlinePreview("ex-worn-word", function(p, canvasW, canvasH, outlineFont) {
     const plot = new GysinPlot({
       p: p,
       seed: 1960,
       width: canvasW,
       height: canvasH
     });
-    // One intent verb on its own defaults - only size scales to the canvas.
-    plot.rub("WORN", 46, canvasH * 0.17, {
-      size: canvasW * 0.0775
-    });
+    // One intent verb on its own defaults - only size scales to the canvas;
+    // the outline font fills the legible head, exactly like the full example.
+    const options = { size: canvasW * 0.0775 };
+    if (outlineFont) options.font = outlineFont;
+    plot.rub("WORN", 46, canvasH * 0.17, options);
     return plot;
   });
 
@@ -553,7 +577,7 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });
     return plot;
   });
 
-  makePreview("ex-permutation", function(p, canvasW, canvasH) {
+  makeOutlinePreview("ex-permutation", function(p, canvasW, canvasH, outlineFont) {
     const plot = new GysinPlot({
       p: p,
       seed: 1960,
@@ -561,10 +585,11 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });
       height: canvasH,
       style: { stroke: "#171717", strokeWeight: 0.82, alpha: 0.88 }
     });
-    // The card's one call: chant() permutes and cuts every line itself.
-    plot.chant("I LOVE YOU", 30, 44, {
+    // The card's one call: chant() permutes and cuts every line itself,
+    // through real outline letterforms when the face loads.
+    const options = {
       lines: 6,
-      size: canvasW * 0.041,
+      size: canvasW * (outlineFont ? 0.062 : 0.041),
       leading: (canvasH - 66) / 6,
       slices: 4,
       sliceOffset: 1,
@@ -572,7 +597,9 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });
       dropout: 0.01,
       strokeWeight: 1.05,
       alpha: 0.95
-    });
+    };
+    if (outlineFont) options.font = outlineFont;
+    plot.chant("I LOVE YOU", 30, 44, options);
     return plot;
   });
 
@@ -658,28 +685,31 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });
     return plot;
   });
 
-  makePreview("ex-ink-bleed", function(p, canvasW, canvasH) {
+  makeOutlinePreview("ex-ink-bleed", function(p, canvasW, canvasH, outlineFont) {
     const plot = new GysinPlot({
       p: p,
       seed: 1916,
       width: canvasW,
       height: canvasH
     });
-    // The same whole line three times - the card's snippet, verbatim.
-    plot.text("I AM THAT I AM", 42, canvasH * 0.28, {
-      size: canvasW * 0.062
-    });
-    plot.text("I AM THAT I AM", 42, canvasH * 0.56, {
-      size: canvasW * 0.062,
+    // The same whole line three times - the card's snippet, verbatim; the ink
+    // gathers along real outline letterforms, like the full example.
+    const fontOptions = outlineFont ? { font: outlineFont } : {};
+    const lineSize = canvasW * (outlineFont ? 0.085 : 0.062);
+    plot.text("I AM THAT I AM", 42, canvasH * 0.28, Object.assign({}, fontOptions, {
+      size: lineSize
+    }));
+    plot.text("I AM THAT I AM", 42, canvasH * 0.56, Object.assign({}, fontOptions, {
+      size: lineSize,
       bleed: 0.22,
       bleedPasses: 2
-    });
-    plot.text("I AM THAT I AM", 42, canvasH * 0.84, {
-      size: canvasW * 0.062,
+    }));
+    plot.text("I AM THAT I AM", 42, canvasH * 0.84, Object.assign({}, fontOptions, {
+      size: lineSize,
       bleed: 0.4,
       bleedPasses: 3,
       bleedSpread: 1.2
-    });
+    }));
     return plot;
   });
 
