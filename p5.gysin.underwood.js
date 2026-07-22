@@ -168,6 +168,7 @@
           strokeWeight: weight * (0.85 + 0.15 * ink)
         };
         if (o.stroke !== undefined) baseOpts.stroke = o.stroke;
+        if (o.layer !== undefined) baseOpts.layer = o.layer;
         baseOpts.alpha = 0.6 + 0.4 * ink;
         for (const poly of polys) ids.push(plot.path(place(poly, 0, 0), baseOpts));
 
@@ -183,6 +184,7 @@
             alpha: 0.8
           };
           if (o.stroke !== undefined) overOpts.stroke = o.stroke;
+          if (o.layer !== undefined) overOpts.layer = o.layer;
           for (const poly of polys) ids.push(plot.path(place(poly, dx, dy), overOpts));
         }
       }
@@ -198,6 +200,7 @@
             strokeWeight: weight
           };
           if (o.stroke !== undefined) ruleOpts.stroke = o.stroke;
+          if (o.layer !== undefined) ruleOpts.layer = o.layer;
           ids.push(plot.line(x + pitch * 0.15, uy, x + lineWidth - pitch * 0.15, uy, ruleOpts));
         }
       }

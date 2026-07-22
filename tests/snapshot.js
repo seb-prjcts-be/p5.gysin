@@ -599,6 +599,11 @@ assert.ok(typeBold.length > typeClean.length, "bold doubles every strike");
 const typeUnderline = new TypePlot({ seed: 1961 }).underwood("RUB", 40, 80, { size: 20, wear: 0, underline: 2 });
 const typeNoRule = new TypePlot({ seed: 1961 }).underwood("RUB", 40, 80, { size: 20, wear: 0 });
 assert.equal(typeUnderline.length - typeNoRule.length, 2, "underline:2 adds two rules");
+// underwood passes the layer option through to every emitted path
+const layeredTypePlot = new TypePlot({ seed: 1961 });
+const layeredTypeIds = layeredTypePlot.underwood("+#&%= /", 10, 40, { size: 18, wear: 0, layer: "operators" });
+assert.ok(layeredTypeIds.length > 0, "Underwood emits real ASCII operator paths");
+assert.ok(layeredTypeIds.every((id) => layeredTypePlot.get(id).exportSettings.layer === "operators"), "Underwood preserves export layers");
 assert.throws(() => new TypePlot().underwood("X", 0, 0, { size: 0 }), /size must be greater than zero/);
 assert.throws(() => new TypePlot().underwood("X", Infinity, 0), /finite number/);
 
