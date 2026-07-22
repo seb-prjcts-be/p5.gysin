@@ -294,12 +294,12 @@ plot.underwood("* * * * * * * *", 60, 230);</code></pre>
     <div class="section-header">
       <div class="section-tag">09 &middot; fill: "hatch" &middot; fill: "cross"</div>
       <h2>Tone blocks</h2>
-      <p class="section-desc">Collage needs dark paper too: blocks of tone to paste behind and between the words. A plotter cannot pour ink, so <code>fill</code> builds tone from strokes - <code>hatch</code> lays parallel lines, <code>cross</code> lays two hatchings perpendicular for a heavier grey. The fill speaks the same free line as everything else: <code>wobble</code> bends every hatch stroke, so the tone stays uneven, like graphite rubbed by hand.</p>
+      <p class="section-desc">Collage needs dark paper too: blocks of tone to paste behind and between the words. A plotter cannot pour ink, so <code>fill</code> builds tone from strokes - <code>hatch</code> lays parallel lines, <code>cross</code> lays two perpendicular hatchings. The patch and its filling are one family: the outline is the hand-drawn <code>rect()</code>, and every hatch stroke is the same free <code>line</code> - it wobbles, runs past the edge, skips, and soaks. Craft over perfection: the mistakes are the tone.</p>
     </div>
     <div class="ce-strip">
       <div class="ce-step"><span>cut</span><h4>A patch of tone</h4><p>Any closed shape can carry a fill; counters stay open.</p></div>
       <div class="ce-step"><span>arrange</span><h4>Set the weave</h4><p><code>hatchSpacing</code> sets the density, <code>hatchAngle</code> turns the weave.</p></div>
-      <div class="ce-step"><span>glue</span><h4>Strokes, not pixels</h4><p>The fill is real pen lines; <code>stats()</code> counts them as <code>fillPaths</code>.</p></div>
+      <div class="ce-step"><span>glue</span><h4>Let the hand show</h4><p><code>wobble</code>, <code>overshoot</code>, <code>dropout</code>, and <code>bleed</code> reach the fill strokes too; <code>stats()</code> counts them as <code>fillPaths</code>.</p></div>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-tone" class="ce-canvas"></div></div>
@@ -309,19 +309,24 @@ plot.underwood("* * * * * * * *", 60, 230);</code></pre>
   fill: "hatch",
   hatchSpacing: 3,
   hatchAngle: 30,
-  wobble: 0.9
+  wobble: 0.9,
+  overshoot: 5,
+  bleed: 0.25
 });
 plot.rect(420, 80, 280, 200, {
   fill: "cross",
   hatchSpacing: 4,
   wobble: 1.2,
-  dropout: 0.04
+  dropout: 0.06,
+  overshoot: 4
 });
 plot.circle(380, 430, 180, {
   fill: "hatch",
   hatchSpacing: 2.5,
   hatchAngle: 75,
-  wobble: 0.9
+  wobble: 0.9,
+  dropout: 0.05,
+  bleed: 0.35
 });</code></pre>
       </div>
     </div>
@@ -640,9 +645,9 @@ plot.draw();</code></pre>
   // 09 tone blocks
   makeGysinPreview('m-tone', 0.66, function (p, w, h) {
     const plot = base(p, w, h, 9);
-    plot.rect(w * 0.08, h * 0.14, w * 0.36, h * 0.34, { fill: 'hatch', hatchSpacing: 3, hatchAngle: 30, wobble: 0.9 });
-    plot.rect(w * 0.56, h * 0.14, w * 0.36, h * 0.34, { fill: 'cross', hatchSpacing: 4, wobble: 1.2, dropout: 0.04 });
-    plot.circle(w * 0.5, h * 0.74, h * 0.3, { fill: 'hatch', hatchSpacing: 2.5, hatchAngle: 75, wobble: 0.9 });
+    plot.rect(w * 0.08, h * 0.14, w * 0.36, h * 0.34, { fill: 'hatch', hatchSpacing: 3, hatchAngle: 30, wobble: 0.9, overshoot: 5, bleed: 0.25 });
+    plot.rect(w * 0.56, h * 0.14, w * 0.36, h * 0.34, { fill: 'cross', hatchSpacing: 4, wobble: 1.2, dropout: 0.06, overshoot: 4 });
+    plot.circle(w * 0.5, h * 0.74, h * 0.3, { fill: 'hatch', hatchSpacing: 2.5, hatchAngle: 75, wobble: 0.9, dropout: 0.05, bleed: 0.35 });
     return plot;
   });
 
@@ -696,7 +701,7 @@ plot.draw();</code></pre>
     plot.letters('COLLAGE', w * 0.1, h * 0.42, w * 0.8, h * 0.16, { size: w * 0.023, glyphJitter: 0.7, dropout: 0.05, alpha: 0.85 });
     plot.symbols(w * 0.1, h * 0.6, w * 0.8, h * 0.07, { set: '/"()-:', cluster: true, size: w * 0.023 });
     plot.line(w * 0.1, h * 0.71, w * 0.9, h * 0.715, { wobble: 0.8, bleed: 0.7 });
-    plot.rect(w * 0.56, h * 0.745, w * 0.33, h * 0.145, { fill: 'hatch', hatchSpacing: 3, hatchAngle: 30, wobble: 0.9 });
+    plot.rect(w * 0.56, h * 0.745, w * 0.33, h * 0.145, { fill: 'hatch', hatchSpacing: 3, hatchAngle: 30, wobble: 0.9, overshoot: 4, dropout: 0.05, bleed: 0.25 });
     plot.rub('COLLAGE', w * 0.1, h * 0.81, { size: w * 0.054 });
     plot.asemic(w * 0.1, h * 0.86, w * 0.38, h * 0.08, { wobble: 1.5, strokeWeight: 1 });
     plot.underwood('P5.GYSIN / COLLAGE / SEED 1919', w * 0.1, h * 0.955, { size: w * 0.017, wear: 0.5 });
