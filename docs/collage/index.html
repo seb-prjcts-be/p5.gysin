@@ -522,15 +522,17 @@ console.log(plot.stats({ page }));</code></pre>
         <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
         <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 1919, width: 560, height: 760 });
 
-// the roller: an incised table, stamped twice, off register
+// the roller: an incised table, stamped twice, off register.
+// The first pass soaks; the second is one clean stroke of the pen.
 plot.grid(30, 30, 500, 700, 3, 4, { frame: { bleed: 0.4, wobble: 0.9 } });
-plot.grid(38, 24, 500, 700, 3, 4, { frame: { wobble: 1.6, dropout: 0.35 } });
+plot.grid(38, 24, 500, 700, 3, 4, { frame: { wobble: 1.6 } });
 
 // left to right: the typed permutation strip
 const lines = GysinText.permute("CUT ARRANGE GLUE", { seed: 1919, limit: 4 });
 plot.underwood(lines.join("\n"), 56, 120, { size: 14, wear: 0.5 });
 
-// top to bottom: the word turned, written over the strip
+// top to bottom: the word turned, written over the strip.
+// One pass or two: the middle column is struck twice.
 const word = "COLLAGE";
 for (let column = 0; column &lt; 3; column++) {
   for (let i = 0; i &lt; word.length; i++) {
@@ -538,15 +540,15 @@ for (let column = 0; column &lt; 3; column++) {
       size: 38,
       breathe: 1.0,
       bleed: 0.2,
-      dropout: 0.06
+      repeat: column === 1 ? 2 : 1
     });
   }
 }
 
 // fields collide: sifted letters across the marks, tone behind
-plot.letters("COLLAGE", 56, 430, 440, 150, { size: 13, glyphJitter: 0.8, dropout: 0.08 });
+plot.letters("COLLAGE", 56, 430, 440, 150, { size: 13, glyphJitter: 0.8, dropout: 0.02 });
 plot.symbols(200, 500, 300, 90, { set: '/"()-:', cluster: true, size: 13 });
-plot.rect(330, 560, 170, 120, { fill: "hatch", hatchSpacing: 5, hatchAngle: 30, wobble: 1.0, dropout: 0.06 });
+plot.rect(330, 560, 170, 120, { fill: "hatch", hatchSpacing: 5, hatchAngle: 30, wobble: 1.0, repeat: 2 });
 
 // erased and overwritten: the worn word drags across the field
 plot.rub("COLLAGE", 90, 620, { size: 34, decay: 1.6 });
@@ -768,7 +770,7 @@ plot.draw();</code></pre>
     const m = w * 0.05;
     // the roller: an incised table, stamped twice, off register
     plot.grid(m, m, w - 2 * m, h - 2 * m, 3, 4, { frame: { bleed: 0.4, wobble: 0.9, strokeWeight: 2 } });
-    plot.grid(m * 1.28, m * 0.8, w - 2 * m, h - 2 * m, 3, 4, { frame: { wobble: 1.6, dropout: 0.35 } });
+    plot.grid(m * 1.28, m * 0.8, w - 2 * m, h - 2 * m, 3, 4, { frame: { wobble: 1.6 } });
     // left to right: the typed permutation strip
     const lines = GysinText.permute('CUT ARRANGE GLUE', { seed: 1919, limit: 4, order: 'walk' });
     plot.underwood(lines.join('\n'), w * 0.1, h * 0.16, { size: w * 0.025, wear: 0.5 });
@@ -777,14 +779,14 @@ plot.draw();</code></pre>
     for (let c = 0; c < 3; c++) {
       for (let i = 0; i < word.length; i++) {
         plot.text(word[i], w * (0.21 + c * 0.27), h * (0.12 + i * 0.113), {
-          size: w * 0.068, breathe: 1.0, bleed: 0.2, dropout: 0.06
+          size: w * 0.068, breathe: 1.0, bleed: 0.2, repeat: c === 1 ? 2 : 1
         });
       }
     }
     // fields collide
-    plot.letters('COLLAGE', w * 0.1, h * 0.57, w * 0.8, h * 0.19, { size: w * 0.023, glyphJitter: 0.8, dropout: 0.08, alpha: 0.85 });
+    plot.letters('COLLAGE', w * 0.1, h * 0.57, w * 0.8, h * 0.19, { size: w * 0.023, glyphJitter: 0.8, dropout: 0.02, alpha: 0.85 });
     plot.symbols(w * 0.36, h * 0.66, w * 0.54, h * 0.115, { set: '/"()-:', cluster: true, size: w * 0.023 });
-    plot.rect(w * 0.59, h * 0.735, w * 0.3, h * 0.155, { fill: 'hatch', hatchSpacing: w * 0.016, hatchAngle: 30, wobble: 1.0, dropout: 0.06 });
+    plot.rect(w * 0.59, h * 0.735, w * 0.3, h * 0.155, { fill: 'hatch', hatchSpacing: w * 0.016, hatchAngle: 30, wobble: 1.0, repeat: 2 });
     // erased and overwritten
     plot.rub('COLLAGE', w * 0.16, h * 0.815, { size: w * 0.06, decay: 1.6 });
     plot.asemic(w * 0.53, h * 0.775, w * 0.36, h * 0.145, { wobble: 1.8, strokeWeight: 1 });

@@ -52,7 +52,7 @@ function buildHeroTrace(plot) {
     frame: { bleed: 0.35, wobble: 0.8, strokeWeight: 1.6 }
   });
   plot.grid(w * 0.045 + 8, h * 0.05 - 6, w * 0.92, h * 0.88, compact ? 3 : 5, 4, {
-    frame: { wobble: 1.5, dropout: 0.4 }
+    frame: { wobble: 1.5 }
   });
 
   // ghost behind the title: the phrase, deep cut, muted by the wash
@@ -61,7 +61,7 @@ function buildHeroTrace(plot) {
     slices: 8,
     sliceOffset: 16,
     wobble: 1.6,
-    dropout: 0.1,
+    dropout: 0.02,
     rubout: 0.15,
     alpha: 0.6
   });
@@ -77,7 +77,8 @@ function buildHeroTrace(plot) {
     wear: 0.4
   });
 
-  // top to bottom: the word turned, written over the block
+  // top to bottom: the word turned, written over the block.
+  // The play is in the passes: the middle column is struck twice.
   const word = "RUB OUT";
   const columns = compact ? 2 : 3;
   for (let c = 0; c < columns; c++) {
@@ -87,7 +88,7 @@ function buildHeroTrace(plot) {
         size: Math.max(20, w * 0.026),
         breathe: 1.0,
         bleed: 0.2,
-        dropout: 0.05
+        repeat: c === 1 ? 2 : 1
       });
     }
   }
@@ -97,7 +98,7 @@ function buildHeroTrace(plot) {
     size: Math.max(10, w * 0.012),
     glyphJitter: 0.7,
     wobble: 0.5,
-    dropout: 0.1,
+    dropout: 0.03,
     alpha: 0.8
   });
 
