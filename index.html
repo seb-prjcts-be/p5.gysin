@@ -268,6 +268,34 @@ plot.path(signal, {
     </div>
   </section>
 
+  <section class="section">
+    <div class="section-header">
+      <div class="section-tag">bleed &middot; the additive counterpart</div>
+      <h2>Ink <span class="accent">Bleed</span></h2>
+      <p class="section-desc">dropout and rubout take line material away; bleed gives chosen fragments extra, slightly shifted passes - ink gathering where the pen returned. <code>tool: "blade"</code> strips the build-up again for cutting machines.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-ink-bleed" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// the same sliced line three times - the ink returns harder each row
+plot.textCutup("I AM THAT I AM", 42, 90, { size: 34 });
+plot.textCutup("I AM THAT I AM", 42, 180, {
+  size: 34,
+  bleed: 0.22,
+  bleedPasses: 2
+});
+plot.textCutup("I AM THAT I AM", 42, 270, {
+  size: 34,
+  bleed: 0.4,
+  bleedPasses: 3,
+  bleedSpread: 1.2
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="examples/ink_bleed/" target="_blank">-&gt; full example</a>
+        <a class="ex-full-link" href="examples/ink_bleed/sketch.js" target="_blank">-&gt; source sketch</a>
+      </div>
+    </div>
+  </section>
+
   <section class="section group-intro" id="learn-plot">
     <div class="section-header">
       <div class="section-tag">Learn &amp; plot</div>
@@ -618,6 +646,31 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, hatch: 3 } });
         layer: "hatch"
       });
     }
+    return plot;
+  });
+
+  makePreview("ex-ink-bleed", function(p, canvasW, canvasH) {
+    const plot = new GysinPlot({
+      p: p,
+      seed: 1916,
+      width: canvasW,
+      height: canvasH
+    });
+    // The same sliced line three times - the card's snippet, verbatim.
+    plot.textCutup("I AM THAT I AM", 42, canvasH * 0.28, {
+      size: canvasW * 0.062
+    });
+    plot.textCutup("I AM THAT I AM", 42, canvasH * 0.56, {
+      size: canvasW * 0.062,
+      bleed: 0.22,
+      bleedPasses: 2
+    });
+    plot.textCutup("I AM THAT I AM", 42, canvasH * 0.84, {
+      size: canvasW * 0.062,
+      bleed: 0.4,
+      bleedPasses: 3,
+      bleedSpread: 1.2
+    });
     return plot;
   });
 

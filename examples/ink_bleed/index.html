@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ink Bleed | p5.gysin examples</title>
+  <link rel="stylesheet" href="../../docs/style.css">
+  <style>
+    /* The sheet is clickable (reroll); the pointer makes that affordance visible. */
+    #sketch { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../../docs/system.html">System</a></li>
+      <li><a href="../../docs/vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">bleed</div>
+      <h1>Ink Bleed</h1>
+      <p>The additive counterpart. <code>dropout</code> and <code>rubout</code> take line material away; <strong>bleed</strong> chooses a few contiguous fragments of the written contour and gives only those one or more extra, slightly shifted passes - ink gathering where the pen went back over its own trace. The same sliced phrase is drawn three times; between the rows <strong>only the bleed options change</strong>.</p>
+      <p><strong>The ink knob</strong> (<em>Ink &plus;/&minus;</em> or the &uarr;/&darr; arrow keys) sets the share of the contour that gets return passes, from <em>0 single-pass</em> to <em>0.45 heavily overdrawn</em>. The extra traces carry <code>role: "bleed"</code> and a physical pass number, so <strong>SVG (blade)</strong> exports the same drawing with every second and later pass stripped - a knife cannot darken a line - while <strong>SVG (pen)</strong> keeps the build-up.</p>
+    </div>
+    <div class="demo-layout">
+      <div class="demo-code">
+        <div class="code-label">Core snippet</div>
+        <pre><code class="language-javascript">// The whole library, in three lines - this alone is a complete sketch:
+const plot = new GysinPlot({ seed: 1916 });
+plot.textCutup("I AM THAT I AM", 46, 170);   // sliced, one clean pass
+plot.draw();
+
+// bleed is opt-in, like every disturbance. A share of the contour gets
+// extra, slightly shifted passes; the rest stays a single line:
+plot.textCutup("I AM THAT I AM", 46, 340, {
+  bleed: 0.22,       // share of the written contour length
+  bleedPasses: 2,    // max extra passes per chosen fragment (cap 3)
+  bleedSpread: 0.8   // how far a return pass drifts off the first
+});
+
+// The same drawing, two tools:
+plot.downloadSVG("drawing-pen.svg", { tool: "pen" });     // keeps the ink
+plot.downloadSVG("drawing-blade.svg", { tool: "blade" }); // single pass only
+
+// stats() measures the return: bleedPaths, overdrawRatio, maxLocalPasses.</code></pre>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas" id="sketch" role="img" aria-label="The same sliced phrase three times down the sheet: one clean pass, then with fragments retraced so ink gathers, then retraced harder into dark clusters."></div>
+        <div class="demo-actions" aria-label="Ink Bleed actions">
+          <button type="button" id="ink-down" aria-label="Less ink">&minus; Ink</button>
+          <button type="button" id="ink-up" aria-label="More ink">Ink &plus;</button>
+          <button type="button" id="reroll-button">New variation</button>
+          <button type="button" id="svg-button">SVG (pen)</button>
+          <button type="button" id="blade-button">SVG (blade)</button>
+        </div>
+        <div class="demo-note">Ink <strong id="ink-readout">0.22</strong> &middot; seed <strong id="seed-readout">1916</strong> &middot; <span id="bleed-stats"></span> - all printed on the sheet. Click the canvas or <strong>New variation</strong> for new slices and freshly chosen fragments.</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      <a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp;
+      <a href="../../docs/system.html">System</a>
+    </p>
+    <p class="footer-sub">p5.gysin v0.2.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

@@ -110,7 +110,9 @@ plot.textCutup("RUB OUT THE WORD", 80, 180, {
 The extra traces get `role: "bleed"` and a physical pass number in SVG/JSON.
 `plot.stats()` reports `bleedPaths`, `bleedLength`, `overdrawRatio`, and
 `maxLocalPasses`. For cutting tools, `tool: "blade"` filters all second and
-later passes out of the export; `tool: "pen"` keeps the ink build-up.
+later passes out of the export; `tool: "pen"` keeps the ink build-up. The
+`ink_bleed` example is this feature in three states of one phrase, with both
+exports side by side.
 
 ## Filled shapes and letters
 
@@ -295,6 +297,7 @@ Available examples:
 - `plotter_calibration` - physical A4 sizes, margins, and pen layers
 - `signal_score` - abstract paths and repeatable data scores
 - `worn_word` - one word worn away: the `rub()` intent verb in a single call
+- `ink_bleed` - selective ink build-up: `bleed` in three states, pen vs blade export
 
 ## Plotter export
 
