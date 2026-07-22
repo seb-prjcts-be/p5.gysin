@@ -35,23 +35,83 @@
         <div class="hero-badge">p5.js addon library</div>
         <h1>p5.<span class="accent">gysin</span></h1>
         <p class="hero-sub">Vector-first traces for cut-up text, rubout gaps, uncertain contours, and plotter-friendly export.</p>
-        <a href="#examples" class="cta-btn">View showcases</a>
+        <a href="#studies" class="cta-btn">Enter the three studies</a>
       </div>
     </div>
   </section>
 
-  <section id="examples" class="section">
+  <section id="studies" class="section group-intro">
     <div class="section-header">
-      <div class="section-tag">Public examples &middot; v0.2.0</div>
-      <h2>Eleven live <span class="accent">examples</span></h2>
-      <p class="section-desc">Each preview is a live sketch. Open the full example for the complete page and source file. The snippets show the transferable idea, not every line.</p>
+      <div class="section-tag">Three studies &middot; one movement &middot; v0.2.0</div>
+      <h2>Cut. Permute. <span class="accent">Free.</span></h2>
+      <p class="section-desc">The opening is not a catalogue of effects. Three studies perform three operations on the same material: montage, repetition with difference, and release into gesture. Every preview is a live sketch; the snippets show the transferable idea, not every line.</p>
+    </div>
+    <div class="method-strip" aria-label="The three-study sequence">
+      <a href="#study-cut"><span>01 &middot; CUT</span><strong>Language is material</strong><small>Break the fixed neighbours.</small></a>
+      <a href="#study-permute"><span>02 &middot; PERMUTE</span><strong>Chance is a method</strong><small>Repeat, but change the relation.</small></a>
+      <a href="#study-free"><span>03 &middot; FREE</span><strong>Writing escapes</strong><small>From word to gesture.</small></a>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" id="study-cut">
     <div class="section-header">
-      <div class="section-tag">rub()</div>
-      <h2>Worn <span class="accent">Word</span></h2>
+      <div class="section-tag">01 &middot; CUT &middot; textCutup()</div>
+      <h2>Language is <span class="accent">material</span></h2>
+      <p class="section-desc">Slice text into unstable bands, then combine dropout, rubout, repeat, and drift.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-cutup" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// the same line, sliced twice - the second cut deeper
+plot.textCutup("I THINK THEREFORE I AM", 76, 140, {
+  size: 42,
+  slices: 6,
+  sliceOffset: 8
+});
+plot.textCutup("I THINK THEREFORE I AM", 76, 260, {
+  size: 42,
+  slices: 9,
+  sliceOffset: 22,
+  dropout: 0.09,
+  rubout: 0.12
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="examples/gysin_demo/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="examples/gysin_demo/sketch.js" target="_blank">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark" id="study-permute">
+    <div class="section-header">
+      <div class="section-tag">02 &middot; PERMUTE &middot; GysinText.permute()</div>
+      <h2>Chance is a <span class="accent">method</span></h2>
+      <p class="section-desc">Reorder the words first, then send every resulting line through the original contour cut-up and plotter pipeline.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-permutation" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const lines = GysinText.permute("I LOVE YOU", {
+  seed: 1960,
+  limit: 6,
+  order: "walk"
+});
+
+lines.forEach((line, index) =&gt; {
+  plot.textCutup(line, 48, 90 + index * 46, {
+    slices: 7 + index,
+    sliceOffset: 12 + index * 4
+  });
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="examples/permutation_poem/" target="_blank">-&gt; full poster</a>
+        <a class="ex-full-link" href="examples/permutation_poem/sketch.js" target="_blank">-&gt; source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="study-free">
+    <div class="section-header">
+      <div class="section-tag">03 &middot; FREE &middot; rub()</div>
+      <h2>Writing escapes the <span class="accent">word</span></h2>
       <p class="section-desc">One intent verb. rub() composes text, cut-up, and asemic into a single decaying gesture - the whole piece in one call, defaults and all.</p>
     </div>
     <div class="ex-preview">
@@ -71,25 +131,15 @@ plot.draw();</code></pre>
     </div>
   </section>
 
-  <section class="section section-dark">
+  <section class="section group-intro" id="examples">
     <div class="section-header">
-      <div class="section-tag">editor.p5js.org</div>
-      <h2>p5 Editor <span class="accent">Starter</span></h2>
-      <p class="section-desc">A paste-ready sketch for the p5.js Web Editor using the jsDelivr GitHub CDN build.</p>
-    </div>
-    <div class="ex-preview">
-      <div id="ex-p5-editor" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-html">&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.2.0/p5.gysin.min.js"&gt;&lt;/script&gt;
-&lt;script src="sketch.js"&gt;&lt;/script&gt;</code></pre>
-      <div class="ex-links">
-        <a class="ex-full-link" href="examples/p5_editor/" target="_blank">-> full example</a>
-        <a class="ex-full-link" href="examples/p5_editor/sketch.js" target="_blank">-> source sketch</a>
-      </div>
+      <div class="section-tag">Methods</div>
+      <h2>Intent verbs, not <span class="accent">presets</span></h2>
+      <p class="section-desc">After the three studies, the library opens into focused methods. Each example explains one behaviour at a time. Open the full example for the complete page and source file.</p>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section-dark">
     <div class="section-header">
       <div class="section-tag">text() &middot; one word, three states</div>
       <h2>First <span class="accent">Trace</span></h2>
@@ -122,62 +172,7 @@ plot.text("FIRST TRACE", 68, 270, {
     </div>
   </section>
 
-  <section class="section section-dark">
-    <div class="section-header">
-      <div class="section-tag">textCutup() &middot; rubout</div>
-      <h2>Cut-Up <span class="accent">Typography</span></h2>
-      <p class="section-desc">Slice text into unstable bands, then combine dropout, rubout, repeat, and drift.</p>
-    </div>
-    <div class="ex-preview">
-      <div id="ex-cutup" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">// the same line, sliced twice - the second cut deeper
-plot.textCutup("I THINK THEREFORE I AM", 76, 140, {
-  size: 42,
-  slices: 6,
-  sliceOffset: 8
-});
-plot.textCutup("I THINK THEREFORE I AM", 76, 260, {
-  size: 42,
-  slices: 9,
-  sliceOffset: 22,
-  dropout: 0.09,
-  rubout: 0.12
-});</code></pre>
-      <div class="ex-links">
-        <a class="ex-full-link" href="examples/gysin_demo/" target="_blank">-> full example</a>
-        <a class="ex-full-link" href="examples/gysin_demo/sketch.js" target="_blank">-> source sketch</a>
-      </div>
-    </div>
-  </section>
-
   <section class="section">
-    <div class="section-header">
-      <div class="section-tag">GysinText.permute() &middot; textCutup()</div>
-      <h2>Permutation <span class="accent">Poem</span></h2>
-      <p class="section-desc">Reorder the words first, then send every resulting line through the original contour cut-up and plotter pipeline.</p>
-    </div>
-    <div class="ex-preview">
-      <div id="ex-permutation" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">const regels = GysinText.permute("I LOVE YOU", {
-  seed: 1960,
-  limit: 6,
-  order: "walk"
-});
-
-regels.forEach((regel, index) =&gt; {
-  plot.textCutup(regel, 48, 90 + index * 46, {
-    slices: 7 + index,
-    sliceOffset: 12 + index * 4
-  });
-});</code></pre>
-      <div class="ex-links">
-        <a class="ex-full-link" href="examples/permutation_poem/" target="_blank">-&gt; full poster</a>
-        <a class="ex-full-link" href="examples/permutation_poem/sketch.js" target="_blank">-&gt; source sketch</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-dark">
     <div class="section-header">
       <div class="section-tag">underwood() &middot; single-stroke &middot; period</div>
       <h2>Type<span class="accent">writer</span></h2>
@@ -198,7 +193,7 @@ plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice</code></pre>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section-dark">
     <div class="section-header">
       <div class="section-tag">wobble &middot; dropout &middot; repeat</div>
       <h2>Parameter <span class="accent">Lab</span></h2>
@@ -231,7 +226,7 @@ plot.textCutup("RUB OUT", 58, 270, {
     </div>
   </section>
 
-  <section class="section section-dark">
+  <section class="section">
     <div class="section-header">
       <div class="section-tag">p5.Font &middot; real contours</div>
       <h2>Font <span class="accent">Outlines</span></h2>
@@ -254,7 +249,7 @@ plot.text("O8BR", 70, 190, {
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section-dark">
     <div class="section-header">
       <div class="section-tag">path() &middot; no text</div>
       <h2>Signal <span class="accent">Score</span></h2>
@@ -276,6 +271,32 @@ plot.path(signal, {
       <div class="ex-links">
         <a class="ex-full-link" href="examples/signal_score/" target="_blank">-> full example</a>
         <a class="ex-full-link" href="examples/signal_score/sketch.js" target="_blank">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section group-intro" id="learn-plot">
+    <div class="section-header">
+      <div class="section-tag">Learn &amp; plot</div>
+      <h2>From editor to <span class="accent">pen</span></h2>
+      <p class="section-desc">Setup, calibration, and export: the practical route from a sketch in the browser to a plotted sheet.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-tag">editor.p5js.org</div>
+      <h2>p5 Editor <span class="accent">Starter</span></h2>
+      <p class="section-desc">A paste-ready sketch for the p5.js Web Editor using the jsDelivr GitHub CDN build.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-p5-editor" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-html">&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.2.0/p5.gysin.min.js"&gt;&lt;/script&gt;
+&lt;script src="sketch.js"&gt;&lt;/script&gt;</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="examples/p5_editor/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="examples/p5_editor/sketch.js" target="_blank">-> source sketch</a>
       </div>
     </div>
   </section>
@@ -302,7 +323,7 @@ plot.downloadHPGL("calibration.hpgl", {
     </div>
   </section>
 
-  <section class="section section-dark">
+  <section class="section">
     <div class="section-header">
       <div class="section-tag">SVG &middot; JSON &middot; HPGL</div>
       <h2>Plotter <span class="accent">Export</span></h2>
@@ -582,14 +603,14 @@ function setup() {
       height: canvasH,
       style: { stroke: "#171717", strokeWeight: 0.82, alpha: 0.88 }
     });
-    const regels = GysinText.permute("I LOVE YOU", {
+    const lines = GysinText.permute("I LOVE YOU", {
       seed: 1960,
       limit: 6,
       order: "walk"
     });
     // One pass per permuted line, exactly as the card's snippet describes.
-    regels.forEach(function(regel, index) {
-      plot.textCutup(regel, 30, 44 + index * (canvasH - 66) / 6, {
+    lines.forEach(function(line, index) {
+      plot.textCutup(line, 30, 44 + index * (canvasH - 66) / 6, {
         size: canvasW * 0.041,
         slices: 4 + index,
         sliceOffset: 1 + index * 0.8,
