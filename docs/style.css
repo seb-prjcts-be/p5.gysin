@@ -494,6 +494,7 @@ h3 {
 }
 
 .demo-code {
+  min-width: 0;
   border: 1px solid var(--rule);
   background: rgba(251, 250, 245, 0.72);
 }
@@ -520,6 +521,7 @@ h3 {
 
 .demo-right {
   display: grid;
+  min-width: 0;
   gap: 12px;
 }
 
