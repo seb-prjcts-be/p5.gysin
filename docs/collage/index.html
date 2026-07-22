@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collage | p5.gysin</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <button class="nav-hamburger" type="button" aria-label="Toggle menu" aria-expanded="false" onclick="const open=this.closest('nav').classList.toggle('nav-open');this.setAttribute('aria-expanded',String(open))">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Showcase</a></li>
+      <li><a href="index.html" class="active">Collage</a></li>
+      <li><a href="../guide.html">Guide</a></li>
+      <li><a href="../about.html">About</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <header class="page-header">
+    <div class="section-tag">Deep guide &middot; v0.2.0</div>
+    <h1>Col<span class="accent">lage</span></h1>
+    <p>One word, treated as paper. A collage is three acts: cut the material, arrange the fragments, glue them down. This page runs the single word COLLAGE through every function of the library, one act at a time, each with a live preview and a block you can copy. At the end the acts stack into one glued sheet.</p>
+    <ul class="ce-chips">
+      <li><a href="#sheet">01 the sheet</a></li>
+      <li><a href="#scraps">02 scraps</a></li>
+      <li><a href="#word">03 the word</a></li>
+      <li><a href="#scissors">04 scissors</a></li>
+      <li><a href="#arrange">05 arrange</a></li>
+      <li><a href="#letterbox">06 letter box</a></li>
+      <li><a href="#markbox">07 mark box</a></li>
+      <li><a href="#label">08 typed label</a></li>
+      <li><a href="#tone">09 tone blocks</a></li>
+      <li><a href="#glue">10 glue &amp; ink</a></li>
+      <li><a href="#wear">11 wear</a></li>
+      <li><a href="#note">12 margin note</a></li>
+      <li><a href="#pens">13 pens &amp; export</a></li>
+      <li><a href="#collage">14 the collage</a></li>
+    </ul>
+  </header>
+
+  <!-- 01 THE SHEET -->
+  <section class="section ce-module" id="sheet">
+    <div class="section-header">
+      <div class="section-tag">01 &middot; grid()</div>
+      <h2>The sheet</h2>
+      <p class="section-desc">Every collage starts with the board it is glued to. <code>grid()</code> divides the sheet with ink-bled rules and hands back the cell rectangles, so every later fragment knows where it may land.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>Divide the sheet</h4><p>Choose the columns and rows the board is built from.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Ink-bled rules</h4><p>The frame carries bleed, so the black lines build up unevenly like a worn print.</p></div>
+      <div class="ce-step"><span>glue</span><h4>Cells to place into</h4><p><code>grid()</code> returns each cell, so fragments land declaratively.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-sheet" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">// the board: a modular, ink-bled frame
+const cells = plot.grid(60, 60, 680, 520, 4, 3, {
+  frame: {
+    bleed: 0.3,
+    wobble: 0.7,
+    strokeWeight: 2
+  }
+});
+// cells[i] = { x, y, w, h, col, row }</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 SCRAPS -->
+  <section class="section section-dark ce-module" id="scraps">
+    <div class="section-header">
+      <div class="section-tag">02 &middot; line() &middot; rect() &middot; circle() &middot; path()</div>
+      <h2>Scraps</h2>
+      <p class="section-desc">The non-text material: strips, patches, rings, and free clippings. Four primitives with torn edges - <code>wobble</code> makes them hand-cut, <code>dropout</code> tears gaps, <code>repeat</code> and <code>overshoot</code> let the scissors pass twice and run past the corner.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>Four kinds of scrap</h4><p>A strip, a patch, a ring, and a free polyline clipping.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Torn, not drawn</h4><p><code>wobble</code> and <code>dropout</code> give every edge the uncertainty of a hand tear.</p></div>
+      <div class="ce-step"><span>glue</span><h4>Passes of the blade</h4><p><code>repeat</code> doubles the pass, <code>overshoot</code> runs past the corner like a real cut.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-scraps" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">plot.line(60, 80, 680, 96, {
+  wobble: 1.2,
+  repeat: 2
+});
+plot.rect(60, 140, 260, 180, {
+  wobble: 0.8,
+  overshoot: 6
+});
+plot.circle(500, 230, 150, {
+  wobble: 0.9,
+  dropout: 0.08
+});
+plot.path([[380, 420], [520, 380], [660, 440], [600, 520]], {
+  wobble: 1.0
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 THE WORD -->
+  <section class="section ce-module" id="word">
+    <div class="section-header">
+      <div class="section-tag">03 &middot; text() &middot; breathe &middot; dropout &middot; rubout</div>
+      <h2>The word</h2>
+      <p class="section-desc">The word itself is the paper this page collages. <code>text()</code> traces it as vector contours; the material options set its condition: <code>breathe</code> is the tremor of the hand, <code>dropout</code> the print that skips, <code>rubout</code> the eraser that has already been here.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>One clean clipping</h4><p>The word traced as letter contours, nearly steady.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Its condition</h4><p><code>breathe</code>, <code>dropout</code>, and <code>rubout</code> age the same clipping in states.</p></div>
+      <div class="ce-step"><span>glue</span><h4>Same trace, worn</h4><p>Each state is the same paths, sampled with more uncertainty.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-word" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">plot.text("COLLAGE", 60, 120, {
+  size: 64,
+  breathe: 0.4
+});
+plot.text("COLLAGE", 60, 260, {
+  size: 64,
+  breathe: 1.4,
+  dropout: 0.08
+});
+plot.text("COLLAGE", 60, 400, {
+  size: 64,
+  breathe: 2.2,
+  dropout: 0.2,
+  rubout: 0.2
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 SCISSORS -->
+  <section class="section section-dark ce-module" id="scissors">
+    <div class="section-header">
+      <div class="section-tag">04 &middot; textCutup()</div>
+      <h2>Scissors</h2>
+      <p class="section-desc">The defining act. <code>textCutup()</code> slices the word into horizontal bands and shifts each band sideways, exactly like scissors through a printed line. Cut shallow and it stays legible; cut deep and the word becomes texture.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>Slice into bands</h4><p><code>slices</code> sets how many strips the scissors make.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Shift each band</h4><p><code>sliceOffset</code> slides the strips out of register.</p></div>
+      <div class="ce-step"><span>glue</span><h4>Two depths of cut</h4><p>The same word twice: one careful cut, one deep cut with tears.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-scissors" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">plot.textCutup("COLLAGE", 60, 180, {
+  size: 72,
+  slices: 6,
+  sliceOffset: 8
+});
+plot.textCutup("COLLAGE", 60, 380, {
+  size: 72,
+  slices: 10,
+  sliceOffset: 24,
+  dropout: 0.08,
+  rubout: 0.1
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 ARRANGE -->
+  <section class="section ce-module" id="arrange">
+    <div class="section-header">
+      <div class="section-tag">05 &middot; GysinText.permute() + textCutup()</div>
+      <h2>Arrange</h2>
+      <p class="section-desc">Arranging is a collage act on word order. The three acts themselves - cut, arrange, glue - are handed to <code>GysinText.permute()</code>, and every new order runs through the scissors again. The addon reorders language; the core cuts the image.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>Loose words</h4><p><code>permute()</code> returns plain strings, the source line first.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Every order</h4><p>Orders <code>walk</code>, <code>random</code>, <code>lexical</code>, <code>rotate</code>; duplicates yield only unique lines.</p></div>
+      <div class="ce-step"><span>glue</span><h4>Cut each new order</h4><p>Deeper offsets per line walk the poem from readable to ruptured.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-arrange" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">const lines = GysinText.permute("CUT ARRANGE GLUE", {
+  seed: 1919,
+  limit: 5,
+  order: "walk"
+});
+
+lines.forEach((line, index) =&gt; {
+  plot.textCutup(line, 60, 90 + index * 90, {
+    size: 34,
+    slices: 5 + index,
+    sliceOffset: 2 + index * 4
+  });
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 LETTER BOX -->
+  <section class="section section-dark ce-module" id="letterbox">
+    <div class="section-header">
+      <div class="section-tag">06 &middot; letters() &middot; glyphJitter</div>
+      <h2>The letter box</h2>
+      <p class="section-desc">Cut the word small enough and only its letters remain: a box of loose type, like clippings sifted from a magazine. <code>letters()</code> fills a region from the word's own letter pool, and <code>glyphJitter</code> gives every glyph its own small deviation - no two clippings alike.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>Down to letters</h4><p>The word becomes the pool the field is built from.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Fill a region</h4><p>Rows of loose type fill the box you hand it.</p></div>
+      <div class="ce-step"><span>glue</span><h4>Each glyph unique</h4><p><code>glyphJitter</code> varies every letter; <code>dropout</code> thins the field into noise.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-letterbox" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">plot.letters("COLLAGE", 60, 60, 680, 520, {
+  size: 16,
+  glyphJitter: 0.7,
+  wobble: 0.5,
+  dropout: 0.05
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 MARK BOX -->
+  <section class="section ce-module" id="markbox">
+    <div class="section-header">
+      <div class="section-tag">07 &middot; symbols()</div>
+      <h2>The mark box</h2>
+      <p class="section-desc">Next to the letters, a box of punctuation: the small hard marks that hold a page together. <code>symbols()</code> works like the letter box but pools marks instead of letters, and <code>cluster</code> repeats them in short bursts so the band reads as rhythm, not static.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>Pick an alphabet of marks</h4><p>A short string of punctuation becomes the texture's pool.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Cluster into runs</h4><p>Bursts of the same mark read as machine rhythm.</p></div>
+      <div class="ce-step"><span>glue</span><h4>A rational noise strip</h4><p>The band grounds the expressive fragments with an even texture.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-markbox" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">plot.symbols(60, 120, 680, 300, {
+  set: '/"()-:',
+  cluster: true,
+  size: 16
+});</code></pre>
+      </div>
+    </div>
+    <p class="ce-note">Marks like <code>+ # &amp;</code> are not in the built-in vector alphabet. Type those with <code>underwood()</code> (its face has them) or pass an outline font.</p>
+  </section>
+
+  <!-- 08 TYPED LABEL -->
+  <section class="section section-dark ce-module" id="label">
+    <div class="section-header">
+      <div class="section-tag">08 &middot; underwood()</div>
+      <h2>The typed label</h2>
+      <p class="section-desc">Every collage carries a typed strip: the caption pasted under the image. <code>underwood()</code> types it period-correct - single-stroke letters at a fixed pitch, no bold, no italic. "Bold" is the same key struck twice; the underline is the underscore ladder.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>Type the strip</h4><p>Defaults give a period page: fixed pitch, six lines per inch, light wear.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Only period decoration</h4><p><code>underline</code>, <code>bold: true</code> (double-strike), and typed dividers.</p></div>
+      <div class="ce-step"><span>glue</span><h4>One pen line per letter</h4><p>Single-stroke, so it plots exactly as typed.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-label" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">// needs p5.gysin.underwood.min.js loaded
+plot.underwood("COLLAGE", 60, 90, {
+  size: 30,
+  underline: 1
+});
+plot.underwood("CUT ARRANGE GLUE", 60, 170, {
+  bold: true
+});
+plot.underwood("* * * * * * * *", 60, 230);</code></pre>
+      </div>
+    </div>
+    <p class="ce-links"><a href="../../examples/typewriter/" target="_blank">typewriter example -&gt;</a></p>
+  </section>
+
+  <!-- 09 TONE BLOCKS -->
+  <section class="section ce-module" id="tone">
+    <div class="section-header">
+      <div class="section-tag">09 &middot; fill: "hatch" &middot; fill: "cross"</div>
+      <h2>Tone blocks</h2>
+      <p class="section-desc">Collage needs dark paper too: blocks of tone to paste behind and between the words. A plotter cannot pour ink, so <code>fill</code> builds tone from strokes - <code>hatch</code> lays parallel lines, <code>cross</code> lays two hatchings perpendicular for a heavier grey.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>A patch of tone</h4><p>Any closed shape can carry a fill; counters stay open.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Set the weave</h4><p><code>hatchSpacing</code> sets the density, <code>hatchAngle</code> turns the weave.</p></div>
+      <div class="ce-step"><span>glue</span><h4>Strokes, not pixels</h4><p>The fill is real pen lines; <code>stats()</code> counts them as <code>fillPaths</code>.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-tone" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">plot.rect(60, 80, 280, 200, {
+  fill: "hatch",
+  hatchSpacing: 3,
+  hatchAngle: 30
+});
+plot.rect(420, 80, 280, 200, {
+  fill: "cross",
+  hatchSpacing: 4
+});
+plot.circle(380, 430, 180, {
+  fill: "hatch",
+  hatchSpacing: 2.5,
+  hatchAngle: 75
+});</code></pre>
+      </div>
+    </div>
+    <p class="ce-links"><a href="../../examples/font_outlines/" target="_blank">filled letters in font_outlines -&gt;</a></p>
+  </section>
+
+  <!-- 10 GLUE & INK -->
+  <section class="section section-dark ce-module" id="glue">
+    <div class="section-header">
+      <div class="section-tag">10 &middot; bleed &middot; repeat</div>
+      <h2>Glue &amp; ink</h2>
+      <p class="section-desc">Where fragments overlap, the glue soaks through and the ink builds up. <code>bleed</code> is that additive build-up: extra passes that thicken a trace unevenly, like a print pulled twice. It is selective - you decide which fragment soaks.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>One dry strip</h4><p>A plain line is a clean, single pass.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Let it soak</h4><p><code>bleed</code> adds uneven passes; <code>bleedPasses</code> caps how many.</p></div>
+      <div class="ce-step"><span>glue</span><h4>Measured, not guessed</h4><p><code>stats()</code> reports <code>bleedPaths</code> and <code>overdrawRatio</code>, so build-up stays plottable.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-glue" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">// dry strip
+plot.line(60, 120, 680, 130, {
+  wobble: 0.8
+});
+// soaked strips: ink builds up in passes
+plot.line(60, 240, 680, 255, {
+  wobble: 0.8,
+  bleed: 0.5
+});
+plot.line(60, 360, 680, 380, {
+  wobble: 0.8,
+  bleed: 0.9,
+  bleedPasses: 4
+});</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 WEAR -->
+  <section class="section ce-module" id="wear">
+    <div class="section-header">
+      <div class="section-tag">11 &middot; rub()</div>
+      <h2>Wear</h2>
+      <p class="section-desc">A fragment that is handled wears out. <code>rub()</code> is the intent verb for that whole gesture: the word appears legible, returns cut up, and is finally buried under an asemic scribble - three copies, one call, one <code>decay</code> knob to scale the wear.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>One call</h4><p><code>rub()</code> composes <code>text</code>, <code>textCutup</code>, and <code>asemic</code> with strong defaults.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>One knob</h4><p><code>decay</code> scales wobble, drift, dropout, and rubout across every copy at once.</p></div>
+      <div class="ce-step"><span>glue</span><h4>Escape hatches stay</h4><p><code>tail</code>, <code>stages</code>, and <code>tangles</code> replace the recipe when you need to.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-wear" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">// the whole gesture, defaults and all
+plot.rub("COLLAGE", 60, 220, {
+  size: 56
+});</code></pre>
+      </div>
+    </div>
+    <p class="ce-links"><a href="../../examples/worn_word/" target="_blank">worn_word example -&gt;</a></p>
+  </section>
+
+  <!-- 12 MARGIN NOTE -->
+  <section class="section section-dark ce-module" id="note">
+    <div class="section-header">
+      <div class="section-tag">12 &middot; asemic()</div>
+      <h2>The margin note</h2>
+      <p class="section-desc">In the margin of every collage: handwriting that is not language. <code>asemic()</code> draws a smooth turning walk that drifts back toward its centre - a compact cursive scribble you can feel but not read. Rows of them read as the note the maker left.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>Give it a box</h4><p>The gesture fills the rectangle you hand it, one tangle per cell.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>A centre-seeking walk</h4><p>The path loops and drifts home, so it reads as writing, not as a net.</p></div>
+      <div class="ce-step"><span>glue</span><h4>Script without language</h4><p>A row of tangles becomes a line of unreadable annotation.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-note" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">// one cursive gesture per cell of a small grid
+for (let r = 0; r &lt; 2; r++) {
+  for (let c = 0; c &lt; 4; c++) {
+    plot.asemic(60 + c * 170, 60 + r * 240, 150, 210, {
+      wobble: 1.4
+    });
+  }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 PENS & EXPORT -->
+  <section class="section ce-module" id="pens">
+    <div class="section-header">
+      <div class="section-tag">13 &middot; layer &middot; penMap &middot; export</div>
+      <h2>Pens &amp; off the table</h2>
+      <p class="section-desc">The finished collage leaves the table. Give every material its own <code>layer</code>, map layers to physical pens, and the same captured paths go out as SVG for the plotter driver, JSON for data, or HPGL for the classics. Nothing is redrawn: export is the drawing.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>Name the materials</h4><p>Each call carries a <code>layer</code>: frame, word, tone.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Map layers to pens</h4><p><code>penMap</code> assigns each layer a physical pen number.</p></div>
+      <div class="ce-step"><span>glue</span><h4>Ship the sheet</h4><p><code>downloadSVG</code>, <code>downloadJSON</code>, <code>downloadHPGL</code>; <code>stats()</code> predicts the plot.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-pens" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">plot.rect(60, 60, 680, 520, { layer: "frame" });
+plot.text("COLLAGE", 120, 320, {
+  size: 72,
+  layer: "word"
+});
+plot.rect(120, 380, 240, 120, {
+  fill: "hatch",
+  layer: "tone"
+});
+
+const page = { format: "A4", margin: 18 };
+plot.downloadSVG("collage.svg", {
+  page,
+  optimize: true,
+  penMap: { frame: 1, word: 2, tone: 3 }
+});
+console.log(plot.stats({ page }));</code></pre>
+      </div>
+    </div>
+    <p class="ce-links"><a href="../../examples/plotter_export/" target="_blank">plotter_export example -&gt;</a><a href="../../examples/plotter_calibration/" target="_blank">plotter_calibration example -&gt;</a></p>
+  </section>
+
+  <!-- 14 THE COLLAGE -->
+  <section class="section section-dark ce-module ce-poster-section" id="collage">
+    <div class="section-header">
+      <div class="section-tag">14 &middot; assembly</div>
+      <h2>The collage</h2>
+      <p class="section-desc">Cut, arranged, glued. The board holds a deep-cut headline, a typed permutation strip, the sifted letter box, a mark band, a soaked rule, a patch of tone, the worn word, and the margin note. One seed, one word, every act on one sheet.</p>
+    </div>
+    <div class="ce-poster-stage">
+      <div id="m-collage" class="ce-canvas"></div>
+    </div>
+    <div class="ce-demo" style="margin-top:18px;">
+      <div class="ce-codewrap" style="grid-column: 1 / -1;">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 1919, width: 560, height: 760 });
+
+// the board
+plot.grid(30, 30, 500, 700, 1, 1, {
+  frame: { bleed: 0.3, wobble: 0.6 }
+});
+
+// deep-cut headline
+plot.textCutup("COLLAGE", 60, 120, {
+  size: 60,
+  slices: 8,
+  sliceOffset: 14
+});
+
+// typed permutation strip
+const lines = GysinText.permute("CUT ARRANGE GLUE", { seed: 1919, limit: 4 });
+plot.underwood(lines.join("\n"), 60, 190, { size: 13 });
+
+// the letter box, sifted from the word
+plot.letters("COLLAGE", 60, 330, 440, 120, {
+  size: 13,
+  glyphJitter: 0.7,
+  dropout: 0.05
+});
+
+// mark band and a soaked rule
+plot.symbols(60, 470, 440, 50, { set: '/"()-:', cluster: true, size: 13 });
+plot.line(60, 545, 500, 550, { wobble: 0.8, bleed: 0.7 });
+
+// tone patch, the worn word, the margin note
+plot.rect(320, 570, 180, 110, { fill: "hatch", hatchSpacing: 3, hatchAngle: 30 });
+plot.rub("COLLAGE", 60, 620, { size: 30 });
+plot.asemic(60, 660, 220, 60, { wobble: 1.5 });
+
+plot.draw();</code></pre>
+      </div>
+    </div>
+    <p class="ce-links"><a href="../../index.html#studies">the three studies -&gt;</a><a href="../guide.html">full guide -&gt;</a></p>
+  </section>
+
+  <footer>
+    <p><a href="../../index.html#examples">Examples</a> &nbsp;&middot;&nbsp; <a href="../guide.html">Guide</a></p>
+    <p class="footer-sub">p5.gysin v0.2.0</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.text.min.js"></script>
+  <script src="../../p5.gysin.underwood.min.js"></script>
+  <script>
+  const PAPER = '#f0efe9';
+  const INK = '#17140f';
+
+  function copyCode(btn) {
+    const code = btn.parentElement.querySelector('code');
+    navigator.clipboard.writeText(code.innerText).then(function () {
+      const old = btn.textContent;
+      btn.textContent = 'Copied';
+      setTimeout(function () { btn.textContent = old; }, 1200);
+    });
+  }
+
+  function makeGysinPreview(id, ratio, builder) {
+    new p5(function (p) {
+      let plot;
+      function size() {
+        const el = document.getElementById(id);
+        const w = Math.max(280, el.clientWidth);
+        return { w: w, h: Math.round(w * ratio) };
+      }
+      p.setup = function () {
+        const s = size();
+        p.createCanvas(s.w, s.h).parent(id);
+        p.pixelDensity(1);
+        p.noLoop();
+        plot = builder(p, s.w, s.h);
+      };
+      p.draw = function () {
+        p.background(PAPER);
+        if (plot) plot.draw();
+      };
+      p.windowResized = function () {
+        const s = size();
+        p.resizeCanvas(s.w, s.h);
+        plot = builder(p, s.w, s.h);
+        p.redraw();
+      };
+    }, id);
+  }
+
+  function base(p, w, h, seed) {
+    return new GysinPlot({ p: p, seed: seed, width: w, height: h, style: { stroke: INK, strokeWeight: 1.2, alpha: 0.9 } });
+  }
+
+  // 01 the sheet
+  makeGysinPreview('m-sheet', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 12);
+    plot.grid(w * 0.08, h * 0.1, w * 0.84, h * 0.8, 4, 3, {
+      frame: { bleed: 0.3, wobble: 0.7, strokeWeight: 2, bleedPasses: 3 }
+    });
+    return plot;
+  });
+
+  // 02 scraps
+  makeGysinPreview('m-scraps', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 21);
+    plot.line(w * 0.08, h * 0.15, w * 0.92, h * 0.17, { wobble: 1.2, repeat: 2 });
+    plot.rect(w * 0.08, h * 0.26, w * 0.32, h * 0.32, { wobble: 0.8, overshoot: 6 });
+    plot.circle(w * 0.68, h * 0.42, w * 0.2, { wobble: 0.9, dropout: 0.08 });
+    plot.path([
+      [w * 0.5, h * 0.78], [w * 0.68, h * 0.7], [w * 0.88, h * 0.82], [w * 0.8, h * 0.94]
+    ], { wobble: 1.0 });
+    return plot;
+  });
+
+  // 03 the word
+  makeGysinPreview('m-word', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 1919);
+    plot.text('COLLAGE', w * 0.08, h * 0.24, { size: w * 0.115, breathe: 0.4 });
+    plot.text('COLLAGE', w * 0.08, h * 0.52, { size: w * 0.115, breathe: 1.4, dropout: 0.08 });
+    plot.text('COLLAGE', w * 0.08, h * 0.8, { size: w * 0.115, breathe: 2.2, dropout: 0.2, rubout: 0.2 });
+    return plot;
+  });
+
+  // 04 scissors
+  makeGysinPreview('m-scissors', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 1919);
+    plot.textCutup('COLLAGE', w * 0.08, h * 0.34, { size: w * 0.13, slices: 6, sliceOffset: 8 });
+    plot.textCutup('COLLAGE', w * 0.08, h * 0.74, { size: w * 0.13, slices: 10, sliceOffset: 24, dropout: 0.08, rubout: 0.1 });
+    return plot;
+  });
+
+  // 05 arrange
+  makeGysinPreview('m-arrange', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 1919);
+    const lines = GysinText.permute('CUT ARRANGE GLUE', { seed: 1919, limit: 5, order: 'walk' });
+    lines.forEach(function (line, i) {
+      plot.textCutup(line, w * 0.07, h * 0.18 + i * h * 0.17, {
+        size: w * 0.052, slices: 5 + i, sliceOffset: 2 + i * 4, wobble: 0.5
+      });
+    });
+    return plot;
+  });
+
+  // 06 the letter box
+  makeGysinPreview('m-letterbox', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 7);
+    plot.letters('COLLAGE', w * 0.08, h * 0.12, w * 0.84, h * 0.74, {
+      size: w * 0.032, glyphJitter: 0.7, wobble: 0.5, dropout: 0.05, alpha: 0.85
+    });
+    return plot;
+  });
+
+  // 07 the mark box
+  makeGysinPreview('m-markbox', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 4);
+    plot.symbols(w * 0.08, h * 0.24, w * 0.84, h * 0.5, {
+      set: '/"()-:', cluster: true, size: w * 0.032, wobble: 0.5
+    });
+    return plot;
+  });
+
+  // 08 the typed label
+  makeGysinPreview('m-label', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 1919);
+    plot.underwood('COLLAGE', w * 0.07, h * 0.34, { size: w * 0.052, underline: 1 });
+    plot.underwood('CUT ARRANGE GLUE', w * 0.07, h * 0.62, { size: w * 0.042, bold: true });
+    plot.underwood('* * * * * * * * * *', w * 0.07, h * 0.82, { size: w * 0.036, wear: 0.6 });
+    return plot;
+  });
+
+  // 09 tone blocks
+  makeGysinPreview('m-tone', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 9);
+    plot.rect(w * 0.08, h * 0.14, w * 0.36, h * 0.34, { fill: 'hatch', hatchSpacing: 3, hatchAngle: 30 });
+    plot.rect(w * 0.56, h * 0.14, w * 0.36, h * 0.34, { fill: 'cross', hatchSpacing: 4 });
+    plot.circle(w * 0.5, h * 0.74, h * 0.3, { fill: 'hatch', hatchSpacing: 2.5, hatchAngle: 75 });
+    return plot;
+  });
+
+  // 10 glue & ink
+  makeGysinPreview('m-glue', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 10);
+    plot.line(w * 0.08, h * 0.2, w * 0.92, h * 0.22, { wobble: 0.8 });
+    plot.line(w * 0.08, h * 0.45, w * 0.92, h * 0.48, { wobble: 0.8, bleed: 0.5 });
+    plot.line(w * 0.08, h * 0.7, w * 0.92, h * 0.74, { wobble: 0.8, bleed: 0.9, bleedPasses: 4 });
+    return plot;
+  });
+
+  // 11 wear
+  makeGysinPreview('m-wear', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 1919);
+    plot.rub('COLLAGE', w * 0.08, h * 0.42, { size: w * 0.1 });
+    return plot;
+  });
+
+  // 12 the margin note
+  makeGysinPreview('m-note', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 3);
+    const cols = 4, rows = 2;
+    const gx = w * 0.06, gy = h * 0.1, gw = w * 0.88, gh = h * 0.8;
+    const cw = gw / cols, ch = gh / rows;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        plot.asemic(gx + c * cw, gy + r * ch, cw * 0.9, ch * 0.9, { wobble: 1.4, strokeWeight: 1 });
+      }
+    }
+    return plot;
+  });
+
+  // 13 pens & export
+  makeGysinPreview('m-pens', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 13);
+    plot.rect(w * 0.08, h * 0.1, w * 0.84, h * 0.8, { layer: 'frame', wobble: 0.5 });
+    plot.text('COLLAGE', w * 0.16, h * 0.5, { size: w * 0.11, layer: 'word', breathe: 0.5 });
+    plot.rect(w * 0.16, h * 0.6, w * 0.34, h * 0.2, { fill: 'hatch', hatchSpacing: 3, layer: 'tone' });
+    return plot;
+  });
+
+  // 14 the collage (portrait)
+  makeGysinPreview('m-collage', 1.36, function (p, w, h) {
+    const plot = base(p, w, h, 1919);
+    const m = w * 0.05;
+    plot.grid(m, m, w - 2 * m, h - 2 * m, 1, 1, { frame: { bleed: 0.3, wobble: 0.6, strokeWeight: 2, bleedPasses: 3 } });
+    plot.textCutup('COLLAGE', w * 0.1, h * 0.14, { size: w * 0.107, slices: 8, sliceOffset: 14 });
+    const lines = GysinText.permute('CUT ARRANGE GLUE', { seed: 1919, limit: 4, order: 'walk' });
+    plot.underwood(lines.join('\n'), w * 0.1, h * 0.235, { size: w * 0.023 });
+    plot.letters('COLLAGE', w * 0.1, h * 0.42, w * 0.8, h * 0.16, { size: w * 0.023, glyphJitter: 0.7, dropout: 0.05, alpha: 0.85 });
+    plot.symbols(w * 0.1, h * 0.6, w * 0.8, h * 0.07, { set: '/"()-:', cluster: true, size: w * 0.023 });
+    plot.line(w * 0.1, h * 0.71, w * 0.9, h * 0.715, { wobble: 0.8, bleed: 0.7 });
+    plot.rect(w * 0.56, h * 0.745, w * 0.33, h * 0.145, { fill: 'hatch', hatchSpacing: 3, hatchAngle: 30 });
+    plot.rub('COLLAGE', w * 0.1, h * 0.81, { size: w * 0.054 });
+    plot.asemic(w * 0.1, h * 0.86, w * 0.38, h * 0.08, { wobble: 1.5, strokeWeight: 1 });
+    plot.underwood('P5.GYSIN / COLLAGE / SEED 1919', w * 0.1, h * 0.955, { size: w * 0.017, wear: 0.5 });
+    return plot;
+  });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>
