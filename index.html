@@ -345,7 +345,7 @@ const json = plot.exportJSON({
   includeGenerated: true
 });
 
-const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, hatch: 3 } });</code></pre>
+const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="examples/plotter_export/" target="_blank">-> full example</a>
         <a class="ex-full-link" href="examples/plotter_export/sketch.js" target="_blank">-> source sketch</a>
@@ -715,7 +715,7 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, hatch: 3 } });
         dropout: 0.04,
         overshoot: 7,
         stroke: "#244f73",
-        layer: "hatch"
+        layer: "field"
       });
     }
     return plot;

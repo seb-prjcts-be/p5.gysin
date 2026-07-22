@@ -25,13 +25,13 @@
       <p><strong>How to read it</strong></p>
       <ul>
         <li><strong>Pen 1</strong> (ink) - the frame and the registration work: a cross in every corner plus a circle and triangle on the diagonal. The frame <em>hesitates</em> mid-edge and the crosses <em>overshoot</em> and <em>fray</em>, the way a hand-set mark runs past its own centre.</li>
-        <li><strong>Pen 2</strong> (red) - the type: the hero word and a typed subtitle (the optional <code>underwood()</code> typewriter, single-stroke at period pitch), which spells the four export layers <strong>FRAME / TYPE / HATCH / REG</strong> so the plate captions its own pen map.</li>
-        <li><strong>Pen 3</strong> (blue) - the texture that bridges type into tone: a decaying letter field, a mid-tone accent block, an airy field of operator glyphs, and a dense cross-hatch that anchors the plate in solid, dark tone.</li>
+        <li><strong>Pen 2</strong> (red) - the type: the hero word and a typed subtitle (the optional <code>underwood()</code> typewriter, single-stroke at period pitch), which spells the four export layers <strong>FRAME / TYPE / FIELD / REG</strong> so the plate captions its own pen map.</li>
+        <li><strong>Pen 3</strong> (blue) - the fields: a decaying letter field and an airy full-width band of operator glyphs. No filled masses - the lower band is signs, not tone.</li>
         <li><strong>Legend</strong> - names which pen draws which layer, its path count, and roughly how many seconds it keeps the machine busy (drawn length ÷ draw speed). The <strong>status line</strong> adds the total paths, millimetres of ink, and estimated plot time.</li>
       </ul>
       <p><strong>Controls</strong></p>
       <ul>
-        <li><strong>New variation</strong> - or press <strong>R</strong> - rerolls the plate: a new symbol set, a re-angled cross-hatch and accent, and freshly reshaped glyphs, so every variation reads as a different plate.</li>
+        <li><strong>New variation</strong> - or press <strong>R</strong> - rerolls the plate: a new symbol set and freshly reshaped glyphs, so every variation reads as a different plate.</li>
         <li><strong>Rougher +</strong> / <strong>Cleaner −</strong> - or the <strong>↑ / ↓</strong> keys - scale every perturbation from a clean plot up toward heavily hand-disturbed. The <strong>CLEAN … ROUGH</strong> meter shows where the human scale sits between 0 and 2.</li>
         <li><strong>Reset</strong> - returns the plate to its canonical state (variation 0, human x1.00), always one click away.</li>
         <li><strong>Download SVG / JSON / HPGL</strong> - takes the exact plate on screen to a plotter or vector tool. Seed, variation and human scale are printed on the plate, so any export is reproducible.</li>
@@ -50,11 +50,11 @@ plot.draw();
 
 // 1) per-pen layers: tag each call with a { layer } so one pen == one ink,
 //    and the same tags drive the HPGL pen map on export
-const penMap = { frame: 1, type: 2, hatch: 3, registration: 1 };
+const penMap = { frame: 1, type: 2, field: 3, registration: 1 };
 const ink = { 1: "#151515", 2: "#b5362b", 3: "#244f73" };
 
 // 2) the composition as data: [layer, method, geometry, perturbation]. One pass
-//    over the array draws the plate - frame, type, hatch fields, registration -
+//    over the array draws the plate - frame, type, fields, registration -
 //    with the stroke derived from the pen map, not written per shape
 for (const [layer, method, geom, opts] of shapesFor(composition(variation))) {
   plot[method](...geom, { layer, stroke: ink[penMap[layer]], ...humanize(opts) });

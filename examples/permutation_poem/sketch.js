@@ -51,14 +51,14 @@ const RULE = {
 // One source for the vertical rhythm; every layout anchor below derives from it.
 const GROUPS = 6;                      // permutation orders stacked down the poster
 const REPEATS = 6;                     // fading echo rows under each order
-const COLS = 3;                        // columns in the bottom tonal grid
+const COLS = 3;                        // columns in the bottom word grid
 const ROWS = Math.ceil(GROUPS / COLS); // grid rows needed to hold every order
 
 // Vertical anchors, derived from GROUPS so the band and grid follow the orders.
 const GROUP_TOP = 124;                       // first order's top edge
 const GROUP_H = 112;                         // vertical stride between orders
 const BAND_Y = GROUP_TOP + GROUPS * GROUP_H; // letter band, under the last order
-const GRID_Y = BAND_Y + 146;                 // tonal grid, under the band
+const GRID_Y = BAND_Y + 146;                 // word grid, under the band
 const FOOTER_Y = 1147;                        // colophon baseline at the page foot
 const GRID_FOOT_GAP = 44;                     // clearance kept between grid and colophon
 
@@ -259,9 +259,9 @@ function buildPoster() {
   // glyph so meaning breaks down into pure letterform.
   drawLetterBand();
 
-  // ── 6 · the tonal grid ──────────────────────────────────────────
-  // The modular grid at the foot: one hatch-filled cell per order, tightening
-  // from light to dark, with the order printed back inside each cell.
+  // ── 6 · the word grid ───────────────────────────────────────────
+  // The modular grid at the foot: one hand-ruled cell per order, with the
+  // order printed back inside each cell.
   drawPermutationGrid();
 }
 
@@ -306,11 +306,8 @@ function drawPermutationGrid() {
     const x = gridX + (i % COLS) * cellWidth;
     const y = gridY + Math.floor(i / COLS) * cellHeight;
 
-    // Tonal engine: hatch tightens from 14 (faint) to 4 (dense) as a light-to-dark staircase.
+    // Cell frame: a hand-ruled outline, no fill - the words carry the grid.
     plot.rect(x, y, cellWidth, cellHeight, {
-      fill: "hatch",
-      hatchSpacing: 14 - i * 2,
-      hatchAngle: -18,
       breathe: 0.5,
       dropout: 0.02,
       strokeWeight: 0.6,

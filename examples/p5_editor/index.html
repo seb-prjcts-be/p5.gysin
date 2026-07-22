@@ -21,7 +21,7 @@
     <div class="demo-header">
       <div class="demo-number">editor.p5js.org starter</div>
       <h1>p5 Editor Starter</h1>
-      <p>A paste-ready starter for the p5.js Web Editor. The plate acts out its title: <code>THE MACHINE REMEMBERS</code> is sliced once, then the word <code>REMEMBERS</code> returns lower and <em>forgets itself</em> - each lost letter decaying through its own shape shaken loose, then a printed sign, then a pure scribble. Raise decay and the hatched anchor and the machine-grid on the right erode too, so the forgetting reaches the whole plate. Everything on the canvas is real vector, so what you see is exactly what the SVG plots. Add the CDN script in <code>index.html</code>, then paste the sketch into <code>sketch.js</code>.</p>
+      <p>A paste-ready starter for the p5.js Web Editor. The plate acts out its title: <code>THE MACHINE REMEMBERS</code> is sliced once, then the word <code>REMEMBERS</code> returns lower and <em>forgets itself</em> - each lost letter decaying through its own shape shaken loose, then a printed sign, then a pure scribble. Raise decay and the ruled anchor and the machine-grid on the right erode too, so the forgetting reaches the whole plate. Everything on the canvas is real vector, so what you see is exactly what the SVG plots. Add the CDN script in <code>index.html</code>, then paste the sketch into <code>sketch.js</code>.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
@@ -38,8 +38,10 @@ plot.draw();
 // Everything below is OPTIONAL disturbance layered on top. Defaults are all
 // zero, so options are opt-in. buildPlot() stacks six layers, back to front:
 
-// 1) anchor - a cross-hatch-filled block that grounds the plate
-plot.rect(88, 470, 544, 160, { fill: "cross", dropout: 0.05 + decay * 0.35 });
+// 1) anchor - a ruled block (frame + closely set rules) grounds the plate
+for (let i = 1; i < 13; i++) {
+  plot.line(88, 470 + i * 12.3, 632, 470 + i * 12.3, { dropout: 0.05 + decay * 0.35 });
+}
 
 // 2) right-hand field - a light machine index (symbols over a grid)
 plot.symbols(470, 274, 196, 186, { size: 15, dropout: 0.05 + decay * 0.5 });
@@ -72,7 +74,7 @@ plot.draw();</code></pre>
           <button type="button" onclick="exportSVG()">Download SVG</button>
         </div>
         <div class="demo-stats" id="stats" aria-live="polite">Loading plotter cost&hellip;</div>
-        <div class="demo-note"><strong>Watch:</strong> press <em>Decay +</em> and see <code>REMEMBERS</code> forget its last letters - each drops from its own shape shaken loose to a printed sign to a pure scribble, and the hatched anchor and right-hand grid erode with it. <em>Decay &minus;</em> brings it back; <em>Decay reset</em> jumps to the <code>0.45</code> baseline, where several letters have already gone. The buttons show the live value and the stats line reads all three steerable axes - seed, hand and decay - plus how many of the nine letters went. <em>Reseed</em> redraws a visibly different work each time; <em>Hand</em> toggles the marks between steady and nervous. Nothing here is screen-only decoration, so <em>Download SVG</em> plots exactly what you see. The buttons match the <code>R</code>, <code>H</code>, <code>+</code>&thinsp;/&thinsp;<code>&minus;</code>, <code>0</code> and <code>S</code> keys.</div>
+        <div class="demo-note"><strong>Watch:</strong> press <em>Decay +</em> and see <code>REMEMBERS</code> forget its last letters - each drops from its own shape shaken loose to a printed sign to a pure scribble, and the ruled anchor and right-hand grid erode with it. <em>Decay &minus;</em> brings it back; <em>Decay reset</em> jumps to the <code>0.45</code> baseline, where several letters have already gone. The buttons show the live value and the stats line reads all three steerable axes - seed, hand and decay - plus how many of the nine letters went. <em>Reseed</em> redraws a visibly different work each time; <em>Hand</em> toggles the marks between steady and nervous. Nothing here is screen-only decoration, so <em>Download SVG</em> plots exactly what you see. The buttons match the <code>R</code>, <code>H</code>, <code>+</code>&thinsp;/&thinsp;<code>&minus;</code>, <code>0</code> and <code>S</code> keys.</div>
       </div>
     </div>
   </main>

@@ -19,11 +19,11 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">textCutup() + hatch fill + letter field</div>
+      <div class="demo-number">textCutup() + letter field</div>
       <h1>Gysin Demo</h1>
-      <p>A cut-up typographic poster on the theme "rub out the word". The title comes apart letter by letter (<code>glyphJitter</code>), the lower shapes gain tonal mass through parallel and cross hatching (<code>fill</code>), and the word itself dissolves into a decaying letter field (<code>letters()</code>). Everything exports as clean plotter vectors.</p>
+      <p>A cut-up typographic poster on the theme "rub out the word". The title comes apart letter by letter (<code>glyphJitter</code>), and the word itself dissolves into a decaying letter field (<code>letters()</code>) that fills the lower half - the words themselves are the only mass the poster carries. Everything exports as clean plotter vectors.</p>
       <p class="demo-context"><strong>The reference:</strong> "Rub out the word" is Brion Gysin's cut-up battle cry - the artist who, with William Burroughs, sliced text apart to break language open. This poster performs the phrase: it rubs itself out. Seed <code>19600319</code> fixes the noise, so every reload is the same print.</p>
-      <p class="demo-look"><strong>What to look for:</strong> follow the word down the page in zones - the rubbed-out titles, the ruled band that fans and tapers, the airy tilted slab weighed against the dense dark disc, and at the foot the word breaking apart into a decaying letter field. The rub-out is a <em>gradient</em>: light at the titles, heaviest at the field. Drag <em>rub out</em> to deepen that gradient top to bottom; drag <em>break apart</em> to shake every letter off its axis; hit <em>New variation</em> to re-decay everything except the frozen top title.</p>
+      <p class="demo-look"><strong>What to look for:</strong> follow the word down the page in zones - the rubbed-out titles, the ruled band that fans and tapers, and below it the word breaking apart into a decaying letter field. The rub-out is a <em>gradient</em>: light at the titles, heaviest at the field. Drag <em>rub out</em> to deepen that gradient top to bottom; drag <em>break apart</em> to shake every letter off its axis; hit <em>New variation</em> to re-decay everything except the frozen top title.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
@@ -46,12 +46,8 @@ plot.textCutup("I THINK THEREFORE I AM", 76, 370, { size: 55, slices: 9, sliceOf
 // 3) a ruled band of six lines that fan out and taper away
 for (let i = 0; i &lt; 6; i++) plot.line(80 + i * 8, 448 + i * 18, 820, 448 + i * 23, { dropout: 0.04 + i * 0.03 });
 
-// 4) two hatched masses in balance - both feel the break-apart slider too
-plot.polygon(slab,         { fill: "hatch", hatchSpacing: 8, breathe: 1.3 + letterJitter * 1.2 });
-plot.circle(705, 672, 160, { fill: "cross", hatchSpacing: 6, fray:  0.25 + letterJitter * 0.4 });
-
-// 5) the word made literal, dropped to the foot as a decaying letter field
-plot.letters("RUB OUT THE WORD", 90, 795, 720, 105, { size: 26, rubout: ruboutAt(795) });
+// 4) the word made literal: a decaying letter field fills the lower half
+plot.letters("RUB OUT THE WORD", 90, 600, 720, 300, { size: 26, rubout: ruboutAt(700) });
 
 plot.freeze(titleId); // reroll leaves the top title untouched
 plot.draw();</code></pre>
@@ -74,14 +70,13 @@ plot.draw();</code></pre>
         </div>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas" id="sketch" role="img" aria-label="A cut-up typographic poster with rubbed-out titles, a ruled band, two hatched tonal blocks, and a decaying letter field."></div>
+        <div class="demo-canvas" id="sketch" role="img" aria-label="A cut-up typographic poster with rubbed-out titles, a ruled band, and a decaying letter field that fills the lower half."></div>
         <ol class="demo-note" style="margin:0.6rem 0 0;padding-left:1.4rem;line-height:1.5;">
           <li><strong>Titles</strong> - the word being rubbed out, letter by letter</li>
           <li><strong>Ruled band</strong> - liniatuur that fans out and tapers away</li>
-          <li><strong>Two masses</strong> - an airy hatch slab weighed against a dense cross-hatched disc</li>
-          <li><strong>Letter field</strong> - the word decaying into loose glyphs</li>
+          <li><strong>Letter field</strong> - the word decaying into loose glyphs across the lower half</li>
         </ol>
-        <p class="demo-note">Reading top to bottom, the word dissolves through all four zones.</p>
+        <p class="demo-note">Reading top to bottom, the word dissolves through all three zones.</p>
         <p class="demo-note"><strong>R</strong> re-decays everything except the frozen top title, so it stays sharp while the rest finds a new variation. <strong>Download HPGL</strong> gives the plotter-native path.</p>
         <p class="demo-note" id="plot-stats">plot cost</p>
         <p class="demo-note">Keyboard: <code>S</code> SVG, <code>J</code> JSON, <code>H</code> HPGL, <code>R</code> new variation.</p>

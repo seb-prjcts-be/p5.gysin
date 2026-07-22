@@ -7,7 +7,7 @@
 //      plot.text("PLOT", 118, 188);   // clean, mechanical text
 //      plot.draw();
 //
-//  Every option below (breathe, dropout, fill, typed subtitle, per-pen
+//  Every option below (breathe, dropout, typed subtitle, per-pen
 //  layers, page + export…) is OPTIONAL on top of that core. The defaults are
 //  all zero, so a call with no options just draws clean - nothing here
 //  is required to use the library. This sketch stacks the layers one at
@@ -38,7 +38,7 @@ const STATS_OPTIONS = {
 const PEN_MAP = {
   frame: 1,
   type: 2,
-  hatch: 3,
+  field: 3,
   registration: 1
 };
 const PEN_INK = {
@@ -50,7 +50,7 @@ const PEN_INK = {
 const PEN_LEGEND = [
   { layer: "frame", label: "FRAME" },
   { layer: "type", label: "TYPE" },
-  { layer: "hatch", label: "HATCH" },
+  { layer: "field", label: "FIELD" },
   { layer: "registration", label: "REG" }
 ];
 
@@ -77,22 +77,6 @@ const ROW = {
 const LETTERS_H = 30;
 const BAND_H = 130;
 
-// Lower band runs left/right: a light symbol field beside a dense cross-hatch
-// anchor, so the eye reads across rather than down a bottom-heavy stack.
-const BAND_GAP = 20;
-const SYMBOLS_W = 174;
-const CROSS_W = INNER.w - SYMBOLS_W - BAND_GAP;   // 130
-const CROSS_X = INNER.x + SYMBOLS_W + BAND_GAP;   // 312
-
-// A mid-tone single-hatch block in the gap above the symbol field. It gives the
-// eye a second, lighter mass so the dark cross-hatch is not the only tone.
-const ACCENT = {
-  x: INNER.x,
-  y: ROW.sub + 12,
-  w: SYMBOLS_W,
-  h: 36
-};
-
 const FRAME_CORNERS = [
   [FRAME.x, FRAME.y],
   [FRAME.x + FRAME.size, FRAME.y],
@@ -101,30 +85,21 @@ const FRAME_CORNERS = [
 ];
 
 // Per-variation composition tuning. A reroll advances `variation`, which walks
-// these tables, so each plate reads as a distinctly different plate - a new
-// symbol set, a re-angled/re-spaced cross-hatch and a re-angled mid-tone accent
-// - not just re-jittered glyphs. Symbols stay inside the bitmap alphabet's safe
-// punctuation. The array lengths are coprime (4·5·3·4) so 60 plates pass before
-// a full combination repeats. Index 0 is the canonical plate that Reset returns.
+// this table, so each plate reads as a distinctly different plate - a new
+// symbol set, not just re-jittered glyphs. Symbols stay inside the bitmap
+// alphabet's safe punctuation. Index 0 is the canonical plate Reset returns.
 const SYMBOL_SETS = ["/:;-!", "()/-:", ":;.,_", "!?-/'"];
-const HATCH_ANGLES = [45, 30, 60, 20, 75];
-const HATCH_SPACINGS = [8, 6, 10];
-const ACCENT_ANGLES = [90, 0, 45, 135];
 
 function composition(v) {
   return {
-    symbolSet: SYMBOL_SETS[v % SYMBOL_SETS.length],
-    hatchAngle: HATCH_ANGLES[v % HATCH_ANGLES.length],
-    hatchSpacing: HATCH_SPACINGS[v % HATCH_SPACINGS.length],
-    accentAngle: ACCENT_ANGLES[v % ACCENT_ANGLES.length]
+    symbolSet: SYMBOL_SETS[v % SYMBOL_SETS.length]
   };
 }
 
 // The composition as data: [layer, method, geometry, perturbation]. buildPlot()
 // iterates this and derives stroke from the pen map, describing the plate once.
-// `comp` carries the per-variation tuning. Tonal hierarchy is deliberate: light
-// fields (alpha 0.3/0.35) and a mid-tone accent (0.5) versus the dark cross-hatch
-// anchor (0.82), so airy field, second rest point and heavy anchor all contrast.
+// `comp` carries the per-variation tuning. No filled masses: the pen-3 fields
+// stay airy (alpha 0.3/0.35), so the red type carries the weight of the plate.
 const ARM = {
   alpha: 0.7,
   breathe: 0.6,
@@ -164,7 +139,7 @@ function shapesFor(comp) {
     // ── 3 · typed subtitle ──────────────────────
     // Pen 2 - the four export layers as a typed spec line (underwood module):
     // a machine sheet gets a machine label, single-stroke at period pitch.
-    ["type", "underwood", ["FRAME/TYPE/HATCH/REG", INNER.x, ROW.sub],
+    ["type", "underwood", ["FRAME/TYPE/FIELD/REG", INNER.x, ROW.sub],
       {
         size: 13,
         wear: 0.8
@@ -172,7 +147,7 @@ function shapesFor(comp) {
 
     // ── 4 · letter field ────────────────────────
     // Pen 3 - decaying letter field, kept lightest so the hero dominates.
-    ["hatch", "letters", ["PLOTTER", INNER.x, ROW.letters, INNER.w, LETTERS_H],
+    ["field", "letters", ["PLOTTER", INNER.x, ROW.letters, INNER.w, LETTERS_H],
       {
         size: 11,
         segmentLength: 7,
@@ -183,23 +158,10 @@ function shapesFor(comp) {
         alpha: 0.3
       }],
 
-    // ── 5 · accent block ────────────────────────
-    // Pen 3 - mid-tone single-direction hatch: a second, lighter tonal mass.
-    ["hatch", "rect", [ACCENT.x, ACCENT.y, ACCENT.w, ACCENT.h],
-      {
-        segmentLength: 9,
-        fill: "hatch",
-        hatchAngle: comp.accentAngle,
-        hatchSpacing: 5,
-        breathe: 0.6,
-        drift: 1,
-        dropout: 0.03,
-        alpha: 0.5
-      }],
-
-    // ── 6 · symbol field ────────────────────────
-    // Pen 3 - airy field of procedural operator glyphs, left of the anchor.
-    ["hatch", "symbols", [INNER.x, ROW.band, SYMBOLS_W, BAND_H],
+    // ── 5 · symbol field ────────────────────────
+    // Pen 3 - airy full-width field of procedural operator glyphs: the lower
+    // band is signs, not a filled mass.
+    ["field", "symbols", [INNER.x, ROW.band, INNER.w, BAND_H],
       {
         set: comp.symbolSet,
         cluster: true,
@@ -213,23 +175,9 @@ function shapesFor(comp) {
         alpha: 0.35
       }],
 
-    // ── 7 · cross-hatch anchor ──────────────────
-    // Pen 3 - dense cross-hatch: the dark tonal anchor grounding the plate.
-    ["hatch", "rect", [CROSS_X, ROW.band, CROSS_W, BAND_H],
-      {
-        segmentLength: 10,
-        fill: "cross",
-        hatchAngle: comp.hatchAngle,
-        hatchSpacing: comp.hatchSpacing,
-        breathe: 0.6,
-        drift: 1,
-        dropout: 0.03,
-        alpha: 0.82
-      }],
-
-    // ── 8 · registration marks ──────────────────
+    // ── 6 · registration marks ──────────────────
     // Pen 1 - registration marks on the diagonal; light enough to read as
-    // registration, not as dark noise beside the hatch anchor.
+    // registration, not as dark noise beside the fields.
     ["registration", "circle", [404, 152, 78],
       {
         alpha: 0.7,
@@ -252,7 +200,7 @@ function shapesFor(comp) {
         fray: 0.5
       }],
 
-    // ── 9 · corner crosses ──────────────────────
+    // ── 7 · corner crosses ──────────────────────
     // Pen 1 - a cross in every frame corner; arms overshoot and fray at the tips.
     ...FRAME_CORNERS.flatMap(([cx, cy]) => [
       ["registration", "line", [cx - 10, cy, cx + 10, cy], ARM],

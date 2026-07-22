@@ -7,7 +7,7 @@
 //      plot.text("RUB OUT", 75, 145);   // clean, mechanical text
 //      plot.draw();
 //
-//  Every option below (breathe, dropout, rubout, fill, cut-up, letters…)
+//  Every option below (breathe, dropout, rubout, cut-up, letters…)
 //  is OPTIONAL disturbance layered on top of that core. The defaults are
 //  all zero, so a call with no options just draws clean - nothing here is
 //  required to use the library. This sketch adds the layers one at a time;
@@ -17,11 +17,11 @@
 // ═══════════════════════════════════════════════════════════════════
 
 // p5.gysin demo - "RUB OUT THE WORD"
-// A cut-up typographic poster read in clear zones: two titles, a ruled band, two
-// tonal blocks that weigh against each other, and the word dissolving into a
-// letter field. Two sliders drive the whole poster: one rubs it away as a
-// top-to-bottom gradient (titles barely touched, the field worn out), one breaks
-// the letters apart - the word decaying from its head down to its foot.
+// A cut-up typographic poster read in clear zones: two titles, a ruled band,
+// and the word dissolving into a letter field that fills the lower half. Two
+// sliders drive the whole poster: one rubs it away as a top-to-bottom gradient
+// (titles barely touched, the field worn out), one breaks the letters apart -
+// the word decaying from its head down to its foot.
 
 let plot;
 let paper;                 // paper texture, rendered once in setup (out of the draw loop)
@@ -49,7 +49,7 @@ function ruboutAt(y) {
 function setup() {
   const canvas = createCanvas(900, 900);
   canvas.parent("sketch");
-  describe("A cut-up typographic poster: rubbed-out titles, a ruled band, two hatched tonal blocks, and the word dissolving into a decaying letter field.");
+  describe("A cut-up typographic poster: rubbed-out titles, a ruled band, and the word dissolving into a decaying letter field that fills the lower half.");
   pixelDensity(1);
   noLoop();
 
@@ -141,53 +141,16 @@ function buildPlot() {
     });
   }
 
-  // ── 4 · the left mass ───────────────────────────────────────────
-  // Left block: an airy hatched slab, tilted off the horizontal to break the stack.
-  // Its breathe rides the break-apart slider, so the mass shakes with the letters.
-  plot.polygon(tiltedRect(310, 672, 440, 165, -7), {
-    ...base,
-    fill: "hatch",
-    hatchAngle: 52,
-    hatchSpacing: 8,
-    density: 1,
-    breathe: 1.3 + letterJitter * 1.2,
-    dropout: 0.08,
-    repeat: 3,
-    rubout: ruboutAt(672),
-    fray: 0.55,
-    pressure: 0.25,
-    segmentLength: 9,
-    strokeWeight: 0.9,
-    alpha: 0.5
-  });
-
-  // ── 5 · the right mass ──────────────────────────────────────────
-  // Right block: a dense cross-hatched disc, the dark counterweight to the slab.
-  // Its fray rides the same slider, so the disc frays open as the poster breaks up.
-  plot.circle(705, 672, 160, {
-    ...base,
-    fill: "cross",
-    hatchSpacing: 6,
-    density: 1.6,
-    breathe: 2.5,
-    dropout: 0.13,
-    repeat: 2,
-    drift: 4,
-    rubout: ruboutAt(672),
-    fray: 0.25 + letterJitter * 0.4,
-    pressure: 0.35,
-    alpha: 0.82
-  });
-
-  // ── 6 · the letter field ────────────────────────────────────────
-  // The word made literal: dropped to the foot as its own block, it is the heaviest
-  // step of the gradient, dissolving into a letter field driven by both sliders.
-  plot.letters("RUB OUT THE WORD", 90, 795, 720, 105, {
+  // ── 4 · the letter field ────────────────────────────────────────
+  // The word made literal: the whole lower half is a letter field, the heaviest
+  // step of the gradient, dissolving under both sliders. No filled masses - the
+  // words themselves are the block, densest ink the poster has.
+  plot.letters("RUB OUT THE WORD", 90, 600, 720, 300, {
     ...base,
     size: 26,
     breathe: 1.4,
     dropout: 0.2 + titleRubout,
-    rubout: ruboutAt(795),
+    rubout: ruboutAt(700),
     drift: 1.2,
     glyphJitter: letterJitter,
     alpha: 0.7
@@ -204,13 +167,6 @@ function updateCodeCaption() {
   const el = document.getElementById("code-caption");
   if (!el) return;
   el.textContent = `now driving the code above: rubout ${titleRubout.toFixed(2)} · glyphJitter ${letterJitter.toFixed(2)}`;
-}
-
-// Four corners of a w×h rectangle centred on (cx, cy), rotated by deg degrees.
-function tiltedRect(cx, cy, w, h, deg) {
-  const a = deg * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
-  return [[-w / 2, -h / 2], [w / 2, -h / 2], [w / 2, h / 2], [-w / 2, h / 2]]
-    .map(([px, py]) => [cx + px * c - py * s, cy + px * s + py * c]);
 }
 
 function draw() {

@@ -7,7 +7,7 @@
 //      plot.text("CUT UP", 82, 150);   // clean, mechanical text
 //      plot.draw();
 //
-//  Every option below (breathe, dropout, rubout, cut-up, hatch fill,
+//  Every option below (breathe, dropout, rubout, cut-up,
 //  asemic…) is OPTIONAL disturbance layered on top of that core. The
 //  defaults are all zero, so a call with no options just draws clean -
 //  nothing here is required to use the library. This sketch builds the
@@ -20,7 +20,7 @@
 // The plate acts out its title: a line of type is sliced, then REMEMBERS returns
 // lower, ringed in red, and forgets itself - its tail decaying through a wrong
 // letter, then a printed sign, then a pure scribble as you steer decay. As the
-// machine forgets, the hatched anchor erodes too. What you see is what you plot.
+// machine forgets, the ruled anchor erodes too. What you see is what you plot.
 // Buttons drive everything; the R H + - 0 S keys mirror them.
 
 let plot;
@@ -61,13 +61,13 @@ const base = {
   alpha: 0.8
 };
 const RED = "#c0392b"; // second pen: the returning word and the ring around it
-const INK = "#151515"; // hatch grey, reused by the right-hand field
+const INK = "#151515"; // machine grey, reused by the right-hand field
 
 function setup() {
   const canvas = createCanvas(LAYOUT.canvas, LAYOUT.canvas);
   const holder = document.getElementById("sketch");
   if (holder) canvas.parent(holder);
-  describe("Cut-up typography whose title word forgets itself into scribbles over an eroding hatched anchor.");
+  describe("Cut-up typography whose title word forgets itself into scribbles over an eroding ruled anchor.");
   pixelDensity(1);
   noLoop();
   buildPlot();
@@ -123,10 +123,7 @@ function buildPlot() {
   // Seed-driven grain so each plot reads as its own work, not the same picture
   // rebreathed. Drawn once, reused per layer.
   const grain = {
-    crossSpacing: random(6, 9),
-    crossAngle: random(0, 22),
-    hatchSpacing: random(12, 18),
-    hatchAngle: random(24, 48),
+    anchorRules: floor(random(10, 16)),
     ringRepeat: floor(random(2, 5)),
     ringRubout: random(0.06, 0.2),
     titleHesitate: random(0.35, 0.7),
@@ -146,34 +143,31 @@ function buildPlot() {
   });
 
   // ── 1 · the anchor ──────────────────────────────────────────────
-  // Anchor - cross-hatched block that grounds the plate. Its ink drops out and
-  // rubs away as decay rises, so "the machine forgets" reaches the whole plate,
-  // not only the word.
+  // Anchor - a ruled block that grounds the plate: closely set rules inside a
+  // hand-drawn frame, no fill. Its rules drop out and rub away as decay rises,
+  // so "the machine forgets" reaches the whole plate, not only the word.
   const a = LAYOUT.anchor;
   plot.rect(a.x, a.y, a.w, a.h, {
     ...hand,
-    fill: "cross",
-    hatchSpacing: grain.crossSpacing,
-    hatchAngle: grain.crossAngle,
-    pressure: breath,
     repeat: 2,
     fray: 0.3,
     alpha: 0.7,
-    dropout: 0.05 + decay * 0.35,
-    rubout: decay * 0.22
+    dropout: 0.05 + decay * 0.2
   });
-  // Sparse slanted second hatch for tonal depth.
-  plot.rect(a.x, a.y, a.w, a.h, {
-    ...hand,
-    fill: "hatch",
-    hatchAngle: grain.hatchAngle,
-    hatchSpacing: grain.hatchSpacing,
-    dropout: 0.05,
-    alpha: 0.25
-  });
+  for (let i = 1; i < grain.anchorRules; i++) {
+    const ry = a.y + (a.h / grain.anchorRules) * i;
+    plot.line(a.x, ry, a.x + a.w, ry, {
+      ...hand,
+      pressure: breath,
+      fray: 0.3,
+      alpha: 0.7,
+      dropout: 0.05 + decay * 0.35,
+      rubout: decay * 0.22
+    });
+  }
 
   // ── 2 · the right-hand field ────────────────────────────────────
-  // Right-hand field - a light machine index in the hatch grey that fills the
+  // Right-hand field - a light machine index in the machine grey that fills the
   // void and counterweights the red ring. Its glyphs and frame thin with decay.
   const f = LAYOUT.field;
   plot.symbols(f.x, f.y, f.w, f.h, {

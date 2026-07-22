@@ -187,21 +187,10 @@ function buildPlot() {
     layer: "read"
   });
 
-  // ── 3 · accent focus band ──────────────────────────────────────
-  // Hero anchor: a faint red hatch band between the accent signal and its baseline gives S3 one clear focus.
+  // ── 3 · accent baseline ────────────────────────────────────────
+  // A thin red baseline under the accent signal gives S3 one clear focus -
+  // a line, not a filled wash.
   const hero = voices[ACCENT];
-  const heroBand = cols.map((c) => [c.x, c.ys[ACCENT]]);
-  heroBand.push([right, hero.y], [LEFT, hero.y]);
-  plot.polygon(heroBand, {
-    fill: "hatch",
-    hatchSpacing: 3,
-    breathe: 0.4,
-    stroke: RED,
-    strokeWeight: 0.6,
-    alpha: 0.22,
-    layer: "signal"
-  });
-  // A thin red baseline so the focus band still reads at plot scale, where the hatch thins out.
   plot.line(LEFT, hero.y, right, hero.y, {
     breathe: 0.3,
     stroke: RED,
