@@ -194,7 +194,14 @@ canvas:focus-visible {
   display: flex;
   align-items: center;
   padding: 9vw var(--col-pad);
-  background: rgba(245, 245, 245, 0.68);
+  /* The wash protects only the title zone; the worked sheet stays
+     at full strength on the right, ghosted at the left edge. */
+  background: linear-gradient(100deg,
+    rgba(240, 239, 233, 0.94) 0%,
+    rgba(240, 239, 233, 0.87) 30%,
+    rgba(240, 239, 233, 0.55) 48%,
+    rgba(240, 239, 233, 0.12) 62%,
+    rgba(240, 239, 233, 0) 75%);
 }
 
 .hero-text {
