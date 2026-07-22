@@ -258,10 +258,12 @@ function buildPlot() {
 
   // ── 6 · the letter field ────────────────────────────────────────
   // Unowned ink: a dense letter field, right of ERASE, that counterweights the
-  // middle row and travels into the SVG as fixed reference ink. A smaller size
+  // middle row and travels into the SVG as fixed reference ink. Its pool is the
+  // library's creed in three words - the word as material, cut apart, set
+  // free - dissolved past reading into pure texture. A smaller size
   // packs more rows into the same box, so it reads as a solid textured block and
   // truly balances the band. It obeys no slider but dims when one is shown.
-  plot.letters("GYSIN", 300, 150, 190, 100, {
+  plot.letters("WORD CUT FREE", 300, 150, 190, 100, {
     layer: "field",
     size: 10,
     stroke: "#111111",

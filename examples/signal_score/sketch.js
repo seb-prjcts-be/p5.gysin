@@ -153,6 +153,8 @@ function buildPlot() {
 
   // ── 2 · reading head ───────────────────────────────────────────
   // Reading head: the loudest combined column, and the channel that dominates it.
+  // A tape head over a loop: the same material returns at different speeds and
+  // levels, and the score notates what returned - reading as recording.
   let head = cols[0];
   for (const c of cols) if (c.amp > head.amp) head = c;
   const headCell = cellIndex(head.x, cellW);
