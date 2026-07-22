@@ -859,6 +859,24 @@ h3 {
   margin-right: 16px;
 }
 
+/* The module rules above appear after the generic dark-section rules,
+   so dark modules would fall back to muted. Reassert the light palette. */
+.ce-module.section-dark .section-tag {
+  color: var(--red-on-dark);
+}
+
+.ce-module.section-dark .section-desc {
+  color: var(--text-on-dark);
+}
+
+.ce-module.section-dark .ce-note {
+  color: var(--text-on-dark);
+}
+
+.ce-module.section-dark .ce-links a {
+  color: var(--blue-on-dark);
+}
+
 .ce-poster-section {
   border-top: 2px solid var(--ink);
 }
