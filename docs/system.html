@@ -172,6 +172,10 @@ plot.underwood("the small voice.", 60, 190);</code>
         <li><code>pressure</code>: clamped 0–1 screen weight and alpha variation.</li>
         <li><code>overshoot</code>: non-negative extension of open path endpoints.</li>
         <li><code>segmentLength</code>: positive target spacing; default <code>8</code>.</li>
+        <li><code>glyphJitter</code>: non-negative per-glyph variation (rotation, shift, scale) so no two rendered letters are identical; default <code>0.35</code>, <code>0</code> is mechanically exact.</li>
+        <li><code>fill</code>: <code>"hatch"</code> (parallel strokes) or <code>"cross"</code> (two perpendicular hatchings) fills closed contours; even-odd, so letter counters stay open. Fill strokes carry <code>role: "fill"</code>, <code>stats()</code> reports <code>fillPaths</code> and <code>fillLength</code>, and <code>tool: "blade"</code> leaves fill out of the export. House use: letterforms via a real <code>font</code> - not empty tone planes.</li>
+        <li><code>hatchSpacing</code>: distance between fill strokes; default <code>2</code>, minimum <code>0.25</code>.</li>
+        <li><code>hatchAngle</code>: rotation of the hatching in degrees; default <code>0</code>.</li>
         <li><code>seed</code>: optional deterministic seed for one shape.</li>
       </ul>
     </section>
@@ -179,7 +183,7 @@ plot.underwood("the small voice.", 60, 190);</code>
     <section class="guide-block">
       <h2>Ink accumulation</h2>
       <p><code>dropout</code> and <code>rubout</code> remove material. <code>bleed</code> is their additive counterpart: it selects seeded, contiguous trace fragments and adds a bounded number of coherently offset passages. It does not repeat the complete glyph or shape.</p>
-      <div class="code-preview"><code>plot.textCutup("RUB OUT THE WORD", 80, 180, {
+      <div class="code-preview"><code>plot.text("RUB OUT THE WORD", 80, 180, {
   bleed: 0.22,
   bleedPasses: 2,
   bleedSpread: 0.8,

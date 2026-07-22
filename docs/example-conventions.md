@@ -100,6 +100,36 @@ Secties wisselen licht/donker af; elke groep heeft een eigen intro-sectie
 (`group-intro`). Een nieuw voorbeeld krijgt een plek in groep 2 of 3;
 de drie studies blijven met z'n drieën.
 
+## Regel 7 - Drie letterstemmen in balans; cut-up alleen als concept
+
+De bibliotheek spreekt drie letterstemmen: het ingebouwde single-stroke-alfabet
+(klein, plotter-veilig), echte outline-fonts (Oswald: koppen en gevulde
+letters) en de `underwood()`-typemachine. Aanleiding (jul 2026): op Enter
+stonden 7 kaarten in het ingebouwde alfabet tegenover 1 typemachine, en
+`textCutup()` sloop in bijna elk voorbeeld.
+
+- **`textCutup()` alleen waar snijden hét concept is** (CUT-studie,
+  permutatie, p5_editor, het cut-up-stadium van first_trace). Elders:
+  `text()` met outline-font, of `underwood()`.
+- **Een galerij-kaart tekent in dezelfde letterstem als zijn volledige
+  voorbeeld.** Laadt het voorbeeld Oswald, dan de kaart ook (helper
+  `makeOutlinePreview` in `index.html`: async font-load, bitmap-fallback).
+- **Houd de verdeling op Enter in het oog** - geen stem laten domineren.
+  Stand jul 2026: 5 outline / 1 typemachine / 3 ingebouwd / 2 zonder type.
+
+## Regel 8 - Geen lege toonvlakken ("tone blocks")
+
+Abstracte fill-hatch-vlakken als compositievulling vallen uit de toon; alle
+gevallen zijn verwijderd (jul 2026, Sebs besluit: "eerst volledig
+verwijderen en eventueel vervangen door alternatief indien nodig").
+
+- **Een blok op het blad bestaat uit dicht gezette lijnen, letters of
+  tekens** - zie parameter_lab (lijnenblok van 9 rules), p5_editor (anker:
+  kader + rules), gysin_demo (het letterveld ís de massa).
+- **`fill` blijft in de API** en is er voor LETTERS (echte font-contouren),
+  het calibratie-instrument (dat meet hatch-dichtheid voor die letters) en
+  kleine data-markers (signal_score-diamanten). Nooit voor lege vlakken.
+
 ## Checklist per voorbeeld
 
 - [ ] On-ramp-kop toegevoegd, met het juiste woord/de juiste maten.
@@ -110,3 +140,6 @@ de drie studies blijven met z'n drieën.
 - [ ] `npm test` groen.
 - [ ] Galerij-kaart (indien aanwezig): preview = snippet, variaties binnen één
       concept (Regel 5).
+- [ ] Letterstem klopt: cut-up alleen als concept; kaart in de stem van het
+      voorbeeld (Regel 7).
+- [ ] Geen lege toonvlakken; een blok is lijnen/letters/tekens (Regel 8).

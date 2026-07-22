@@ -114,15 +114,12 @@ later passes out of the export; `tool: "pen"` keeps the ink build-up. The
 `ink_bleed` example is this feature in three states of one phrase, with both
 exports side by side.
 
-## Filled shapes and letters
+## Filled letters
 
-Letterforms and closed shapes are outline-only by default. `fill: "hatch"`
-fills the interior with parallel plotter lines, so type becomes solid instead of
-hollow:
+Letterforms are outline-only by default. `fill: "hatch"` fills the interior
+with parallel plotter lines, so type becomes solid instead of hollow:
 
 ```js
-plot.rect(40, 40, 200, 120, { fill: "hatch", hatchSpacing: 3, hatchAngle: 30 });
-
 plot.text("RUB OUT", 60, 200, {
   size: 96,
   font: outlineFont,   // fill requires real font contours
@@ -130,6 +127,12 @@ plot.text("RUB OUT", 60, 200, {
   hatchSpacing: 2
 });
 ```
+
+**House rule: fill is for letterforms.** `rect`, `circle`, and `polygon`
+accept the same fill options, but empty tone planes are not part of the house
+style - a block on the sheet is made of closely set lines, letters, or signs
+(see the ruled blocks in `parameter_lab` and `p5_editor`), so every mark stays
+writing. See `docs/example-conventions.md`, rule 8.
 
 - `hatchSpacing` (default 2) is the distance between the fill lines; minimum 0.25.
 - `hatchAngle` (default 0) rotates the hatching, in degrees.
