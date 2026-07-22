@@ -279,25 +279,7 @@ plot.path(signal, {
     <div class="section-header">
       <div class="section-tag">Learn &amp; plot</div>
       <h2>From editor to <span class="accent">pen</span></h2>
-      <p class="section-desc">Setup, calibration, and export: the practical route from a sketch in the browser to a plotted sheet.</p>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-header">
-      <div class="section-tag">editor.p5js.org</div>
-      <h2>p5 Editor <span class="accent">Starter</span></h2>
-      <p class="section-desc">A paste-ready sketch for the p5.js Web Editor using the jsDelivr GitHub CDN build.</p>
-    </div>
-    <div class="ex-preview">
-      <div id="ex-p5-editor" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-html">&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.2.0/p5.gysin.min.js"&gt;&lt;/script&gt;
-&lt;script src="sketch.js"&gt;&lt;/script&gt;</code></pre>
-      <div class="ex-links">
-        <a class="ex-full-link" href="examples/p5_editor/" target="_blank">-> full example</a>
-        <a class="ex-full-link" href="examples/p5_editor/sketch.js" target="_blank">-> source sketch</a>
-      </div>
+      <p class="section-desc">Calibration and export: the practical route from a sketch in the browser to a plotted sheet. The paste-ready starter lives in the <a href="examples/p5_editor/">p5 editor example</a> (<a href="examples/p5_editor/sketch.js">source sketch</a>); the loading order closes the <a href="docs/collage/#leave">Collage</a> and opens the <a href="docs/system.html">System</a>.</p>
     </div>
   </section>
 
@@ -368,33 +350,6 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, hatch: 3 } });
     </div>
   </section>
 
-  <section class="section section-dark">
-    <div class="section-header">
-      <div class="section-tag">5 lines to start</div>
-      <h2>Get <span class="accent">Started</span></h2>
-    </div>
-    <div class="code-preview">
-      <code>&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
-&lt;script src="p5.gysin.min.js"&gt;&lt;/script&gt;
-
-function setup() {
-  createCanvas(800, 800);
-  const plot = new GysinPlot({ seed: 1960 });
-  plot.textCutup("RUB OUT THE WORD", 80, 180, {
-    size: 72,
-    breathe: 2,
-    dropout: 0.12,
-    repeat: 2,
-    rubout: 0.25
-  });
-  plot.draw();
-}</code>
-    </div>
-    <div class="button-row">
-      <a href="docs/examples.html" class="cta-btn">Examples</a>
-      <a href="docs/system.html" class="cta-btn secondary">System</a>
-    </div>
-  </section>
 
   <footer>
     <p>Built with <a href="https://p5js.org" target="_blank">p5.js</a></p>
@@ -536,28 +491,6 @@ function setup() {
     // One intent verb on its own defaults - only size scales to the canvas.
     plot.rub("WORN", 46, canvasH * 0.17, {
       size: canvasW * 0.0775
-    });
-    return plot;
-  });
-
-  makePreview("ex-p5-editor", function(p, canvasW, canvasH) {
-    const plot = new GysinPlot({
-      p: p,
-      seed: 19600319,
-      width: canvasW,
-      height: canvasH,
-      style: {
-        stroke: "#151515",
-        strokeWeight: 1,
-        alpha: 0.88
-      }
-    });
-    // The starter draws one thing: the smallest complete sketch, pasted as-is.
-    plot.text("CUT UP", 42, canvasH * 0.55, {
-      size: canvasW * 0.17,
-      breathe: 1.4,
-      dropout: 0.06,
-      repeat: 2
     });
     return plot;
   });

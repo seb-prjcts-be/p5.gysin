@@ -41,6 +41,7 @@
       <li><a href="#note">13 margin note</a></li>
       <li><a href="#pens">14 pens &amp; export</a></li>
       <li><a href="#collage">15 the collage</a></li>
+      <li><a href="#leave">16 off the page</a></li>
     </ul>
   </header>
 
@@ -568,6 +569,32 @@ plot.draw();</code></pre>
     <p class="ce-links"><a href="../../index.html#studies">the three studies -&gt;</a><a href="../system.html">the full system -&gt;</a></p>
   </section>
 
+  <!-- 16 OFF THE PAGE -->
+  <section class="section section-dark ce-module" id="leave">
+    <div class="section-header">
+      <div class="section-tag">16 &middot; off the page</div>
+      <h2>Take it with you</h2>
+      <p class="section-desc">Everything on this page runs on plain script files. Two lines load the system into the p5.js Web Editor or any page; two more add the permutation and typewriter voices. Your own <code>sketch.js</code> always comes last. The full reference lives in the <a href="../system.html">System</a>.</p>
+    </div>
+    <div class="ce-strip">
+      <div class="ce-step"><span>cut</span><h4>Pick your files</h4><p>The core alone draws and exports; the addons bring permutation and the typed voice.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Load in order</h4><p>p5 first, then the core, then the addons, then your sketch.</p></div>
+      <div class="ce-step"><span>glue</span><h4>Write</h4><p>The smallest complete sketch is three lines; every act on this page is one call away.</p></div>
+    </div>
+    <div class="ce-demo">
+      <div class="ce-preview"><div id="m-leave" class="ce-canvas"></div></div>
+      <div class="ce-codewrap">
+        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-html">&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
+&lt;script src="https://seb-prjcts-be.github.io/p5.gysin/p5.gysin.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://seb-prjcts-be.github.io/p5.gysin/p5.gysin.text.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://seb-prjcts-be.github.io/p5.gysin/p5.gysin.underwood.min.js"&gt;&lt;/script&gt;
+&lt;script src="sketch.js"&gt;&lt;/script&gt;</code></pre>
+      </div>
+    </div>
+    <p class="ce-links"><a href="../../examples/p5_editor/" target="_blank">paste-ready starter -&gt;</a><a href="../system.html">the full system -&gt;</a></p>
+  </section>
+
   <footer>
     <p><a href="../../index.html#examples">Examples</a> &nbsp;&middot;&nbsp; <a href="../system.html">System</a></p>
     <p class="footer-sub">p5.gysin v0.2.0</p>
@@ -799,6 +826,22 @@ plot.draw();</code></pre>
       plot.line(sx, sy, sx + 2, sy + 2, { breathe: 3 });
     }
     plot.underwood('p5.gysin / collage / seed 1919', w * 0.36, h * 0.955, { size: w * 0.017, wear: 0.5 });
+    return plot;
+  });
+
+  // 16 off the page
+  makeGysinPreview('m-leave', 0.66, function (p, w, h) {
+    const plot = base(p, w, h, 19600319);
+    // the smallest complete sketch, pasted as-is
+    plot.text('CUT UP', w * 0.1, h * 0.55, {
+      size: w * 0.17,
+      breathe: 1.4,
+      repeat: 2
+    });
+    plot.underwood('three lines. every act one call away.', w * 0.1, h * 0.8, {
+      size: w * 0.03,
+      wear: 0.4
+    });
     return plot;
   });
   </script>
