@@ -83,23 +83,16 @@ plot.textCutup("I THINK THEREFORE I AM", 76, 260, {
 
   <section class="section section-dark" id="study-permute">
     <div class="section-header">
-      <div class="section-tag">02 &middot; PERMUTE &middot; GysinText.permute()</div>
+      <div class="section-tag">02 &middot; PERMUTE &middot; chant()</div>
       <h2>Coincidence is a <span class="accent">method</span></h2>
-      <p class="section-desc">Reorder the words first, then send every resulting line through the original contour cut-up and plotter pipeline.</p>
+      <p class="section-desc">One call reorders the words and sends every resulting line through the contour cut-up, each cut a little deeper. The library does the orchestration.</p>
     </div>
     <div class="ex-preview">
       <div id="ex-permutation" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">const lines = GysinText.permute("I LOVE YOU", {
-  seed: 1960,
-  limit: 6,
-  order: "walk"
-});
-
-lines.forEach((line, index) =&gt; {
-  plot.textCutup(line, 48, 90 + index * 46, {
-    slices: 7 + index,
-    sliceOffset: 12 + index * 4
-  });
+      <pre class="ex-code-block"><code class="language-javascript">// the whole permutation poem in one call: the phrase
+// through its orders, every line cut a little deeper
+plot.chant("I LOVE YOU", 48, 90, {
+  lines: 6
 });</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="examples/permutation_poem/" target="_blank">-&gt; full poster</a>
@@ -356,7 +349,7 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, hatch: 3 } });
     <p class="footer-sub">MIT License &middot; v0.2.0</p>
   </footer>
 
-  <script src="p5.gysin.text.min.js"></script>
+  <script src="p5.gysin.text.min.js?v=chant"></script>
   <script src="p5.gysin.underwood.min.js"></script>
   <script>
   function previewSize(id) {
@@ -536,23 +529,17 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, hatch: 3 } });
       height: canvasH,
       style: { stroke: "#171717", strokeWeight: 0.82, alpha: 0.88 }
     });
-    const lines = GysinText.permute("I LOVE YOU", {
-      seed: 1960,
-      limit: 6,
-      order: "walk"
-    });
-    // One pass per permuted line, exactly as the card's snippet describes.
-    lines.forEach(function(line, index) {
-      plot.textCutup(line, 30, 44 + index * (canvasH - 66) / 6, {
-        size: canvasW * 0.041,
-        slices: 4 + index,
-        sliceOffset: 1 + index * 0.8,
-        sliceDropout: 0.02,
-        breathe: 0.12,
-        dropout: 0.01,
-        strokeWeight: 1.05,
-        alpha: 0.95
-      });
+    // The card's one call: chant() permutes and cuts every line itself.
+    plot.chant("I LOVE YOU", 30, 44, {
+      lines: 6,
+      size: canvasW * 0.041,
+      leading: (canvasH - 66) / 6,
+      slices: 4,
+      sliceOffset: 1,
+      breathe: 0.12,
+      dropout: 0.01,
+      strokeWeight: 1.05,
+      alpha: 0.95
     });
     return plot;
   });

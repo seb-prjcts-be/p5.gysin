@@ -204,7 +204,19 @@ const rows = GysinText.permute("I LOVE YOU", {
 ```
 
 Combine both modules to run each permutation through the existing graphic
-cut-up:
+cut-up. `plot.chant()` is the intent verb for that whole recipe - one call
+permutes the phrase and sends every order through `textCutup()`, each line cut
+a little deeper:
+
+```js
+plot.chant("CUT ARRANGE GLUE", 60, 90);                  // the whole poem, defaults
+plot.chant("CUT ARRANGE GLUE", 60, 90, { descent: 0 });  // every line cut equally
+```
+
+`chant()` appears on every plot once the text module is loaded. `lines`,
+`order`, and `seed` reach `permute()`; `descent` scales the escalation; `size`,
+`leading`, `slices`, `sliceOffset`, and every other `textCutup()` option pass
+through. The primitives stay underneath when you want them:
 
 ```js
 rows.forEach((row, index) => {

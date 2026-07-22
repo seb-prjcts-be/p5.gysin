@@ -607,6 +607,52 @@ assert.ok(layeredTypeIds.every((id) => layeredTypePlot.get(id).exportSettings.la
 assert.throws(() => new TypePlot().underwood("X", 0, 0, { size: 0 }), /size must be greater than zero/);
 assert.throws(() => new TypePlot().underwood("X", Infinity, 0), /finite number/);
 
+// --- chant: the permutation poem as one intent verb -------------------------
+function loadCombined(coreFile, textFile) {
+  const context = { console };
+  context.globalThis = context;
+  vm.createContext(context);
+  for (const filename of [coreFile, textFile]) {
+    const absolute = path.join(__dirname, "..", filename);
+    vm.runInContext(fs.readFileSync(absolute, "utf8"), context, { filename: absolute });
+  }
+  assert.equal(typeof context.GysinPlot.prototype.chant, "function");
+  return context;
+}
+
+const chantSource = loadCombined("p5.gysin.js", "p5.gysin.text.js");
+const chantMin = loadCombined("p5.gysin.min.js", "p5.gysin.text.min.js");
+
+function buildChant(ctx, options) {
+  const plot = new ctx.GysinPlot({ seed: 1919, width: 560, height: 560 });
+  const ids = plot.chant("CUT ARRANGE GLUE", 60, 90, options);
+  return { ids, svg: plot.exportSVG({ width: 560, height: 560 }) };
+}
+
+const chantDefault = buildChant(chantSource);
+assert.equal(chantDefault.ids.length, 5, "chant draws five lines by default");
+assert.equal(chantDefault.svg, buildChant(chantSource).svg, "chant is deterministic");
+assert.equal(chantDefault.svg, buildChant(chantMin).svg, "chant min build matches source");
+
+// chant() is exactly the manual recipe it replaces
+{
+  const manual = new chantSource.GysinPlot({ seed: 1919, width: 560, height: 560 });
+  const rows = chantSource.GysinText.permute("CUT ARRANGE GLUE", { seed: 1919, limit: 5, order: "walk" });
+  rows.forEach((row, i) => {
+    manual.textCutup(row, 60, 90 + i * 90, { size: 34, slices: 5 + i, sliceOffset: 2 + i * 4 });
+  });
+  const verb = buildChant(chantSource, { leading: 90 });
+  assert.equal(verb.svg, manual.exportSVG({ width: 560, height: 560 }), "chant equals the manual permute + textCutup recipe");
+}
+
+// descent 0 flattens the escalation; material options pass through
+const chantFlat = buildChant(chantSource, { descent: 0, breathe: 0.5 });
+assert.equal(chantFlat.ids.length, 5);
+assert.notEqual(chantFlat.svg, chantDefault.svg, "descent and material options change the trace");
+assert.throws(() => buildChant(chantSource, { lines: 0 }), /from 1 through 1000/);
+assert.throws(() => buildChant(chantSource, { order: "grammar" }), /order must be one of/);
+assert.throws(() => chantSource.GysinPlot.prototype.chant.call({}, "A B", 0, 0), /needs a GysinPlot/);
+
 const root = path.join(__dirname, "..");
 const manifest = JSON.parse(fs.readFileSync(
   path.join(root, "docs", "p5.gysin.manifest.json"),

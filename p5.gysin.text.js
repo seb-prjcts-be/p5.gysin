@@ -198,4 +198,88 @@
   }
 
   global.GysinText = Object.freeze({ permute });
+
+  // chant() is the intent verb for a permutation poem: one call takes a phrase
+  // through its permutations and sends every new order through the scissors,
+  // each line cut a little deeper than the last. It lives in this addon
+  // because it needs permute(); the core stays free of the dependency. Load
+  // the core first, then this file, and the verb appears on every plot.
+  // `descent` scales how much deeper every line is cut (0 = all lines equal);
+  // every other option passes straight through to textCutup().
+  const CHANT_OWN = new Set([
+    "lines",
+    "order",
+    "seed",
+    "size",
+    "leading",
+    "descent",
+    "slices",
+    "sliceOffset"
+  ]);
+
+  function chant(text, x, y, options) {
+    if (!this || typeof this.textCutup !== "function") {
+      throw new TypeError("chant() needs a GysinPlot instance.");
+    }
+    const o = options || {};
+    requireFinite(x, "chant x");
+    requireFinite(y, "chant y");
+    const lines = o.lines === undefined ? 5 : readLimit(o.lines);
+    const order = o.order === undefined ? "walk" : o.order;
+    const seed = o.seed === undefined
+      ? (this.globalSeed === undefined ? 1 : this.globalSeed)
+      : o.seed;
+    const size = o.size === undefined ? 34 : requirePositive(o.size, "chant size");
+    const leading = o.leading === undefined
+      ? size * 2.65
+      : requirePositive(o.leading, "chant leading");
+    const descent = o.descent === undefined
+      ? 1
+      : requireNonNegative(o.descent, "chant descent");
+    const slices = o.slices === undefined
+      ? 5
+      : requirePositive(o.slices, "chant slices");
+    const sliceOffset = o.sliceOffset === undefined
+      ? 2
+      : requireFinite(o.sliceOffset, "chant sliceOffset");
+
+    const rows = permute(text, { seed, limit: lines, order });
+    const ids = [];
+    rows.forEach((row, index) => {
+      const opts = {
+        size,
+        slices: Math.max(1, Math.round(slices + index * descent)),
+        sliceOffset: sliceOffset + index * 4 * descent
+      };
+      for (const key of Object.keys(o)) {
+        if (!CHANT_OWN.has(key)) opts[key] = o[key];
+      }
+      ids.push(this.textCutup(row, x, y + index * leading, opts));
+    });
+    return ids;
+  }
+
+  function requireFinite(value, label) {
+    const number = Number(value);
+    if (!Number.isFinite(number)) {
+      throw new TypeError(`${label} must be a finite number.`);
+    }
+    return number;
+  }
+
+  function requirePositive(value, label) {
+    const number = requireFinite(value, label);
+    if (number <= 0) throw new RangeError(`${label} must be greater than zero.`);
+    return number;
+  }
+
+  function requireNonNegative(value, label) {
+    const number = requireFinite(value, label);
+    if (number < 0) throw new RangeError(`${label} must be zero or greater.`);
+    return number;
+  }
+
+  if (global.GysinPlot && global.GysinPlot.prototype && !global.GysinPlot.prototype.chant) {
+    global.GysinPlot.prototype.chant = chant;
+  }
 })(typeof globalThis !== "undefined" ? globalThis : window);

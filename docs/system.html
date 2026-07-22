@@ -129,6 +129,17 @@ lines.forEach((line, index) =&gt; {
       </div>
       <p>The first line stays almost completely readable. Each following line increases the slice offset by one pixel, so the poem gradually moves from legible text toward a stronger cut-up.</p>
       <p>Orders: <code>walk</code>, <code>random</code>, <code>lexical</code>, and <code>rotate</code>. The source line stays first, duplicate words produce only unique lines, and <code>limit</code> is capped at 1,000.</p>
+      <p><code>plot.chant(text, x, y, options)</code> is the intent verb for that whole recipe: one call takes a phrase through its permutations and sends every new order through <code>textCutup()</code>, each line cut a little deeper. It appears on every plot once this addon is loaded.</p>
+      <div class="code-preview">
+        <code>plot.chant("CUT ARRANGE GLUE", 60, 90);            // the whole poem, defaults
+plot.chant("CUT ARRANGE GLUE", 60, 90, { descent: 0 }); // every line cut equally
+plot.chant("CUT ARRANGE GLUE", 60, 90, { order: "rotate", breathe: 1 });</code>
+      </div>
+      <ul>
+        <li><code>lines</code> (default <code>5</code>): how many permuted lines return; <code>order</code> and <code>seed</code> pass to <code>permute()</code>.</li>
+        <li><code>descent</code> (default <code>1</code>): scales how much deeper each line is cut; <code>0</code> cuts them all equally light.</li>
+        <li><code>size</code>, <code>leading</code>, <code>slices</code>, <code>sliceOffset</code> set the type; every other <code>textCutup()</code> option (breathe, dropout, bleed, layer, ...) passes straight through.</li>
+      </ul>
     </section>
 
     <section class="guide-block">

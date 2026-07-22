@@ -179,32 +179,25 @@ plot.textCutup("COLLAGE", 60, 380, {
   <!-- 05 ARRANGE -->
   <section class="section ce-module" id="arrange">
     <div class="section-header">
-      <div class="section-tag">05 &middot; GysinText.permute() + textCutup()</div>
+      <div class="section-tag">05 &middot; chant()</div>
       <h2>Arrange</h2>
-      <p class="section-desc">This is the essence of the whole page: collage as an act on word order. The three acts themselves - cut, arrange, glue - are handed to <code>GysinText.permute()</code>, every word changes neighbours, and every new order runs through the scissors again. The addon reorders language; the core cuts the image.</p>
+      <p class="section-desc">This is the essence of the whole page: collage as an act on word order - and it is the library's work, not yours. One call takes the three acts through their permutations and sends every new order through the scissors, each line cut a little deeper. <code>permute()</code> and <code>textCutup()</code> stay underneath as the escape hatch.</p>
     </div>
     <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>Loose words</h4><p><code>permute()</code> returns plain strings, the source line first.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Every order</h4><p>Orders <code>walk</code>, <code>random</code>, <code>lexical</code>, <code>rotate</code>; duplicates yield only unique lines.</p></div>
-      <div class="ce-step"><span>glue</span><h4>Cut each new order</h4><p>Deeper offsets per line walk the poem from readable to ruptured.</p></div>
+      <div class="ce-step"><span>cut</span><h4>One call</h4><p><code>chant()</code> composes <code>permute()</code> and <code>textCutup()</code> with strong defaults.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Every order</h4><p><code>order</code>: walk, random, lexical, rotate; <code>lines</code> picks how many return.</p></div>
+      <div class="ce-step"><span>glue</span><h4>One knob</h4><p><code>descent</code> scales how much deeper every line is cut; 0 cuts them all equally light.</p></div>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-arrange" class="ce-canvas"></div></div>
       <div class="ce-codewrap">
         <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">const lines = GysinText.permute("CUT ARRANGE GLUE", {
-  seed: 1919,
-  limit: 5,
-  order: "walk"
-});
+        <pre><code class="language-javascript">// the whole poem, one call: the phrase through its
+// permutations, every new order cut a little deeper
+plot.chant("CUT ARRANGE GLUE", 60, 90);
 
-lines.forEach((line, index) =&gt; {
-  plot.textCutup(line, 60, 90 + index * 90, {
-    size: 34,
-    slices: 5 + index,
-    sliceOffset: 2 + index * 4
-  });
-});</code></pre>
+// escape hatches: lines, order, seed, descent, size,
+// leading - and every textCutup option passes through</code></pre>
       </div>
     </div>
   </section>
@@ -602,7 +595,7 @@ plot.draw();</code></pre>
 
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="../../p5.gysin.min.js"></script>
-  <script src="../../p5.gysin.text.min.js"></script>
+  <script src="../../p5.gysin.text.min.js?v=chant"></script>
   <script src="../../p5.gysin.underwood.min.js"></script>
   <script>
   const PAPER = '#f0efe9';
@@ -690,11 +683,10 @@ plot.draw();</code></pre>
   // 05 arrange
   makeGysinPreview('m-arrange', 0.66, function (p, w, h) {
     const plot = base(p, w, h, 1919);
-    const lines = GysinText.permute('CUT ARRANGE GLUE', { seed: 1919, limit: 5, order: 'walk' });
-    lines.forEach(function (line, i) {
-      plot.textCutup(line, w * 0.07, h * 0.18 + i * h * 0.17, {
-        size: w * 0.052, slices: 5 + i, sliceOffset: 2 + i * 4, breathe: 0.5
-      });
+    plot.chant('CUT ARRANGE GLUE', w * 0.07, h * 0.18, {
+      size: w * 0.052,
+      leading: h * 0.17,
+      breathe: 0.5
     });
     return plot;
   });
