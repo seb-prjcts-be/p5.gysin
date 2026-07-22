@@ -190,7 +190,7 @@ plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice</code></pre>
     <div class="section-header">
       <div class="section-tag">breathe &middot; dropout &middot; repeat &middot; rubout</div>
       <h2>Parameter <span class="accent">Lab</span></h2>
-      <p class="section-desc">One slider owns one element, each in its own ink: breathe bends the whole title, rubout tears the word, repeat thickens the band, dropout opens the hatch.</p>
+      <p class="section-desc">One slider owns one element, each in its own ink: breathe bends the whole title, rubout tears the word, repeat thickens the band, dropout opens the ruled block.</p>
     </div>
     <div class="ex-preview">
       <div id="ex-parameter" class="ex-canvas"></div>
@@ -210,12 +210,12 @@ plot.path(wave, {   // wave: a sampled sine row
   drift: 2.4,
   stroke: "#2b4fb0"
 });
-plot.rect(42, 240, 340, 56, {
-  fill: "cross",
-  hatchSpacing: 6,
-  dropout: 0.16,
-  stroke: "#0f7a6c"
-});</code></pre>
+for (let i = 0; i < 6; i++) {   // a ruled block, no fill
+  plot.line(42, 240 + i * 9, 380, 240 + i * 9, {
+    dropout: 0.16,
+    stroke: "#0f7a6c"
+  });
+}</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="examples/parameter_lab/" target="_blank">-> full example</a>
         <a class="ex-full-link" href="examples/parameter_lab/sketch.js" target="_blank">-> source sketch</a>
@@ -603,12 +603,12 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, hatch: 3 } });
       drift: 2.4,
       stroke: "#2b4fb0"
     });
-    plot.rect(42, canvasH * 0.74, canvasW - 84, canvasH * 0.16, {
-      fill: "cross",
-      hatchSpacing: 6,
-      dropout: 0.16,
-      stroke: "#0f7a6c"
-    });
+    for (let i = 0; i < 6; i++) {
+      plot.line(42, canvasH * (0.74 + i * 0.032), canvasW - 84, canvasH * (0.74 + i * 0.032), {
+        dropout: 0.16,
+        stroke: "#0f7a6c"
+      });
+    }
     return plot;
   });
 

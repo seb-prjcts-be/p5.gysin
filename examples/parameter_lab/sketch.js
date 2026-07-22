@@ -7,7 +7,7 @@
 //      plot.text("RUB OUT", 70, 150);   // clean, mechanical text
 //      plot.draw();
 //
-//  Every option below (breathe, dropout, repeat, rubout, hatch fill,
+//  Every option below (breathe, dropout, repeat, rubout, ruled block,
 //  letter field…) is OPTIONAL disturbance layered on top of that
 //  core. The defaults are all zero, so a call with no options just draws
 //  clean - nothing here is required to use the library. This sketch adds
@@ -25,7 +25,7 @@ let seedValue = 8319;
 // readable without the text. Change a default here and the HTML slider matches.
 const CONTROLS = {
   breathe:  { layer: "title", tint: "#b26a00", value: 1.4 },  // title  "RUB OUT"
-  dropout: { layer: "bar",   tint: "#0f7a6c", value: 0.16 }, // hatch bar
+  dropout: { layer: "bar",   tint: "#0f7a6c", value: 0.16 }, // ruled block
   repeat:  { layer: "band",  tint: "#2b4fb0", value: 2 },    // line band
   rubout:  { layer: "word",  tint: "#b0203a", value: 0.12 }  // word   "ERASE"
 };
@@ -51,7 +51,7 @@ const DIM = {
 function setup() {
   const canvas = createCanvas(560, 560);
   canvas.parent("sketch");
-  describe("A parameter lab: breathe bends the title, rubout tears ERASE, repeat thickens the line band, dropout loosens the hatch bar, and a dense letter field fills the middle row. Hover or move a slider and its own element darkens while every other element fades back, so you see exactly which one you own.");
+  describe("A parameter lab: breathe bends the title, rubout tears ERASE, repeat thickens the line band, dropout opens the ruled block, and a dense letter field fills the middle row. Hover or move a slider and its own element darkens while every other element fades back, so you see exactly which one you own.");
   pixelDensity(1);
   noLoop();
   wireControls();
@@ -209,7 +209,7 @@ function buildPlot() {
   // engine, ghosted apart by a drift that grows with repeat, so more copies also
   // spread visibly wider. Rows swing in alternating phase with an amplitude that
   // deepens downward, so neighbours overrun and cross into a woven mesh rather
-  // than parallel stripes. Left/right edges share the hatch bar's grid.
+  // than parallel stripes. Left/right edges share the ruled block's grid.
   const bandTop = 250;
   const bandBottom = 410;
   const rows = 6;
@@ -233,23 +233,23 @@ function buildPlot() {
     });
   }
 
-  // ── 5 · the hatch bar ───────────────────────────────────────────
-  // Filled bar - owned by DROPOUT only. Dropout both loosens the cross-hatch
-  // spacing and breaks up the strokes, so the anchor plane opens as you raise it.
-  // Aligned to the band above (70..490) so the owned elements form a clean grid.
-  plot.rect(70, 428, 420, 64, {
-    layer: CONTROLS.dropout.layer,
-    fill: "cross",
-    hatchSpacing: 2.5 + value("dropout") * 12,
-    hatchAngle: 22,
-    dropout: value("dropout"),
-    stroke: inkOf("dropout"),
-    fray: 0.35,
-    pressure: 0.25,
-    segmentLength: 8,
-    alpha: 0.82,
-    ...focus("dropout")
-  });
+  // ── 5 · the ruled block ─────────────────────────────────────────
+  // Ruled block - owned by DROPOUT only. A block needs no fill: closely set
+  // rules read as one mass, and dropout visibly breaks them up, so the block
+  // opens as you raise it. Aligned to the band above (70..490) so the owned
+  // elements form a clean grid.
+  for (let i = 0; i < 9; i++) {
+    plot.line(70, 428 + i * 8, 490, 428 + i * 8, {
+      layer: CONTROLS.dropout.layer,
+      dropout: value("dropout"),
+      stroke: inkOf("dropout"),
+      fray: 0.35,
+      pressure: 0.25,
+      segmentLength: 8,
+      alpha: 0.82,
+      ...focus("dropout")
+    });
+  }
 
   // ── 6 · the letter field ────────────────────────────────────────
   // Unowned ink: a dense letter field, right of ERASE, that counterweights the

@@ -73,7 +73,7 @@
         <li data-focus="breathe"><span class="dot" style="background:#b26a00"></span><span style="color:#b26a00">Breathe</span> bends the <strong>title</strong></li>
         <li data-focus="rubout"><span class="dot" style="background:#b0203a"></span><span style="color:#b0203a">Rubout</span> tears <strong>ERASE</strong> away</li>
         <li data-focus="repeat"><span class="dot" style="background:#2b4fb0"></span><span style="color:#2b4fb0">Repeat</span> thickens the <strong>line band</strong></li>
-        <li data-focus="dropout"><span class="dot" style="background:#0f7a6c"></span><span style="color:#0f7a6c">Dropout</span> loosens the <strong>hatch bar</strong></li>
+        <li data-focus="dropout"><span class="dot" style="background:#0f7a6c"></span><span style="color:#0f7a6c">Dropout</span> opens the <strong>ruled block</strong></li>
       </ul>
       <p class="intro-sub">The letter field and corner marks obey no slider - fixed reference ink that travels into the SVG. The <code>stats()</code> readout shows total plot cost and the shown element's share of it.</p>
     </div>
@@ -98,8 +98,10 @@ plot.text("ERASE", 70, 214, { rubout: value("rubout") });
 // 4) a woven line band - each row drawn `repeat` times, owned by REPEAT
 plot.path(waveRow(70, 490, y, amp, phase), { repeat: value("repeat") });
 
-// 5) a cross-hatch bar that opens up - owned by the DROPOUT slider
-plot.rect(70, 428, 420, 64, { fill: "cross", dropout: value("dropout") });
+// 5) a ruled block - closely set rules, no fill - owned by DROPOUT
+for (let i = 0; i < 9; i++) {
+  plot.line(70, 428 + i * 8, 490, 428 + i * 8, { dropout: value("dropout") });
+}
 
 // 6) a dense letter field: fixed reference ink, obeys no slider
 plot.letters("WORD CUT FREE", 300, 150, 190, 100, { size: 10 });
@@ -111,7 +113,7 @@ plot.draw();</code></pre>
             <input id="breathe" type="range" min="0" max="4" step="0.1" value="1.4">
           </label>
           <label class="control-row" style="--accent:#0f7a6c">
-            <span><i class="swatch"></i>Dropout &middot; hatch bar <output id="dropout-value">0.16</output></span>
+            <span><i class="swatch"></i>Dropout &middot; ruled block <output id="dropout-value">0.16</output></span>
             <input id="dropout" type="range" min="0" max="0.28" step="0.01" value="0.16">
           </label>
           <label class="control-row" style="--accent:#2b4fb0">
@@ -125,7 +127,7 @@ plot.draw();</code></pre>
         </div>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas" id="sketch" role="img" aria-label="A whole title bent only by breathe, a word that only rubout erases, a line band whose count follows repeat, and a hatch-filled bar."></div>
+        <div class="demo-canvas" id="sketch" role="img" aria-label="A whole title bent only by breathe, a word that only rubout erases, a line band whose count follows repeat, and a ruled block that dropout opens."></div>
         <div class="demo-actions" aria-label="Parameter Lab actions">
           <button type="button" id="reset-button">Reset sliders</button>
           <button type="button" id="reroll-button">New variation</button>
