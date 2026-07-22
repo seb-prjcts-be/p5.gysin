@@ -82,6 +82,23 @@ Voor de galerij-kaarten op de homepage (preview + korte snippet):
 
 Doorgevoerd op alle 11 kaarten (juli 2026); toets elke nieuwe kaart hieraan.
 
+## Regel 6 - Homepage-volgorde: drie studies, dan methodes
+
+De homepage is een tentoonstelling, geen catalogus. De vaste volgorde:
+
+1. **Drie studies openen de pagina** onder de method-strip: CUT (Cut-Up
+   Typography), PERMUTE (Permutation Poem), FREE (Worn Word). Zij dragen de
+   boog cut -> permute -> free; Worn Word is als FREE-studie naar voren
+   gehaald.
+2. **Methods** groepeert de losse verb-voorbeelden (First Trace, Typewriter,
+   Parameter Lab, Font Outlines, Signal Score).
+3. **Learn & plot** sluit af met de praktische route (p5 Editor, Calibration,
+   Export).
+
+Secties wisselen licht/donker af; elke groep heeft een eigen intro-sectie
+(`group-intro`). Een nieuw voorbeeld krijgt een plek in groep 2 of 3;
+de drie studies blijven met z'n drieën.
+
 ## Checklist per voorbeeld
 
 - [ ] On-ramp-kop toegevoegd, met het juiste woord/de juiste maten.
