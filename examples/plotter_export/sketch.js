@@ -7,8 +7,8 @@
 //      plot.text("PLOT", 118, 188);   // clean, mechanical text
 //      plot.draw();
 //
-//  Every option below (breathe, dropout, fill, cut-up, per-pen layers,
-//  page + export…) is OPTIONAL on top of that core. The defaults are
+//  Every option below (breathe, dropout, fill, typed subtitle, per-pen
+//  layers, page + export…) is OPTIONAL on top of that core. The defaults are
 //  all zero, so a call with no options just draws clean - nothing here
 //  is required to use the library. This sketch stacks the layers one at
 //  a time; read the numbered sections in shapesFor() from top to bottom.
@@ -161,19 +161,13 @@ function shapesFor(comp) {
         glyphJitter: 0.7
       }],
 
-    // ── 3 · cut-up subtitle ─────────────────────
-    // Pen 2 - cut-up subtitle spelling the four export layers.
-    ["type", "textCutup", ["FRAME/TYPE/HATCH/REG", INNER.x, ROW.sub],
+    // ── 3 · typed subtitle ──────────────────────
+    // Pen 2 - the four export layers as a typed spec line (underwood module):
+    // a machine sheet gets a machine label, single-stroke at period pitch.
+    ["type", "underwood", ["FRAME/TYPE/HATCH/REG", INNER.x, ROW.sub],
       {
-        size: 24,
-        segmentLength: 7,
-        slices: 5,
-        sliceOffset: 10,
-        sliceDropout: 0.14,
-        breathe: 1.2,
-        drift: 1.6,
-        dropout: 0.08,
-        glyphJitter: 0.4
+        size: 13,
+        wear: 0.8
       }],
 
     // ── 4 · letter field ────────────────────────
@@ -268,8 +262,9 @@ function shapesFor(comp) {
 }
 
 // Perturbation keys scaled by the live human-scale control: 0 = machine-clean,
-// 2 = heavily hand-disturbed.
-const SCALED_KEYS = ["breathe", "drift", "hesitate", "overshoot", "fray", "rubout", "glyphJitter", "dropout"];
+// 2 = heavily hand-disturbed. wear is underwood's own knob, so the typed
+// subtitle strikes cleaner and rougher along with everything else.
+const SCALED_KEYS = ["breathe", "drift", "hesitate", "overshoot", "fray", "rubout", "glyphJitter", "dropout", "wear"];
 
 let plot;
 let variation = 0;

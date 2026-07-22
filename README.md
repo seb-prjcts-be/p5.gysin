@@ -99,7 +99,7 @@ counterpart: the core deterministically selects contiguous fragments and gives
 only those one or more extra, slightly shifted passes.
 
 ```js
-plot.textCutup("RUB OUT THE WORD", 80, 180, {
+plot.text("RUB OUT THE WORD", 80, 180, {
   bleed: 0.22,       // share of the written contour length
   bleedPasses: 2,    // max number of extra passes, capped at 3
   bleedSpread: 0.8,  // coherent shift; at least 0.1 when bleed is active

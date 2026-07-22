@@ -25,7 +25,7 @@
     <div class="demo-header">
       <div class="demo-number">bleed</div>
       <h1>Ink Bleed</h1>
-      <p>The additive counterpart. <code>dropout</code> and <code>rubout</code> take line material away; <strong>bleed</strong> chooses a few contiguous fragments of the written contour and gives only those one or more extra, slightly shifted passes - ink gathering where the pen went back over its own trace. The same sliced phrase is drawn three times; between the rows <strong>only the bleed options change</strong>.</p>
+      <p>The additive counterpart. <code>dropout</code> and <code>rubout</code> take line material away; <strong>bleed</strong> chooses a few contiguous fragments of the written contour and gives only those one or more extra, slightly shifted passes - ink gathering where the pen went back over its own trace. No cut-up here: the phrase stays whole, drawn on real <strong>outline-font contours</strong>, and is drawn three times; between the rows <strong>only the bleed options change</strong>.</p>
       <p><strong>The ink knob</strong> (<em>Ink &plus;/&minus;</em> or the &uarr;/&darr; arrow keys) sets the share of the contour that gets return passes, from <em>0 single-pass</em> to <em>0.45 heavily overdrawn</em>. The extra traces carry <code>role: "bleed"</code> and a physical pass number, so <strong>SVG (blade)</strong> exports the same drawing with every second and later pass stripped - a knife cannot darken a line - while <strong>SVG (pen)</strong> keeps the build-up.</p>
     </div>
     <div class="demo-layout">
@@ -33,12 +33,14 @@
         <div class="code-label">Core snippet</div>
         <pre><code class="language-javascript">// The whole library, in three lines - this alone is a complete sketch:
 const plot = new GysinPlot({ seed: 1916 });
-plot.textCutup("I AM THAT I AM", 46, 170);   // sliced, one clean pass
+plot.text("I AM THAT I AM", 46, 170);   // one clean pass
 plot.draw();
 
 // bleed is opt-in, like every disturbance. A share of the contour gets
-// extra, slightly shifted passes; the rest stays a single line:
-plot.textCutup("I AM THAT I AM", 46, 340, {
+// extra, slightly shifted passes; the rest stays a single line. With an
+// outline font the ink gathers along real letterforms:
+plot.text("I AM THAT I AM", 46, 340, {
+  font: outlineFont,
   bleed: 0.22,       // share of the written contour length
   bleedPasses: 2,    // max extra passes per chosen fragment (cap 3)
   bleedSpread: 0.8   // how far a return pass drifts off the first
@@ -51,7 +53,7 @@ plot.downloadSVG("drawing-blade.svg", { tool: "blade" }); // single pass only
 // stats() measures the return: bleedPaths, overdrawRatio, maxLocalPasses.</code></pre>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas" id="sketch" role="img" aria-label="The same sliced phrase three times down the sheet: one clean pass, then with fragments retraced so ink gathers, then retraced harder into dark clusters."></div>
+        <div class="demo-canvas" id="sketch" role="img" aria-label="The same phrase in outline letters three times down the sheet: one clean pass, then with fragments retraced so ink gathers, then retraced harder into dark clusters."></div>
         <div class="demo-actions" aria-label="Ink Bleed actions">
           <button type="button" id="ink-down" aria-label="Less ink">&minus; Ink</button>
           <button type="button" id="ink-up" aria-label="More ink">Ink &plus;</button>

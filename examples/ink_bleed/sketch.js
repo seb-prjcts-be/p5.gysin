@@ -4,20 +4,25 @@
 //  New to p5.gysin? The whole library is three lines:
 //
 //      const plot = new GysinPlot({ seed: 1916 });
-//      plot.textCutup("I AM THAT I AM", 46, 170);   // sliced, one clean pass
+//      plot.text("I AM THAT I AM", 46, 170);   // one clean pass
 //      plot.draw();
 //
 //  bleed is the ADDITIVE disturbance. dropout and rubout take line
 //  material away; bleed picks a few contiguous fragments and gives only
 //  those one or more extra, slightly shifted passes - ink gathering where
-//  the pen went back over its own trace. This sketch is one phrase in
-//  three states of exactly that option, nothing else changes between the
-//  rows. Read the numbered sections in buildPlot() from top to bottom.
+//  the pen went back over its own trace. No cut-up here: the phrase stays
+//  whole, drawn on real outline-font contours (Oswald), so the ink
+//  gathers in letterforms. Three states of exactly that one option;
+//  nothing else changes between the rows. Read the numbered sections in
+//  buildPlot() from top to bottom.
 // ═══════════════════════════════════════════════════════════════════
 
 let plot;
 let seedValue = 1916;
 let ink = 0.22;   // the one knob: share of the written contour that gets extra passes
+let font = null;  // outline contours; a failed load falls back to the single-stroke alphabet
+
+const FONT_URL = "../font_outlines/assets/Oswald-Regular.otf";
 
 // A phrase that repeats itself, for a pen that repeats itself. Three states
 // of one concept: the same sliced line, the ink returning harder each row.
@@ -46,18 +51,19 @@ const CAPTION_STYLE = {
   stroke: "#8a8a8a"
 };
 
-function setup() {
+async function setup() {
   const canvas = createCanvas(520, 620);
   canvas.parent("sketch");
   describe(
-    "The same sliced phrase three times down the sheet: one clean pass, then " +
-    "with a share of its fragments retraced so ink gathers, then retraced " +
-    "harder - dark clusters where the pen kept returning."
+    "The same phrase in outline letters three times down the sheet: one clean " +
+    "pass, then with a share of its contours retraced so ink gathers, then " +
+    "retraced harder - dark clusters where the pen kept returning."
   );
   pixelDensity(1);
   noLoop();
   wireActions();
   updateInkReadout();
+  try { font = await loadFont(FONT_URL); } catch (error) { font = null; }
   buildPlot();
 }
 
@@ -80,15 +86,21 @@ function buildPlot() {
 
   // ── 1 · the three states ────────────────────────────────────────
   // Identical calls; only the bleed options differ per row, so the darkening
-  // clusters are provably that one option at work.
+  // clusters are provably that one option at work. With the outline font the
+  // ink gathers along real letter contours; without it, on the single-stroke
+  // alphabet.
   for (const row of STATES) {
     plot.text(row.caption, 46, row.labelY, CAPTION_STYLE);
-    plot.textCutup(PHRASE, 46, row.y, {
-      size: 44,
+    const opts = {
+      // The condensed outline face carries 44; the wider single-stroke
+      // fallback drops to 34 so the phrase stays inside the sheet.
+      size: font ? 44 : 34,
       breathe: 0.9,
       pressure: 0.3,
       ...row.state()
-    });
+    };
+    if (font) opts.font = font;
+    plot.text(PHRASE, 46, row.y, opts);
   }
 
   // ── 2 · the sheet's own measurement ─────────────────────────────

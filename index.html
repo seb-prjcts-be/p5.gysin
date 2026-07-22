@@ -188,29 +188,33 @@ plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice</code></pre>
 
   <section class="section section-dark">
     <div class="section-header">
-      <div class="section-tag">breathe &middot; dropout &middot; repeat</div>
+      <div class="section-tag">breathe &middot; dropout &middot; repeat &middot; rubout</div>
       <h2>Parameter <span class="accent">Lab</span></h2>
-      <p class="section-desc">Use a small control surface to see how trace parameters change the same composition.</p>
+      <p class="section-desc">One slider owns one element, each in its own ink: breathe bends the whole title, rubout tears the word, repeat thickens the band, dropout opens the hatch.</p>
     </div>
     <div class="ex-preview">
       <div id="ex-parameter" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">// the same call at three slider positions
-plot.textCutup("RUB OUT", 58, 90, {
-  slices: 7,
-  breathe: 0.4,
-  dropout: 0.02
+      <pre class="ex-code-block"><code class="language-javascript">// one slider owns one element, each in its own ink
+plot.text("RUB OUT", 42, 90, {
+  size: 44,
+  breathe: 1.4,
+  stroke: "#b26a00"
 });
-plot.textCutup("RUB OUT", 58, 180, {
-  slices: 7,
-  breathe: 1.3,
-  dropout: 0.08,
-  rubout: 0.1
+plot.text("ERASE", 42, 160, {
+  size: 30,
+  rubout: 0.12,
+  stroke: "#b0203a"
 });
-plot.textCutup("RUB OUT", 58, 270, {
-  slices: 7,
-  breathe: 2.4,
+plot.path(wave, {   // wave: a sampled sine row
+  repeat: 2,
+  drift: 2.4,
+  stroke: "#2b4fb0"
+});
+plot.rect(42, 240, 340, 56, {
+  fill: "cross",
+  hatchSpacing: 6,
   dropout: 0.16,
-  rubout: 0.22
+  stroke: "#0f7a6c"
 });</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="examples/parameter_lab/" target="_blank">-> full example</a>
@@ -272,18 +276,18 @@ plot.path(signal, {
     <div class="section-header">
       <div class="section-tag">bleed &middot; the additive counterpart</div>
       <h2>Ink <span class="accent">Bleed</span></h2>
-      <p class="section-desc">dropout and rubout take line material away; bleed gives chosen fragments extra, slightly shifted passes - ink gathering where the pen returned. <code>tool: "blade"</code> strips the build-up again for cutting machines.</p>
+      <p class="section-desc">dropout and rubout take line material away; bleed gives chosen fragments extra, slightly shifted passes - ink gathering where the pen returned. No cut-up: the phrase stays whole. <code>tool: "blade"</code> strips the build-up again for cutting machines.</p>
     </div>
     <div class="ex-preview">
       <div id="ex-ink-bleed" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">// the same sliced line three times - the ink returns harder each row
-plot.textCutup("I AM THAT I AM", 42, 90, { size: 34 });
-plot.textCutup("I AM THAT I AM", 42, 180, {
+      <pre class="ex-code-block"><code class="language-javascript">// the same whole line three times - the ink returns harder each row
+plot.text("I AM THAT I AM", 42, 90, { size: 34 });
+plot.text("I AM THAT I AM", 42, 180, {
   size: 34,
   bleed: 0.22,
   bleedPasses: 2
 });
-plot.textCutup("I AM THAT I AM", 42, 270, {
+plot.text("I AM THAT I AM", 42, 270, {
   size: 34,
   bleed: 0.4,
   bleedPasses: 3,
@@ -579,26 +583,31 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, hatch: 3 } });
       width: canvasW,
       height: canvasH
     });
-    // The same call at three slider positions - the card's snippet, verbatim.
-    plot.textCutup("RUB OUT", 42, canvasH * 0.28, {
-      size: canvasW * 0.09,
-      slices: 7,
-      breathe: 0.4,
-      dropout: 0.02
+    // One slider owns one element - the card's snippet, verbatim, each in its ink.
+    plot.text("RUB OUT", 42, canvasH * 0.3, {
+      size: canvasW * 0.085,
+      breathe: 1.4,
+      stroke: "#b26a00"
     });
-    plot.textCutup("RUB OUT", 42, canvasH * 0.56, {
-      size: canvasW * 0.09,
-      slices: 7,
-      breathe: 1.3,
-      dropout: 0.08,
-      rubout: 0.1
+    plot.text("ERASE", 42, canvasH * 0.52, {
+      size: canvasW * 0.058,
+      rubout: 0.12,
+      stroke: "#b0203a"
     });
-    plot.textCutup("RUB OUT", 42, canvasH * 0.84, {
-      size: canvasW * 0.09,
-      slices: 7,
-      breathe: 2.4,
+    const wave = [];
+    for (let x = 42; x <= canvasW - 42; x += 10) {
+      wave.push([x, canvasH * 0.64 + p.sin(x * 0.05) * 6]);
+    }
+    plot.path(wave, {
+      repeat: 2,
+      drift: 2.4,
+      stroke: "#2b4fb0"
+    });
+    plot.rect(42, canvasH * 0.74, canvasW - 84, canvasH * 0.16, {
+      fill: "cross",
+      hatchSpacing: 6,
       dropout: 0.16,
-      rubout: 0.22
+      stroke: "#0f7a6c"
     });
     return plot;
   });
@@ -656,16 +665,16 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, hatch: 3 } });
       width: canvasW,
       height: canvasH
     });
-    // The same sliced line three times - the card's snippet, verbatim.
-    plot.textCutup("I AM THAT I AM", 42, canvasH * 0.28, {
+    // The same whole line three times - the card's snippet, verbatim.
+    plot.text("I AM THAT I AM", 42, canvasH * 0.28, {
       size: canvasW * 0.062
     });
-    plot.textCutup("I AM THAT I AM", 42, canvasH * 0.56, {
+    plot.text("I AM THAT I AM", 42, canvasH * 0.56, {
       size: canvasW * 0.062,
       bleed: 0.22,
       bleedPasses: 2
     });
-    plot.textCutup("I AM THAT I AM", 42, canvasH * 0.84, {
+    plot.text("I AM THAT I AM", 42, canvasH * 0.84, {
       size: canvasW * 0.062,
       bleed: 0.4,
       bleedPasses: 3,

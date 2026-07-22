@@ -7,8 +7,8 @@
 //      plot.text("RUB OUT", 70, 150);   // clean, mechanical text
 //      plot.draw();
 //
-//  Every option below (breathe, dropout, repeat, rubout, cut-up, hatch
-//  fill, letter field…) is OPTIONAL disturbance layered on top of that
+//  Every option below (breathe, dropout, repeat, rubout, hatch fill,
+//  letter field…) is OPTIONAL disturbance layered on top of that
 //  core. The defaults are all zero, so a call with no options just draws
 //  clean - nothing here is required to use the library. This sketch adds
 //  the layers one at a time; read the numbered sections in buildPlot()
@@ -175,15 +175,12 @@ function buildPlot() {
   registrationMarks();
 
   // ── 2 · the title ───────────────────────────────────────────────
-  // Title - owned by BREATHE only. Breathe re-cuts the slices (count and offset)
-  // and drifts the trace, so the whole word breathes; the other sliders leave it
-  // untouched. glyphJitter keeps each letter a hand-set shape.
-  plot.textCutup("RUB OUT", 70, 150, {
+  // Title - owned by BREATHE only. The word stays whole (no cut-up: breathe is
+  // the concept here); the slider bends and drifts the trace while the other
+  // sliders leave it untouched. glyphJitter keeps each letter a hand-set shape.
+  plot.text("RUB OUT", 70, 150, {
     layer: CONTROLS.breathe.layer,
     size: 68,
-    slices: 5 + round(value("breathe")),
-    sliceOffset: 12 + value("breathe") * 6,
-    sliceDropout: 0.14,
     breathe: value("breathe"),
     drift: value("breathe") * 1.4,
     glyphJitter: 0.55,
@@ -195,13 +192,11 @@ function buildPlot() {
   });
 
   // ── 3 · the word ────────────────────────────────────────────────
-  // Word - owned by RUBOUT only. The slider visibly eats this line away while
-  // everything around it holds together.
-  plot.textCutup("ERASE", 70, 214, {
+  // Word - owned by RUBOUT only. The word stays whole; the slider visibly eats
+  // this line away while everything around it holds together.
+  plot.text("ERASE", 70, 214, {
     layer: CONTROLS.rubout.layer,
     size: 40,
-    slices: 5,
-    sliceOffset: 6,
     rubout: value("rubout"),
     glyphJitter: 0.2,
     stroke: inkOf("rubout"),
