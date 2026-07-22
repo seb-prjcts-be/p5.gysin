@@ -27,6 +27,7 @@
       <h1>Worn Word</h1>
       <p>One word, worn away. <strong>rub()</strong> is an intent verb: it composes <code>text</code>, <code>textCutup</code>, and <code>asemic</code> into a single decaying gesture - the same word drawn three times, from a solid legible head to an asemic scribble that buries the last, ghostly copy. This whole sketch is <strong>one call</strong>. It is the <a href="../first_trace/">First Trace</a> gesture, which builds the same thing by hand in ~40 lines, collapsed into one.</p>
       <p><strong>The decay knob</strong> (<em>Decay &plus;/&minus;</em> or the &uarr;/&darr; arrow keys) scales the whole disturbance at once, from <em>0&times; fully clean</em> to <em>2.5&times; fully worn</em>. Every option is optional; the defaults alone draw the full gesture.</p>
+      <p><strong>Freeze head</strong> locks the legible copy - the first of the ids <code>rub()</code> returns. While it is frozen the decay knob locks with it, and <em>New variation</em> calls <code>plot.reroll()</code> instead of rebuilding: the word holds its exact trace while the cut-up and the tangles decay anew around it. <em>Thaw head</em> unlocks.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
@@ -40,14 +41,20 @@ plot.draw();
 // an outline font fills the legible head (without one it stays hollow):
 plot.rub("WORN", 46, 248, { decay: 2, font: outlineFont });
 
-// rub() returns the id of every copy and tangle, so each can be frozen,
-// rerolled, or exported on its own - like any other p5.gysin shape.</code></pre>
+// rub() returns the id of every copy and tangle it drew, head first.
+// Freeze the head and a reroll re-decays only the rest - the word
+// holds its exact trace while its burial moves:
+const ids = plot.rub("WORN", 46, 248);
+plot.freeze(ids[0]);   // lock the legible head
+plot.reroll();         // every unfrozen shape gets a new variant
+plot.thaw(ids[0]);     // unlock it again</code></pre>
       </div>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch" role="img" aria-label="One word drawn three times down the sheet, each copy more worn than the last: a solid legible head, a cut-up middle, and an asemic scribble burying the final copy."></div>
         <div class="demo-actions" aria-label="Worn Word actions">
           <button type="button" id="decay-down" aria-label="Less decay">&minus; Decay</button>
           <button type="button" id="decay-up" aria-label="More decay">Decay &plus;</button>
+          <button type="button" id="freeze-button" aria-pressed="false">Freeze head</button>
           <button type="button" id="reroll-button">New variation</button>
           <button type="button" id="svg-button">Download SVG</button>
         </div>

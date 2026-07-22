@@ -12,12 +12,19 @@
 //  one call - everything else here is just a canvas, a decay knob, and a
 //  reseed button. Compare it with first_trace, which builds the same
 //  gesture by hand: rub() is those ~40 lines collapsed into one.
+//
+//  rub() also returns the id of every copy and tangle it drew. The Freeze
+//  head button locks the first id: a frozen shape keeps its exact trace,
+//  so New variation then re-decays only the tail via plot.reroll() - the
+//  word holds while its burial moves. Thaw unlocks it again.
 // ═══════════════════════════════════════════════════════════════════
 
 let plot;
 let seedValue = 1960;
-let decay = 1;      // one knob: scales the whole disturbance (0 = clean)
-let font = null;    // outline font gives the legible head a real filled body
+let decay = 1;            // one knob: scales the whole disturbance (0 = clean)
+let font = null;          // outline font gives the legible head a real filled body
+let rubIds = [];          // every shape rub() drew, head first
+let headFrozen = false;   // locked head: reroll may not touch it
 
 const FONT_URL = "../font_outlines/assets/Oswald-Regular.otf";
 
@@ -61,10 +68,12 @@ function buildPlot() {
     }
   });
 
-  plot.rub(word, 46, 248, {
+  rubIds = plot.rub(word, 46, 248, {
     decay: decay,
     font: font
   });
+  // A rebuild draws a fresh head; re-lock it if the toggle says so.
+  if (headFrozen) plot.freeze(rubIds[0]);
 
   // A small caption, so an exported SVG records its own seed and knob setting.
   plot.text("seed " + seedValue + "  ·  decay " + decay.toFixed(1) + "x", 46, 600, {
@@ -90,21 +99,46 @@ function keyPressed() {
 function wireActions() {
   document.getElementById("reroll-button").addEventListener("click", rerollPlot);
   document.getElementById("svg-button").addEventListener("click", downloadSVG);
+  document.getElementById("freeze-button").addEventListener("click", toggleFreeze);
   document.getElementById("decay-up").addEventListener("click", () => nudgeDecay(0.2));
   document.getElementById("decay-down").addEventListener("click", () => nudgeDecay(-0.2));
 }
 
 function nudgeDecay(delta) {
+  if (headFrozen) return;   // a locked head obeys no knob
   decay = constrain(decay + delta, 0, 2.5);
   updateDecayReadout();
   buildPlot();
   redraw();
 }
 
+// Lock or unlock the legible head (the first id rub() returned). Nothing
+// changes on screen until the next reroll; the knob lock makes it felt now.
+function toggleFreeze() {
+  headFrozen = !headFrozen;
+  if (headFrozen) plot.freeze(rubIds[0]);
+  else plot.thaw(rubIds[0]);
+  updateFreezeLabel();
+  updateDecayReadout();
+}
+
 function rerollPlot() {
+  if (headFrozen) {
+    // reroll() gives every unfrozen shape a new variant: the head keeps its
+    // exact trace while cut-up and tangles decay anew around it.
+    plot.reroll();
+    redraw();
+    return;
+  }
   seedValue += 1;   // next word, fresh disturbance
   buildPlot();
   redraw();
+}
+
+function updateFreezeLabel() {
+  const button = document.getElementById("freeze-button");
+  button.textContent = headFrozen ? "Thaw head" : "Freeze head";
+  button.setAttribute("aria-pressed", String(headFrozen));
 }
 
 function downloadSVG() {
@@ -114,6 +148,6 @@ function downloadSVG() {
 
 function updateDecayReadout() {
   document.getElementById("decay-readout").textContent = decay.toFixed(1) + "×";
-  document.getElementById("decay-down").disabled = decay <= 0;
-  document.getElementById("decay-up").disabled = decay >= 2.5;
+  document.getElementById("decay-down").disabled = headFrozen || decay <= 0;
+  document.getElementById("decay-up").disabled = headFrozen || decay >= 2.5;
 }
