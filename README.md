@@ -19,7 +19,7 @@ as standalone pages under `examples/`.
 - `p5.gysin.text.min.js` - semantically identical browser build of the text module
 - `index.html` - Pages showcase
 - `docs/examples.html` - overview of examples
-- `docs/guide.html` - public guide
+- `docs/system.html` - the system: public API reference
 - `docs/about.html` - context and status
 - `docs/technical-blueprint.md` - technical blueprint
 - `docs/ink-bleed-design.md` - design and safety model for additive ink build-up
