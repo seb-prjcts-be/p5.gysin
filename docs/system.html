@@ -24,35 +24,26 @@
   <header class="page-header">
     <div class="section-tag">API reference</div>
     <h1>System</h1>
-    <p>A complete permutation sketch loads three scripts: p5.js, the p5.gysin core, and the separate p5.gysin text addon. Your own <code>sketch.js</code> always comes last.</p>
+    <p>p5.gysin is plain script files: one core, and two optional voices for permutation and type. Your own <code>sketch.js</code> always comes last.</p>
   </header>
 
   <main class="section guide-layout">
     <section class="guide-block">
       <div class="section-tag">Start here</div>
-      <h2>p5.gysin has two library files</h2>
+      <h2>p5.gysin has three library files</h2>
       <p><strong><code>p5.js</code> is the creative-coding foundation.</strong> Load it when you want <code>GysinPlot</code> to draw the generated paths on a canvas.</p>
       <p><strong><code>p5.gysin.min.js</code> is the core library.</strong> It provides <code>GysinPlot</code>, drawing methods such as <code>textCutup()</code>, and SVG, JSON, and HPGL export.</p>
-      <p><strong><code>p5.gysin.text.min.js</code> is the text addon.</strong> It provides <code>GysinText.permute()</code>. Load this second file whenever you want to generate permutation poems.</p>
-      <p>For sketches that combine permutations with drawing, load the scripts in this order:</p>
-      <div class="code-preview">
-        <code>&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
-&lt;script src="../p5.gysin.min.js"&gt;&lt;/script&gt;
-&lt;script src="../p5.gysin.text.min.js"&gt;&lt;/script&gt;
-&lt;script src="sketch.js"&gt;&lt;/script&gt;</code>
-      </div>
-      <p>You only need <code>p5.gysin.text.min.js</code> for <code>GysinText</code>. The addon is dependency-free and can also be used without p5.js or <code>GysinPlot</code>.</p>
-    </section>
-
-    <section class="guide-block">
-      <h2>p5 Editor</h2>
-      <p>In the p5.js Web Editor, add the library script to the <code>index.html</code> tab before <code>sketch.js</code>.</p>
+      <p><strong><code>p5.gysin.text.min.js</code> is the permutation voice.</strong> It provides <code>GysinText.permute()</code>. Load it whenever you want to generate permutation poems.</p>
+      <p><strong><code>p5.gysin.underwood.min.js</code> is the typed voice.</strong> It provides <code>plot.underwood()</code>, the period-correct typewriter.</p>
+      <p>Load what you need, in this order:</p>
       <div class="code-preview">
         <code>&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
 &lt;script src="https://seb-prjcts-be.github.io/p5.gysin/p5.gysin.min.js"&gt;&lt;/script&gt;
 &lt;script src="https://seb-prjcts-be.github.io/p5.gysin/p5.gysin.text.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://seb-prjcts-be.github.io/p5.gysin/p5.gysin.underwood.min.js"&gt;&lt;/script&gt;
 &lt;script src="sketch.js"&gt;&lt;/script&gt;</code>
       </div>
+      <p>The voices are optional. Both are dependency-free; <code>p5.gysin.text.min.js</code> even runs without p5.js or <code>GysinPlot</code>.</p>
     </section>
 
     <section class="guide-block">
@@ -136,6 +127,18 @@ lines.forEach((line, index) =&gt; {
       </div>
       <p>The first line stays almost completely readable. Each following line increases the slice offset by one pixel, so the poem gradually moves from legible text toward a stronger cut-up.</p>
       <p>Orders: <code>walk</code>, <code>random</code>, <code>lexical</code>, and <code>rotate</code>. The source line stays first, duplicate words produce only unique lines, and <code>limit</code> is capped at 1,000.</p>
+    </section>
+
+    <section class="guide-block">
+      <h2>Optional Typewriter (underwood)</h2>
+      <p><code>p5.gysin.underwood.min.js</code> adds one verb: <code>plot.underwood(text, x, y, options)</code> types period-correct single-stroke letters at a fixed pitch - ten characters per inch, six lines per inch, light strike wear. The face carries both voices, capitals and lowercase, plus marks like <code>+ # &amp;</code> that the built-in vector alphabet lacks.</p>
+      <div class="code-preview">
+        <code>plot.underwood("KICK THAT HABIT MAN", 60, 90);
+plot.underwood("HEADING", 60, 130, { underline: 1 });
+plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice
+plot.underwood("the small voice.", 60, 190);</code>
+      </div>
+      <p>The machine has no bold and no italic: <code>bold: true</code> strikes the same key twice, <code>underline</code> draws the underscore ladder, and <code>wear</code> (0 and up) is the one ageing knob. Every letter is a single pen line, so it plots exactly as typed.</p>
     </section>
 
     <section class="guide-block">
