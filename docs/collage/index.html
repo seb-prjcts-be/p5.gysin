@@ -24,7 +24,7 @@
   <header class="page-header">
     <div class="section-tag">Deep guide &middot; v0.2.0</div>
     <h1>Col<span class="accent">lage</span></h1>
-    <p>One word, treated as paper. A collage is three acts: cut the material, arrange the fragments, glue them down. This page runs the single word COLLAGE through every function of the library, one act at a time, each with a live preview and a block you can copy. At the end the acts stack into one glued sheet.</p>
+    <p>Collage, here, is done to language, not to paper. Words are the scraps: a phrase is cut apart, its words change neighbours, and the new order is fixed to the sheet as drawn lines. Three acts - cut, arrange, glue - and one word, COLLAGE, run through every function of the library, each with a live preview and a block you can copy. At the end the acts fix themselves to one sheet.</p>
     <ul class="ce-chips">
       <li><a href="#sheet">01 the sheet</a></li>
       <li><a href="#scraps">02 scraps</a></li>
@@ -112,7 +112,7 @@ plot.path([[380, 420], [520, 380], [660, 440], [600, 520]], {
     <div class="section-header">
       <div class="section-tag">03 &middot; text() &middot; breathe &middot; dropout &middot; rubout</div>
       <h2>The word</h2>
-      <p class="section-desc">The word itself is the paper this page collages. <code>text()</code> traces it as vector contours; the material options set its condition: <code>breathe</code> is the tremor of the hand, <code>dropout</code> the print that skips, <code>rubout</code> the eraser that has already been here.</p>
+      <p class="section-desc">The word is the material - not what is printed on the scrap, but the scrap itself. <code>text()</code> traces it as vector contours; the material options set its condition: <code>breathe</code> is the tremor of the hand, <code>dropout</code> the print that skips, <code>rubout</code> the eraser that has already been here.</p>
     </div>
     <div class="ce-strip">
       <div class="ce-step"><span>cut</span><h4>One clean clipping</h4><p>The word traced as letter contours, nearly steady.</p></div>
@@ -179,7 +179,7 @@ plot.textCutup("COLLAGE", 60, 380, {
     <div class="section-header">
       <div class="section-tag">05 &middot; GysinText.permute() + textCutup()</div>
       <h2>Arrange</h2>
-      <p class="section-desc">Arranging is a collage act on word order. The three acts themselves - cut, arrange, glue - are handed to <code>GysinText.permute()</code>, and every new order runs through the scissors again. The addon reorders language; the core cuts the image.</p>
+      <p class="section-desc">This is the essence of the whole page: collage as an act on word order. The three acts themselves - cut, arrange, glue - are handed to <code>GysinText.permute()</code>, every word changes neighbours, and every new order runs through the scissors again. The addon reorders language; the core cuts the image.</p>
     </div>
     <div class="ce-strip">
       <div class="ce-step"><span>cut</span><h4>Loose words</h4><p><code>permute()</code> returns plain strings, the source line first.</p></div>
@@ -298,7 +298,7 @@ plot.underwood("* * * * * * * *", 60, 230);</code></pre>
     </div>
     <div class="ce-strip">
       <div class="ce-step"><span>cut</span><h4>A patch of tone</h4><p>Any closed shape can carry a fill; counters stay open.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Set the weave</h4><p><code>hatchSpacing</code> sets the density, <code>hatchAngle</code> turns the weave.</p></div>
+      <div class="ce-step"><span>arrange</span><h4>Set the weave</h4><p><code>hatchSpacing</code> sets the density, <code>hatchAngle</code> turns it; <code>cross</code> lays stroke over stroke in two directions, writing woven over writing.</p></div>
       <div class="ce-step"><span>glue</span><h4>Let the hand show</h4><p><code>wobble</code>, <code>overshoot</code>, <code>dropout</code>, and <code>bleed</code> reach the fill strokes too; <code>stats()</code> counts them as <code>fillPaths</code>.</p></div>
     </div>
     <div class="ce-demo">
@@ -339,7 +339,7 @@ plot.circle(380, 430, 180, {
     <div class="section-header">
       <div class="section-tag">10 &middot; bleed &middot; repeat</div>
       <h2>Glue &amp; ink</h2>
-      <p class="section-desc">Where fragments overlap, the glue soaks through and the ink builds up. <code>bleed</code> is that additive build-up: extra passes that thicken a trace unevenly, like a print pulled twice. It is selective - you decide which fragment soaks.</p>
+      <p class="section-desc">Glue, in a collage of words, is commitment: the pass that fixes the new order to the sheet. <code>bleed</code> is that commitment made visible - extra passes that thicken a trace unevenly, ink building up where the sheet was worked longest. It is selective: you decide which words soak.</p>
     </div>
     <div class="ce-strip">
       <div class="ce-step"><span>cut</span><h4>One dry strip</h4><p>A plain line is a clean, single pass.</p></div>
@@ -474,7 +474,7 @@ console.log(plot.stats({ page }));</code></pre>
     <div class="section-header">
       <div class="section-tag">14 &middot; assembly</div>
       <h2>The collage</h2>
-      <p class="section-desc">Cut, arranged, glued. The board holds a deep-cut headline, a typed permutation strip, the sifted letter box, a mark band, a soaked rule, a patch of tone, the worn word, and the margin note. One seed, one word, every act on one sheet.</p>
+      <p class="section-desc">Cut, arranged, glued. The sheet holds a deep-cut headline, a typed permutation strip, the sifted letter box, a mark band, a soaked rule, a patch of tone, the worn word, and the margin note. One seed, one word, and every act fixing a new order of it to one sheet.</p>
     </div>
     <div class="ce-poster-stage">
       <div id="m-collage" class="ce-canvas"></div>
