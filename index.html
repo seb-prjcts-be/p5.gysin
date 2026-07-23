@@ -74,8 +74,10 @@
       <a class="cs-tile" href="examples/p5_editor/" data-page="examples/p5_editor/" data-slug="p5_editor"><span class="cs-num">10</span><strong>p5 Editor Starter</strong><small>paste-ready page -&gt;</small></a>
       <div class="cs-group">+ p5.gysin.text.js</div>
       <a class="cs-tile" href="#study-permute" data-page="examples/permutation_poem/" data-slug="permutation_poem"><span class="cs-num">11</span><strong>Permutation Poem</strong><small>chant()</small></a>
+      <a class="cs-tile" href="#plate-rotations" data-page="examples/rotations/" data-slug="rotations"><span class="cs-num">12</span><strong>Rotations</strong><small>rotate &middot; lexical</small></a>
       <div class="cs-group">+ p5.gysin.underwood.js</div>
-      <a class="cs-tile" href="#plate-typewriter" data-page="examples/typewriter/" data-slug="typewriter"><span class="cs-num">12</span><strong>Typewriter</strong><small>underwood()</small></a>
+      <a class="cs-tile" href="#plate-typewriter" data-page="examples/typewriter/" data-slug="typewriter"><span class="cs-num">13</span><strong>Typewriter</strong><small>underwood()</small></a>
+      <a class="cs-tile" href="#plate-the-letter" data-page="examples/the_letter/" data-slug="the_letter"><span class="cs-num">14</span><strong>The Letter</strong><small>the whole grammar</small></a>
     </div>
     <div class="cs-actions">
       <button type="button" id="deal-sheet" hidden>deal me a sheet</button>
@@ -382,6 +384,27 @@ plot.chant("I LOVE YOU", 48, 90, {
     </div>
   </section>
 
+  <section class="section plate" id="plate-rotations">
+    <div class="section-header">
+      <div class="section-tag">permute() &middot; rotate &middot; lexical</div>
+      <h2>Rota<span class="accent">tions</span></h2>
+      <p class="section-desc">The quieter permutations: order "rotate" turns the phrase like a wheel, order "lexical" walks every arrangement in dictionary sequence. No scissors - the turning itself is the event.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-rotations" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// the phrase turns: the first word walks to the back of the queue
+GysinText.permute("RUB OUT THE WORD", { order: "rotate" })
+  .forEach((row, i) =&gt; {
+    plot.text(row, 40 + i * 30, 70 + i * 52, { size: 24 });
+  });</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="examples/rotations/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="examples/rotations/sketch.js" target="_blank">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
   <section class="section group-intro" id="lib-underwood">
     <div class="section-header">
       <div class="section-tag">Library 03 &middot; addon &middot; the machine</div>
@@ -418,6 +441,26 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
     </div>
   </section>
 
+
+  <section class="section plate" id="plate-the-letter">
+    <div class="section-header">
+      <div class="section-tag">underwood() &middot; correspondence</div>
+      <h2>The <span class="accent">Letter</span></h2>
+      <p class="section-desc">The machine's natural habitat: one complete typed letter. Spaced dateline, ruled salutation, a word unsaid with X's struck over it, and a signature in the small voice.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-the-letter" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">plot.underwood("DEAR READER,", 60, 90, { underline: 1 });
+plot.underwood("FORGET", 60, 150);
+plot.underwood("XXXXXX", 60, 150, { bold: true });   // struck over
+plot.underwood("the small hand.", 60, 210);</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="examples/the_letter/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="examples/the_letter/sketch.js" target="_blank">-> source sketch</a>
+      </div>
+    </div>
+  </section>
 
   <section class="section">
     <div class="section-header">
@@ -559,6 +602,51 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
       return plot;
     });
   }
+
+  // Rotations: the turning stair, in miniature.
+  function makeRotationsPreview(id) {
+    makePreview(id, function(p, canvasW, canvasH) {
+      const plot = new GysinPlot({ p: p, seed: 1959, width: canvasW, height: canvasH });
+      const turns = GysinText.permute("RUB OUT THE WORD", { order: "rotate" });
+      turns.forEach(function(row, i) {
+        plot.text(row, 26 + i * canvasW * 0.05, canvasH * 0.2 + i * canvasH * 0.19, {
+          size: canvasW * 0.044,
+          breathe: 0.4 + i * 0.3,
+          dropout: i * 0.015
+        });
+      });
+      return plot;
+    });
+  }
+
+  // The Letter: salutation, correction and the small voice, in miniature.
+  function makeLetterPreview(id) {
+    makePreview(id, function(p, canvasW, canvasH) {
+      const plot = new GysinPlot({ p: p, seed: 1912, width: canvasW, height: canvasH });
+      plot.underwood("DEAR READER,", 26, canvasH * 0.24, {
+        size: canvasW * 0.038,
+        underline: 1,
+        stroke: "#171717"
+      });
+      plot.underwood("FORGET", 26, canvasH * 0.5, {
+        size: canvasW * 0.034,
+        stroke: "#171717"
+      });
+      plot.underwood("XXXXXX", 26, canvasH * 0.5, {
+        size: canvasW * 0.034,
+        bold: true,
+        stroke: "#171717"
+      });
+      plot.underwood("the small hand.", 26, canvasH * 0.74, {
+        size: canvasW * 0.034,
+        stroke: "#171717"
+      });
+      return plot;
+    });
+  }
+
+  makeRotationsPreview("ex-rotations");
+  makeLetterPreview("ex-the-letter");
 
   makeOutlinePreview("ex-first-trace", function(p, canvasW, canvasH, outlineFont) {
     const plot = new GysinPlot({

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rotations | p5.gysin examples</title>
+  <link rel="stylesheet" href="../../docs/style.css">
+</head>
+<body>
+  <script>if (window.self !== window.top) document.documentElement.classList.add("embedded");</script>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../../docs/system.html">System</a></li>
+      <li><a href="../plotter_calibration/">Transmission</a></li>
+      <li><a href="../../docs/vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">GysinText.permute() &middot; rotate &middot; lexical</div>
+      <h1>Rotations</h1>
+      <p>A permutation does not have to be cut. This sheet turns one phrase two quieter ways: <strong>order "rotate"</strong> moves the first word to the end, again and again, until the phrase comes back to itself - four words, four turns, one wheel. <strong>Order "lexical"</strong> walks every arrangement the dictionary allows, in strict sequence. Both are deterministic: the same phrase always turns the same way.</p>
+      <p>The drawing stays whole on purpose - plain <code>text()</code>, no scissors. The turning itself is the event: the indent of each line is the first word walking to the back of the queue.</p>
+    </div>
+    <div class="demo-layout">
+      <div class="demo-code">
+        <div class="code-label">Core snippet</div>
+        <pre><code class="language-javascript">// Load the text module, then the phrase turns in one loop:
+const plot = new GysinPlot({ seed: 1959 });
+GysinText.permute("RUB OUT THE WORD", { order: "rotate" })
+  .forEach((row, i) =&gt; {
+    plot.text(row, 90 + i * 34, 470 + i * 56, { size: 26 });
+  });
+plot.draw();
+
+// order "lexical" walks every arrangement in dictionary sequence:
+GysinText.permute("RUB OUT THE WORD", { order: "lexical", limit: 12 });</code></pre>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas is-clickable" id="sketch" role="img" aria-label="A permutation sheet: a red double ring with four spokes, four rotations of the phrase RUB OUT THE WORD stepping down like a turning stair, and twelve lexical orders falling in two blue columns."></div>
+        <div class="demo-actions" aria-label="Rotations actions">
+          <button type="button" id="reroll-button">New turn</button>
+          <button type="button" id="svg-button">Download SVG</button>
+        </div>
+        <div class="demo-note">The orders never change - they are the mathematics of the phrase. <strong>New turn</strong> rerolls only the hand that draws them; <strong>Download SVG</strong> saves the plotter-ready file. <code>R</code> and <code>S</code> do the same from the keyboard.</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      <a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp;
+      <a href="../../docs/system.html">System</a>
+    </p>
+    <p class="footer-sub">p5.gysin v0.3.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.text.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Letter | p5.gysin examples</title>
+  <link rel="stylesheet" href="../../docs/style.css">
+</head>
+<body>
+  <script>if (window.self !== window.top) document.documentElement.classList.add("embedded");</script>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../../docs/system.html">System</a></li>
+      <li><a href="../plotter_calibration/">Transmission</a></li>
+      <li><a href="../../docs/vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">underwood() &middot; the whole grammar</div>
+      <h1>The Letter</h1>
+      <p>The typewriter's natural habitat was never the poster - it was the letter. This sheet types one complete piece of correspondence and, along the way, uses every voice the machine ever had: the <em>S&nbsp;p&nbsp;e&nbsp;r&nbsp;r&nbsp;s&nbsp;a&nbsp;t&nbsp;z</em> dateline, the ruled salutation, the double strike, and the row of asterisks that divides a page.</p>
+      <p>Look closely at the fourth line of events: a word is unsaid the only way the machine allowed - typed over with X's, <code>bold: true</code> striking the same cell twice. And the signature drops to lowercase: both cases live on the same keys.</p>
+    </div>
+    <div class="demo-layout">
+      <div class="demo-code">
+        <div class="code-label">Core snippet</div>
+        <pre><code class="language-javascript">// Load the underwood module, then the letter is a handful of lines:
+const plot = new GysinPlot({ seed: 1912 });
+plot.underwood("DEAR READER,", 60, 150, { underline: 1 });
+plot.underwood("THE MACHINE HAS ONE FACE, ONE SIZE.\n...", 60, 210);
+
+// unsaying a word, the period way - struck over with X's:
+plot.underwood("FORGET", 60, 360);
+plot.underwood("XXXXXX", 60, 360, { bold: true });
+
+// and the small voice signs:
+plot.underwood("the small hand.", 60, 600);
+plot.draw();</code></pre>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas is-clickable" id="sketch" role="img" aria-label="A period-typed letter: a spaced dateline, an underlined salutation, four typed lines, a word struck over with X's followed by a correction, a line showing the three period emphases, a typed asterisk divider, a lowercase signature, and a worn postscript."></div>
+        <div class="demo-actions" aria-label="The Letter actions">
+          <button type="button" id="reroll-button">New strike</button>
+          <button type="button" id="svg-button">Download SVG</button>
+        </div>
+        <div class="demo-note"><strong>New strike</strong> retypes the same letter with the next seeded wear - every strike lands differently, the words hold. <strong>Download SVG</strong> saves the plotter-ready file; every letter is a single pen line. <code>R</code> and <code>S</code> do the same from the keyboard.</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      <a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp;
+      <a href="../../docs/system.html">System</a>
+    </p>
+    <p class="footer-sub">p5.gysin v0.3.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.underwood.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>
