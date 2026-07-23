@@ -444,6 +444,7 @@
       const p = this._p();
       if (!p || !p.beginShape) return;
 
+      const ctx = p.drawingContext || global.drawingContext;
       p.push();
       p.noFill();
 
@@ -452,7 +453,6 @@
         for (const trace of shape.generated) {
           if (trace.points.length < 2) continue;
 
-          const ctx = p.drawingContext || global.drawingContext;
           const oldAlpha = ctx ? ctx.globalAlpha : 1;
           if (ctx) ctx.globalAlpha = trace.style.alpha;
 
@@ -708,14 +708,16 @@
         maxLocalPasses = Math.max(maxLocalPasses, trace.pass || 1);
         if (previous) travelLength += distance(previous, trace.points[0]);
         previous = trace.points[trace.points.length - 1];
-        if (!layerStats.has(trace.layer)) {
-          layerStats.set(trace.layer, { paths: 0, drawnLength: 0, bleedPaths: 0, bleedLength: 0 });
+        let layerEntry = layerStats.get(trace.layer);
+        if (!layerEntry) {
+          layerEntry = { paths: 0, drawnLength: 0, bleedPaths: 0, bleedLength: 0 };
+          layerStats.set(trace.layer, layerEntry);
         }
-        layerStats.get(trace.layer).paths += 1;
-        layerStats.get(trace.layer).drawnLength += length;
+        layerEntry.paths += 1;
+        layerEntry.drawnLength += length;
         if (trace.role === "bleed") {
-          layerStats.get(trace.layer).bleedPaths += 1;
-          layerStats.get(trace.layer).bleedLength += length;
+          layerEntry.bleedPaths += 1;
+          layerEntry.bleedLength += length;
         }
       }
 
@@ -1134,10 +1136,11 @@
       const traces = [];
       const repeat = Math.max(1, Math.round(h.repeat || 1));
       const ruboutZones = makeRuboutZones(shape.bounds, h.rubout, rng);
+      const wobble = Number(h.wobble) || 0;
+      const driftAmount = Number(h.drift) || 0;
 
       for (let r = 0; r < repeat; r++) {
         const baseMeta = { role: "base", pass: r + 1 };
-        const driftAmount = Number(h.drift) || 0;
         const driftX = r === 0 ? 0 : rng.range(-driftAmount, driftAmount);
         const driftY = r === 0 ? 0 : rng.range(-driftAmount, driftAmount);
 
@@ -1159,7 +1162,6 @@
               continue;
             }
 
-            const wobble = Number(h.wobble) || 0;
             const pt = {
               x: source.x + driftX + rng.range(-wobble, wobble),
               y: source.y + driftY + rng.range(-wobble, wobble)
@@ -1638,7 +1640,11 @@
   }
 
   function flatten(paths) {
-    return paths.reduce((all, path) => all.concat(path), []);
+    const all = [];
+    for (const path of paths) {
+      for (const pt of path) all.push(pt);
+    }
+    return all;
   }
 
   function clusterPolyline(points, targetLength) {
@@ -1734,20 +1740,23 @@
   }
 
   function boundsOfPaths(paths) {
-    const points = flatten(paths);
-    if (points.length === 0) return null;
-
     let minX = Infinity;
     let minY = Infinity;
     let maxX = -Infinity;
     let maxY = -Infinity;
+    let count = 0;
 
-    for (const pt of points) {
-      minX = Math.min(minX, pt.x);
-      minY = Math.min(minY, pt.y);
-      maxX = Math.max(maxX, pt.x);
-      maxY = Math.max(maxY, pt.y);
+    for (const path of paths) {
+      for (const pt of path) {
+        count += 1;
+        if (pt.x < minX) minX = pt.x;
+        if (pt.y < minY) minY = pt.y;
+        if (pt.x > maxX) maxX = pt.x;
+        if (pt.y > maxY) maxY = pt.y;
+      }
     }
+
+    if (count === 0) return null;
 
     return {
       minX,
@@ -2385,10 +2394,23 @@
 
   global.GysinPlot = GysinPlot;
 
-  if (global.p5) {
-    global.p5.GysinPlot = GysinPlot;
-    global.p5.prototype.createGysinPlot = function (options = {}) {
+  // p5 integration. p5.js 2.x has an official addon hook, p5.registerAddon();
+  // use it when present so p5.gysin registers the way core modules do. Older
+  // setups fall back to the direct prototype attach. Both paths expose the
+  // same two things: p5.GysinPlot and createGysinPlot(). The core itself
+  // stays independent of p5 on purpose - traces and export need no canvas.
+  function gysinAddon(p5Class, fn) {
+    p5Class.GysinPlot = GysinPlot;
+    fn.createGysinPlot = function (options = {}) {
       return new GysinPlot(Object.assign({}, options, { p: this }));
     };
+  }
+
+  if (global.p5) {
+    if (typeof global.p5.registerAddon === "function") {
+      global.p5.registerAddon(gysinAddon);
+    } else {
+      gysinAddon(global.p5, global.p5.prototype);
+    }
   }
 })(typeof window !== "undefined" ? window : globalThis);

@@ -67,12 +67,40 @@
         return pts;
       })
       .filter(function (pts) { return pts.length >= 2; });
-}
+  }
 
   function glyphFor(char) {
     const code = char.charCodeAt(0);
     if (code < 33 || code > 127) return null;
     return FACE[code - 33] || null;
+  }
+
+  // Parsing a glyph's "d" string and measuring its centre is pure and per
+  // character, so do it once per distinct character instead of per keystroke.
+  const GLYPH_CACHE = new Map();
+
+  function glyphShape(char) {
+    let cached = GLYPH_CACHE.get(char);
+    if (cached !== undefined) return cached;
+
+    const glyph = glyphFor(char);
+    const polys = glyph ? glyphPolylines(glyph.d) : [];
+    if (!polys.length) {
+      GLYPH_CACHE.set(char, null);
+      return null;
+    }
+
+    let minX = Infinity;
+    let maxX = -Infinity;
+    for (const poly of polys) {
+      for (const p of poly) {
+        if (p[0] < minX) minX = p[0];
+        if (p[0] > maxX) maxX = p[0];
+      }
+    }
+    cached = { polys: polys, gcx: (minX + maxX) / 2 };
+    GLYPH_CACHE.set(char, cached);
+    return cached;
   }
 
   function finite(value, name) {
@@ -126,20 +154,10 @@
       for (let i = 0; i < line.length; i++) {
         const char = line[i];
         if (char === " ") continue;
-        const glyph = glyphFor(char);
-        if (!glyph) continue;
-        const polys = glyphPolylines(glyph.d);
-        if (!polys.length) continue;
-
-        let minX = Infinity;
-        let maxX = -Infinity;
-        for (const poly of polys) {
-          for (const p of poly) {
-            if (p[0] < minX) minX = p[0];
-            if (p[0] > maxX) maxX = p[0];
-          }
-        }
-        const gcx = (minX + maxX) / 2;
+        const shape = glyphShape(char);
+        if (!shape) continue;
+        const polys = shape.polys;
+        const gcx = shape.gcx;
         const cellCenter = x + i * pitch + pitch / 2;
 
         // Per-glyph strike: a hair high/low and a touch crooked, like a worn slug.
