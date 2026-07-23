@@ -1,6 +1,6 @@
 {
   "name": "p5.gysin",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Vector-first plotter-friendly traces for p5.js.",
   "main": "p5.gysin.js",
   "files": [
@@ -8,6 +8,8 @@
     "p5.gysin.min.js",
     "p5.gysin.text.js",
     "p5.gysin.text.min.js",
+    "p5.gysin.underwood.js",
+    "p5.gysin.underwood.min.js",
     "README.md",
     "LICENSE"
   ],

@@ -12,19 +12,19 @@
     },
     {
       "name": "GysinText.permute",
-      "added_in": "next",
+      "added_in": "0.3.0",
       "status": "optional-addon",
       "note": "Dependency-free seeded word permutations that can run alone or feed lines into text() and textCutup()."
     },
     {
       "name": "bleed",
-      "added_in": "next",
+      "added_in": "0.3.0",
       "status": "experimental",
       "note": "Seeded additive ink accumulation on contiguous trace fragments, bounded by bleedPasses and coherently offset by bleedSpread."
     },
     {
       "name": "tool:pen|blade",
-      "added_in": "next",
+      "added_in": "0.3.0",
       "status": "experimental",
       "note": "Pen exports preserve all passages; blade exports and statistics keep only the first physical passage."
     }
