@@ -47,3 +47,6 @@ gysin.json
 
 # Important: p5.gysin.min.js is a committed distribution file.
 !p5.gysin.min.js
+
+# Sebs interne dashboard-metadata, niet voor de publieke repo
+info.json
