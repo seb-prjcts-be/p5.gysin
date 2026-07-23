@@ -4,7 +4,7 @@
 //  New to p5.gysin? The whole library is three lines:
 //
 //      const plot = new GysinPlot({ seed: 8319 });
-//      plot.text("RUB OUT", 70, 150);   // clean, mechanical text
+//      plot.text("PISTOL POEM", 70, 150);   // clean, mechanical text
 //      plot.draw();
 //
 //  Every option below (breathe, dropout, repeat, rubout, ruled block,
@@ -24,7 +24,7 @@ let seedValue = 8319;
 // drives, and the stroke colour it shares with that element so the isolation is
 // readable without the text. Change a default here and the HTML slider matches.
 const CONTROLS = {
-  breathe:  { layer: "title", tint: "#b26a00", value: 1.4 },  // title  "RUB OUT"
+  breathe:  { layer: "title", tint: "#b26a00", value: 1.4 },  // title  "PISTOL POEM"
   dropout: { layer: "bar",   tint: "#0f7a6c", value: 0.16 }, // ruled block
   repeat:  { layer: "band",  tint: "#2b4fb0", value: 2 },    // line band
   rubout:  { layer: "word",  tint: "#b0203a", value: 0.12 }  // word   "ERASE"
@@ -178,7 +178,7 @@ function buildPlot() {
   // Title - owned by BREATHE only. The word stays whole (no cut-up: breathe is
   // the concept here); the slider bends and drifts the trace while the other
   // sliders leave it untouched. glyphJitter keeps each letter a hand-set shape.
-  plot.text("RUB OUT", 70, 150, {
+  plot.text("PISTOL POEM", 70, 150, {
     layer: CONTROLS.breathe.layer,
     size: 68,
     breathe: value("breathe"),

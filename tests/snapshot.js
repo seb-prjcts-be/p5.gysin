@@ -663,6 +663,36 @@ assert.throws(() => buildChant(chantSource, { lines: 0 }), /from 1 through 1000/
 assert.throws(() => buildChant(chantSource, { order: "grammar" }), /order must be one of/);
 assert.throws(() => chantSource.GysinPlot.prototype.chant.call({}, "A B", 0, 0), /needs a GysinPlot/);
 
+// The turned sheet: angle/pivot and the lattice() verb stay deterministic and
+// identical across the source and min builds; angle 0 stays byte-identical.
+function buildTurned(Plot) {
+  const plot = new Plot({ seed: 1959, width: 400, height: 400 });
+  const lineId = plot.line(100, 100, 200, 100, { angle: 90, pivot: { x: 100, y: 100 }, wobble: 0 });
+  const latticeIds = plot.lattice("RUB OUT THE WORD", 40, 40, 320, 320, { size: 16 });
+  return { plot, lineId, latticeIds };
+}
+
+const turnedSource = buildTurned(SourcePlot);
+const turnedMin = buildTurned(MinPlot);
+const turnedEnd = turnedSource.plot.get(turnedSource.lineId).paths[0].slice(-1)[0];
+assert.ok(Math.abs(turnedEnd.x - 100) < 1e-9 && Math.abs(turnedEnd.y - 200) < 1e-9);
+assert.ok(turnedSource.latticeIds.length > 2);
+// JSON comparison: each vm context has its own Object.prototype, so
+// deepStrictEqual would reject structurally identical points across builds.
+assert.equal(
+  JSON.stringify(turnedSource.plot.get(turnedSource.latticeIds[3]).paths),
+  JSON.stringify(turnedMin.plot.get(turnedMin.latticeIds[3]).paths)
+);
+
+const flatA = new SourcePlot({ seed: 7, width: 200, height: 200 });
+const flatB = new SourcePlot({ seed: 7, width: 200, height: 200 });
+const flatIdA = flatA.text("TURN", 40, 60, { size: 20 });
+const flatIdB = flatB.text("TURN", 40, 60, { size: 20, angle: 0 });
+assert.deepEqual(flatA.get(flatIdA).paths, flatB.get(flatIdB).paths);
+
+assert.throws(() => flatA.text("X", 0, 0, { pivot: "links" }), /pivot/);
+assert.throws(() => flatA.lattice("  ", 0, 0, 10, 10), /non-empty/);
+
 const root = path.join(__dirname, "..");
 const manifest = JSON.parse(fs.readFileSync(
   path.join(root, "docs", "p5.gysin.manifest.json"),

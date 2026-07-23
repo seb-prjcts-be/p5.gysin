@@ -44,7 +44,7 @@
 
   <section id="studies" class="section group-intro">
     <div class="section-header">
-      <div class="section-tag">Cut. Permute. Free. &middot; v0.3.0</div>
+      <div class="section-tag">Cut. Permute. Free. &middot; v0.4.0</div>
       <p class="section-desc">The library ships as three script files, and this page is organised the same way. The core captures shapes as traces, disturbs them, and exports them for the plotter. Two optional addons add a voice each: the word operations and the typewriter. Every group opens with the exact pinned file it demonstrates; every preview is a live sketch.</p>
     </div>
     <div class="method-strip" aria-label="The three-library sequence">
@@ -91,7 +91,7 @@
       <div class="section-tag">Library 01 &middot; the core &middot; required</div>
       <h2>p5.gysin.<span class="accent">js</span></h2>
       <p class="section-desc">Everything on one sheet: capture shapes and letterforms as traces, disturb them with breathe, dropout, rubout, and bleed, then draw or export the same polylines as SVG, JSON, or HPGL. The paste-ready <a href="examples/p5_editor/">starter example</a> (<a href="examples/p5_editor/sketch.js">source sketch</a>) is two script lines and a sketch.</p>
-      <p class="section-desc lib-cdn"><code>https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.min.js</code></p>
+      <p class="section-desc lib-cdn"><code>https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.min.js</code></p>
     </div>
   </section>
 
@@ -357,7 +357,7 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });
       <h2>p5.gysin.text.<span class="accent">js</span></h2>
       <p class="section-desc">The language voice. GysinText.permute() reorders a phrase into its permutations, and chant() performs the whole permutation poem as one intent verb. Load it after the core file.</p>
       <p class="ref-note"><span class="ref-label">ref</span><span class="ref-term">the permutation poems</span><span class="ref-gloss">"I AM THAT I AM" &middot; "KICK THAT HABIT MAN" - a phrase set free to say everything its words allow, one order at a time</span></p>
-      <p class="section-desc lib-cdn"><code>https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.text.min.js</code></p>
+      <p class="section-desc lib-cdn"><code>https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.text.min.js</code></p>
     </div>
   </section>
 
@@ -386,17 +386,18 @@ plot.chant("I LOVE YOU", 48, 90, {
 
   <section class="section plate" id="plate-rotations">
     <div class="section-header">
-      <div class="section-tag">permute() &middot; rotate &middot; lexical</div>
+      <div class="section-tag">angle &middot; pivot &middot; lattice() &middot; permute()</div>
       <h2>Rota<span class="accent">tions</span></h2>
-      <p class="section-desc">The quieter permutations: order "rotate" turns the phrase like a wheel, order "lexical" walks every arrangement in dictionary sequence. No scissors - the turning itself is the event.</p>
+      <p class="section-desc">The turned sheet as palimpsest: a roller grid off true as ground, lattice() writing the sheet edge to edge in two off-square passes, and the five cyclic orders of the phrase scattered over it at their own angles - columns among rows, one upside down.</p>
       <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js</p>
     </div>
     <div class="ex-preview">
       <div id="ex-rotations" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">// the phrase turns: the first word walks to the back of the queue
-GysinText.permute("RUB OUT THE WORD", { order: "rotate" })
+      <pre class="ex-code-block"><code class="language-javascript">// write the field, turn the sheet, write across - then the script over it
+plot.lattice("COME TO FREE THE WORDS", -15, -15, 730, 1190, { turns: [4, 94] });
+GysinText.permute("COME TO FREE THE WORDS", { order: "rotate" })
   .forEach((row, i) =&gt; {
-    plot.text(row, 40 + i * 30, 70 + i * 52, { size: 24 });
+    plot.text(row, x[i], y[i], { size: 24, angle: a[i] });
   });</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="examples/rotations/" target="_blank">-> full example</a>
@@ -411,7 +412,7 @@ GysinText.permute("RUB OUT THE WORD", { order: "rotate" })
       <h2>p5.gysin.underwood.<span class="accent">js</span></h2>
       <p class="section-desc">The typewriter voice. underwood() types single-stroke letterforms at period pitch and line height, with the machine's only decorations: the underscore rule and the same key struck twice. Load it after the core file.</p>
       <p class="ref-note"><span class="ref-label">ref</span><span class="ref-term">Underwood No. 5</span><span class="ref-gloss">the flat black office standard that fixed the look of the typed page for half a century - the machine this addon types on</span></p>
-      <p class="section-desc lib-cdn"><code>https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.underwood.min.js</code></p>
+      <p class="section-desc lib-cdn"><code>https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.underwood.min.js</code></p>
     </div>
   </section>
 
@@ -487,7 +488,7 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
 
   <footer>
     <p>Built with <a href="https://p5js.org" target="_blank">p5.js</a></p>
-    <p class="footer-sub">MIT License &middot; v0.3.0</p>
+    <p class="footer-sub">MIT License &middot; v0.4.0</p>
   </footer>
 
   <script src="p5.gysin.text.min.js?v=chant"></script>
@@ -603,16 +604,30 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
     });
   }
 
-  // Rotations: the turning stair, in miniature.
+  // Rotations: the palimpsest in miniature - an off-square written
+  // field with the turned script over it.
   function makeRotationsPreview(id) {
     makePreview(id, function(p, canvasW, canvasH) {
-      const plot = new GysinPlot({ p: p, seed: 1959, width: canvasW, height: canvasH });
-      const turns = GysinText.permute("RUB OUT THE WORD", { order: "rotate" });
-      turns.forEach(function(row, i) {
-        plot.text(row, 26 + i * canvasW * 0.05, canvasH * 0.2 + i * canvasH * 0.19, {
-          size: canvasW * 0.044,
-          breathe: 0.4 + i * 0.3,
-          dropout: i * 0.015
+      const plot = new GysinPlot({ p: p, seed: 1960, width: canvasW, height: canvasH });
+      plot.lattice("COME TO FREE THE WORDS", -8, -8, canvasW + 16, canvasH + 16, {
+        size: canvasW * 0.026,
+        lineHeight: 1.55,
+        turns: [4, 94],
+        wear: 1.1
+      });
+      const turns = GysinText.permute("COME TO FREE THE WORDS", { order: "rotate" });
+      const spots = [
+        { fx: 0.12, fy: 0.3, a: -6 },
+        { fx: 0.7, fy: 0.12, a: 94 },
+        { fx: 0.3, fy: 0.72, a: 177 }
+      ];
+      spots.forEach(function(spot, i) {
+        plot.text(turns[i], spot.fx * canvasW, spot.fy * canvasH, {
+          size: canvasW * 0.042,
+          angle: spot.a,
+          breathe: 0.5 + i * 0.2,
+          strokeWeight: 1.4,
+          stroke: "#b5362b"
         });
       });
       return plot;

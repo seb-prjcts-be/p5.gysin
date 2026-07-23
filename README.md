@@ -4,9 +4,12 @@
 
 p5.gysin is a vector-first p5.js library for generative, plottable drawings:
 cut-up text, rubout zones, breathe, dropout, selective ink bleed, and export to
-SVG, JSON, and HPGL. Version 0.3.0 adds intent verbs (`rub()`, `chant()`,
+SVG, JSON, and HPGL. Version 0.3.0 added intent verbs (`rub()`, `chant()`,
 `underwood()`) that compose the primitives into finished gestures, plus the
-optional text and underwood addons.
+optional text and underwood addons. Version 0.4.0 makes the turned sheet a
+first-class gesture: every shape takes `angle` and `pivot`, and the `lattice()`
+verb writes a field, turns the paper, and writes across it - Gysin's
+calligraphic method as one call.
 
 The repository follows the same publishing structure as `p5.waves`: the library
 lives at the root, GitHub Pages uses `index.html` and `docs/`, and examples live
@@ -31,7 +34,7 @@ as standalone pages under `examples/`.
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/p5@2.3.1/lib/p5.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.min.js"></script>
 ```
 
 ```js
@@ -92,6 +95,48 @@ plot.rub("RUB OUT", 46, 248, { font: outlineFont }); // fills the legible head
 `rub()` returns the id of every copy and tangle, so each can be `freeze`d,
 `reroll`ed, updated, or exported like any other shape. Same seed, same result. See
 the `worn_word` example - the whole sketch is this one call.
+
+## The turned sheet
+
+Every shape takes `angle` (degrees) and `pivot`. This is Gysin's physical
+gesture - write, turn the paper, write again - as geometry, not as an export
+afterthought. The rotation runs before breathe, dropout, bleed and hatching,
+so every disturbance lives on the turned line.
+
+```js
+plot.text("RUB OUT", 80, 120, { angle: 90 });                      // turns about its pen-down anchor
+plot.text("RUB OUT", 80, 120, { angle: 45, pivot: "center" });     // turns about its own middle
+plot.rect(60, 60, 200, 90, { angle: 30, pivot: { x: 60, y: 60 } }); // turns about an explicit pin
+plot.update(id, { angle: 180 });                                    // any standing shape can be turned
+```
+
+- `pivot: "anchor"` (default): text and textCutup turn about their pen-down
+  point, rect and circle about their centre, path and polygon about their
+  centroid, line about its midpoint.
+- `pivot: "center"` turns about the sampled bounds; `{ x, y }` sets the pin.
+- `angle: 0` stays byte-identical to a shape without the option.
+- `page.rotation` still exists and still means the whole exported page; `angle`
+  is the shape-level turn the page model never gave you.
+
+`lattice()` composes the turn into the finished method: a phrase written in
+rows that fill a field, then the sheet turned and written across again. Each
+row cycles the word order by one, so the permutation runs inside the turning.
+Later passes wear more.
+
+```js
+plot.lattice("RUB OUT THE WORD", 60, 60, 480, 480);                 // two passes, 0 and 90
+plot.lattice("JUNK IS NO GOOD BABY", 60, 60, 480, 480, {
+  turns: [0, 90, 180],  // one more crossing
+  size: 16,
+  wear: 1.6,            // one knob scales breathe/dropout/drift per pass
+  stroke: "#244f73"
+});
+```
+
+`lattice()` returns the id of every written row (pass by pass), so rows can be
+`freeze`d, `update`d, or `reroll`ed like any other shape - freeze the first
+pass and only the later hand rerolls. See the `rotations` example: the turning
+cross, the lattice, and the page-level 180 export live on one sheet.
 
 ## Selective ink build-up
 
@@ -198,7 +243,7 @@ Load the text module only when you want to reorder phrases. The module needs
 no p5.js or `GysinPlot` and returns plain strings:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.text.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.text.min.js"></script>
 ```
 
 ```js
@@ -249,8 +294,8 @@ Load the typewriter module for one period-correct intent verb. It bundles a
 single-stroke (Hershey) face, so it needs no external font:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.underwood.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.underwood.min.js"></script>
 ```
 
 ```js
@@ -341,7 +386,7 @@ early with a clear error.
 
 ## Compatibility
 
-Version 0.3.0 supports p5.js 2.x in global mode and instance mode. In instance
+Version 0.4.0 supports p5.js 2.x in global mode and instance mode. In instance
 mode, create a linked plot after `p.createCanvas()` with
 `p.createGysinPlot(options)`. The vector and export core needs no p5 runtime,
 but p5.js 1.x is not part of the tested support matrix.

@@ -21,32 +21,41 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">GysinText.permute() &middot; rotate &middot; lexical</div>
+      <div class="demo-number">angle &middot; pivot &middot; lattice() &middot; permute()</div>
       <h1>Rotations</h1>
-      <p>A permutation does not have to be cut. This sheet turns one phrase two quieter ways: <strong>order "rotate"</strong> moves the first word to the end, again and again, until the phrase comes back to itself - four words, four turns, one wheel. <strong>Order "lexical"</strong> walks every arrangement the dictionary allows, in strict sequence. Both are deterministic: the same phrase always turns the same way.</p>
-      <p>The drawing stays whole on purpose - plain <code>text()</code>, no scissors. The turning itself is the event: the indent of each line is the first word walking to the back of the queue.</p>
+      <p>A palimpsest, layered the way the studio layered. The ground is the <strong>machine drawing</strong> - a roller grid, turned a few degrees off true so it never squares with the frame. Over it, <strong>lattice()</strong> writes the whole sheet edge to edge in two off-square passes, the hand against the machine. And over everything, the <strong>silent script</strong>: the five cyclic orders of the phrase (<strong>order "rotate"</strong> walks the first word to the back), each written large at its own place and its own <strong>angle</strong> - columns among rows, one upside down. Nothing centres; nothing reads top-left to bottom-right; the sheet is entered anywhere.</p>
+      <p>Everything stays addressable. The wear knob re-tunes every standing lattice row through <code>update()</code>; freeze the first pass and only the later hand rerolls. The turned export saves the same sheet upside down through <code>page.rotation</code>, so a second plot run wears the pen the other way.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">// Load the text module, then the phrase turns in one loop:
-const plot = new GysinPlot({ seed: 1959 });
-GysinText.permute("RUB OUT THE WORD", { order: "rotate" })
+        <pre><code class="language-javascript">// The whole sheet: write the field, turn the sheet, write across.
+const plot = new GysinPlot({ seed: 1960 });
+plot.lattice("COME TO FREE THE WORDS", -15, -15, 730, 1190, {
+  turns: [4, 94]   // both passes a few degrees off the grid
+});
+
+// The silent script over it, at its own places and angles:
+GysinText.permute("COME TO FREE THE WORDS", { order: "rotate" })
   .forEach((row, i) =&gt; {
-    plot.text(row, 90 + i * 34, 470 + i * 56, { size: 26 });
+    plot.text(row, x[i], y[i], { size: 24, angle: a[i] });
   });
 plot.draw();
 
-// order "lexical" walks every arrangement in dictionary sequence:
-GysinText.permute("RUB OUT THE WORD", { order: "lexical", limit: 12 });</code></pre>
+// The page's own turn: the same sheet exported upside down.
+plot.downloadSVG("turned.svg", { page: { width: 700, height: 1160, rotation: 180 } });</code></pre>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas is-clickable" id="sketch" role="img" aria-label="A permutation sheet: a red double ring with four spokes, four rotations of the phrase RUB OUT THE WORD stepping down like a turning stair, and twelve lexical orders falling in two blue columns."></div>
+        <div class="demo-canvas is-clickable" id="sketch" role="img" aria-label="A dense layered sheet: a faint roller grid turned slightly off true, a black lattice of the phrase COME TO FREE THE WORDS written edge to edge in two off-square passes, five large red cyclic orders of the phrase scattered at their own angles - columns among rows, one upside down - small blue dictionary orders embedded through the field, and three asemic ink knots."></div>
         <div class="demo-actions" aria-label="Rotations actions">
           <button type="button" id="reroll-button">New turn</button>
+          <button type="button" id="sheet-button">New sheet</button>
+          <button type="button" id="wear-button">Wear: 1</button>
+          <button type="button" id="freeze-button">Freeze first pass</button>
           <button type="button" id="svg-button">Download SVG</button>
+          <button type="button" id="turned-button">SVG turned 180</button>
         </div>
-        <div class="demo-note">The orders never change - they are the mathematics of the phrase. <strong>New turn</strong> rerolls only the hand that draws them; <strong>Download SVG</strong> saves the plotter-ready file. <code>R</code> and <code>S</code> do the same from the keyboard.</div>
+        <div class="demo-note">The orders never change - they are the mathematics of the phrase. <strong>New turn</strong> rerolls only the hand; <strong>Wear</strong> re-tunes every standing lattice row through <code>update()</code>, no rebuild; <strong>Freeze first pass</strong> makes the first writing the fixed ground the second keeps crossing; <strong>SVG turned 180</strong> exports the sheet upside down through <code>page.rotation</code>. Keys: <code>R</code>, <code>N</code>, <code>W</code>, <code>F</code>, <code>S</code>, <code>T</code>.</div>
       </div>
     </div>
   </main>
@@ -56,7 +65,7 @@ GysinText.permute("RUB OUT THE WORD", { order: "lexical", limit: 12 });</code></
       <a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp;
       <a href="../../docs/system.html">System</a>
     </p>
-    <p class="footer-sub">p5.gysin v0.3.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+    <p class="footer-sub">p5.gysin v0.4.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>

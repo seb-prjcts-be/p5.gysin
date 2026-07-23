@@ -40,9 +40,9 @@
       </ul>
       <p>Load what you need, in this order - with <code>p5.js</code> first when you draw to a canvas:</p>
       <div class="code-preview">
-        <code>&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.min.js"&gt;&lt;/script&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.text.min.js"&gt;&lt;/script&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.underwood.min.js"&gt;&lt;/script&gt;</code>
+        <code>&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.text.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.underwood.min.js"&gt;&lt;/script&gt;</code>
       </div>
       <p>The voices are optional. Both are dependency-free; <code>p5.gysin.text.min.js</code> even runs without p5.js or <code>GysinPlot</code>.</p>
     </section>
@@ -107,10 +107,37 @@ plot.rub("RUB OUT", 46, 248, { font: outlineFont }); // fills the legible head</
     </section>
 
     <section class="guide-block">
+      <h2>The Turned Sheet</h2>
+      <p>Every shape takes <code>angle</code> (degrees) and <code>pivot</code>. This is the physical gesture of the studio - write, turn the paper, write again - as shape geometry, not as an export afterthought. The turn runs before breathe, dropout, bleed and hatching, so every disturbance lives on the turned line, and <code>update()</code> can turn any standing shape.</p>
+      <div class="code-preview"><code>plot.text("RUB OUT", 80, 120, { angle: 90 });                       // about its pen-down anchor
+plot.text("RUB OUT", 80, 120, { angle: 45, pivot: "center" });      // about its own middle
+plot.rect(60, 60, 200, 90, { angle: 30, pivot: { x: 60, y: 60 } }); // about an explicit pin
+plot.update(id, { angle: 180 });</code></div>
+      <ul>
+        <li><code>pivot: "anchor"</code> (default): text turns about its pen-down point, rect and circle about their centre, path and polygon about their centroid, line about its midpoint.</li>
+        <li><code>pivot: "center"</code> turns about the sampled bounds; an <code>{ x, y }</code> object sets the pin explicitly.</li>
+        <li><code>angle: 0</code> stays byte-identical to a shape without the option. Page-level <code>page.rotation</code> is unchanged and still means the whole exported sheet.</li>
+      </ul>
+      <p><code>plot.lattice(text, x, y, w, h, options)</code> composes the turn into the finished method: a phrase written in rows that fill a field, then the sheet turned and written across again. Each row cycles the word order by one, so the permutation runs inside the turning; later passes wear more.</p>
+      <div class="code-preview"><code>plot.lattice("RUB OUT THE WORD", 60, 60, 480, 480);   // two passes, 0 and 90
+plot.lattice("JUNK IS NO GOOD BABY", 60, 60, 480, 480, {
+  turns: [0, 90, 180],
+  size: 16,
+  wear: 1.6
+});</code></div>
+      <ul>
+        <li><code>turns</code> (default <code>[0, 90]</code>): the sheet's angles, one written pass per entry. Near-perpendicular passes write along the field's other axis so their rows still fill it.</li>
+        <li><code>wear</code> (default <code>1</code>): one knob that scales breathe/dropout/drift per pass; <code>0</code> writes every pass clean.</li>
+        <li><code>size</code> (default <code>14</code>), <code>lineHeight</code>, <code>letterSpacing</code>, <code>stroke</code>, <code>font</code>, <code>alpha</code>, <code>layer</code> (default <code>"lattice"</code>); <code>extra</code> passes any other trace option to every row.</li>
+        <li>Returns the id of every written row, pass by pass - freeze the first pass and only the later hand rerolls. The <code>rotations</code> example is this sheet.</li>
+      </ul>
+    </section>
+
+    <section class="guide-block">
       <h2>Optional Text Permutations</h2>
       <p><code>p5.gysin.text.min.js</code> returns ordinary strings that can be used on their own or drawn through the core library.</p>
       <div class="code-preview">
-        <code>&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.text.min.js"&gt;&lt;/script&gt;
+        <code>&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.text.min.js"&gt;&lt;/script&gt;
 
 const lines = GysinText.permute("I LOVE YOU", {
   seed: 1960,
@@ -264,7 +291,7 @@ plot.downloadHPGL("gysin.hpgl", { page });</code>
 
     <section class="guide-block">
       <h2>Compatibility</h2>
-      <p>Version 0.3.0 targets p5.js 2.x in global and instance mode. The vector and export core is framework-independent, but p5.js 1.x is not part of the tested support contract.</p>
+      <p>Version 0.4.0 targets p5.js 2.x in global and instance mode. The vector and export core is framework-independent, but p5.js 1.x is not part of the tested support contract.</p>
     </section>
 
     <section class="guide-block">
@@ -275,7 +302,7 @@ plot.downloadHPGL("gysin.hpgl", { page });</code>
 
   <footer>
     <p><a href="../index.html#examples">Examples</a> &nbsp;&middot;&nbsp; <a href="../index.html">Enter</a></p>
-    <p class="footer-sub">p5.gysin v0.3.0</p>
+    <p class="footer-sub">p5.gysin v0.4.0</p>
   </footer>
 </body>
 </html>
