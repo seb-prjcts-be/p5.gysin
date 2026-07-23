@@ -9,7 +9,7 @@
   <meta property="og:description" content="Vector-first traces for cut-up text, rubout gaps, dropout lines, repeats, breathe, SVG, JSON, and HPGL export.">
   <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="docs/style.css?v=deal">
+  <link rel="stylesheet" href="docs/style.css?v=full-pages">
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="p5.gysin.min.js"></script>
 </head>
@@ -58,28 +58,28 @@
   <section class="section group-intro" id="contact-sheet">
     <div class="section-header">
       <div class="section-tag">Contact sheet &middot; every work at a glance</div>
-      <p class="section-desc">Twelve works on one sheet. Open a plate and it takes the whole screen: browse with the arrow keys or the edge arrows, leave with Esc. Without JavaScript the same links simply jump to the cards below.</p>
+      <p class="section-desc">Twelve works on one sheet. Open one and the complete example page fills the screen - story, live sketch, buttons and exports included. Browse them all with the arrow keys or the edge arrows, leave with Esc. Without JavaScript the links jump to the cards below instead.</p>
     </div>
     <div class="contact-sheet">
       <div class="cs-group">p5.gysin.js &middot; the core</div>
-      <a class="cs-tile" href="#plate-first-trace" data-plate><span class="cs-num">01</span><strong>First Trace</strong><small>text() &middot; three states</small></a>
-      <a class="cs-tile" href="#study-cut" data-plate><span class="cs-num">02</span><strong>Cut-Up</strong><small>textCutup()</small></a>
-      <a class="cs-tile" href="#study-free" data-plate><span class="cs-num">03</span><strong>Worn Word</strong><small>rub()</small></a>
-      <a class="cs-tile" href="#plate-parameter-lab" data-plate><span class="cs-num">04</span><strong>Parameter Lab</strong><small>breathe &middot; dropout &middot; repeat</small></a>
-      <a class="cs-tile" href="#plate-font-outlines" data-plate><span class="cs-num">05</span><strong>Font Outlines</strong><small>p5.Font contours</small></a>
-      <a class="cs-tile" href="#plate-frequencies" data-plate><span class="cs-num">06</span><strong>Frequencies</strong><small>path() &middot; no text</small></a>
-      <a class="cs-tile" href="#plate-ink-bleed" data-plate><span class="cs-num">07</span><strong>Ink Bleed</strong><small>bleed &middot; additive</small></a>
-      <a class="cs-tile" href="#plate-calibration" data-plate><span class="cs-num">08</span><strong>Plotter Calibration</strong><small>page &middot; mm &middot; pens</small></a>
-      <a class="cs-tile" href="#plate-export" data-plate><span class="cs-num">09</span><strong>Plotter Export</strong><small>SVG &middot; JSON &middot; HPGL</small></a>
-      <a class="cs-tile" href="examples/p5_editor/"><span class="cs-num">10</span><strong>p5 Editor Starter</strong><small>paste-ready page -&gt;</small></a>
+      <a class="cs-tile" href="#plate-first-trace" data-page="examples/first_trace/" data-slug="first_trace"><span class="cs-num">01</span><strong>First Trace</strong><small>text() &middot; three states</small></a>
+      <a class="cs-tile" href="#study-cut" data-page="examples/gysin_demo/" data-slug="gysin_demo"><span class="cs-num">02</span><strong>Cut-Up</strong><small>textCutup()</small></a>
+      <a class="cs-tile" href="#study-free" data-page="examples/worn_word/" data-slug="worn_word"><span class="cs-num">03</span><strong>Worn Word</strong><small>rub()</small></a>
+      <a class="cs-tile" href="#plate-parameter-lab" data-page="examples/parameter_lab/" data-slug="parameter_lab"><span class="cs-num">04</span><strong>Parameter Lab</strong><small>breathe &middot; dropout &middot; repeat</small></a>
+      <a class="cs-tile" href="#plate-font-outlines" data-page="examples/font_outlines/" data-slug="font_outlines"><span class="cs-num">05</span><strong>Font Outlines</strong><small>p5.Font contours</small></a>
+      <a class="cs-tile" href="#plate-frequencies" data-page="examples/frequencies/" data-slug="frequencies"><span class="cs-num">06</span><strong>Frequencies</strong><small>path() &middot; no text</small></a>
+      <a class="cs-tile" href="#plate-ink-bleed" data-page="examples/ink_bleed/" data-slug="ink_bleed"><span class="cs-num">07</span><strong>Ink Bleed</strong><small>bleed &middot; additive</small></a>
+      <a class="cs-tile" href="#plate-calibration" data-page="examples/plotter_calibration/" data-slug="plotter_calibration"><span class="cs-num">08</span><strong>Plotter Calibration</strong><small>page &middot; mm &middot; pens</small></a>
+      <a class="cs-tile" href="#plate-export" data-page="examples/plotter_export/" data-slug="plotter_export"><span class="cs-num">09</span><strong>Plotter Export</strong><small>SVG &middot; JSON &middot; HPGL</small></a>
+      <a class="cs-tile" href="examples/p5_editor/" data-page="examples/p5_editor/" data-slug="p5_editor"><span class="cs-num">10</span><strong>p5 Editor Starter</strong><small>paste-ready page -&gt;</small></a>
       <div class="cs-group">+ p5.gysin.text.js</div>
-      <a class="cs-tile" href="#study-permute" data-plate><span class="cs-num">11</span><strong>Permutation Poem</strong><small>chant()</small></a>
+      <a class="cs-tile" href="#study-permute" data-page="examples/permutation_poem/" data-slug="permutation_poem"><span class="cs-num">11</span><strong>Permutation Poem</strong><small>chant()</small></a>
       <div class="cs-group">+ p5.gysin.underwood.js</div>
-      <a class="cs-tile" href="#plate-typewriter" data-plate><span class="cs-num">12</span><strong>Typewriter</strong><small>underwood()</small></a>
+      <a class="cs-tile" href="#plate-typewriter" data-page="examples/typewriter/" data-slug="typewriter"><span class="cs-num">12</span><strong>Typewriter</strong><small>underwood()</small></a>
     </div>
     <div class="cs-actions">
       <button type="button" id="deal-sheet" hidden>deal me a sheet</button>
-      <button type="button" id="exhibition" hidden>exhibition &middot; 12s a plate</button>
+      <button type="button" id="exhibition" hidden>exhibition &middot; 20s a page</button>
     </div>
   </section>
 
@@ -895,6 +895,7 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
   <script src="docs/sketch.js?v=passes1"></script>
 
   <div id="plate-chrome" hidden>
+    <div id="plate-frame-wrap"><iframe id="plate-frame" title="Full example page"></iframe></div>
     <div class="plate-bar">
       <span id="plate-counter"></span>
       <span id="plate-title"></span>
@@ -904,20 +905,21 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
     <button type="button" id="plate-next" class="plate-arrow" aria-label="Next plate">&rarr;</button>
   </div>
   <script>
-  // The plate viewer: the cards above are the plates; one at a time, full screen.
+  // The sheet viewer: every tile opens the COMPLETE example page in a frame,
+  // so all twelve pages browse in place - story, buttons and exports included.
   (function() {
-    const plates = Array.from(document.querySelectorAll("section.plate"));
+    const tiles = Array.from(document.querySelectorAll(".cs-tile[data-page]"));
     const chrome = document.getElementById("plate-chrome");
-    if (!plates.length || !chrome) return;
+    const frame = document.getElementById("plate-frame");
+    if (!tiles.length || !chrome || !frame) return;
     const counter = document.getElementById("plate-counter");
     const titleEl = document.getElementById("plate-title");
     let current = -1;
 
-    // The folder stays closed: with the viewer available the card stream hides
-    // and every plate exists full screen only.
+    // The folder stays closed: with the viewer available the card stream hides.
     document.body.classList.add("folder");
 
-    // Exhibition mode: the site turns the plates itself; any hand stops it.
+    // Exhibition mode: the site turns the pages itself; any hand stops it.
     let exhibitionTimer = null;
 
     function stopExhibition() {
@@ -926,54 +928,47 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
       exhibitionTimer = null;
     }
 
-    function openPlate(index) {
-      current = (index + plates.length) % plates.length;
+    function openSheet(index) {
+      current = (index + tiles.length) % tiles.length;
       document.body.classList.add("plate-mode");
       chrome.hidden = false;
-      plates.forEach(function(plate, i) {
-        plate.classList.toggle("plate-active", i === current);
-      });
-      const active = plates[current];
-      counter.textContent = (current + 1) + " / " + plates.length + (exhibitionTimer ? " · exhibition" : "");
-      const heading = active.querySelector("h2");
-      titleEl.textContent = heading ? heading.textContent : "";
-      active.scrollTop = 0;
-      history.replaceState(null, "", "#" + active.id);
-      // Let the p5 previews resize now that this plate has real dimensions.
-      window.dispatchEvent(new Event("resize"));
+      const tile = tiles[current];
+      if (frame.getAttribute("src") !== tile.dataset.page) {
+        frame.src = tile.dataset.page;
+      }
+      counter.textContent = (current + 1) + " / " + tiles.length + (exhibitionTimer ? " \u00b7 exhibition" : "");
+      titleEl.textContent = tile.querySelector("strong").textContent;
+      history.replaceState(null, "", "#sheet-" + tile.dataset.slug);
     }
 
-    function closePlates() {
+    function closeSheets() {
       stopExhibition();
       current = -1;
       document.body.classList.remove("plate-mode");
       chrome.hidden = true;
-      plates.forEach(function(plate) { plate.classList.remove("plate-active"); });
+      frame.removeAttribute("src");
       history.replaceState(null, "", location.pathname + location.search);
     }
 
-    document.querySelectorAll(".cs-tile[data-plate]").forEach(function(tile) {
+    tiles.forEach(function(tile, index) {
       tile.addEventListener("click", function(event) {
-        const target = document.querySelector(tile.getAttribute("href"));
-        const index = plates.indexOf(target);
-        if (index === -1) return;
         event.preventDefault();
         stopExhibition();
-        openPlate(index);
+        openSheet(index);
       });
     });
 
-    document.getElementById("plate-prev").addEventListener("click", function() { stopExhibition(); openPlate(current - 1); });
-    document.getElementById("plate-next").addEventListener("click", function() { stopExhibition(); openPlate(current + 1); });
-    document.getElementById("plate-close").addEventListener("click", closePlates);
+    document.getElementById("plate-prev").addEventListener("click", function() { stopExhibition(); openSheet(current - 1); });
+    document.getElementById("plate-next").addEventListener("click", function() { stopExhibition(); openSheet(current + 1); });
+    document.getElementById("plate-close").addEventListener("click", closeSheets);
     document.addEventListener("keydown", function(event) {
       if (current === -1) return;
-      if (event.key === "ArrowLeft") { stopExhibition(); openPlate(current - 1); }
-      else if (event.key === "ArrowRight") { stopExhibition(); openPlate(current + 1); }
-      else if (event.key === "Escape") closePlates();
+      if (event.key === "ArrowLeft") { stopExhibition(); openSheet(current - 1); }
+      else if (event.key === "ArrowRight") { stopExhibition(); openSheet(current + 1); }
+      else if (event.key === "Escape") closeSheets();
     });
 
-    // deal me a sheet: chance opens one plate. Exhibition: slow automatic
+    // deal me a sheet: chance opens one page. Exhibition: slow automatic
     // turning, kept from users who prefer reduced motion.
     const dealButton = document.getElementById("deal-sheet");
     const exhibitionButton = document.getElementById("exhibition");
@@ -982,24 +977,28 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
       dealButton.hidden = false;
       dealButton.addEventListener("click", function() {
         stopExhibition();
-        openPlate(Math.floor(Math.random() * plates.length));
+        openSheet(Math.floor(Math.random() * tiles.length));
       });
     }
     if (exhibitionButton && !calmViewer) {
       exhibitionButton.hidden = false;
       exhibitionButton.addEventListener("click", function() {
         stopExhibition();
-        exhibitionTimer = setInterval(function() { openPlate(current + 1); }, 12000);
-        openPlate(current === -1 ? 0 : current);
+        exhibitionTimer = setInterval(function() { openSheet(current + 1); }, 20000);
+        openSheet(current === -1 ? 0 : current);
       });
     }
 
-    let fromHash = -1;
-    try {
-      fromHash = plates.indexOf(document.querySelector(location.hash));
-    } catch (error) { /* invalid hash selector: ignore */ }
-    if (fromHash !== -1) openPlate(fromHash);
-  })();
+    // Deep links: the new #sheet-<slug> form, plus the older card anchors.
+    const hash = location.hash;
+    let start = -1;
+    if (hash.indexOf("#sheet-") === 0) {
+      start = tiles.findIndex(function(tile) { return tile.dataset.slug === hash.slice(7); });
+    } else if (hash) {
+      start = tiles.findIndex(function(tile) { return tile.getAttribute("href") === hash; });
+    }
+    if (start !== -1) openSheet(start);
+    })();
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
