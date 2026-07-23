@@ -37,13 +37,11 @@
         <li><strong><code>p5.gysin.text.min.js</code> is the permutation voice.</strong> It provides <code>GysinText.permute()</code>. Load it whenever you want to generate permutation poems.</li>
         <li><strong><code>p5.gysin.underwood.min.js</code> is the typed voice.</strong> It provides <code>plot.underwood()</code>, the period-correct typewriter.</li>
       </ul>
-      <p>Load what you need, in this order:</p>
+      <p>Load what you need, in this order - with <code>p5.js</code> first when you draw to a canvas:</p>
       <div class="code-preview">
-        <code>&lt;script src="https://cdn.jsdelivr.net/npm/p5@2.3.1/lib/p5.js"&gt;&lt;/script&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.min.js"&gt;&lt;/script&gt;
+        <code>&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.min.js"&gt;&lt;/script&gt;
 &lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.text.min.js"&gt;&lt;/script&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.underwood.min.js"&gt;&lt;/script&gt;
-&lt;script src="sketch.js"&gt;&lt;/script&gt;</code>
+&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.underwood.min.js"&gt;&lt;/script&gt;</code>
       </div>
       <p>The voices are optional. Both are dependency-free; <code>p5.gysin.text.min.js</code> even runs without p5.js or <code>GysinPlot</code>.</p>
     </section>
