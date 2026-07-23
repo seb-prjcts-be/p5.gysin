@@ -9,7 +9,7 @@
   <meta property="og:description" content="Vector-first traces for cut-up text, rubout gaps, dropout lines, repeats, breathe, SVG, JSON, and HPGL export.">
   <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="docs/style.css?v=folder">
+  <link rel="stylesheet" href="docs/style.css?v=deal">
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="p5.gysin.min.js"></script>
 </head>
@@ -76,6 +76,10 @@
       <a class="cs-tile" href="#study-permute" data-plate><span class="cs-num">11</span><strong>Permutation Poem</strong><small>chant()</small></a>
       <div class="cs-group">+ p5.gysin.underwood.js</div>
       <a class="cs-tile" href="#plate-typewriter" data-plate><span class="cs-num">12</span><strong>Typewriter</strong><small>underwood()</small></a>
+    </div>
+    <div class="cs-actions">
+      <button type="button" id="deal-sheet" hidden>deal me a sheet</button>
+      <button type="button" id="exhibition" hidden>exhibition &middot; 12s a plate</button>
     </div>
   </section>
 
@@ -913,6 +917,15 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
     // and every plate exists full screen only.
     document.body.classList.add("folder");
 
+    // Exhibition mode: the site turns the plates itself; any hand stops it.
+    let exhibitionTimer = null;
+
+    function stopExhibition() {
+      if (!exhibitionTimer) return;
+      clearInterval(exhibitionTimer);
+      exhibitionTimer = null;
+    }
+
     function openPlate(index) {
       current = (index + plates.length) % plates.length;
       document.body.classList.add("plate-mode");
@@ -921,7 +934,7 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
         plate.classList.toggle("plate-active", i === current);
       });
       const active = plates[current];
-      counter.textContent = (current + 1) + " / " + plates.length;
+      counter.textContent = (current + 1) + " / " + plates.length + (exhibitionTimer ? " · exhibition" : "");
       const heading = active.querySelector("h2");
       titleEl.textContent = heading ? heading.textContent : "";
       active.scrollTop = 0;
@@ -931,6 +944,7 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
     }
 
     function closePlates() {
+      stopExhibition();
       current = -1;
       document.body.classList.remove("plate-mode");
       chrome.hidden = true;
@@ -944,19 +958,41 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
         const index = plates.indexOf(target);
         if (index === -1) return;
         event.preventDefault();
+        stopExhibition();
         openPlate(index);
       });
     });
 
-    document.getElementById("plate-prev").addEventListener("click", function() { openPlate(current - 1); });
-    document.getElementById("plate-next").addEventListener("click", function() { openPlate(current + 1); });
+    document.getElementById("plate-prev").addEventListener("click", function() { stopExhibition(); openPlate(current - 1); });
+    document.getElementById("plate-next").addEventListener("click", function() { stopExhibition(); openPlate(current + 1); });
     document.getElementById("plate-close").addEventListener("click", closePlates);
     document.addEventListener("keydown", function(event) {
       if (current === -1) return;
-      if (event.key === "ArrowLeft") openPlate(current - 1);
-      else if (event.key === "ArrowRight") openPlate(current + 1);
+      if (event.key === "ArrowLeft") { stopExhibition(); openPlate(current - 1); }
+      else if (event.key === "ArrowRight") { stopExhibition(); openPlate(current + 1); }
       else if (event.key === "Escape") closePlates();
     });
+
+    // deal me a sheet: chance opens one plate. Exhibition: slow automatic
+    // turning, kept from users who prefer reduced motion.
+    const dealButton = document.getElementById("deal-sheet");
+    const exhibitionButton = document.getElementById("exhibition");
+    const calmViewer = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (dealButton) {
+      dealButton.hidden = false;
+      dealButton.addEventListener("click", function() {
+        stopExhibition();
+        openPlate(Math.floor(Math.random() * plates.length));
+      });
+    }
+    if (exhibitionButton && !calmViewer) {
+      exhibitionButton.hidden = false;
+      exhibitionButton.addEventListener("click", function() {
+        stopExhibition();
+        exhibitionTimer = setInterval(function() { openPlate(current + 1); }, 12000);
+        openPlate(current === -1 ? 0 : current);
+      });
+    }
 
     let fromHash = -1;
     try {

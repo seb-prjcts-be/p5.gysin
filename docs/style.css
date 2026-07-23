@@ -372,6 +372,32 @@ body.folder .plate {
   display: none;
 }
 
+/* The two chance controls under the contact sheet */
+.cs-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  max-width: 1100px;
+}
+
+.cs-actions button {
+  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 9px 14px;
+  border: 1px solid var(--ink);
+  background: var(--white);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.cs-actions button:hover,
+.cs-actions button:focus-visible {
+  background: var(--ink);
+  color: var(--white);
+}
+
 /* Plate mode: one work fills the screen; the page underneath holds still */
 body.plate-mode {
   overflow: hidden;
