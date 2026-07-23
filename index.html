@@ -9,7 +9,7 @@
   <meta property="og:description" content="Vector-first traces for cut-up text, rubout gaps, dropout lines, repeats, breathe, SVG, JSON, and HPGL export.">
   <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="docs/style.css?v=55a1d25">
+  <link rel="stylesheet" href="docs/style.css?v=ref-note">
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="p5.gysin.min.js"></script>
 </head>
@@ -35,104 +35,32 @@
         <div class="hero-badge">p5.js addon library</div>
         <h1>p5.<span class="accent">gysin</span></h1>
         <p class="hero-sub">Vector-first traces for cut-up text, rubout gaps, uncertain contours, and plotter-friendly export.</p>
-        <a href="#studies" class="cta-btn">Enter the three studies</a>
+        <a href="#studies" class="cta-btn">Enter the three libraries</a>
       </div>
     </div>
   </section>
+
 
   <section id="studies" class="section group-intro">
     <div class="section-header">
-      <div class="section-tag">Three studies &middot; one movement &middot; v0.3.0</div>
+      <div class="section-tag">Three files &middot; one instrument &middot; v0.3.0</div>
       <h2>Cut. Permute. <span class="accent">Free.</span></h2>
-      <p class="section-desc">The opening is not a catalogue of effects. Three studies perform three operations on the same material: montage, repetition with difference, and release into gesture. Every preview is a live sketch; the snippets show the transferable idea, not every line.</p>
+      <p class="section-desc">The library ships as three script files, and this page is organised the same way. The core captures shapes as traces, disturbs them, and exports them for the plotter. Two optional addons add a voice each: the word operations and the typewriter. Every group opens with the exact pinned file it demonstrates; every preview is a live sketch.</p>
     </div>
-    <div class="method-strip" aria-label="The three-study sequence">
-      <a href="#study-cut"><span>01 &middot; CUT</span><strong>Language is material</strong><small>Break the fixed neighbours.</small></a>
-      <a href="#study-permute"><span>02 &middot; PERMUTE</span><strong>Coincidence is a method</strong><small>Words fall together.</small></a>
-      <a href="#study-free"><span>03 &middot; FREE</span><strong>Writing escapes</strong><small>From word to gesture.</small></a>
-    </div>
-  </section>
-
-  <section class="section" id="study-cut">
-    <div class="section-header">
-      <div class="section-tag">01 &middot; CUT &middot; textCutup()</div>
-      <h2>Language is <span class="accent">material</span></h2>
-      <p class="section-desc">Slice text into unstable bands, then combine dropout, rubout, repeat, and drift.</p>
-    </div>
-    <div class="ex-preview">
-      <div id="ex-cutup" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">// the same line, sliced twice - the second cut deeper
-plot.textCutup("I THINK THEREFORE I AM", 76, 140, {
-  size: 42,
-  slices: 6,
-  sliceOffset: 8
-});
-plot.textCutup("I THINK THEREFORE I AM", 76, 260, {
-  size: 42,
-  slices: 9,
-  sliceOffset: 22,
-  dropout: 0.09,
-  rubout: 0.12
-});</code></pre>
-      <div class="ex-links">
-        <a class="ex-full-link" href="examples/gysin_demo/" target="_blank">-> full example</a>
-        <a class="ex-full-link" href="examples/gysin_demo/sketch.js" target="_blank">-> source sketch</a>
-      </div>
+    <div class="method-strip" aria-label="The three-library sequence">
+      <a href="#lib-core"><span>01 &middot; CORE</span><strong>p5.gysin.js</strong><small>Capture, disturb, export.</small></a>
+      <a href="#lib-text"><span>02 &middot; ADDON</span><strong>p5.gysin.text.js</strong><small>Words fall together.</small></a>
+      <a href="#lib-underwood"><span>03 &middot; ADDON</span><strong>p5.gysin.underwood.js</strong><small>The typewriter voice.</small></a>
     </div>
   </section>
 
-  <section class="section section-dark" id="study-permute">
+  <a id="examples"></a>
+  <section class="section group-intro" id="lib-core">
     <div class="section-header">
-      <div class="section-tag">02 &middot; PERMUTE &middot; chant()</div>
-      <h2>Coincidence is a <span class="accent">method</span></h2>
-      <p class="section-desc">One call reorders the words and sends every resulting line through the contour cut-up, each cut a little deeper. The library does the orchestration.</p>
-    </div>
-    <div class="ex-preview">
-      <div id="ex-permutation" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">// the whole permutation poem in one call: the phrase
-// through its orders, every line cut a little deeper,
-// through real outline letterforms
-plot.chant("I LOVE YOU", 48, 90, {
-  lines: 6,
-  font: outlineFont
-});</code></pre>
-      <div class="ex-links">
-        <a class="ex-full-link" href="examples/permutation_poem/" target="_blank">-&gt; full poster</a>
-        <a class="ex-full-link" href="examples/permutation_poem/sketch.js" target="_blank">-&gt; source sketch</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="study-free">
-    <div class="section-header">
-      <div class="section-tag">03 &middot; FREE &middot; rub()</div>
-      <h2>Writing escapes the <span class="accent">word</span></h2>
-      <p class="section-desc">One intent verb. rub() composes text, cut-up, and asemic into a single decaying gesture - the whole piece in one call, defaults and all.</p>
-    </div>
-    <div class="ex-preview">
-      <div id="ex-worn-word" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
-const outlineFont = await loadFont(FONT_URL);   // fills the legible head
-
-// one word, worn away - legible → cut up → asemic, in one call
-plot.rub("WORN", 46, 72, {
-  size: 48,
-  font: outlineFont
-});
-
-plot.draw();</code></pre>
-      <div class="ex-links">
-        <a class="ex-full-link" href="examples/worn_word/" target="_blank">-&gt; full example</a>
-        <a class="ex-full-link" href="examples/worn_word/sketch.js" target="_blank">-&gt; source sketch</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section group-intro" id="examples">
-    <div class="section-header">
-      <div class="section-tag">Methods</div>
-      <h2>Intent verbs, not <span class="accent">presets</span></h2>
-      <p class="section-desc">After the three studies, the library opens into focused methods. Each example explains one behaviour at a time. Open the full example for the complete page and source file.</p>
+      <div class="section-tag">Library 01 &middot; the core &middot; required</div>
+      <h2>p5.gysin.<span class="accent">js</span></h2>
+      <p class="section-desc">Everything on one sheet: capture shapes and letterforms as traces, disturb them with breathe, dropout, rubout, and bleed, then draw or export the same polylines as SVG, JSON, or HPGL. The paste-ready <a href="examples/p5_editor/">starter example</a> (<a href="examples/p5_editor/sketch.js">source sketch</a>) is two script lines and a sketch.</p>
+      <p class="section-desc lib-cdn"><code>https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.min.js</code></p>
     </div>
   </section>
 
@@ -173,28 +101,62 @@ plot.text("FIRST TRACE", 68, 270, {
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" id="study-cut">
     <div class="section-header">
-      <div class="section-tag">underwood() &middot; single-stroke &middot; period</div>
-      <h2>Type<span class="accent">writer</span></h2>
-      <p class="section-desc">Burroughs' Underwood No. 5 as an intent verb. Single-stroke letters, period pitch and line height, no bold or italic - "bold" is just the same key struck twice.</p>
+      <div class="section-tag">textCutup() &middot; cut</div>
+      <h2>Language is <span class="accent">material</span></h2>
+      <p class="section-desc">Slice text into unstable bands, then combine dropout, rubout, repeat, and drift.</p>
+      <p class="ref-note"><span class="ref-label">ref</span>"Rub out the word" - the cut-up battle cry: slice the sentence apart to break language open</p>
     </div>
     <div class="ex-preview">
-      <div id="ex-typewriter" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">// defaults alone = a period-correct typed page
-plot.underwood("KICK THAT HABIT MAN", 60, 90);
-
-// the only decoration the machine had:
-plot.underwood("HEADING", 60, 130, { underline: 1 });
-plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice</code></pre>
+      <div id="ex-cutup" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// the same line, sliced twice - the second cut deeper
+plot.textCutup("I THINK THEREFORE I AM", 76, 140, {
+  size: 42,
+  slices: 6,
+  sliceOffset: 8
+});
+plot.textCutup("I THINK THEREFORE I AM", 76, 260, {
+  size: 42,
+  slices: 9,
+  sliceOffset: 22,
+  dropout: 0.09,
+  rubout: 0.12
+});</code></pre>
       <div class="ex-links">
-        <a class="ex-full-link" href="examples/typewriter/" target="_blank">-&gt; full example</a>
-        <a class="ex-full-link" href="examples/typewriter/sketch.js" target="_blank">-&gt; source sketch</a>
+        <a class="ex-full-link" href="examples/gysin_demo/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="examples/gysin_demo/sketch.js" target="_blank">-> source sketch</a>
       </div>
     </div>
   </section>
 
-  <section class="section section-dark">
+  <section class="section section-dark" id="study-free">
+    <div class="section-header">
+      <div class="section-tag">rub() &middot; one intent verb</div>
+      <h2>Writing escapes the <span class="accent">word</span></h2>
+      <p class="section-desc">One intent verb. rub() composes text, cut-up, and asemic into a single decaying gesture - the whole piece in one call, defaults and all.</p>
+      <p class="ref-note"><span class="ref-label">ref</span>"Rub out the word", taken literally - a word worn from print to gesture</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-worn-word" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+const outlineFont = await loadFont(FONT_URL);   // fills the legible head
+
+// one word, worn away - legible → cut up → asemic, in one call
+plot.rub("WORN", 46, 72, {
+  size: 48,
+  font: outlineFont
+});
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="examples/worn_word/" target="_blank">-&gt; full example</a>
+        <a class="ex-full-link" href="examples/worn_word/sketch.js" target="_blank">-&gt; source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
     <div class="section-header">
       <div class="section-tag">breathe &middot; dropout &middot; repeat &middot; rubout</div>
       <h2>Parameter <span class="accent">Lab</span></h2>
@@ -231,7 +193,7 @@ for (let i = 0; i < 6; i++) {   // a ruled block, no fill
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section-dark">
     <div class="section-header">
       <div class="section-tag">p5.Font &middot; real contours</div>
       <h2>Font <span class="accent">Outlines</span></h2>
@@ -254,7 +216,7 @@ plot.text("O8BR", 70, 190, {
     </div>
   </section>
 
-  <section class="section section-dark">
+  <section class="section">
     <div class="section-header">
       <div class="section-tag">path() &middot; no text</div>
       <h2>Signal <span class="accent">Score</span></h2>
@@ -280,11 +242,12 @@ plot.path(signal, {
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section-dark">
     <div class="section-header">
       <div class="section-tag">bleed &middot; the additive counterpart</div>
       <h2>Ink <span class="accent">Bleed</span></h2>
       <p class="section-desc">dropout and rubout take line material away; bleed gives chosen fragments extra, slightly shifted passes - ink gathering where the pen returned. No cut-up: the phrase stays whole. <code>tool: "blade"</code> strips the build-up again for cutting machines.</p>
+      <p class="ref-note"><span class="ref-label">ref</span>"I AM THAT I AM" - the classic permutation phrase, here kept whole while the ink returns</p>
     </div>
     <div class="ex-preview">
       <div id="ex-ink-bleed" class="ex-canvas"></div>
@@ -311,15 +274,7 @@ plot.text("I AM THAT I AM", 42, 270, {
     </div>
   </section>
 
-  <section class="section group-intro" id="learn-plot">
-    <div class="section-header">
-      <div class="section-tag">Learn &amp; plot</div>
-      <h2>From editor to <span class="accent">pen</span></h2>
-      <p class="section-desc">Calibration and export: the practical route from a sketch in the browser to a plotted sheet. The paste-ready <a href="examples/p5_editor/">starter example</a> (<a href="examples/p5_editor/sketch.js">source sketch</a>) is two script lines and a sketch; the loading order closes the <a href="docs/collage/#leave">Collage</a> and opens the <a href="docs/system.html">System</a>.</p>
-    </div>
-  </section>
-
-  <section class="section section-dark">
+  <section class="section">
     <div class="section-header">
       <div class="section-tag">page &middot; mm &middot; penMap &middot; stats</div>
       <h2>Plotter <span class="accent">Calibration</span></h2>
@@ -341,9 +296,73 @@ plot.downloadHPGL("calibration.hpgl", {
     </div>
   </section>
 
+  <section class="section group-intro" id="lib-text">
+    <div class="section-header">
+      <div class="section-tag">Library 02 &middot; addon &middot; the words</div>
+      <h2>p5.gysin.text.<span class="accent">js</span></h2>
+      <p class="section-desc">The language voice. GysinText.permute() reorders a phrase into its permutations, and chant() performs the whole permutation poem as one intent verb. Load it after the core file.</p>
+      <p class="ref-note"><span class="ref-label">ref</span>the permutation poems - "I AM THAT I AM", "KICK THAT HABIT MAN": one phrase through all its orders</p>
+      <p class="section-desc lib-cdn"><code>https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.text.min.js</code></p>
+    </div>
+  </section>
+
+  <section class="section section-dark" id="study-permute">
+    <div class="section-header">
+      <div class="section-tag">chant() &middot; permute</div>
+      <h2>Coincidence is a <span class="accent">method</span></h2>
+      <p class="section-desc">One call reorders the words and sends every resulting line through the contour cut-up, each cut a little deeper. The library does the orchestration.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-permutation" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// the whole permutation poem in one call: the phrase
+// through its orders, every line cut a little deeper,
+// through real outline letterforms
+plot.chant("I LOVE YOU", 48, 90, {
+  lines: 6,
+  font: outlineFont
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="examples/permutation_poem/" target="_blank">-&gt; full poster</a>
+        <a class="ex-full-link" href="examples/permutation_poem/sketch.js" target="_blank">-&gt; source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section group-intro" id="lib-underwood">
+    <div class="section-header">
+      <div class="section-tag">Library 03 &middot; addon &middot; the machine</div>
+      <h2>p5.gysin.underwood.<span class="accent">js</span></h2>
+      <p class="section-desc">The typewriter voice. underwood() types single-stroke letterforms at period pitch and line height, with the machine's only decorations: the underscore rule and the same key struck twice. Load it after the core file.</p>
+      <p class="ref-note"><span class="ref-label">ref</span>Underwood No. 5 - the flat black office standard that fixed the look of a typed page for half a century</p>
+      <p class="section-desc lib-cdn"><code>https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.underwood.min.js</code></p>
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="section-header">
+      <div class="section-tag">underwood() &middot; single-stroke &middot; period</div>
+      <h2>Type<span class="accent">writer</span></h2>
+      <p class="section-desc">Burroughs' Underwood No. 5 as an intent verb. Single-stroke letters, period pitch and line height, no bold or italic - "bold" is just the same key struck twice.</p>
+      <p class="ref-note"><span class="ref-label">ref</span>10 cpi / 6 lpi, one face at one size - Sperrsatz: spaced letters as the machine's only emphasis</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-typewriter" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// defaults alone = a period-correct typed page
+plot.underwood("KICK THAT HABIT MAN", 60, 90);
+
+// the only decoration the machine had:
+plot.underwood("HEADING", 60, 130, { underline: 1 });
+plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="examples/typewriter/" target="_blank">-&gt; full example</a>
+        <a class="ex-full-link" href="examples/typewriter/sketch.js" target="_blank">-&gt; source sketch</a>
+      </div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="section-header">
-      <div class="section-tag">SVG &middot; JSON &middot; HPGL</div>
+      <div class="section-tag">SVG &middot; JSON &middot; HPGL &middot; underwood() spec line</div>
       <h2>Plotter <span class="accent">Export</span></h2>
       <p class="section-desc">The same generated traces drive canvas drawing and vector export.</p>
     </div>
@@ -363,6 +382,7 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });
       </div>
     </div>
   </section>
+
 
   <section class="section">
     <div class="section-header">
