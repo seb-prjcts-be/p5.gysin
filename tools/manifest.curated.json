@@ -27,6 +27,18 @@
       "added_in": "0.3.0",
       "status": "experimental",
       "note": "Pen exports preserve all passages; blade exports and statistics keep only the first physical passage."
+    },
+    {
+      "name": "angle/pivot",
+      "added_in": "0.4.0",
+      "status": "stable",
+      "note": "Per-shape turn in degrees about the shape's own anchor, its sampled bounds, or an explicit point; runs before every disturbance, so breathe, dropout, bleed and hatching live on the turned line. angle 0 stays byte-identical."
+    },
+    {
+      "name": "lattice",
+      "added_in": "0.4.0",
+      "status": "stable",
+      "note": "Intent verb: writes a phrase in rows that fill a field, turns the sheet once per entry in turns, and writes across again; each row cycles the word order by one and wear scales the disturbance per pass. Returns every row id, pass by pass."
     }
   ]
 }

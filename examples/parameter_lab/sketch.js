@@ -180,7 +180,8 @@ function buildPlot() {
   // sliders leave it untouched. glyphJitter keeps each letter a hand-set shape.
   plot.text("PISTOL POEM", 70, 150, {
     layer: CONTROLS.breathe.layer,
-    size: 68,
+    // 48 keeps the eleven characters inside the plate border at x 528.
+    size: 48,
     breathe: value("breathe"),
     drift: value("breathe") * 1.4,
     glyphJitter: 0.55,

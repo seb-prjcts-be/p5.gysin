@@ -24,6 +24,8 @@ const W = 700;
 const H = 1160;
 
 const WEAR_STEPS = [0.6, 1, 1.5, 2.1];
+const LATTICE_SIZE = 15;
+const LATTICE_LINE_HEIGHT = 1.5;
 
 // Anchor fractions and base angles for the five cyclic orders: spread
 // over the whole sheet, two as columns (up and down), one upside down.
@@ -38,6 +40,7 @@ const SCRIPT_ANCHORS = [
 let plot;
 let currentSeed = 1960;
 let latticeIds = [];
+let firstPassRows = 0;
 let wearIndex = 1;
 let firstPassFrozen = false;
 
@@ -97,11 +100,17 @@ function buildPlot(seed) {
   // The lattice covers the whole sheet; turns [4, 94] keep the two
   // writings a few degrees off the grid, the hand against the machine.
   latticeIds = plot.lattice(PHRASE, -15, -15, W + 30, H + 30, {
-    size: 15,
-    lineHeight: 1.5,
+    size: LATTICE_SIZE,
+    lineHeight: LATTICE_LINE_HEIGHT,
     turns: [4, 94],
     wear: WEAR_STEPS[wearIndex]
   });
+  // The ids arrive pass by pass, but the passes are not the same length:
+  // the 4-degree pass fills the field's height with rows, the 94-degree
+  // pass writes along the other axis and fits fewer of them. Mirror the
+  // library's row count so wear and freeze split the ids where the
+  // first writing really ends.
+  firstPassRows = Math.max(1, Math.floor((H + 30) / (LATTICE_SIZE * LATTICE_LINE_HEIGHT)));
 
   // ── 3 · the lexical drift: orders embedded through the field ─────
   // Fourteen dictionary orders of the phrase, scattered over a loose
@@ -159,9 +168,8 @@ function buildPlot(seed) {
 function applyWear() {
   wearIndex = (wearIndex + 1) % WEAR_STEPS.length;
   const wear = WEAR_STEPS[wearIndex];
-  const perPass = latticeIds.length / 2;
   latticeIds.forEach((id, index) => {
-    const pass = index < perPass ? 0 : 1;
+    const pass = index < firstPassRows ? 0 : 1;
     plot.update(id, {
       wobble: (0.3 + 0.55 * pass) * wear,
       dropout: (0.01 + 0.035 * pass) * wear,
@@ -176,8 +184,7 @@ function applyWear() {
 // pass becomes the fixed ground the second keeps crossing.
 function toggleFirstPass() {
   firstPassFrozen = !firstPassFrozen;
-  const perPass = Math.floor(latticeIds.length / 2);
-  latticeIds.slice(0, perPass).forEach((id) => {
+  latticeIds.slice(0, firstPassRows).forEach((id) => {
     if (firstPassFrozen) plot.freeze(id);
     else plot.thaw(id);
   });
