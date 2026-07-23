@@ -251,6 +251,36 @@ h3 {
   font-size: 20px;
 }
 
+/* the pinned library URL under each group title; long, so it may break anywhere */
+.lib-cdn code {
+  overflow-wrap: anywhere;
+}
+
+/* the reference plate: the period source a section leans on, in the machine voice */
+.ref-note {
+  margin-top: 12px;
+  max-width: 720px;
+  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.ref-note .ref-label {
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  margin-right: 10px;
+}
+
+.section-dark .ref-note {
+  color: var(--text-on-dark);
+}
+
+.section-dark .ref-note .ref-label {
+  color: var(--red-on-dark);
+}
+
 .hero-sub {
   margin: 20px 0 28px;
   font-size: 24px;
