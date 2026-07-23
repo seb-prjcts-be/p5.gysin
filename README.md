@@ -4,8 +4,9 @@
 
 p5.gysin is a vector-first p5.js library for generative, plottable drawings:
 cut-up text, rubout zones, breathe, dropout, selective ink bleed, and export to
-SVG, JSON, and HPGL. Version 0.2.0 adds physical page settings, layers/pen
-mapping, optional route optimization, and plot statistics.
+SVG, JSON, and HPGL. Version 0.3.0 adds intent verbs (`rub()`, `chant()`,
+`underwood()`) that compose the primitives into finished gestures, plus the
+optional text and underwood addons.
 
 The repository follows the same publishing structure as `p5.waves`: the library
 lives at the root, GitHub Pages uses `index.html` and `docs/`, and examples live
@@ -29,8 +30,8 @@ as standalone pages under `examples/`.
 ## Basic usage
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
-<script src="p5.gysin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/p5@2.3.1/lib/p5.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.min.js"></script>
 ```
 
 ```js
@@ -197,7 +198,7 @@ Load the text module only when you want to reorder phrases. The module needs
 no p5.js or `GysinPlot` and returns plain strings:
 
 ```html
-<script src="p5.gysin.text.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.text.min.js"></script>
 ```
 
 ```js
@@ -248,8 +249,8 @@ Load the typewriter module for one period-correct intent verb. It bundles a
 single-stroke (Hershey) face, so it needs no external font:
 
 ```html
-<script src="p5.gysin.min.js"></script>
-<script src="p5.gysin.underwood.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.underwood.min.js"></script>
 ```
 
 ```js
@@ -340,7 +341,7 @@ early with a clear error.
 
 ## Compatibility
 
-Version 0.2.0 supports p5.js 2.x in global mode and instance mode. In instance
+Version 0.3.0 supports p5.js 2.x in global mode and instance mode. In instance
 mode, create a linked plot after `p.createCanvas()` with
 `p.createGysinPlot(options)`. The vector and export core needs no p5 runtime,
 but p5.js 1.x is not part of the tested support matrix.

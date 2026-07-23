@@ -39,10 +39,10 @@
       </ul>
       <p>Load what you need, in this order:</p>
       <div class="code-preview">
-        <code>&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
-&lt;script src="https://seb-prjcts-be.github.io/p5.gysin/p5.gysin.min.js"&gt;&lt;/script&gt;
-&lt;script src="https://seb-prjcts-be.github.io/p5.gysin/p5.gysin.text.min.js"&gt;&lt;/script&gt;
-&lt;script src="https://seb-prjcts-be.github.io/p5.gysin/p5.gysin.underwood.min.js"&gt;&lt;/script&gt;
+        <code>&lt;script src="https://cdn.jsdelivr.net/npm/p5@2.3.1/lib/p5.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.text.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.underwood.min.js"&gt;&lt;/script&gt;
 &lt;script src="sketch.js"&gt;&lt;/script&gt;</code>
       </div>
       <p>The voices are optional. Both are dependency-free; <code>p5.gysin.text.min.js</code> even runs without p5.js or <code>GysinPlot</code>.</p>
@@ -111,7 +111,7 @@ plot.rub("RUB OUT", 46, 248, { font: outlineFont }); // fills the legible head</
       <h2>Optional Text Permutations</h2>
       <p><code>p5.gysin.text.min.js</code> returns ordinary strings that can be used on their own or drawn through the core library.</p>
       <div class="code-preview">
-        <code>&lt;script src="../p5.gysin.text.min.js"&gt;&lt;/script&gt;
+        <code>&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.text.min.js"&gt;&lt;/script&gt;
 
 const lines = GysinText.permute("I LOVE YOU", {
   seed: 1960,
@@ -264,7 +264,7 @@ plot.downloadHPGL("gysin.hpgl", { page });</code>
 
     <section class="guide-block">
       <h2>Compatibility</h2>
-      <p>Version 0.2.0 targets p5.js 2.x in global and instance mode. The vector and export core is framework-independent, but p5.js 1.x is not part of the tested support contract.</p>
+      <p>Version 0.3.0 targets p5.js 2.x in global and instance mode. The vector and export core is framework-independent, but p5.js 1.x is not part of the tested support contract.</p>
     </section>
 
     <section class="guide-block">
@@ -275,7 +275,7 @@ plot.downloadHPGL("gysin.hpgl", { page });</code>
 
   <footer>
     <p><a href="../index.html#examples">Examples</a> &nbsp;&middot;&nbsp; <a href="../index.html">Enter</a></p>
-    <p class="footer-sub">p5.gysin v0.2.0</p>
+    <p class="footer-sub">p5.gysin v0.3.0</p>
   </footer>
 </body>
 </html>
