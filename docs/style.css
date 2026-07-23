@@ -814,6 +814,17 @@ body.chapters .ce-module.chapter-active {
   gap: 18px;
 }
 
+/* The minute-zero block on Enter: the code gets air around and inside it. */
+#start-here {
+  margin-top: 42px;
+}
+
+#start-here .ex-code-block {
+  margin: 16px 0 18px;
+  padding: 26px 30px;
+  line-height: 1.85;
+}
+
 .ex-full-link {
   color: var(--muted);
   font-family: "Oswald", sans-serif;
