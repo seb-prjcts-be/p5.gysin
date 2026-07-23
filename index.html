@@ -9,7 +9,7 @@
   <meta property="og:description" content="Vector-first traces for cut-up text, rubout gaps, dropout lines, repeats, breathe, SVG, JSON, and HPGL export.">
   <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="docs/style.css?v=ref-air">
+  <link rel="stylesheet" href="docs/style.css?v=lib-req">
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="p5.gysin.min.js"></script>
 </head>
@@ -296,6 +296,30 @@ plot.downloadHPGL("calibration.hpgl", {
     </div>
   </section>
 
+  <section class="section section-dark">
+    <div class="section-header">
+      <div class="section-tag">SVG &middot; JSON &middot; HPGL &middot; underwood() spec line</div>
+      <h2>Plotter <span class="accent">Export</span></h2>
+      <p class="section-desc">The same generated traces drive canvas drawing and vector export.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-export" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const page = { width: 210, height: 210, units: "mm", margin: 5, scale: 0.375, clip: true };
+const svg = plot.exportSVG({ page, optimize: true });
+
+const json = plot.exportJSON({
+  includeGenerated: true
+});
+
+const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="examples/plotter_export/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="examples/plotter_export/sketch.js" target="_blank">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
   <section class="section group-intro" id="lib-text">
     <div class="section-header">
       <div class="section-tag">Library 02 &middot; addon &middot; the words</div>
@@ -311,6 +335,7 @@ plot.downloadHPGL("calibration.hpgl", {
       <div class="section-tag">chant() &middot; permute</div>
       <h2>Coincidence is a <span class="accent">method</span></h2>
       <p class="section-desc">One call reorders the words and sends every resulting line through the contour cut-up, each cut a little deeper. The library does the orchestration.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js</p>
     </div>
     <div class="ex-preview">
       <div id="ex-permutation" class="ex-canvas"></div>
@@ -343,6 +368,7 @@ plot.chant("I LOVE YOU", 48, 90, {
       <div class="section-tag">underwood() &middot; single-stroke &middot; period</div>
       <h2>Type<span class="accent">writer</span></h2>
       <p class="section-desc">Burroughs' Underwood No. 5 as an intent verb. Single-stroke letters, period pitch and line height, no bold or italic - "bold" is just the same key struck twice.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js + p5.gysin.underwood.min.js</p>
       <p class="ref-note"><span class="ref-label">ref</span><span class="ref-term ref-spaced">Sperrsatz</span><span class="ref-gloss">one face, at one size, upright - so to make a word matter the machine spaced it out, struck it twice, or ruled a line beneath it</span></p>
     </div>
     <div class="ex-preview">
@@ -356,29 +382,6 @@ plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="examples/typewriter/" target="_blank">-&gt; full example</a>
         <a class="ex-full-link" href="examples/typewriter/sketch.js" target="_blank">-&gt; source sketch</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-header">
-      <div class="section-tag">SVG &middot; JSON &middot; HPGL &middot; underwood() spec line</div>
-      <h2>Plotter <span class="accent">Export</span></h2>
-      <p class="section-desc">The same generated traces drive canvas drawing and vector export.</p>
-    </div>
-    <div class="ex-preview">
-      <div id="ex-export" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">const page = { width: 210, height: 210, units: "mm", margin: 5, scale: 0.375, clip: true };
-const svg = plot.exportSVG({ page, optimize: true });
-
-const json = plot.exportJSON({
-  includeGenerated: true
-});
-
-const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });</code></pre>
-      <div class="ex-links">
-        <a class="ex-full-link" href="examples/plotter_export/" target="_blank">-> full example</a>
-        <a class="ex-full-link" href="examples/plotter_export/sketch.js" target="_blank">-> source sketch</a>
       </div>
     </div>
   </section>

@@ -312,6 +312,19 @@ h3 {
   color: var(--text-on-dark);
 }
 
+/* a card that loads more than its group's file names every file it needs */
+.lib-req {
+  margin-top: 10px;
+  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  color: var(--blue);
+}
+
+.section-dark .lib-req {
+  color: var(--blue-on-dark);
+}
+
 /* Vision: generated plates, honestly labeled as imaginations, never as documents */
 .vision-plates {
   display: grid;
