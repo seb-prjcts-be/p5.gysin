@@ -130,6 +130,29 @@ verwijderen en eventueel vervangen door alternatief indien nodig").
   het calibratie-instrument (dat meet hatch-dichtheid voor die letters) en
   kleine data-markers (frequencies-diamanten). Nooit voor lege vlakken.
 
+## Regel 9 - Ordeningscontract voor catalogus-pagina's (README & System)
+
+README en `docs/system.html` zijn catalogus-pagina's: kort, opzoekbaar, met een
+**vaste sectievolgorde** (het skelet). Een nieuwe release deponeert zijn nieuwe
+laag ÍN het skelet, op de plek waar de lezer hem zoekt - niet naast het
+nieuwste idee. De homepage en Collage/Vision zijn essay-pagina's en vallen
+buiten dit contract; daar geldt Regel 6.
+
+Het skelet, in volgorde:
+
+1. **Laden** - de scriptbestanden, basic use, constructor/instance mode.
+2. **Eerste sporen** - shape methods en hun opties (incl. tekst/fonts).
+3. **Verstoren** - trace-parameters, ink accumulation.
+4. **Componeren** - intent verbs, the turned sheet, de optionele addons.
+5. **Adresseren** - ids, freeze/thaw, update, regenerate/reroll.
+6. **Pagina en export** - page model, SVG/JSON/HPGL, stats, pen/blade.
+7. **Meta** - compatibiliteit, input safety, test.
+
+Doorgevoerd op 24 jul 2026 (eenmalige hersortering van beide pagina's, tekst
+verbatim verplaatst). Toets elke nieuwe sectie hieraan: "in welke van de zeven
+lagen zoekt een lezer dit?" - en zet hem daar, ook als het idee jonger is dan
+alles eromheen.
+
 ## Checklist per voorbeeld
 
 - [ ] On-ramp-kop toegevoegd, met het juiste woord/de juiste maten.

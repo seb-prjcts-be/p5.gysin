@@ -15,6 +15,29 @@ The repository follows the same publishing structure as `p5.waves`: the library
 lives at the root, GitHub Pages uses `index.html` and `docs/`, and examples live
 as standalone pages under `examples/`.
 
+## Start
+
+Two script lines and a sketch - this is the whole library:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/p5@2.3.1/lib/p5.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.min.js"></script>
+```
+
+```js
+function setup() {
+  createCanvas(700, 300);
+  const plot = new GysinPlot({ seed: 1960 });
+  plot.text("RUB OUT THE WORD", 60, 170, { size: 52, breathe: 2 });
+  plot.draw();
+}
+```
+
+Paste-ready page for editor.p5js.org: the
+[`p5_editor` starter](examples/p5_editor/). The full reference is
+[System](https://seb-prjcts-be.github.io/p5.gysin/docs/system.html); the guided
+tour is [Collage](https://seb-prjcts-be.github.io/p5.gysin/docs/collage/).
+
 ## Structure
 
 - `p5.gysin.js` - source library
@@ -69,74 +92,6 @@ plot.draw();
 ```js
 plot.line(80, 260, 720, 280, { breathe: 1 });   // the line breathes
 ```
-
-## Intent verbs
-
-The calls above are primitives - you compose them yourself. `rub()` is the first
-*intent verb*: one call that composes `text`, `textCutup`, and `asemic` into a
-finished gesture - a word worn away in three copies (legible, cut up, asemic
-scribble). Strong defaults make the one-liner complete; every option is an opt-in
-escape hatch, and the primitives stay underneath.
-
-```js
-plot.rub("RUB OUT", 46, 248);                        // the whole gesture, defaults
-plot.rub("RUB OUT", 46, 248, { decay: 2 });          // one knob scales the wear
-plot.rub("RUB OUT", 46, 248, { font: outlineFont }); // fills the legible head
-```
-
-- `decay` (default 1) scales breathe/drift/dropout/rubout/fray across every copy at
-  once; `0` draws clean, higher wears the word away and buries it wider.
-- `size` (default 46), `font` (fills the legible head), `stroke`.
-- `tail` (default true) is the asemic burial of the last copy; set `false` to leave
-  the word unburied.
-- `stepX`/`stepY` set the drift between copies; `stages`/`tangles` replace the
-  built-in recipe wholesale.
-
-`rub()` returns the id of every copy and tangle, so each can be `freeze`d,
-`reroll`ed, updated, or exported like any other shape. Same seed, same result. See
-the `worn_word` example - the whole sketch is this one call.
-
-## The turned sheet
-
-Every shape takes `angle` (degrees) and `pivot`. This is Gysin's physical
-gesture - write, turn the paper, write again - as geometry, not as an export
-afterthought. The rotation runs before breathe, dropout, bleed and hatching,
-so every disturbance lives on the turned line.
-
-```js
-plot.text("RUB OUT", 80, 120, { angle: 90 });                      // turns about its pen-down anchor
-plot.text("RUB OUT", 80, 120, { angle: 45, pivot: "center" });     // turns about its own middle
-plot.rect(60, 60, 200, 90, { angle: 30, pivot: { x: 60, y: 60 } }); // turns about an explicit pin
-plot.update(id, { angle: 180 });                                    // any standing shape can be turned
-```
-
-- `pivot: "anchor"` (default): text and textCutup turn about their pen-down
-  point, rect and circle about their centre, path and polygon about their
-  centroid, line about its midpoint.
-- `pivot: "center"` turns about the sampled bounds; `{ x, y }` sets the pin.
-- `angle: 0` stays byte-identical to a shape without the option.
-- `page.rotation` still exists and still means the whole exported page; `angle`
-  is the shape-level turn the page model never gave you.
-
-`lattice()` composes the turn into the finished method: a phrase written in
-rows that fill a field, then the sheet turned and written across again. Each
-row cycles the word order by one, so the permutation runs inside the turning.
-Later passes wear more.
-
-```js
-plot.lattice("RUB OUT THE WORD", 60, 60, 480, 480);                 // two passes, 0 and 90
-plot.lattice("JUNK IS NO GOOD BABY", 60, 60, 480, 480, {
-  turns: [0, 90, 180],  // one more crossing
-  size: 16,
-  wear: 1.6,            // one knob scales breathe/dropout/drift per pass
-  stroke: "#244f73"
-});
-```
-
-`lattice()` returns the id of every written row (pass by pass), so rows can be
-`freeze`d, `update`d, or `reroll`ed like any other shape - freeze the first
-pass and only the later hand rerolls. See the `rotations` example: the turning
-cross, the lattice, and the page-level 180 export live on one sheet.
 
 ## Selective ink build-up
 
@@ -237,6 +192,74 @@ gives the same letters, `reroll()` gives a new set. Works on `text` and
 `textCutup` (outline and bitmap alphabet). Set `glyphJitter: 0` for mechanically
 exact type.
 
+## Intent verbs
+
+The calls above are primitives - you compose them yourself. `rub()` is the first
+*intent verb*: one call that composes `text`, `textCutup`, and `asemic` into a
+finished gesture - a word worn away in three copies (legible, cut up, asemic
+scribble). Strong defaults make the one-liner complete; every option is an opt-in
+escape hatch, and the primitives stay underneath.
+
+```js
+plot.rub("RUB OUT", 46, 248);                        // the whole gesture, defaults
+plot.rub("RUB OUT", 46, 248, { decay: 2 });          // one knob scales the wear
+plot.rub("RUB OUT", 46, 248, { font: outlineFont }); // fills the legible head
+```
+
+- `decay` (default 1) scales breathe/drift/dropout/rubout/fray across every copy at
+  once; `0` draws clean, higher wears the word away and buries it wider.
+- `size` (default 46), `font` (fills the legible head), `stroke`.
+- `tail` (default true) is the asemic burial of the last copy; set `false` to leave
+  the word unburied.
+- `stepX`/`stepY` set the drift between copies; `stages`/`tangles` replace the
+  built-in recipe wholesale.
+
+`rub()` returns the id of every copy and tangle, so each can be `freeze`d,
+`reroll`ed, updated, or exported like any other shape. Same seed, same result. See
+the `worn_word` example - the whole sketch is this one call.
+
+## The turned sheet
+
+Every shape takes `angle` (degrees) and `pivot`. This is Gysin's physical
+gesture - write, turn the paper, write again - as geometry, not as an export
+afterthought. The rotation runs before breathe, dropout, bleed and hatching,
+so every disturbance lives on the turned line.
+
+```js
+plot.text("RUB OUT", 80, 120, { angle: 90 });                      // turns about its pen-down anchor
+plot.text("RUB OUT", 80, 120, { angle: 45, pivot: "center" });     // turns about its own middle
+plot.rect(60, 60, 200, 90, { angle: 30, pivot: { x: 60, y: 60 } }); // turns about an explicit pin
+plot.update(id, { angle: 180 });                                    // any standing shape can be turned
+```
+
+- `pivot: "anchor"` (default): text and textCutup turn about their pen-down
+  point, rect and circle about their centre, path and polygon about their
+  centroid, line about its midpoint.
+- `pivot: "center"` turns about the sampled bounds; `{ x, y }` sets the pin.
+- `angle: 0` stays byte-identical to a shape without the option.
+- `page.rotation` still exists and still means the whole exported page; `angle`
+  is the shape-level turn the page model never gave you.
+
+`lattice()` composes the turn into the finished method: a phrase written in
+rows that fill a field, then the sheet turned and written across again. Each
+row cycles the word order by one, so the permutation runs inside the turning.
+Later passes wear more.
+
+```js
+plot.lattice("RUB OUT THE WORD", 60, 60, 480, 480);                 // two passes, 0 and 90
+plot.lattice("JUNK IS NO GOOD BABY", 60, 60, 480, 480, {
+  turns: [0, 90, 180],  // one more crossing
+  size: 16,
+  wear: 1.6,            // one knob scales breathe/dropout/drift per pass
+  stroke: "#244f73"
+});
+```
+
+`lattice()` returns the id of every written row (pass by pass), so rows can be
+`freeze`d, `update`d, or `reroll`ed like any other shape - freeze the first
+pass and only the later hand rerolls. See the `rotations` example: the turning
+cross, the lattice, and the page-level 180 export live on one sheet.
+
 ## Optional text permutations
 
 Load the text module only when you want to reorder phrases. The module needs
@@ -313,41 +336,6 @@ whole strike irregularity from one knob (`0` = mechanically clean). See
 [`docs/typewriter-decoration-research.md`](docs/typewriter-decoration-research.md)
 for what was and was not possible in that era.
 
-## Examples
-
-Open locally:
-
-```text
-index.html
-docs/examples.html
-examples/first_trace/index.html
-examples/gysin_demo/index.html
-examples/p5_editor/index.html
-examples/parameter_lab/index.html
-examples/plotter_export/index.html
-```
-
-The examples follow the same three-layer structure as `p5.waves`:
-
-- live preview and snippet in `docs/examples.html`
-- standalone page in `examples/<name>/index.html`
-- full sketch in `examples/<name>/sketch.js`
-
-Available examples:
-
-- `first_trace` - minimal trace composition
-- `gysin_demo` - cut-up typography and rubout
-- `permutation_poem` - A3 poster where all word permutations run through `textCutup()` again
-- `typewriter` - a period-correct single-stroke typewriter sheet built with the optional `underwood()` verb
-- `p5_editor` - copy-paste starter for editor.p5js.org
-- `parameter_lab` - live control over trace parameters
-- `plotter_export` - SVG/JSON/HPGL export workflow
-- `font_outlines` - real font contours with separate counters
-- `plotter_calibration` - physical A4 sizes, margins, and pen layers
-- `frequencies` - abstract paths and repeatable data scores
-- `worn_word` - one word worn away: the `rub()` intent verb in a single call
-- `ink_bleed` - selective ink build-up: `bleed` in three states, pen vs blade export
-
 ## Plotter export
 
 Use an optional page model to bring the same trace data to physical SVG and HPGL
@@ -383,6 +371,41 @@ plot.downloadSVG("drawing-blade.svg", { page, tool: "blade" });
 `regenerate()` keeps the seed; use `reroll()` to give only unfrozen shapes a new
 variant. Non-finite geometry, duplicate ids, and extreme sampling are rejected
 early with a clear error.
+
+## Examples
+
+Open locally:
+
+```text
+index.html
+docs/examples.html
+examples/first_trace/index.html
+examples/gysin_demo/index.html
+examples/p5_editor/index.html
+examples/parameter_lab/index.html
+examples/plotter_export/index.html
+```
+
+The examples follow the same three-layer structure as `p5.waves`:
+
+- live preview and snippet in `docs/examples.html`
+- standalone page in `examples/<name>/index.html`
+- full sketch in `examples/<name>/sketch.js`
+
+Available examples:
+
+- `first_trace` - minimal trace composition
+- `gysin_demo` - cut-up typography and rubout
+- `permutation_poem` - A3 poster where all word permutations run through `textCutup()` again
+- `typewriter` - a period-correct single-stroke typewriter sheet built with the optional `underwood()` verb
+- `p5_editor` - copy-paste starter for editor.p5js.org
+- `parameter_lab` - live control over trace parameters
+- `plotter_export` - SVG/JSON/HPGL export workflow
+- `font_outlines` - real font contours with separate counters
+- `plotter_calibration` - physical A4 sizes, margins, and pen layers
+- `frequencies` - abstract paths and repeatable data scores
+- `worn_word` - one word worn away: the `rub()` intent verb in a single call
+- `ink_bleed` - selective ink build-up: `bleed` in three states, pen vs blade export
 
 ## Compatibility
 

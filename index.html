@@ -52,6 +52,19 @@
       <a href="#lib-text"><span>02 &middot; ADDON</span><strong>p5.gysin.text.js</strong><small>Words fall together.</small></a>
       <a href="#lib-underwood"><span>03 &middot; ADDON</span><strong>p5.gysin.underwood.js</strong><small>The typewriter voice.</small></a>
     </div>
+    <div class="section-header" id="start-here">
+      <div class="section-tag">Start &middot; two script lines and a sketch</div>
+      <pre class="ex-code-block"><code class="language-javascript">&lt;script src="https://cdn.jsdelivr.net/npm/p5@2.3.1/lib/p5.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.min.js"&gt;&lt;/script&gt;
+
+function setup() {
+  createCanvas(700, 300);
+  const plot = new GysinPlot({ seed: 1960 });
+  plot.text("RUB OUT THE WORD", 60, 170, { size: 52, breathe: 2 });
+  plot.draw();
+}</code></pre>
+      <p class="section-desc">That is a complete sketch. Paste it into the <a href="examples/p5_editor/">p5 Editor starter</a> to see it draw, or read the whole grammar in <a href="docs/system.html">System</a>. Everything below is the exhibition.</p>
+    </div>
   </section>
 
 

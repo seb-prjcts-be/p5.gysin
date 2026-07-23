@@ -76,6 +76,13 @@ function setup() {
     </section>
 
     <section class="guide-block">
+      <h2>Constructor and Instance Mode</h2>
+      <p><code>new GysinPlot(options)</code> accepts <code>seed</code>, <code>width</code>, <code>height</code>, <code>page</code>, and default <code>human</code>, <code>style</code>, and <code>export</code> objects. In p5 instance mode, create the plot after <code>createCanvas()</code>:</p>
+      <div class="code-preview"><code>const plot = p.createGysinPlot({ seed: 1960 });</code></div>
+      <p>The helper links drawing and automatic export dimensions to that p5 instance. Capture methods return a shape id. Lookup and mutation methods return detached snapshots, so use <code>update()</code> instead of modifying data returned by <code>get()</code>.</p>
+    </section>
+
+    <section class="guide-block">
       <h2>Shape Methods</h2>
       <ul>
         <li><code>plot.line(x1, y1, x2, y2, options)</code></li>
@@ -86,6 +93,62 @@ function setup() {
         <li><code>plot.text(value, x, y, options)</code></li>
         <li><code>plot.textCutup(value, x, y, options)</code></li>
       </ul>
+    </section>
+
+    <section class="guide-block">
+      <h2>Shape, Text, Style, and Export Options</h2>
+      <ul>
+        <li><code>path</code>: set <code>closed: true</code> for an exact closed contour.</li>
+        <li><code>text</code>: <code>size</code>, <code>font</code>, <code>sampleFactor</code>, <code>lineHeight</code>, and <code>letterSpacing</code>.</li>
+        <li><code>textCutup</code>: all text options plus <code>slices</code>, <code>sliceOffset</code>, and <code>sliceDropout</code>.</li>
+        <li>Style: <code>stroke</code>, positive <code>strokeWeight</code>, and clamped <code>alpha</code>.</li>
+        <li>Export per shape: <code>simplify</code>, <code>minSegmentLength</code>, and <code>layer</code>.</li>
+      </ul>
+      <p>Invalid geometry, duplicate ids, excessive sampling, more than 1,000 repeats, and route optimization above 2,000 traces raise an error before export.</p>
+    </section>
+
+    <section class="guide-block">
+      <h2>Text</h2>
+      <p>When the supplied p5 font exposes its outline path, p5.gysin keeps separate glyph contours and counters. Otherwise it uses <code>font.textToPoints()</code>; without a font, it falls back to a simple vector alphabet.</p>
+      <p>For p5.js 2.x, load fonts with <code>async setup()</code> and <code>await loadFont(...)</code> before passing the font to <code>plot.text()</code>.</p>
+    </section>
+
+    <section class="guide-block">
+      <h2>Trace Parameters</h2>
+      <ul>
+        <li><code>density</code>: positive point sampling density; default <code>1</code>.</li>
+        <li><code>breathe</code>: the hand tremor that keeps a line alive - maximum point displacement in pixels; default <code>0</code>.</li>
+        <li><code>dropout</code>: clamped 0–1 probability that a point interrupts a path.</li>
+        <li><code>hesitate</code>: clamped 0–1 probability of small mechanical hesitations.</li>
+        <li><code>repeat</code>: whole number from 1 through 1000; default <code>1</code>.</li>
+        <li><code>drift</code>: non-negative global offset between repeats.</li>
+        <li><code>bleed</code>: clamped 0–1 share of written contour length selected for additive ink accumulation.</li>
+        <li><code>bleedPasses</code>: maximum extra passages per selected fragment, from 1 through 3; default <code>2</code>.</li>
+        <li><code>bleedSpread</code>: coherent offset between bleed passages; at least <code>0.1</code> when bleed is active.</li>
+        <li><code>bleedCluster</code>: positive target length for contiguous selected fragments; default <code>18</code>.</li>
+        <li><code>rubout</code>: clamped 0–1 strength of generated erase zones.</li>
+        <li><code>fray</code>: non-negative amount of loose edge strokes.</li>
+        <li><code>pressure</code>: clamped 0–1 screen weight and alpha variation.</li>
+        <li><code>overshoot</code>: non-negative extension of open path endpoints.</li>
+        <li><code>segmentLength</code>: positive target spacing; default <code>8</code>.</li>
+        <li><code>glyphJitter</code>: non-negative per-glyph variation (rotation, shift, scale) so no two rendered letters are identical; default <code>0.35</code>, <code>0</code> is mechanically exact.</li>
+        <li><code>fill</code>: <code>"hatch"</code> (parallel strokes) or <code>"cross"</code> (two perpendicular hatchings) fills closed contours; even-odd, so letter counters stay open. Fill strokes carry <code>role: "fill"</code>, <code>stats()</code> reports <code>fillPaths</code> and <code>fillLength</code>, and <code>tool: "blade"</code> leaves fill out of the export. House use: letterforms via a real <code>font</code> - not empty tone planes.</li>
+        <li><code>hatchSpacing</code>: distance between fill strokes; default <code>2</code>, minimum <code>0.25</code>.</li>
+        <li><code>hatchAngle</code>: rotation of the hatching in degrees; default <code>0</code>.</li>
+        <li><code>seed</code>: optional deterministic seed for one shape.</li>
+      </ul>
+    </section>
+
+    <section class="guide-block">
+      <h2>Ink accumulation</h2>
+      <p><code>dropout</code> and <code>rubout</code> remove material. <code>bleed</code> is their additive counterpart: it selects seeded, contiguous trace fragments and adds a bounded number of coherently offset passages. It does not repeat the complete glyph or shape.</p>
+      <div class="code-preview"><code>plot.text("RUB OUT THE WORD", 80, 180, {
+  bleed: 0.22,
+  bleedPasses: 2,
+  bleedSpread: 0.8,
+  bleedCluster: 18
+});</code></div>
+      <p>Generated bleed traces carry <code>data-role="bleed"</code> and <code>data-pass</code> in SVG. Statistics expose <code>bleedPaths</code>, <code>bleedLength</code>, <code>overdrawRatio</code>, and <code>maxLocalPasses</code>.</p>
     </section>
 
     <section class="guide-block">
@@ -182,63 +245,6 @@ plot.underwood("the small voice.", 60, 190);</code>
     </section>
 
     <section class="guide-block">
-      <h2>Trace Parameters</h2>
-      <ul>
-        <li><code>density</code>: positive point sampling density; default <code>1</code>.</li>
-        <li><code>breathe</code>: the hand tremor that keeps a line alive - maximum point displacement in pixels; default <code>0</code>.</li>
-        <li><code>dropout</code>: clamped 0–1 probability that a point interrupts a path.</li>
-        <li><code>hesitate</code>: clamped 0–1 probability of small mechanical hesitations.</li>
-        <li><code>repeat</code>: whole number from 1 through 1000; default <code>1</code>.</li>
-        <li><code>drift</code>: non-negative global offset between repeats.</li>
-        <li><code>bleed</code>: clamped 0–1 share of written contour length selected for additive ink accumulation.</li>
-        <li><code>bleedPasses</code>: maximum extra passages per selected fragment, from 1 through 3; default <code>2</code>.</li>
-        <li><code>bleedSpread</code>: coherent offset between bleed passages; at least <code>0.1</code> when bleed is active.</li>
-        <li><code>bleedCluster</code>: positive target length for contiguous selected fragments; default <code>18</code>.</li>
-        <li><code>rubout</code>: clamped 0–1 strength of generated erase zones.</li>
-        <li><code>fray</code>: non-negative amount of loose edge strokes.</li>
-        <li><code>pressure</code>: clamped 0–1 screen weight and alpha variation.</li>
-        <li><code>overshoot</code>: non-negative extension of open path endpoints.</li>
-        <li><code>segmentLength</code>: positive target spacing; default <code>8</code>.</li>
-        <li><code>glyphJitter</code>: non-negative per-glyph variation (rotation, shift, scale) so no two rendered letters are identical; default <code>0.35</code>, <code>0</code> is mechanically exact.</li>
-        <li><code>fill</code>: <code>"hatch"</code> (parallel strokes) or <code>"cross"</code> (two perpendicular hatchings) fills closed contours; even-odd, so letter counters stay open. Fill strokes carry <code>role: "fill"</code>, <code>stats()</code> reports <code>fillPaths</code> and <code>fillLength</code>, and <code>tool: "blade"</code> leaves fill out of the export. House use: letterforms via a real <code>font</code> - not empty tone planes.</li>
-        <li><code>hatchSpacing</code>: distance between fill strokes; default <code>2</code>, minimum <code>0.25</code>.</li>
-        <li><code>hatchAngle</code>: rotation of the hatching in degrees; default <code>0</code>.</li>
-        <li><code>seed</code>: optional deterministic seed for one shape.</li>
-      </ul>
-    </section>
-
-    <section class="guide-block">
-      <h2>Ink accumulation</h2>
-      <p><code>dropout</code> and <code>rubout</code> remove material. <code>bleed</code> is their additive counterpart: it selects seeded, contiguous trace fragments and adds a bounded number of coherently offset passages. It does not repeat the complete glyph or shape.</p>
-      <div class="code-preview"><code>plot.text("RUB OUT THE WORD", 80, 180, {
-  bleed: 0.22,
-  bleedPasses: 2,
-  bleedSpread: 0.8,
-  bleedCluster: 18
-});</code></div>
-      <p>Generated bleed traces carry <code>data-role="bleed"</code> and <code>data-pass</code> in SVG. Statistics expose <code>bleedPaths</code>, <code>bleedLength</code>, <code>overdrawRatio</code>, and <code>maxLocalPasses</code>.</p>
-    </section>
-
-    <section class="guide-block">
-      <h2>Constructor and Instance Mode</h2>
-      <p><code>new GysinPlot(options)</code> accepts <code>seed</code>, <code>width</code>, <code>height</code>, <code>page</code>, and default <code>human</code>, <code>style</code>, and <code>export</code> objects. In p5 instance mode, create the plot after <code>createCanvas()</code>:</p>
-      <div class="code-preview"><code>const plot = p.createGysinPlot({ seed: 1960 });</code></div>
-      <p>The helper links drawing and automatic export dimensions to that p5 instance. Capture methods return a shape id. Lookup and mutation methods return detached snapshots, so use <code>update()</code> instead of modifying data returned by <code>get()</code>.</p>
-    </section>
-
-    <section class="guide-block">
-      <h2>Shape, Text, Style, and Export Options</h2>
-      <ul>
-        <li><code>path</code>: set <code>closed: true</code> for an exact closed contour.</li>
-        <li><code>text</code>: <code>size</code>, <code>font</code>, <code>sampleFactor</code>, <code>lineHeight</code>, and <code>letterSpacing</code>.</li>
-        <li><code>textCutup</code>: all text options plus <code>slices</code>, <code>sliceOffset</code>, and <code>sliceDropout</code>.</li>
-        <li>Style: <code>stroke</code>, positive <code>strokeWeight</code>, and clamped <code>alpha</code>.</li>
-        <li>Export per shape: <code>simplify</code>, <code>minSegmentLength</code>, and <code>layer</code>.</li>
-      </ul>
-      <p>Invalid geometry, duplicate ids, excessive sampling, more than 1,000 repeats, and route optimization above 2,000 traces raise an error before export.</p>
-    </section>
-
-    <section class="guide-block">
       <h2>Addressing</h2>
       <div class="code-preview">
         <code>const titleId = plot.text("RUB OUT", 80, 180, { breathe: 2 });
@@ -281,12 +287,6 @@ plot.downloadHPGL("gysin.hpgl", { page });</code>
       <p>The page model applies units, margins, origin, rotation, scale, and optional clipping to SVG, HPGL, and statistics. Route optimization is opt-in so the original drawing order remains the default.</p>
       <p><code>tool: "pen"</code> preserves bleed and explicit repeats. <code>tool: "blade"</code> automatically removes every second and later passage, including legacy <code>repeat</code> traces, so a cutter receives only the first physical path.</p>
       <p>Supported units are <code>px</code>, <code>mm</code>, <code>cm</code>, and <code>in</code>. Origins are <code>top-left</code> and <code>bottom-left</code>. SVG precision accepts <code>decimals</code> from 0 through 12. HPGL additionally accepts <code>scale</code>, <code>penMap</code>, <code>speed</code>, offsets, and <code>maxPointsPerCommand</code>.</p>
-    </section>
-
-    <section class="guide-block">
-      <h2>Text</h2>
-      <p>When the supplied p5 font exposes its outline path, p5.gysin keeps separate glyph contours and counters. Otherwise it uses <code>font.textToPoints()</code>; without a font, it falls back to a simple vector alphabet.</p>
-      <p>For p5.js 2.x, load fonts with <code>async setup()</code> and <code>await loadFont(...)</code> before passing the font to <code>plot.text()</code>.</p>
     </section>
 
     <section class="guide-block">
