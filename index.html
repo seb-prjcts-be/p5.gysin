@@ -9,7 +9,7 @@
   <meta property="og:description" content="Vector-first traces for cut-up text, rubout gaps, dropout lines, repeats, breathe, SVG, JSON, and HPGL export.">
   <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="docs/style.css?v=strip-frames">
+  <link rel="stylesheet" href="docs/style.css?v=sheet-room">
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="p5.gysin.min.js"></script>
 </head>
@@ -23,6 +23,7 @@
       <li><a href="#hero" class="active">Enter</a></li>
       <li><a href="docs/collage/">Collage</a></li>
       <li><a href="docs/system.html">System</a></li>
+      <li><a href="examples/plotter_calibration/">Transmission</a></li>
       <li><a href="docs/vision.html">Vision</a></li>
       <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
     </ul>
@@ -279,8 +280,8 @@ plot.text("I AM THAT I AM", 42, 270, {
       <h2>Plotter <span class="accent">Calibration</span></h2>
       <p class="section-desc">A practical calibration sheet for margins, circles, dropout, overshoot, multi-pen output, and route statistics.</p>
     </div>
-    <div class="ex-preview">
-      <div id="ex-calibration" class="ex-canvas"></div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-calibration" class="ex-canvas" data-ratio="1.35"></div>
       <pre class="ex-code-block"><code class="language-javascript">const page = { width: 210, height: 297, units: "mm", margin: 10, scale: 1 / 3, clip: true };
 
 plot.downloadHPGL("calibration.hpgl", {
@@ -302,8 +303,8 @@ plot.downloadHPGL("calibration.hpgl", {
       <p class="section-desc">The same generated traces drive canvas drawing and vector export.</p>
       <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
     </div>
-    <div class="ex-preview">
-      <div id="ex-export" class="ex-canvas"></div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-export" class="ex-canvas" data-ratio="1"></div>
       <pre class="ex-code-block"><code class="language-javascript">const page = { width: 210, height: 210, units: "mm", margin: 5, scale: 0.375, clip: true };
 const svg = plot.exportSVG({ page, optimize: true });
 
@@ -423,9 +424,10 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
   function previewSize(id) {
     const element = document.getElementById(id);
     const canvasW = Math.max(280, Math.floor(element.offsetWidth || 420));
+    const ratio = Number(element.dataset.ratio) || 0.68;
     return {
       width: canvasW,
-      height: Math.floor(canvasW * 0.68)
+      height: Math.floor(canvasW * ratio)
     };
   }
 
@@ -688,12 +690,48 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
     return plot;
   });
 
+  // The calibration sheet at sheet scale: a condensed echo of the full page -
+  // frame with registration crosses, masthead, ruler, rings, ramp, gradient,
+  // and pen-weight bars, in the layer colors the penMap separates.
   makePreview("ex-calibration", function(p, canvasW, canvasH) {
     const plot = new GysinPlot({ p: p, seed: 210297, width: canvasW, height: canvasH });
-    plot.rect(34, 24, canvasW - 68, canvasH - 48, { breathe: 0.25, repeat: 2, layer: "frame" });
-    const diameters = [canvasW * 0.1, canvasW * 0.18, canvasW * 0.28];
-    for (let index = 0; index < diameters.length; index++) {
-      plot.circle(canvasW * 0.5, canvasH * 0.38, diameters[index], {
+    const m = canvasW * 0.09;
+    const left = m;
+    const right = canvasW - m;
+    const innerW = right - left;
+
+    plot.rect(left, m, innerW, canvasH - 2 * m, { breathe: 0.25, repeat: 2, layer: "frame" });
+    const crossR = m * 0.3;
+    for (const cx of [m * 0.5, canvasW - m * 0.5]) {
+      for (const cy of [m * 0.5, canvasH - m * 0.5]) {
+        plot.line(cx - crossR, cy, cx + crossR, cy, { breathe: 0.2, layer: "frame" });
+        plot.line(cx, cy - crossR, cx, cy + crossR, { breathe: 0.2, layer: "frame" });
+      }
+    }
+
+    plot.text("CALIBRATION", left + innerW * 0.04, m + canvasH * 0.045, {
+      size: canvasW * 0.038,
+      breathe: 0.3
+    });
+    plot.line(left + innerW * 0.04, m + canvasH * 0.06, right - innerW * 0.04, m + canvasH * 0.06, {
+      breathe: 0.25,
+      layer: "frame"
+    });
+
+    const rulerY = m + canvasH * 0.1;
+    for (let index = 0; index <= 30; index++) {
+      const x = left + innerW * 0.04 + (innerW * 0.92) * (index / 30);
+      const tall = index % 5 === 0;
+      plot.line(x, rulerY, x, rulerY + (tall ? canvasH * 0.028 : canvasH * 0.014), {
+        breathe: 0.2,
+        layer: "frame"
+      });
+    }
+
+    const ringX = left + innerW * 0.3;
+    const ringY = m + canvasH * 0.24;
+    for (const d of [canvasW * 0.09, canvasW * 0.17, canvasW * 0.25]) {
+      plot.circle(ringX, ringY, d, {
         density: 1.2,
         breathe: 0.35,
         repeat: 2,
@@ -701,16 +739,55 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
         layer: "circle"
       });
     }
-    for (let index = 0; index < 7; index++) {
-      const y = canvasH * 0.7 + index * 11;
-      plot.line(58, y, canvasW - 58, y, {
-        breathe: 0.35,
-        dropout: index * 0.01,
-        overshoot: 7,
+    plot.rect(left + innerW * 0.62, ringY - canvasW * 0.09, canvasW * 0.18, canvasW * 0.18, {
+      breathe: 0.3,
+      fill: "cross",
+      hatchSpacing: Math.max(2.4, canvasW * 0.008),
+      layer: "hatch"
+    });
+
+    for (let index = 0; index < 6; index++) {
+      const y = m + canvasH * 0.44 + index * canvasH * 0.022;
+      plot.line(left + innerW * 0.05, y, right - innerW * 0.05, y, {
+        breathe: 0.2 + index * 0.28,
+        dropout: index * 0.03,
+        overshoot: 6,
         stroke: "#244f73",
         layer: "hatch"
       });
     }
+
+    const gradY = m + canvasH * 0.6;
+    for (let index = 0; index < 3; index++) {
+      plot.rect(left + innerW * (0.05 + index * 0.32), gradY, innerW * 0.26, canvasH * 0.085, {
+        breathe: 0.25,
+        fill: "hatch",
+        hatchSpacing: Math.max(1.8, canvasW * (0.014 - index * 0.004)),
+        hatchAngle: 45,
+        layer: "hatch"
+      });
+    }
+
+    for (let index = 0; index < 5; index++) {
+      const y = m + canvasH * 0.75 + index * canvasH * 0.022;
+      plot.line(left + innerW * 0.05, y, left + innerW * 0.6, y, {
+        breathe: 0.2,
+        strokeWeight: 0.5 + index * 0.55,
+        layer: "frame"
+      });
+      plot.text(String(index + 1), left + innerW * 0.65, y + canvasH * 0.008, {
+        size: canvasW * 0.024,
+        breathe: 0.2,
+        stroke: "#244f73"
+      });
+    }
+
+    plot.symbols(left + innerW * 0.05, canvasH - m - canvasH * 0.045, innerW * 0.9, canvasH * 0.035, {
+      set: "/\"()-",
+      size: canvasW * 0.026,
+      breathe: 0.3,
+      stroke: "#b5362b"
+    });
     return plot;
   });
 
@@ -768,7 +845,7 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
       layer: "type"
     });
     for (let i = 0; i < 8; i++) {
-      const y = canvasH * 0.61 + i * 12;
+      const y = canvasH * 0.55 + i * canvasH * 0.032;
       plot.line(72, y, canvasW - 72, y + p.sin(i * 0.8) * 7, {
         breathe: 0.7,
         dropout: 0.04,
@@ -777,6 +854,12 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
         layer: "field"
       });
     }
+    // The typed spec line the full plate carries: underwood() captions the pen map.
+    plot.underwood("SVG / JSON / HPGL", 64, canvasH - 64, {
+      size: canvasW * 0.032,
+      stroke: "#b5362b",
+      layer: "type"
+    });
     return plot;
   });
   </script>

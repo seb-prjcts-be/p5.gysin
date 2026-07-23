@@ -300,6 +300,27 @@ h3 {
   color: var(--text-on-dark);
 }
 
+/* the calibration sheet gets room: a tall sheet at full width beside its code */
+.ex-preview.ex-sheet {
+  max-width: 1100px;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
+  align-items: start;
+}
+
+.ex-preview.ex-sheet .ex-canvas {
+  grid-row: 1 / 3;
+}
+
+@media (max-width: 900px) {
+  .ex-preview.ex-sheet {
+    grid-template-columns: 1fr;
+  }
+
+  .ex-preview.ex-sheet .ex-canvas {
+    grid-row: auto;
+  }
+}
+
 /* a card that loads more than its group's file names every file it needs */
 .lib-req {
   margin-top: 10px;
