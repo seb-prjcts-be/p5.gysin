@@ -378,7 +378,10 @@ plot.underwood("KICK THAT HABIT MAN", 60, 90);
 
 // the only decoration the machine had:
 plot.underwood("HEADING", 60, 130, { underline: 1 });
-plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice</code></pre>
+plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice
+
+// both cases live on the same keys:
+plot.underwood("the small voice.", 60, 190);</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="examples/typewriter/" target="_blank">-&gt; full example</a>
         <a class="ex-full-link" href="examples/typewriter/sketch.js" target="_blank">-&gt; source sketch</a>
@@ -516,6 +519,10 @@ plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice</code></pre>
       const plot = new GysinPlot({ p: p, seed: 1961, width: canvasW, height: canvasH });
       const rows = GysinText.permute("KICK THAT HABIT MAN", { seed: 1961, limit: 4, order: "walk" });
       plot.underwood(rows.join("\n"), 26, canvasH * 0.26, {
+        size: canvasW * 0.032,
+        stroke: "#171717"
+      });
+      plot.underwood("the small voice.", 26, canvasH * 0.82, {
         size: canvasW * 0.032,
         stroke: "#171717"
       });

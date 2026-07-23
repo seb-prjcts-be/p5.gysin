@@ -93,7 +93,12 @@ function buildSheet() {
     wear: 0.6
   });
 
-  // ── 7 · colophon ────────────────────────────────────────────────
+  // ── 7 · the small voice: both cases live on the same keys ───────
+  plot.underwood("and the small voice, lowercase, on the same keys.", 60, 522, {
+    size: 15
+  });
+
+  // ── 8 · colophon ────────────────────────────────────────────────
   plot.underwood("PERIOD-CORRECT / 10 CPI / 6 LPI / SEED " + seed, 60, 560, {
     size: 12,
     wear: 0.8
