@@ -9,7 +9,7 @@
   <meta property="og:description" content="Vector-first traces for cut-up text, rubout gaps, dropout lines, repeats, breathe, SVG, JSON, and HPGL export.">
   <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="docs/style.css?v=ref-note">
+  <link rel="stylesheet" href="docs/style.css?v=ref-air">
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="p5.gysin.min.js"></script>
 </head>
@@ -106,7 +106,7 @@ plot.text("FIRST TRACE", 68, 270, {
       <div class="section-tag">textCutup() &middot; cut</div>
       <h2>Language is <span class="accent">material</span></h2>
       <p class="section-desc">Slice text into unstable bands, then combine dropout, rubout, repeat, and drift.</p>
-      <p class="ref-note"><span class="ref-label">ref</span>"Rub out the word" - the cut-up battle cry: slice the sentence apart to break language open</p>
+      <p class="ref-note"><span class="ref-label">ref</span><span class="ref-term">"Rub out the word"</span><span class="ref-gloss">the cut-up battle cry: slice the sentence apart and let language fall open to what it was hiding</span></p>
     </div>
     <div class="ex-preview">
       <div id="ex-cutup" class="ex-canvas"></div>
@@ -135,7 +135,7 @@ plot.textCutup("I THINK THEREFORE I AM", 76, 260, {
       <div class="section-tag">rub() &middot; one intent verb</div>
       <h2>Writing escapes the <span class="accent">word</span></h2>
       <p class="section-desc">One intent verb. rub() composes text, cut-up, and asemic into a single decaying gesture - the whole piece in one call, defaults and all.</p>
-      <p class="ref-note"><span class="ref-label">ref</span>"Rub out the word", taken literally - a word worn from print to gesture</p>
+      <p class="ref-note"><span class="ref-label">ref</span><span class="ref-term">"Rub out the word", taken literally</span><span class="ref-gloss">one word worn from print to gesture: legible, then cut apart, then a scribble that no longer needs the alphabet</span></p>
     </div>
     <div class="ex-preview">
       <div id="ex-worn-word" class="ex-canvas"></div>
@@ -247,7 +247,7 @@ plot.path(signal, {
       <div class="section-tag">bleed &middot; the additive counterpart</div>
       <h2>Ink <span class="accent">Bleed</span></h2>
       <p class="section-desc">dropout and rubout take line material away; bleed gives chosen fragments extra, slightly shifted passes - ink gathering where the pen returned. No cut-up: the phrase stays whole. <code>tool: "blade"</code> strips the build-up again for cutting machines.</p>
-      <p class="ref-note"><span class="ref-label">ref</span>"I AM THAT I AM" - the classic permutation phrase, here kept whole while the ink returns</p>
+      <p class="ref-note"><span class="ref-label">ref</span><span class="ref-term">"I AM THAT I AM"</span><span class="ref-gloss">the classic permutation phrase, kept whole here while the ink returns and gathers where the pen came back</span></p>
     </div>
     <div class="ex-preview">
       <div id="ex-ink-bleed" class="ex-canvas"></div>
@@ -301,7 +301,7 @@ plot.downloadHPGL("calibration.hpgl", {
       <div class="section-tag">Library 02 &middot; addon &middot; the words</div>
       <h2>p5.gysin.text.<span class="accent">js</span></h2>
       <p class="section-desc">The language voice. GysinText.permute() reorders a phrase into its permutations, and chant() performs the whole permutation poem as one intent verb. Load it after the core file.</p>
-      <p class="ref-note"><span class="ref-label">ref</span>the permutation poems - "I AM THAT I AM", "KICK THAT HABIT MAN": one phrase through all its orders</p>
+      <p class="ref-note"><span class="ref-label">ref</span><span class="ref-term">the permutation poems</span><span class="ref-gloss">"I AM THAT I AM" &middot; "KICK THAT HABIT MAN" - a phrase set free to say everything its words allow, one order at a time</span></p>
       <p class="section-desc lib-cdn"><code>https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.text.min.js</code></p>
     </div>
   </section>
@@ -333,7 +333,7 @@ plot.chant("I LOVE YOU", 48, 90, {
       <div class="section-tag">Library 03 &middot; addon &middot; the machine</div>
       <h2>p5.gysin.underwood.<span class="accent">js</span></h2>
       <p class="section-desc">The typewriter voice. underwood() types single-stroke letterforms at period pitch and line height, with the machine's only decorations: the underscore rule and the same key struck twice. Load it after the core file.</p>
-      <p class="ref-note"><span class="ref-label">ref</span>Underwood No. 5 - the flat black office standard that fixed the look of a typed page for half a century</p>
+      <p class="ref-note"><span class="ref-label">ref</span><span class="ref-term">Underwood No. 5</span><span class="ref-gloss">the flat black office standard that fixed the look of the typed page for half a century - the machine this addon types on</span></p>
       <p class="section-desc lib-cdn"><code>https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.underwood.min.js</code></p>
     </div>
   </section>
@@ -343,7 +343,7 @@ plot.chant("I LOVE YOU", 48, 90, {
       <div class="section-tag">underwood() &middot; single-stroke &middot; period</div>
       <h2>Type<span class="accent">writer</span></h2>
       <p class="section-desc">Burroughs' Underwood No. 5 as an intent verb. Single-stroke letters, period pitch and line height, no bold or italic - "bold" is just the same key struck twice.</p>
-      <p class="ref-note"><span class="ref-label">ref</span>10 cpi / 6 lpi, one face at one size - Sperrsatz: spaced letters as the machine's only emphasis</p>
+      <p class="ref-note"><span class="ref-label">ref</span><span class="ref-term ref-spaced">Sperrsatz</span><span class="ref-gloss">one face, at one size, upright - so to make a word matter the machine spaced it out, struck it twice, or ruled a line beneath it</span></p>
     </div>
     <div class="ex-preview">
       <div id="ex-typewriter" class="ex-canvas"></div>
