@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Collage | p5.gysin</title>
-  <link rel="stylesheet" href="../style.css?v=55a1d25">
+  <link rel="stylesheet" href="../style.css?v=chapters">
 </head>
 <body>
   <nav id="navbar">
@@ -777,6 +777,57 @@ plot.draw();</code></pre>
     });
     return plot;
   });
+  </script>
+  <button type="button" id="chapter-prev" class="plate-arrow" aria-label="Previous chapter">&larr;</button>
+  <button type="button" id="chapter-next" class="plate-arrow" aria-label="Next chapter">&rarr;</button>
+  <script>
+  // Chapter mode: one module at a time; the chips above stay as the index.
+  // Without JavaScript every module stays visible and the chips anchor-jump.
+  (function () {
+    const modules = Array.from(document.querySelectorAll("section.ce-module"));
+    const chips = Array.from(document.querySelectorAll(".ce-chips a"));
+    if (!modules.length || !chips.length) return;
+    document.body.classList.add("chapters");
+    let current = -1;
+
+    function show(index) {
+      current = (index + modules.length) % modules.length;
+      modules.forEach(function (module, i) {
+        module.classList.toggle("chapter-active", i === current);
+      });
+      chips.forEach(function (chip) {
+        chip.classList.toggle("active", chip.getAttribute("href") === "#" + modules[current].id);
+      });
+      history.replaceState(null, "", "#" + modules[current].id);
+      // Let the p5 previews size themselves now that this module is visible.
+      window.dispatchEvent(new Event("resize"));
+      window.scrollTo(0, 0);
+    }
+
+    chips.forEach(function (chip) {
+      chip.addEventListener("click", function (event) {
+        const target = document.querySelector(chip.getAttribute("href"));
+        const index = modules.indexOf(target);
+        if (index === -1) return;
+        event.preventDefault();
+        show(index);
+      });
+    });
+
+    document.getElementById("chapter-prev").addEventListener("click", function () { show(current - 1); });
+    document.getElementById("chapter-next").addEventListener("click", function () { show(current + 1); });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowLeft") show(current - 1);
+      else if (event.key === "ArrowRight") show(current + 1);
+    });
+
+    let start = 0;
+    try {
+      const fromHash = modules.indexOf(document.querySelector(location.hash));
+      if (fromHash !== -1) start = fromHash;
+    } catch (error) { /* invalid hash: start at the first chapter */ }
+    show(start);
+  })();
   </script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
 </body>

@@ -455,12 +455,28 @@ body.plate-mode .plate.plate-active.section-dark {
   color: var(--white);
 }
 
-#plate-prev {
+#plate-prev,
+#chapter-prev {
   left: 10px;
 }
 
-#plate-next {
+#plate-next,
+#chapter-next {
   right: 10px;
+}
+
+/* Collage chapters: one module at a time; the chips stay as the visible index */
+body.chapters .ce-module {
+  display: none;
+}
+
+body.chapters .ce-module.chapter-active {
+  display: block;
+}
+
+.ce-chips a.active {
+  background: var(--ink);
+  color: var(--white);
 }
 
 /* the calibration sheet gets room: a tall sheet at full width beside its code */
