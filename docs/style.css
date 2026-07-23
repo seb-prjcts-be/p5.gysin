@@ -300,6 +300,163 @@ h3 {
   color: var(--text-on-dark);
 }
 
+/* The contact sheet: every work at a glance; a tile opens the plate viewer */
+.contact-sheet {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  max-width: 1100px;
+}
+
+.cs-group {
+  grid-column: 1 / -1;
+  margin-top: 10px;
+  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cs-tile {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  min-height: 88px;
+  padding: 12px 14px;
+  border: 1px solid var(--rule);
+  background: rgba(251, 250, 245, 0.56);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.cs-tile .cs-num {
+  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--red);
+}
+
+.cs-tile strong {
+  font-family: "Oswald", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.cs-tile small {
+  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.cs-tile:hover,
+.cs-tile:focus-visible {
+  background: var(--ink);
+  color: var(--white);
+}
+
+.cs-tile:hover .cs-num,
+.cs-tile:focus-visible .cs-num {
+  color: var(--red-on-dark);
+}
+
+.cs-tile:hover small,
+.cs-tile:focus-visible small {
+  color: var(--text-on-dark);
+}
+
+/* Plate mode: one work fills the screen; the page underneath holds still */
+body.plate-mode {
+  overflow: hidden;
+}
+
+body.plate-mode .plate {
+  display: none;
+}
+
+body.plate-mode .plate.plate-active {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  overflow-y: auto;
+  background: var(--paper);
+  padding-top: 64px;
+}
+
+body.plate-mode .plate.plate-active.section-dark {
+  background: #25231f;
+}
+
+#plate-chrome[hidden] {
+  display: none;
+}
+
+.plate-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 70;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  padding: 10px 18px;
+  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  background: var(--ink);
+  color: var(--white);
+}
+
+#plate-title {
+  flex: 1;
+  text-transform: uppercase;
+}
+
+#plate-close {
+  border: 1px solid var(--white);
+  background: none;
+  color: var(--white);
+  font-family: inherit;
+  font-size: inherit;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+#plate-close:hover {
+  background: var(--white);
+  color: var(--ink);
+}
+
+.plate-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 70;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--ink);
+  background: var(--white);
+  color: var(--ink);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.plate-arrow:hover {
+  background: var(--ink);
+  color: var(--white);
+}
+
+#plate-prev {
+  left: 10px;
+}
+
+#plate-next {
+  right: 10px;
+}
+
 /* the calibration sheet gets room: a tall sheet at full width beside its code */
 .ex-preview.ex-sheet {
   max-width: 1100px;
