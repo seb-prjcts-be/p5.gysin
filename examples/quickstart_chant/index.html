@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quickstart: chant() | p5.gysin examples</title>
+  <link rel="stylesheet" href="../../docs/style.css">
+</head>
+<body>
+  <script>if (window.self !== window.top) document.documentElement.classList.add("embedded");</script>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../../docs/system.html">System</a></li>
+      <li><a href="../plotter_calibration/">Transmission</a></li>
+      <li><a href="../../docs/vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">Quickstart 02 &middot; chant() &middot; twelve lines</div>
+      <h1>Quickstart: chant()</h1>
+      <p>Load the text addon and one verb performs the whole permutation poem: the phrase says its orders, each line cut a little deeper. This snippet is the entire sketch. Next: <a href="../quickstart_plotter/">quickstart-plotter</a>.</p>
+    </div>
+    <div class="demo-layout">
+      <div class="demo-code">
+        <div class="code-label">The whole sketch</div>
+        <pre><code class="language-javascript">// quickstart-chant - one phrase set free to say its orders.
+function setup() {
+  const canvas = createCanvas(560, 560);
+  canvas.parent("sketch");
+  pixelDensity(1);
+  noLoop();
+
+  const plot = new GysinPlot({ seed: 1960 });
+  plot.chant("SAY IT AGAIN", 60, 110, { size: 34 });
+  plot.draw();
+}</code></pre>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas" id="sketch" role="img" aria-label="The phrase SAY IT AGAIN repeated in permuted word orders, each line cut a little deeper than the one above."></div>
+        <div class="demo-note">This page loads <code>p5.gysin.text.min.js</code> after the core - that is the only extra step. The <a href="../permutation_poem/">permutation_poem</a> example is the same method, composed into a poster.</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      <a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp;
+      <a href="../../docs/system.html">System</a>
+    </p>
+    <p class="footer-sub">Optional text addon &nbsp;&middot;&nbsp; p5.gysin v0.4.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.text.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

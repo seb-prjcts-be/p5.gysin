@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quickstart: rub() | p5.gysin examples</title>
+  <link rel="stylesheet" href="../../docs/style.css">
+</head>
+<body>
+  <script>if (window.self !== window.top) document.documentElement.classList.add("embedded");</script>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../../docs/system.html">System</a></li>
+      <li><a href="../plotter_calibration/">Transmission</a></li>
+      <li><a href="../../docs/vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">Quickstart 01 &middot; rub() &middot; eleven lines</div>
+      <h1>Quickstart: rub()</h1>
+      <p>The snippet on the left is the <em>entire</em> sketch - nothing is hidden. One intent verb wears one word away in three copies: legible, cut up, buried. Next: <a href="../quickstart_chant/">quickstart-chant</a>.</p>
+    </div>
+    <div class="demo-layout">
+      <div class="demo-code">
+        <div class="code-label">The whole sketch</div>
+        <pre><code class="language-javascript">// quickstart-rub - the whole library in one worn word.
+function setup() {
+  const canvas = createCanvas(560, 440);
+  canvas.parent("sketch");
+  pixelDensity(1);
+  noLoop();
+
+  const plot = new GysinPlot({ seed: 1960 });
+  plot.rub("BEGIN", 50, 100);
+  plot.draw();
+}</code></pre>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas" id="sketch" role="img" aria-label="The word BEGIN worn away in three copies: legible, cut up, and buried under an asemic tangle."></div>
+        <div class="demo-note">Everything else - the wear knob, the ids, the export - is opt-in on top of this. The <a href="../worn_word/">worn_word</a> example is the same call, elaborated.</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      <a href="../../docs/examples.html">All examples</a> &nbsp;&middot;&nbsp;
+      <a href="../../docs/system.html">System</a>
+    </p>
+    <p class="footer-sub">p5.gysin v0.4.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

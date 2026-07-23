@@ -45,6 +45,7 @@
 &lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.underwood.min.js"&gt;&lt;/script&gt;</code>
       </div>
       <p>The voices are optional. Both are dependency-free; <code>p5.gysin.text.min.js</code> even runs without p5.js or <code>GysinPlot</code>.</p>
+      <p>Three quickstarts, none longer than twenty-eight lines: <a href="../examples/quickstart_rub/">rub</a>, <a href="../examples/quickstart_chant/">chant</a>, <a href="../examples/quickstart_plotter/">plotter</a>. Each page shows its entire sketch.</p>
     </section>
 
     <section class="guide-block">
@@ -92,6 +93,24 @@ function setup() {
         <li><code>plot.path(points, options)</code></li>
         <li><code>plot.text(value, x, y, options)</code></li>
         <li><code>plot.textCutup(value, x, y, options)</code></li>
+      </ul>
+    </section>
+
+    <section class="guide-block">
+      <h2>Fields and Marks</h2>
+      <p>Four capture methods fill a region instead of drawing one shape. Each returns ordinary shape ids (or cell rectangles), so everything they write stays addressable.</p>
+      <div class="code-preview">
+        <code>const cells = plot.grid(40, 40, 480, 320, 3, 2);   // frame grid; returns cell rects
+plot.letters("RUB OUT", 60, 60, 200, 120);          // a decaying letter field
+plot.symbols(280, 60, 200, 120, { set: "+#&amp;" });    // typewriter operator texture
+plot.asemic(60, 220, 160, 120);                     // a cursive, wordless tangle</code>
+      </div>
+      <ul>
+        <li><code>plot.grid(x, y, w, h, cols, rows, options)</code> draws an ink-bled frame grid and returns its cell rectangles (<code>{ x, y, w, h, col, row }</code>) so a composition can place fields declaratively. Options: <code>gap</code>, <code>outer: false</code> (skip the outer frame), <code>cells: false</code> (return rectangles without drawing them), and <code>frame</code> - an options object passed to every drawn rect, including <code>angle</code>/<code>pivot</code>.</li>
+        <li><code>plot.letters(source, x, y, w, h, options)</code> fills the box with rows of letters drawn from the source phrase, clustered by repetition so words dissolve into a letter field. Returns one id per row.</li>
+        <li><code>plot.symbols(x, y, w, h, options)</code> fills the box with typewriter operator glyphs. <code>set</code> (default <code>+"#&amp;/</code>) chooses the glyphs; <code>cluster: true</code> repeats them in runs.</li>
+        <li><code>plot.asemic(x, y, w, h, options)</code> draws a compact, handwriting-like tangle - writing with no words. <code>loops</code> and <code>detail</code> set the density; every other <code>path()</code> option passes through.</li>
+        <li>All four are auto-seeded by call order, so redrawing the same composition reproduces the same fields; pass <code>seed</code> to pin one. Both field methods accept <code>size</code>, <code>lineHeight</code>, <code>letterSpacing</code>, and every trace option.</li>
       </ul>
     </section>
 
@@ -254,9 +273,15 @@ plot.update(titleId, { stroke: "#b5362b" });
 plot.thaw(titleId);
 plot.regenerate(titleId);
 plot.reroll(titleId); // explicit new seeded variation
-plot.remove(titleId);</code>
+plot.remove(titleId);
+
+plot.select(titleId); // id-less calls now target this shape
+plot.freeze();        // same as plot.freeze(titleId)
+
+plot.setSeed(1961);   // re-seed and regenerate every unpinned shape
+plot.clear();         // empty the sheet: shapes, ids, and selection</code>
       </div>
-      <p><code>regenerate()</code> recalculates with the same seed. Use <code>reroll()</code> only when you want a new deterministic variation.</p>
+      <p><code>regenerate()</code> recalculates with the same seed. Use <code>reroll()</code> only when you want a new deterministic variation. <code>select()</code> sets the default target for id-less addressing calls; <code>setSeed()</code> changes the plot seed and regenerates every shape without an explicit <code>seed</code> of its own; <code>clear()</code> removes all shapes and the selection.</p>
     </section>
 
     <section class="guide-block">

@@ -34,7 +34,10 @@ function setup() {
 ```
 
 Paste-ready page for editor.p5js.org: the
-[`p5_editor` starter](examples/p5_editor/). The full reference is
+[`p5_editor` starter](examples/p5_editor/). Three quickstarts, none longer than
+twenty-eight lines: [`quickstart_rub`](examples/quickstart_rub/),
+[`quickstart_chant`](examples/quickstart_chant/), and
+[`quickstart_plotter`](examples/quickstart_plotter/). The full reference is
 [System](https://seb-prjcts-be.github.io/p5.gysin/docs/system.html); the guided
 tour is [Collage](https://seb-prjcts-be.github.io/p5.gysin/docs/collage/).
 
@@ -394,10 +397,15 @@ The examples follow the same three-layer structure as `p5.waves`:
 
 Available examples:
 
+- `quickstart_rub` - the whole library in one worn word, eleven lines
+- `quickstart_chant` - the permutation poem as one call, twelve lines
+- `quickstart_plotter` - a small sheet saved as plotter-ready A4 SVG, twenty-eight lines
 - `first_trace` - minimal trace composition
 - `gysin_demo` - cut-up typography and rubout
 - `permutation_poem` - A3 poster where all word permutations run through `textCutup()` again
+- `rotations` - the turned sheet as palimpsest: `lattice()`, per-shape `angle`, and the page-level 180 export
 - `typewriter` - a period-correct single-stroke typewriter sheet built with the optional `underwood()` verb
+- `the_letter` - one complete piece of typed correspondence: the whole `underwood()` grammar
 - `p5_editor` - copy-paste starter for editor.p5js.org
 - `parameter_lab` - live control over trace parameters
 - `plotter_export` - SVG/JSON/HPGL export workflow
