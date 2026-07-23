@@ -366,6 +366,12 @@ h3 {
   color: var(--text-on-dark);
 }
 
+/* With the viewer available the folder stays closed: plates only open full screen.
+   Without JavaScript body.folder is never set and the cards stay visible. */
+body.folder .plate {
+  display: none;
+}
+
 /* Plate mode: one work fills the screen; the page underneath holds still */
 body.plate-mode {
   overflow: hidden;

@@ -9,7 +9,7 @@
   <meta property="og:description" content="Vector-first traces for cut-up text, rubout gaps, dropout lines, repeats, breathe, SVG, JSON, and HPGL export.">
   <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="docs/style.css?v=plates">
+  <link rel="stylesheet" href="docs/style.css?v=folder">
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="p5.gysin.min.js"></script>
 </head>
@@ -909,6 +909,10 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
     const titleEl = document.getElementById("plate-title");
     let current = -1;
 
+    // The folder stays closed: with the viewer available the card stream hides
+    // and every plate exists full screen only.
+    document.body.classList.add("folder");
+
     function openPlate(index) {
       current = (index + plates.length) % plates.length;
       document.body.classList.add("plate-mode");
@@ -922,6 +926,8 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
       titleEl.textContent = heading ? heading.textContent : "";
       active.scrollTop = 0;
       history.replaceState(null, "", "#" + active.id);
+      // Let the p5 previews resize now that this plate has real dimensions.
+      window.dispatchEvent(new Event("resize"));
     }
 
     function closePlates() {
