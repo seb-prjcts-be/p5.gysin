@@ -23,47 +23,95 @@
     <div class="demo-header">
       <div class="demo-number">editor.p5js.org starter</div>
       <h1>p5 Editor Starter</h1>
-      <p>A paste-ready starter for the p5.js Web Editor. The plate acts out its title: <code>THE MACHINE REMEMBERS</code> is sliced once, then the word <code>REMEMBERS</code> returns lower and <em>forgets itself</em> - each lost letter decaying through its own shape shaken loose, then a printed sign, then a pure scribble. Raise decay and the ruled anchor and the machine-grid on the right erode too, so the forgetting reaches the whole plate. Everything on the canvas is real vector, so what you see is exactly what the SVG plots. Add the CDN script in <code>index.html</code>, then paste the sketch into <code>sketch.js</code>.</p>
+      <p>A paste-ready starter for the p5.js Web Editor. The plate acts out its title: <code>THE MACHINE REMEMBERS</code> is sliced once, then the word <code>REMEMBERS</code> returns lower and <em>forgets itself</em> - each lost letter decaying through its own shape shaken loose, then a printed sign, then a pure scribble. Raise decay and the ruled anchor and the machine-grid on the right erode too, so the forgetting reaches the whole plate. Everything on the canvas is real vector, so what you see is exactly what the SVG plots. The Editor's <code>index.html</code> already loads its own <code>p5.js</code> and <code>sketch.js</code> - make its script list match the three lines below exactly. <strong>Replace</strong> the Editor's existing <code>p5.js</code> line rather than adding a second one: two p5 copies on one page collide (<code>_runLifecycleHook is not a function</code>). Then paste the compact core below into <code>sketch.js</code> - it runs as-is. The full version of this page, with the buttons, keys and letter-by-letter forgetting, is <a href="sketch.js">sketch.js</a>; it pastes just as cleanly.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
-        <div class="code-label">index.html tab</div>
+        <div class="code-label">index.html tab - the complete script list, one p5.js only</div>
         <pre><code class="language-html">&lt;script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"&gt;&lt;/script&gt;
 &lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.3.0/p5.gysin.min.js"&gt;&lt;/script&gt;
 &lt;script src="sketch.js"&gt;&lt;/script&gt;</code></pre>
-        <div class="code-label">sketch.js core</div>
-        <pre><code class="language-javascript">// The whole library, in three lines - this alone is a complete sketch:
-const plot = new GysinPlot({ seed: 19600319 });
-plot.text("CUT UP", 82, 150);   // clean, mechanical text
-plot.draw();
+        <div class="code-label">sketch.js core - paste-ready</div>
+        <pre><code class="language-javascript">// The whole library, in three lines - inside setup(), this alone is a plate:
+//     const plot = new GysinPlot({ seed: 19600319 });
+//     plot.text("CUT UP", 82, 150);   // clean, mechanical text
+//     plot.draw();
+// Everything else is OPTIONAL disturbance layered on top; defaults are all
+// zero. This compact core stacks the same six layers as the full starter,
+// back to front. Paste it into sketch.js as-is - it runs.
 
-// Everything below is OPTIONAL disturbance layered on top. Defaults are all
-// zero, so options are opt-in. buildPlot() stacks six layers, back to front:
+const decay = 0.45;     // how far the machine forgets; 0 keeps every letter
+const INK = "#151515";  // machine grey
+const RED = "#c0392b";  // second pen: the returning word and its ring
+let plot;
 
-// 1) anchor - a ruled block (frame + closely set rules) grounds the plate
-for (let i = 1; i < 13; i++) {
-  plot.line(88, 470 + i * 12.3, 632, 470 + i * 12.3, { dropout: 0.05 + decay * 0.35 });
+function setup() {
+  createCanvas(720, 720);
+  noLoop();
+  plot = new GysinPlot({
+    seed: 19600319,
+    width,
+    height,
+    style: { stroke: INK }
+  });
+
+  // 1) anchor - a ruled block (frame + closely set rules) grounds the plate
+  plot.rect(88, 470, 544, 160, {
+    fray: 0.3,
+    dropout: 0.05 + decay * 0.2
+  });
+  for (let i = 1; i < 13; i++) {
+    plot.line(88, 470 + i * 12.3, 632, 470 + i * 12.3, {
+      dropout: 0.05 + decay * 0.35,
+      rubout: decay * 0.22
+    });
+  }
+
+  // 2) right-hand field - a light machine index (symbols over a grid)
+  plot.symbols(470, 274, 196, 186, {
+    size: 15,
+    alpha: 0.35,
+    dropout: 0.05 + decay * 0.5
+  });
+  plot.grid(470, 274, 196, 186, 3, 3, {
+    frame: { stroke: INK }
+  });
+
+  // 3) red ring - circled around the returning word
+  plot.circle(256, 337, 350, {
+    stroke: RED,
+    repeat: 3,
+    rubout: 0.1,
+    alpha: 0.7
+  });
+
+  // 4) title - the largest surface; hesitate breaks it up
+  plot.text("CUT UP", 82, 150, {
+    size: 96,
+    hesitate: 0.5,
+    rubout: 0.06
+  });
+
+  // 5) phrase - sliced once
+  plot.textCutup("THE MACHINE REMEMBERS", 82, 262, {
+    size: 46,
+    slices: 8,
+    rubout: 0.14
+  });
+
+  // 6) the word returns lower, red, already fraying - the full starter
+  //    below forgets it letter by letter as decay rises
+  plot.textCutup("REMEMBERS", 82, 360, {
+    size: 46,
+    stroke: RED,
+    rubout: 0.14 + decay * 0.3
+  });
 }
 
-// 2) right-hand field - a light machine index (symbols over a grid)
-plot.symbols(470, 274, 196, 186, { size: 15, dropout: 0.05 + decay * 0.5 });
-plot.grid(470, 274, 196, 186, 3, 3, { frame: { stroke: INK } });
-
-// 3) red ring - circled around the returning word
-plot.circle(ringX, ringY, 350, { stroke: RED, repeat: 3, rubout: 0.1 });
-
-// 4) title - the largest surface; hesitate breaks it up
-plot.text("CUT UP", 82, 150, { size: 96, hesitate: 0.5, rubout: 0.06 });
-
-// 5) phrase - sliced once by the seed's grain
-plot.textCutup("THE MACHINE REMEMBERS", 82, 262, { slices: 8, rubout: 0.14 });
-
-// 6) the word returns lower and forgets itself, letter by letter -
-//    each lost glyph decays: its own shape shaken loose (letters) →
-//    a printed sign (symbols) → a pure scribble (asemic)
-degradeWord("REMEMBERS", 82, 360, 46, decay, hand);
-
-plot.draw();</code></pre>
+function draw() {
+  background("#f0efe9");
+  plot.draw();
+}</code></pre>
       </div>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch" role="img" aria-label="A compact starter composition for copying into the p5.js Web Editor."></div>
