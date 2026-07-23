@@ -239,7 +239,19 @@ function buildPoster() {
       // Words fade down the column (the lead order fades from heavier). The code
       // column prints its top row clean as the legend key, then smears to texture.
       const key = r === 0;
-      cutupLine(strip, TEXT_X, y, decay(r, `text:${g}:${r}`, { layer: "type" }, boost));
+      if (g === 0 && r === 0) {
+        // The source phrase leads the poster WHOLE - no scissors on 01, so the
+        // reader always holds the key to everything decaying below it.
+        plot.text(regel, TEXT_X, y, typeStyle({
+          size: 21,
+          strokeWeight: 1.6,
+          breathe: 0.15,
+          layer: "type",
+          seed: `${posterSeed}:lead`
+        }));
+      } else {
+        cutupLine(strip, TEXT_X, y, decay(r, `text:${g}:${r}`, { layer: "type" }, boost));
+      }
       cutupLine(code, CODE_X, y, decay(r, `code:${g}:${r}`, {
         // The lead order's key row prints a touch larger, sharpening the start of the read.
         size: key && g === 0 ? 20 : 18,
