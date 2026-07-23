@@ -2368,6 +2368,21 @@
     return Math.max(0, Math.min(1, Number(value) || 0));
   }
 
+  // Intent verbs that live in optional addons fail loudly and name the missing
+  // file, instead of the bare "chant is not a function". Each addon replaces
+  // its stub when it loads (it checks the gysinAddonStub marker).
+  const ADDON_VERBS = [
+    ["chant", "p5.gysin.text.js"],
+    ["underwood", "p5.gysin.underwood.js"]
+  ];
+  for (const [verb, file] of ADDON_VERBS) {
+    const stub = function () {
+      throw new Error(`${verb}() requires the optional addon ${file}. Load it after p5.gysin.js.`);
+    };
+    stub.gysinAddonStub = true;
+    GysinPlot.prototype[verb] = stub;
+  }
+
   global.GysinPlot = GysinPlot;
 
   if (global.p5) {

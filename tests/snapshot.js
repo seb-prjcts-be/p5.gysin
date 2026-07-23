@@ -559,6 +559,14 @@ assert.throws(() => new SourcePlot().rub("X", 0, 0, { stages: [{ verb: "circle" 
 assert.throws(() => new SourcePlot().rub("X", 0, 0, { stages: [] }), /non-empty array/);
 assert.throws(() => new SourcePlot().rub("X", Infinity, 0), /finite number/);
 
+// --- missing-addon stubs: fail loudly and name the file to load -----------------
+for (const Plot of [SourcePlot, MinPlot]) {
+  assert.throws(() => new Plot().chant("CUT", 0, 0), /requires the optional addon p5\.gysin\.text\.js/);
+  assert.throws(() => new Plot().underwood("CUT", 0, 0), /requires the optional addon p5\.gysin\.underwood\.js/);
+  assert.ok(Plot.prototype.chant.gysinAddonStub, "chant stub carries the marker the addon checks");
+  assert.ok(Plot.prototype.underwood.gysinAddonStub, "underwood stub carries the marker the addon checks");
+}
+
 // --- underwood(): period single-stroke typewriter (optional module) -------------
 function loadCoreWithType(coreFile, typeFile) {
   const context = { console };
@@ -567,6 +575,7 @@ function loadCoreWithType(coreFile, typeFile) {
   vm.runInContext(fs.readFileSync(coreFile, "utf8"), context, { filename: coreFile });
   vm.runInContext(fs.readFileSync(typeFile, "utf8"), context, { filename: typeFile });
   assert.equal(typeof context.GysinPlot.prototype.underwood, "function");
+  assert.ok(!context.GysinPlot.prototype.underwood.gysinAddonStub, "addon replaced the core stub");
   assert.equal(typeof context.GysinUnderwood, "object");
   return context.GysinPlot;
 }
@@ -617,6 +626,7 @@ function loadCombined(coreFile, textFile) {
     vm.runInContext(fs.readFileSync(absolute, "utf8"), context, { filename: absolute });
   }
   assert.equal(typeof context.GysinPlot.prototype.chant, "function");
+  assert.ok(!context.GysinPlot.prototype.chant.gysinAddonStub, "addon replaced the core stub");
   return context;
 }
 

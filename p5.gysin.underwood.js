@@ -227,8 +227,10 @@
   });
   global.GysinUnderwood = GysinUnderwood;
 
-  // Register the intent verb on the core, if it is present.
-  if (global.GysinPlot && global.GysinPlot.prototype && !global.GysinPlot.prototype.underwood) {
+  // Register the intent verb on the core, if it is present. The core ships a
+  // throwing stub for underwood(); replace it, but never a real implementation.
+  const coreUnderwood = global.GysinPlot && global.GysinPlot.prototype && global.GysinPlot.prototype.underwood;
+  if (global.GysinPlot && global.GysinPlot.prototype && (!coreUnderwood || coreUnderwood.gysinAddonStub)) {
     global.GysinPlot.prototype.underwood = function (text, x, y, options) {
       return typeText(this, text, x, y, options);
     };
