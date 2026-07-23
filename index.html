@@ -219,11 +219,11 @@ plot.text("O8BR", 70, 190, {
   <section class="section">
     <div class="section-header">
       <div class="section-tag">path() &middot; no text</div>
-      <h2>Signal <span class="accent">Score</span></h2>
+      <h2>Frequen<span class="accent">cies</span></h2>
       <p class="section-desc">Treat paths as fragile signals: no typography, only a scored machine reading made from vector paths and markers.</p>
     </div>
     <div class="ex-preview">
-      <div id="ex-signal-score" class="ex-canvas"></div>
+      <div id="ex-frequencies" class="ex-canvas"></div>
       <pre class="ex-code-block"><code class="language-javascript">const signal = [];
 for (let x = 0; x &lt;= 620; x += 8) {
   signal.push([x, y + sin(x * 0.04) * 28]);
@@ -236,8 +236,8 @@ plot.path(signal, {
   rubout: 0.06 + row * 0.03
 });</code></pre>
       <div class="ex-links">
-        <a class="ex-full-link" href="examples/signal_score/" target="_blank">-> full example</a>
-        <a class="ex-full-link" href="examples/signal_score/sketch.js" target="_blank">-> source sketch</a>
+        <a class="ex-full-link" href="examples/frequencies/" target="_blank">-> full example</a>
+        <a class="ex-full-link" href="examples/frequencies/sketch.js" target="_blank">-> source sketch</a>
       </div>
     </div>
   </section>
@@ -669,7 +669,7 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
     return plot;
   });
 
-  makePreview("ex-signal-score", function(p, canvasW, canvasH) {
+  makePreview("ex-frequencies", function(p, canvasW, canvasH) {
     const plot = new GysinPlot({ p: p, seed: 40017, width: canvasW, height: canvasH });
     for (let row = 0; row < 4; row++) {
       const points = [];

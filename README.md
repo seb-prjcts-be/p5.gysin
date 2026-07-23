@@ -299,7 +299,7 @@ Available examples:
 - `plotter_export` - SVG/JSON/HPGL export workflow
 - `font_outlines` - real font contours with separate counters
 - `plotter_calibration` - physical A4 sizes, margins, and pen layers
-- `signal_score` - abstract paths and repeatable data scores
+- `frequencies` - abstract paths and repeatable data scores
 - `worn_word` - one word worn away: the `rub()` intent verb in a single call
 - `ink_bleed` - selective ink build-up: `bleed` in three states, pen vs blade export
 

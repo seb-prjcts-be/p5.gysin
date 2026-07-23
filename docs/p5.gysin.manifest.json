@@ -21,6 +21,7 @@
   "examples": [
     "first_trace",
     "font_outlines",
+    "frequencies",
     "gysin_demo",
     "ink_bleed",
     "p5_editor",
@@ -28,7 +29,6 @@
     "permutation_poem",
     "plotter_calibration",
     "plotter_export",
-    "signal_score",
     "typewriter",
     "worn_word"
   ],

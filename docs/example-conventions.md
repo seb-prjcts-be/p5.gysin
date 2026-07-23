@@ -92,7 +92,7 @@ De homepage is een tentoonstelling, geen catalogus. De vaste volgorde:
    boog cut -> permute -> free; Worn Word is als FREE-studie naar voren
    gehaald.
 2. **Methods** groepeert de losse verb-voorbeelden (First Trace, Typewriter,
-   Parameter Lab, Font Outlines, Signal Score).
+   Parameter Lab, Font Outlines, Frequencies).
 3. **Learn & plot** sluit af met de praktische route (p5 Editor, Calibration,
    Export).
 
@@ -128,7 +128,7 @@ verwijderen en eventueel vervangen door alternatief indien nodig").
   kader + rules), gysin_demo (het letterveld ís de massa).
 - **`fill` blijft in de API** en is er voor LETTERS (echte font-contouren),
   het calibratie-instrument (dat meet hatch-dichtheid voor die letters) en
-  kleine data-markers (signal_score-diamanten). Nooit voor lege vlakken.
+  kleine data-markers (frequencies-diamanten). Nooit voor lege vlakken.
 
 ## Checklist per voorbeeld
 

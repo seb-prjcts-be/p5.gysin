@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════
-//  signal_score - five wavering signals notated as an abstract machine score
+//  frequencies - five wavering signals notated as an abstract machine score
 // ═══════════════════════════════════════════════════════════════════
 //  New to p5.gysin? The whole library is three lines:
 //
@@ -110,7 +110,7 @@ function ampAt(cols, x) {
 
 // Single export path shared by the button and the S key.
 function downloadScore() {
-  plot.downloadSVG("p5-gysin-signal-score.svg", { width, height });
+  plot.downloadSVG("p5-gysin-frequencies.svg", { width, height });
 }
 
 // Which notation cell a column x falls into, clamped to the row.
