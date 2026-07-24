@@ -69,17 +69,32 @@ p code,
   font-size: 0.88em;
 }
 
-/* a quoted voice wears the same plate as the references (ref-note classes) */
+/* A quoted voice, set plainly: a hanging rule, the words in the serif reading
+   voice, the name quiet beneath. No label, no box - the quote is the tribute. */
 .pull-quote {
   margin: 26px 0 8px;
+  padding-left: 18px;
+  border-left: 2px solid var(--rule);
 }
 
 .pull-quote p {
   margin: 0;
+  font-family: "Alegreya", Georgia, serif;
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--ink);
 }
 
 .pull-quote cite {
+  display: block;
+  margin-top: 8px;
+  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
   font-style: normal;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 a:focus-visible,
@@ -230,60 +245,6 @@ h3 {
 
 /* the reference plate: the period source a section leans on. The term breathes
    in the essay voice; the gloss answers in the machine voice. */
-.ref-note {
-  margin-top: 22px;
-  max-width: 720px;
-}
-
-.ref-note .ref-label {
-  display: block;
-  margin-bottom: 6px;
-  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
-  font-size: 12px;
-  color: var(--red);
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-}
-
-.ref-note .ref-term {
-  display: block;
-  font-family: "Alegreya", Georgia, serif;
-  font-style: italic;
-  font-size: 22px;
-  line-height: 1.35;
-  color: var(--ink);
-}
-
-/* a term that demonstrates itself: Sperrsatz is set gesperrt */
-.ref-note .ref-term.ref-spaced {
-  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
-  font-style: normal;
-  font-size: 19px;
-  letter-spacing: 0.42em;
-  text-transform: uppercase;
-}
-
-.ref-note .ref-gloss {
-  display: block;
-  margin-top: 6px;
-  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
-  font-size: 13.5px;
-  line-height: 1.6;
-  color: var(--muted);
-}
-
-.section-dark .ref-note .ref-label {
-  color: var(--red-on-dark);
-}
-
-.section-dark .ref-note .ref-term {
-  color: var(--white);
-}
-
-.section-dark .ref-note .ref-gloss {
-  color: var(--text-on-dark);
-}
-
 /* The contact sheet: every work at a glance; a tile opens the plate viewer */
 .contact-sheet {
   display: grid;
@@ -658,6 +619,24 @@ body.chapters .ce-module.chapter-active {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 18px;
+}
+
+/* Vision reads long, so its text-only sections set in newspaper columns and the
+   measure stays comfortable instead of running the full sheet. A section with a
+   figure keeps one column, so the float stays clean. 360px is the narrowest
+   column, which makes two on the wide sheet and one again on a phone. The
+   heading spans both. Scoped to Vision; other guide pages keep one column. */
+.vision-essay .guide-block:not(:has(figure)) {
+  columns: 360px;
+  column-gap: 34px;
+}
+
+.vision-essay .guide-block:not(:has(figure)) h2 {
+  column-span: all;
+}
+
+.vision-essay .guide-block:not(:has(figure)) p {
+  margin-top: 0;
 }
 
 .guide-block h2 {
