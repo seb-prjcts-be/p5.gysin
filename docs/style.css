@@ -268,13 +268,6 @@ h3 {
   text-decoration: none;
 }
 
-.cs-tile .cs-num {
-  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: var(--red);
-}
-
 .cs-tile strong {
   font-family: "Oswald", sans-serif;
   font-size: 17px;
@@ -292,11 +285,6 @@ h3 {
 .cs-tile:focus-visible {
   background: var(--ink);
   color: var(--white);
-}
-
-.cs-tile:hover .cs-num,
-.cs-tile:focus-visible .cs-num {
-  color: var(--red-on-dark);
 }
 
 .cs-tile:hover small,

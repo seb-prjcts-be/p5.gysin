@@ -35,8 +35,7 @@ function setup() {
 }
 ```
 
-Paste-ready page for editor.p5js.org: the
-[`p5_editor` starter](examples/p5_editor/). The full reference is
+The full reference is
 [System](https://seb-prjcts-be.github.io/p5.gysin/docs/system.html); the guided
 tour is [Collage](https://seb-prjcts-be.github.io/p5.gysin/docs/collage/).
 
@@ -134,7 +133,7 @@ plot.text("RUB OUT", 60, 200, {
 **House rule: fill is for letterforms.** `rect`, `circle`, and `polygon`
 accept the same fill options, but empty tone planes are not part of the house
 style - a block on the sheet is made of closely set lines, letters, or signs
-(see the ruled blocks in `parameter_lab` and `p5_editor`), so every mark stays
+(see the ruled blocks in `parameter_lab`), so every mark stays
 writing. See `docs/example-conventions.md`, rule 8.
 
 - `hatchSpacing` (default 2) is the distance between the fill lines; minimum 0.25.
@@ -383,7 +382,6 @@ index.html
 docs/examples.html
 examples/first_trace/index.html
 examples/gysin_demo/index.html
-examples/p5_editor/index.html
 examples/parameter_lab/index.html
 examples/plotter_export/index.html
 ```
@@ -402,7 +400,6 @@ Available examples:
 - `rotations` - the turned sheet as palimpsest: `lattice()`, per-shape `angle`, and the page-level 180 export
 - `typewriter` - a period-correct single-stroke typewriter sheet built with the optional `underwood()` verb
 - `the_letter` - one complete piece of typed correspondence: the whole `underwood()` grammar
-- `p5_editor` - copy-paste starter for editor.p5js.org
 - `parameter_lab` - live control over trace parameters
 - `plotter_export` - SVG/JSON/HPGL export workflow
 - `font_outlines` - real font contours with separate counters
