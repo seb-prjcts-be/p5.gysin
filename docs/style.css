@@ -302,11 +302,14 @@ h3 {
   color: var(--muted);
 }
 
+/* Every tile stands the same height on every sheet: the core sheet has a tile
+   whose second line wraps and stretches its row, so the two-plate sheets below
+   are held to the same measure instead of sitting a line shorter. */
 .cs-tile {
   display: grid;
   gap: 6px;
   align-content: start;
-  min-height: 88px;
+  min-height: 102px;
   padding: 12px 14px;
   border: 1px solid var(--rule);
   background: rgba(251, 250, 245, 0.56);
@@ -410,12 +413,12 @@ body.plate-mode .plate.plate-active.section-dark {
   display: none;
 }
 
-/* The full example page browses inside the viewer frame, under the bar */
+/* The example page fills the whole viewer, edge to edge: no bar stands above it
+   and pushes it down, the way the sheet and code sit flush on the page. */
 #plate-frame-wrap {
   position: fixed;
   inset: 0;
   z-index: 60;
-  padding-top: 39px;
   background: var(--paper);
 }
 
@@ -433,41 +436,39 @@ html.embedded footer {
   display: none;
 }
 
+/* No bar of its own: only the close floats in the corner, in the same white
+   frame as the prev/next arrows. The counter and title stay in the markup so
+   the viewer script can keep writing them, but the example already prints its
+   own title and the reader has the arrows, so neither is shown. */
 .plate-bar {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 10px;
+  right: 10px;
   z-index: 70;
   display: flex;
-  gap: 18px;
+  gap: 10px;
   align-items: center;
-  padding: 10px 18px;
-  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  background: var(--ink);
-  color: var(--white);
 }
 
+#plate-counter,
 #plate-title {
-  flex: 1;
-  text-transform: uppercase;
+  display: none;
 }
 
 #plate-close {
-  border: 1px solid var(--white);
-  background: none;
-  color: var(--white);
-  font-family: inherit;
-  font-size: inherit;
-  padding: 4px 10px;
+  border: 1px solid var(--ink);
+  background: var(--white);
+  color: var(--ink);
+  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  padding: 13px 14px;
   cursor: pointer;
 }
 
 #plate-close:hover {
-  background: var(--white);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--white);
 }
 
 .plate-arrow {
