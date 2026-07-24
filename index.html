@@ -72,11 +72,7 @@ function setup() {
     </div>
     <div class="section-header" id="the-works">
       <div class="section-tag">Fourteen works &middot; each library keeps its own sheet</div>
-      <p class="section-desc">Every library below opens with a contact sheet of the works that run on it. Click a tile and the complete example page fills the screen - story, live sketch, buttons and exports included. Browse them all with the arrow keys or the edge arrows, leave with Esc. Without JavaScript the links jump to the cards below instead.</p>
-      <div class="cs-actions">
-        <button type="button" id="deal-sheet" hidden>deal me a sheet</button>
-        <button type="button" id="exhibition" hidden>exhibition &middot; 20s a page</button>
-      </div>
+      <p class="section-desc">Every library below opens with a contact sheet of the works that run on it. Click a tile and the work fills the screen - story, live sketch and code together. Browse them all with the arrow keys or the edge arrows, leave with Esc. Without JavaScript the links jump to the cards below instead.</p>
     </div>
   </section>
 
@@ -100,7 +96,7 @@ function setup() {
       <a class="cs-tile" href="#plate-ink-bleed" data-page="examples/ink_bleed/" data-slug="ink_bleed"><span class="cs-num">07</span><strong>Ink Bleed</strong><small>bleed &middot; additive</small></a>
       <a class="cs-tile" href="#plate-calibration" data-page="examples/plotter_calibration/" data-slug="plotter_calibration"><span class="cs-num">08</span><strong>Plotter Calibration</strong><small>page &middot; mm &middot; pens</small></a>
       <a class="cs-tile" href="#plate-export" data-page="examples/plotter_export/" data-slug="plotter_export"><span class="cs-num">09</span><strong>Plotter Export</strong><small>SVG &middot; JSON &middot; HPGL</small></a>
-      <a class="cs-tile" href="examples/p5_editor/" data-page="examples/p5_editor/" data-slug="p5_editor"><span class="cs-num">10</span><strong>p5 Editor Starter</strong><small>paste-ready page -&gt;</small></a>
+      <a class="cs-tile" href="examples/p5_editor/" data-page="examples/p5_editor/" data-slug="p5_editor" target="_blank" rel="noopener"><span class="cs-num">10</span><strong>p5 Editor Starter</strong><small>paste-ready page -&gt;</small></a>
     </div>
   </section>
 
@@ -565,19 +561,19 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
   function makeOutlinePreview(id, builder) {
     new p5(function(p) {
       let plot;
+      let loadedFont = null;
 
       p.setup = async function() {
         const size = previewSize(id);
         p.createCanvas(size.width, size.height).parent(id);
         p.pixelDensity(1);
         p.noLoop();
-        let outlineFont = null;
         try {
-          outlineFont = await p.loadFont(OUTLINE_FONT_URL);
+          loadedFont = await p.loadFont(OUTLINE_FONT_URL);
         } catch (error) {
-          outlineFont = null;
+          loadedFont = null;
         }
-        plot = builder(p, size.width, size.height, outlineFont);
+        plot = builder(p, size.width, size.height, loadedFont);
         p.redraw();
       };
 
@@ -585,6 +581,17 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
         p.background("#f0efe9");
         drawPreviewPaper(p);
         if (plot) plot.draw();
+      };
+
+      // A plate opens from hidden, so the canvas first sized itself to nothing;
+      // re-measure and rebuild at the open panel's width. The face is already
+      // loaded, so hand the same one back to the builder.
+      p.windowResized = function() {
+        if (!plot) return;
+        const size = previewSize(id);
+        p.resizeCanvas(size.width, size.height);
+        plot = builder(p, size.width, size.height, loadedFont);
+        p.redraw();
       };
     }, id);
   }
@@ -1017,7 +1024,6 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
   <script src="docs/sketch.js?v=passes1"></script>
 
   <div id="plate-chrome" hidden>
-    <div id="plate-frame-wrap"><iframe id="plate-frame" title="Full example page"></iframe></div>
     <div class="plate-bar">
       <span id="plate-counter"></span>
       <span id="plate-title"></span>
@@ -1027,99 +1033,100 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
     <button type="button" id="plate-next" class="plate-arrow" aria-label="Next plate">&rarr;</button>
   </div>
   <script>
-  // The sheet viewer: every tile opens the COMPLETE example page in a frame,
-  // so all twelve pages browse in place - story, buttons and exports included.
+  // The sheet turner: a tile turns to its own plate in place, one work at a
+  // time, the way the collage turns its chapters - no frame, no second page
+  // loaded. The plate carries the live preview, the code and the link out.
   (function() {
     const tiles = Array.from(document.querySelectorAll(".cs-tile[data-page]"));
     const chrome = document.getElementById("plate-chrome");
-    const frame = document.getElementById("plate-frame");
-    if (!tiles.length || !chrome || !frame) return;
-    const counter = document.getElementById("plate-counter");
-    const titleEl = document.getElementById("plate-title");
+    if (!tiles.length || !chrome) return;
+
+    // Every tile that points at a plate on this page joins the turner; the one
+    // tile that only links out (the editor starter) stays an ordinary link.
+    const items = tiles
+      .map(function(tile) {
+        const href = tile.getAttribute("href");
+        const plate = href && href.charAt(0) === "#" ? document.querySelector(href) : null;
+        return { tile: tile, plate: plate, slug: tile.dataset.slug };
+      })
+      .filter(function(item) { return item.plate; });
+    if (!items.length) return;
+
     let current = -1;
 
-    // The folder stays closed: with the viewer available the card stream hides.
+    // The folder stays closed: with the turner available the card stream hides.
     document.body.classList.add("folder");
 
-    // Exhibition mode: the site turns the pages itself; any hand stops it.
-    let exhibitionTimer = null;
-
-    function stopExhibition() {
-      if (!exhibitionTimer) return;
-      clearInterval(exhibitionTimer);
-      exhibitionTimer = null;
-    }
-
-    function openSheet(index) {
-      current = (index + tiles.length) % tiles.length;
+    function openPlate(index) {
+      current = (index + items.length) % items.length;
       document.body.classList.add("plate-mode");
       chrome.hidden = false;
-      const tile = tiles[current];
-      if (frame.getAttribute("src") !== tile.dataset.page) {
-        frame.src = tile.dataset.page;
-      }
-      counter.textContent = (current + 1) + " / " + tiles.length + (exhibitionTimer ? " \u00b7 exhibition" : "");
-      titleEl.textContent = tile.querySelector("strong").textContent;
-      history.replaceState(null, "", "#sheet-" + tile.dataset.slug);
+      items.forEach(function(item, i) {
+        item.plate.classList.toggle("plate-active", i === current);
+      });
+      // The plate was hidden until now, so its live preview sized itself to
+      // nothing; a resize makes it re-measure the open panel and redraw at full
+      // width. Reading the panel width forces layout, so a plate opened by hand
+      // is crisp at once. A deep-link open races the preview's own setup, which
+      // may still be running on a fresh load, so poll a few times until the
+      // canvas fills its box - stopping the moment it does, or the reader turns
+      // away. (Timeouts, not rAF: an rAF here measured the panel a frame early
+      // and rebuilt the preview at nothing.)
+      const shown = current;
+      window.dispatchEvent(new Event("resize"));
+      (function settle(tries) {
+        if (current !== shown || tries <= 0) return;
+        const box = items[shown].plate.querySelector(".ex-canvas");
+        const canvas = box && box.querySelector("canvas");
+        if (canvas && canvas.width >= box.offsetWidth - 4) return;
+        window.dispatchEvent(new Event("resize"));
+        setTimeout(function() { settle(tries - 1); }, 150);
+      })(16);
+      history.replaceState(null, "", "#sheet-" + items[current].slug);
     }
 
-    function closeSheets() {
-      stopExhibition();
+    function closePlates() {
       current = -1;
       document.body.classList.remove("plate-mode");
       chrome.hidden = true;
-      frame.removeAttribute("src");
+      items.forEach(function(item) { item.plate.classList.remove("plate-active"); });
       history.replaceState(null, "", location.pathname + location.search);
     }
 
-    tiles.forEach(function(tile, index) {
+    tiles.forEach(function(tile) {
+      const index = items.findIndex(function(item) { return item.tile === tile; });
+      if (index === -1) return;   // links out (editor starter): let it navigate
       tile.addEventListener("click", function(event) {
         event.preventDefault();
-        stopExhibition();
-        openSheet(index);
+        openPlate(index);
       });
     });
 
-    document.getElementById("plate-prev").addEventListener("click", function() { stopExhibition(); openSheet(current - 1); });
-    document.getElementById("plate-next").addEventListener("click", function() { stopExhibition(); openSheet(current + 1); });
-    document.getElementById("plate-close").addEventListener("click", closeSheets);
+    document.getElementById("plate-prev").addEventListener("click", function() { openPlate(current - 1); });
+    document.getElementById("plate-next").addEventListener("click", function() { openPlate(current + 1); });
+    document.getElementById("plate-close").addEventListener("click", closePlates);
     document.addEventListener("keydown", function(event) {
       if (current === -1) return;
-      if (event.key === "ArrowLeft") { stopExhibition(); openSheet(current - 1); }
-      else if (event.key === "ArrowRight") { stopExhibition(); openSheet(current + 1); }
-      else if (event.key === "Escape") closeSheets();
+      if (event.key === "ArrowLeft") openPlate(current - 1);
+      else if (event.key === "ArrowRight") openPlate(current + 1);
+      else if (event.key === "Escape") closePlates();
     });
 
-    // deal me a sheet: chance opens one page. Exhibition: slow automatic
-    // turning, kept from users who prefer reduced motion.
-    const dealButton = document.getElementById("deal-sheet");
-    const exhibitionButton = document.getElementById("exhibition");
-    const calmViewer = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (dealButton) {
-      dealButton.hidden = false;
-      dealButton.addEventListener("click", function() {
-        stopExhibition();
-        openSheet(Math.floor(Math.random() * tiles.length));
-      });
+    // Deep links: the #sheet-<slug> form, plus the older plate anchors. Read on
+    // load and again on any hash change, so a shared link opens its plate even
+    // when the hash arrives a beat after the page.
+    function openFromHash() {
+      const hash = location.hash;
+      let start = -1;
+      if (hash.indexOf("#sheet-") === 0) {
+        start = items.findIndex(function(item) { return item.slug === hash.slice(7); });
+      } else if (hash) {
+        start = items.findIndex(function(item) { return item.tile.getAttribute("href") === hash; });
+      }
+      if (start !== -1) openPlate(start);
     }
-    if (exhibitionButton && !calmViewer) {
-      exhibitionButton.hidden = false;
-      exhibitionButton.addEventListener("click", function() {
-        stopExhibition();
-        exhibitionTimer = setInterval(function() { openSheet(current + 1); }, 20000);
-        openSheet(current === -1 ? 0 : current);
-      });
-    }
-
-    // Deep links: the new #sheet-<slug> form, plus the older card anchors.
-    const hash = location.hash;
-    let start = -1;
-    if (hash.indexOf("#sheet-") === 0) {
-      start = tiles.findIndex(function(tile) { return tile.dataset.slug === hash.slice(7); });
-    } else if (hash) {
-      start = tiles.findIndex(function(tile) { return tile.getAttribute("href") === hash; });
-    }
-    if (start !== -1) openSheet(start);
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
     })();
   </script>
 

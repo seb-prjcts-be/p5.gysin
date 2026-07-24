@@ -359,33 +359,6 @@ body.folder .plate {
   display: none;
 }
 
-/* The two chance controls, announced above the sheets: chance can open a work
-   before the reader has walked past it */
-.cs-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 14px;
-  max-width: 1100px;
-}
-
-.cs-actions button {
-  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 9px 14px;
-  border: 1px solid var(--ink);
-  background: var(--white);
-  color: var(--ink);
-  cursor: pointer;
-}
-
-.cs-actions button:hover,
-.cs-actions button:focus-visible {
-  background: var(--ink);
-  color: var(--white);
-}
-
 /* Plate mode: one work fills the screen; the page underneath holds still */
 body.plate-mode {
   overflow: hidden;
@@ -413,24 +386,9 @@ body.plate-mode .plate.plate-active.section-dark {
   display: none;
 }
 
-/* The example page fills the whole viewer, edge to edge: no bar stands above it
-   and pushes it down, the way the sheet and code sit flush on the page. */
-#plate-frame-wrap {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  background: var(--paper);
-}
-
-#plate-frame {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  background: var(--paper);
-}
-
-/* An example page inside the viewer drops its own chrome */
+/* An example page opened on its own inside a frame drops its own chrome. The
+   showcase no longer frames anything, but the example pages keep this so any
+   other embedding stays clean. */
 html.embedded #navbar,
 html.embedded footer {
   display: none;
