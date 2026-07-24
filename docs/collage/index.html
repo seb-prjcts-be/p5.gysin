@@ -798,7 +798,8 @@ plot.draw();</code></pre>
       history.replaceState(null, "", "#" + modules[current].id);
       // Let the p5 previews size themselves now that this module is visible.
       window.dispatchEvent(new Event("resize"));
-      window.scrollTo(0, 0);
+      // The page holds its place when a chapter turns: no yank back to the top
+      // on every turn. The reader keeps the height they were reading at.
     }
 
     chips.forEach(function (chip) {
