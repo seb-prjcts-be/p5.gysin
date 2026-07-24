@@ -29,6 +29,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* Leave room for the sticky title row so an anchor jump lands on the
+     content, not behind the bar. The mobile value clears the wrapped menu. */
+  scroll-padding-top: 80px;
 }
 
 body {
@@ -1262,12 +1265,22 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  /* Once the columns stack, the sketch comes first so it sits just under
+     the header instead of below the whole code block. */
+  .demo-right {
+    order: -1;
+  }
+
   .demo-canvas {
     min-height: 320px;
   }
 }
 
 @media (max-width: 800px) {
+  html {
+    scroll-padding-top: 128px;
+  }
+
   #navbar {
     align-items: flex-start;
     padding: 12px 18px;
