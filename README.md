@@ -17,7 +17,9 @@ as standalone pages under `examples/`.
 
 ## Start
 
-Two script lines and a sketch - this is the whole library:
+Two script lines and a sketch - this is the whole core. The library ships as
+three script files; the two optional addons, text and underwood, each add one
+line (see below):
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/p5@2.3.1/lib/p5.js"></script>
@@ -397,7 +399,7 @@ The examples follow the same three-layer structure as `p5.waves`:
 
 Available examples:
 
-- `quickstart_rub` - the whole library in one worn word, eleven lines
+- `quickstart_rub` - the whole core in one worn word, eleven lines
 - `quickstart_chant` - the permutation poem as one call, twelve lines
 - `quickstart_plotter` - a small sheet saved as plotter-ready A4 SVG, twenty-eight lines
 - `first_trace` - minimal trace composition

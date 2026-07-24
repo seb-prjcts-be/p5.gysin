@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  worn_word - one word worn away, in a single call
 // ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole library is three lines:
+//  New to p5.gysin? The whole core is three lines:
 //
 //      const plot = new GysinPlot({ seed: 1960 });
 //      plot.rub("WORN", 46, 248);   // legible → cut up → asemic

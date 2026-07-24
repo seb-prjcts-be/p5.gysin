@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  frequencies - five wavering signals notated as an abstract machine score
 // ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole library is three lines:
+//  New to p5.gysin? The whole core is three lines:
 //
 //      const plot = new GysinPlot({ seed: 40017 });
 //      plot.path([[52, 200], [668, 200]], { stroke: "#171717" });   // one clean signal

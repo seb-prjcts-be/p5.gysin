@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  p5 Editor Starter - a sliced title that returns lower and forgets itself
 // ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole library is three lines:
+//  New to p5.gysin? The whole core is three lines:
 //
 //      const plot = new GysinPlot({ seed: 19600319 });
 //      plot.text("CUT UP", 82, 150);   // clean, mechanical text

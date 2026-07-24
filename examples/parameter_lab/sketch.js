@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  parameter_lab - one slider owns one element, each in its own colour
 // ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole library is three lines:
+//  New to p5.gysin? The whole core is three lines:
 //
 //      const plot = new GysinPlot({ seed: 8319 });
 //      plot.text("PISTOL POEM", 70, 150);   // clean, mechanical text

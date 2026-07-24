@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  gysin_demo - a cut-up poster that rubs its own words away
 // ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole library is three lines:
+//  New to p5.gysin? The whole core is three lines:
 //
 //      const plot = new GysinPlot({ seed: 19600319 });
 //      plot.text("RUB OUT", 75, 145);   // clean, mechanical text

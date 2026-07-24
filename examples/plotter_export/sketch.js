@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  plotter_export - one layered plate, exported to SVG, JSON and HPGL
 // ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole library is three lines:
+//  New to p5.gysin? The whole core is three lines:
 //
 //      const plot = new GysinPlot({ seed: 7475 });
 //      plot.text("PLOT", 118, 188);   // clean, mechanical text

@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  ink_bleed - the ink returns to lines it has already written
 // ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole library is three lines:
+//  New to p5.gysin? The whole core is three lines:
 //
 //      const plot = new GysinPlot({ seed: 1916 });
 //      plot.text("I AM THAT I AM", 46, 170);   // one clean pass

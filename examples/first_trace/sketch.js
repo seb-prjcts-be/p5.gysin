@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  first_trace - one word decaying down a single faint backbone line
 // ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole library is three lines:
+//  New to p5.gysin? The whole core is three lines:
 //
 //      const plot = new GysinPlot({ seed: 1960 });
 //      plot.text("FIRST TRACE", 46, 248);   // clean, mechanical text

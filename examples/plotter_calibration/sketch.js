@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  plotter_calibration - an A4 pen-plotter test sheet drawn on three pens
 // ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole library is three lines:
+//  New to p5.gysin? The whole core is three lines:
 //
 //      const plot = new GysinPlot({ seed: 210297 });
 //      plot.text("P5.GYSIN CALIBRATION", 48, 39);   // clean, mechanical text

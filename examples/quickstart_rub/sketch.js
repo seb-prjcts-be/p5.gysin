@@ -1,4 +1,4 @@
-// quickstart-rub - the whole library in one worn word.
+// quickstart-rub - the whole core in one worn word.
 function setup() {
   const canvas = createCanvas(560, 440);
   canvas.parent("sketch");

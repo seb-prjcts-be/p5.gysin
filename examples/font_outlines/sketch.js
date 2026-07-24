@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  font_outlines - the same glyphs, hatch-filled two ways, then undone
 // ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole library is three lines:
+//  New to p5.gysin? The whole core is three lines:
 //
 //      const plot = new GysinPlot({ seed: 8088 });
 //      plot.text("O8", 64, 190, { font });   // an outline font -> real letter bodies
