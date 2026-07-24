@@ -140,22 +140,6 @@ canvas:focus-visible {
   color: var(--ink);
 }
 
-.nav-hamburger {
-  display: none;
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--rule);
-  background: var(--paper);
-}
-
-.nav-hamburger span {
-  display: block;
-  width: 18px;
-  height: 2px;
-  margin: 4px auto;
-  background: var(--ink);
-}
-
 /* ── hero (showcase home) ───────────────────────────────────────────── */
 
 #hero {
