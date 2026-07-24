@@ -1289,31 +1289,11 @@ footer {
     padding: 12px 18px;
   }
 
-  /* Pages with a hamburger collapse the links behind it; pages without
-     one (the example demos) keep the links visible and let them wrap. */
-  #navbar:has(.nav-hamburger) .nav-links {
-    display: none;
-    position: absolute;
-    top: 64px;
-    right: 18px;
-    left: 18px;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 16px;
-    background: var(--paper);
-    border: 1px solid var(--rule);
-  }
-
-  #navbar:not(:has(.nav-hamburger)) .nav-links {
+  /* The menu never collapses: on narrow screens the links wrap to a
+     second row and stay visible on every page. The hamburger stays
+     hidden (it falls back to its base display: none). */
+  .nav-links {
     flex-wrap: wrap;
-  }
-
-  .nav-hamburger {
-    display: block;
-  }
-
-  .nav-open .nav-links {
-    display: flex !important;
   }
 
   .hero-overlay {
