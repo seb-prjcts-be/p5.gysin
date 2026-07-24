@@ -51,8 +51,11 @@ pre {
   font-family: Consolas, "Courier New", monospace;
 }
 
-/* Running text reads in Alegreya; UI chrome stays in the mono voice. */
+/* Running text reads in Alegreya; UI chrome stays in the mono voice. A whole
+   sentence is running text wherever it stands - a card, a step, a caption. */
 p,
+figcaption,
+.demo-header li,
 .guide-block li,
 .legend li {
   font-family: "Alegreya", Georgia, serif;
@@ -60,6 +63,7 @@ p,
 
 /* Mono runs wider and taller than Alegreya - tuck inline code in a step. */
 p code,
+.demo-header li code,
 .guide-block li code,
 .legend li code {
   font-size: 0.88em;
@@ -76,13 +80,6 @@ p code,
 
 .pull-quote cite {
   font-style: normal;
-}
-
-/* Card/strip copy is chrome, not running text - keep it in the mono voice. */
-.feature-grid p,
-.example-card p,
-.ce-step p {
-  font-family: inherit;
 }
 
 a:focus-visible,
@@ -359,7 +356,8 @@ body.folder .plate {
   display: none;
 }
 
-/* The two chance controls under the contact sheet */
+/* The two chance controls, announced above the sheets: chance can open a work
+   before the reader has walked past it */
 .cs-actions {
   display: flex;
   gap: 10px;
@@ -844,9 +842,24 @@ body.chapters .ce-module.chapter-active {
   padding: 56px var(--col-pad) 72px;
 }
 
+/* The intro takes the same measure as the code and sketch below it: title,
+   running text and the two blocks all break on the column edge. One text
+   column would read too long at that width, so the prose sets in newspaper
+   columns: 400px is the narrowest column allowed, which makes two on the wide
+   sheet and one again as soon as the page narrows - no breakpoint needed. */
 .demo-header {
-  max-width: 940px;
-  margin: 0 auto 28px;
+  margin: 0 0 28px;
+  columns: 400px;
+  column-gap: 34px;
+  column-rule: 1px solid var(--rule);
+}
+
+/* The tag and the title stay one line across the whole sheet - h2 too, for the
+   second header some pages set below the sketch. */
+.demo-header .demo-number,
+.demo-header h1,
+.demo-header h2 {
+  column-span: all;
 }
 
 .demo-header h1 {
@@ -855,8 +868,13 @@ body.chapters .ce-module.chapter-active {
   line-height: 1;
 }
 
+/* Bottom margins only: every column has to start flush with its neighbour. */
+.demo-header p,
+.demo-header ul {
+  margin: 0 0 14px;
+}
+
 .demo-header p {
-  max-width: 760px;
   color: var(--muted);
   font-size: 18px;
   line-height: 1.5;
@@ -918,9 +936,22 @@ body.chapters .ce-module.chapter-active {
   height: auto !important;
 }
 
+/* The note under the sketch is prose in whatever tag a page happened to use
+   for it - p on one page, div on the next - so name the voice on the class
+   instead of the tag. 15px because Alegreya sits smaller than mono. */
 .demo-note {
   color: var(--muted);
-  font-size: 14px;
+  font-family: "Alegreya", Georgia, serif;
+  font-size: 15px;
+}
+
+/* An id on a note means the sketch writes into it, so it is a reading and not
+   a sentence - seed, path count, mm drawn - and it keeps the machine voice.
+   That holds whether the sketch fills a word inside the line or the whole line. */
+.demo-note[id],
+.demo-note [id] {
+  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  font-size: 0.9em;
 }
 
 .demo-stats {
@@ -1090,9 +1121,11 @@ body.chapters .ce-module.chapter-active {
   font-size: 17px;
 }
 
+/* Alegreya sits smaller than mono at the same size - one step back up so the
+   step text keeps the weight it had in the machine voice. */
 .ce-step p {
   margin: 0;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--muted);
 }
 
