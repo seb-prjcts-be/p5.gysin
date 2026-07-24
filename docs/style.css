@@ -238,13 +238,6 @@ h3 {
   font-size: 20px;
 }
 
-/* the pinned library URL under each group title; long, so it may break anywhere */
-.lib-cdn code {
-  overflow-wrap: anywhere;
-}
-
-/* the reference plate: the period source a section leans on. The term breathes
-   in the essay voice; the gloss answers in the machine voice. */
 /* The contact sheet: every work at a glance; a tile opens the plate viewer */
 .contact-sheet {
   display: grid;
