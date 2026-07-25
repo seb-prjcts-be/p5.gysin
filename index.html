@@ -141,7 +141,7 @@ plot.textCutup("I THINK THEREFORE I AM", 76, 260, {
 
   <section class="section section-dark plate" id="study-free">
     <div class="section-header">
-      <div class="section-tag">rub() &middot; one intent verb</div>
+      <div class="section-tag">rub() &middot; text / cut / asemic</div>
       <h2>Writing escapes the <span class="accent">word</span></h2>
       <p class="section-desc"><strong>WORN</strong>, in three passages: intact, cut, buried.</p>
     </div>
@@ -584,7 +584,7 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
     });
   }
 
-  // Period single-stroke typewriter: one intent verb, no font to load.
+  // Period single-stroke typewriter; no font file to load.
   function makeTypewriterPreview(id) {
     makePreview(id, function(p, canvasW, canvasH) {
       const plot = new GysinPlot({ p: p, seed: 1961, width: canvasW, height: canvasH });
@@ -696,8 +696,7 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
       width: canvasW,
       height: canvasH
     });
-    // One intent verb on its own defaults - only size scales to the canvas;
-    // the outline font fills the legible head, exactly like the full example.
+    // Only size scales to the canvas; the outline font fills the legible head.
     const options = { size: canvasW * 0.0775 };
     if (outlineFont) options.font = outlineFont;
     plot.rub("WORN", 46, canvasH * 0.17, options);

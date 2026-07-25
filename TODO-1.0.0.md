@@ -617,14 +617,14 @@ AI-stem vormen.
 
 Taken:
 
-- [ ] Zoek sitebreed op de signalen uit §6.1.
-- [ ] Beoordeel treffers handmatig; geen blinde zoek/vervangactie.
-- [ ] Vergelijk alle pagina’s met de goedgekeurde pilootteksten.
-- [ ] Controleer dat niet ieder werk dezelfde zinsbouw en lengte heeft.
-- [ ] Controleer dat interfacehulp niet per ongeluk verdween.
-- [ ] Controleer dat Gysin niet voortdurend bij naam wordt gebruikt waar de
+- [x] Zoek sitebreed op de signalen uit §6.1.
+- [x] Beoordeel treffers handmatig; geen blinde zoek/vervangactie.
+- [x] Vergelijk alle pagina’s met de goedgekeurde pilootteksten.
+- [x] Controleer dat niet ieder werk dezelfde zinsbouw en lengte heeft.
+- [x] Controleer dat interfacehulp niet per ongeluk verdween.
+- [x] Controleer dat Gysin niet voortdurend bij naam wordt gebruikt waar de
       methode zelf kan spreken.
-- [ ] Laat een read-only review alleen concrete overtredingen van dit plan
+- [x] Laat een read-only review alleen concrete overtredingen van dit plan
       rapporteren.
 
 Acceptance:

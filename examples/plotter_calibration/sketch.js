@@ -1,21 +1,5 @@
-// ═══════════════════════════════════════════════════════════════════
-//  plotter_calibration - an A4 pen-plotter test sheet drawn on three pens
-// ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole core is three lines:
-//
-//      const plot = new GysinPlot({ seed: 210297 });
-//      plot.text("P5.GYSIN CALIBRATION", 48, 39);   // clean, mechanical text
-//      plot.draw();
-//
-//  Every option below (breathe, dropout, fill, pressure, hatch, asemic…)
-//  is OPTIONAL disturbance layered on top of that core. The defaults are
-//  all zero, so a call with no options just draws clean - nothing here is
-//  required to use the library. This sheet is a physical instrument: it
-//  works in millimetres on an A4 page (mm() converts mm -> canvas pixels)
-//  and maps every layer to one of three pens. It builds up in zones drawn
-//  back to front; read the numbered sections in buildPlot() from top to
-//  bottom. Each zone is a compositional layer and can be deleted on its
-//  own without breaking the rest.
+// plotter_calibration — an A4 test sheet mapped to three pens.
+// mm() converts physical coordinates; named layers select the pen map.
 // ═══════════════════════════════════════════════════════════════════
 
 const MM = 3;                 // pixels per millimetre on the preview canvas

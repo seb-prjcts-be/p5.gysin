@@ -1,23 +1,5 @@
-// ═══════════════════════════════════════════════════════════════════
-//  worn_word - one word worn away, in a single call
-// ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole core is three lines:
-//
-//      const plot = new GysinPlot({ seed: 1960 });
-//      plot.rub("WORN", 46, 248);   // legible → cut up → asemic
-//      plot.draw();
-//
-//  rub() is an intent verb: it composes text → textCutup → asemic into
-//  one decaying gesture, with strong defaults. This whole sketch is that
-//  one call - everything else here is just a canvas, a decay knob, and a
-//  reseed button. Compare it with first_trace, which builds the same
-//  gesture by hand: rub() is those ~40 lines collapsed into one.
-//
-//  rub() also returns the id of every copy and tangle it drew. The Freeze
-//  head button locks the first id: a frozen shape keeps its exact trace,
-//  so New variation then re-decays only the tail via plot.reroll() - the
-//  word holds while its burial moves. Thaw unlocks it again.
-// ═══════════════════════════════════════════════════════════════════
+// worn_word — rub() returns the ids of its three-stage trace.
+// Freeze head keeps the first id while reroll changes the remaining tail.
 
 let plot;
 let seedValue = 1960;

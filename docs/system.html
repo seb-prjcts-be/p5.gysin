@@ -233,7 +233,7 @@ lines.forEach((line, index) =&gt; {
       <p>Orders: <code>walk</code>, <code>random</code>, <code>lexical</code>, and <code>rotate</code>. The source line stays first, duplicate words produce only unique lines, and <code>limit</code> is capped at 1,000.</p>
       <p><code>plot.chant(text, x, y, options)</code> sends the result of <code>permute()</code> through <code>textCutup()</code>. It is added to each plot when the addon is loaded.</p>
       <div class="code-preview">
-        <code>plot.chant("CUT ARRANGE GLUE", 60, 90);            // the whole poem, defaults
+        <code>plot.chant("CUT ARRANGE GLUE", 60, 90);
 plot.chant("CUT ARRANGE GLUE", 60, 90, { descent: 0 }); // every line cut equally
 plot.chant("CUT ARRANGE GLUE", 60, 90, { order: "rotate", breathe: 1 });</code>
       </div>

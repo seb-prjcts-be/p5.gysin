@@ -1,21 +1,5 @@
-// ═══════════════════════════════════════════════════════════════════
-//  typewriter - a period-correct single-stroke typed sheet
-// ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? With the underwood module loaded, the whole sketch is:
-//
-//      const plot = new GysinPlot({ seed: 1961 });
-//      plot.underwood("KICK THAT HABIT MAN", 60, 90);   // period typewriter, defaults
-//      plot.draw();
-//
-//  underwood() is an intent verb: defaults alone give a period-correct typewriter
-//  page - single-stroke Hershey letterforms (bundled, no font to load), fixed
-//  monospace pitch and line height (10 chars-per-inch / 6 lines-per-inch), and
-//  the small strike wear of a real typed sheet. Every option below is opt-in.
-//
-//  A typewriter had no bold and no italic (see the About page and
-//  docs/typewriter-decoration-research.md). So the only decoration here is what
-//  the machine could actually do: OVERSTRIKE (bold: true, the same key struck
-//  twice), UNDERLINE (the underscore rule), ALL CAPS, spacing, and symbol rules.
+// typewriter — fixed-pitch, single-stroke rows with seeded wear.
+// The bundled face needs no font file. Overstrike and underline are pen paths.
 // ═══════════════════════════════════════════════════════════════════
 
 const W = 820;

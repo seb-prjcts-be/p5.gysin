@@ -1,21 +1,5 @@
-// ═══════════════════════════════════════════════════════════════════
-//  ink_bleed - the ink returns to lines it has already written
-// ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole core is three lines:
-//
-//      const plot = new GysinPlot({ seed: 1916 });
-//      plot.text("I AM THAT I AM", 46, 170);   // one clean pass
-//      plot.draw();
-//
-//  bleed is the ADDITIVE disturbance. dropout and rubout take line
-//  material away; bleed picks a few contiguous fragments and gives only
-//  those one or more extra, slightly shifted passes - ink gathering where
-//  the pen went back over its own trace. No cut-up here: the phrase stays
-//  whole, drawn on real outline-font contours (Oswald), so the ink
-//  gathers in letterforms. Three states of exactly that one option;
-//  nothing else changes between the rows. Read the numbered sections in
-//  buildPlot() from top to bottom.
-// ═══════════════════════════════════════════════════════════════════
+// ink_bleed — one phrase at zero, restrained, and heavy accumulation.
+// Only the bleed settings differ between rows; the contours stay intact.
 
 let plot;
 let seedValue = 1916;

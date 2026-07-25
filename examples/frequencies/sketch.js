@@ -1,20 +1,5 @@
-// ═══════════════════════════════════════════════════════════════════
-//  frequencies - five wavering signals notated as an abstract machine score
-// ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole core is three lines:
-//
-//      const plot = new GysinPlot({ seed: 40017 });
-//      plot.path([[52, 200], [668, 200]], { stroke: "#171717" });   // one clean signal
-//      plot.draw();
-//
-//  Every option below (breathe, dropout, rubout, hatch fill, asemic, layers…)
-//  is OPTIONAL disturbance layered on top of that core. The defaults are
-//  all zero, so a call with no options just draws clean - nothing here is
-//  required to use the library. This sketch builds the score up in layers;
-//  read the numbered sections in buildPlot() from top to bottom. Each is a
-//  compositional layer, drawn back to front, and can be deleted on its own
-//  without breaking the rest.
-// ═══════════════════════════════════════════════════════════════════
+// frequencies — five seeded signals arranged as a score.
+// Staff geometry sets the shared coordinate system for every layer.
 
 let plot;
 let seed = 40017;

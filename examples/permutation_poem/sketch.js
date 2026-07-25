@@ -1,21 +1,6 @@
-// ═══════════════════════════════════════════════════════════════════
-//  permutation_poem - one phrase, permuted and cut up into an A3 poster
-// ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? With the text module loaded, a permutation poem is
-//  three lines:
-//
-//      const plot = new GysinPlot({ seed: 1960 });
-//      plot.chant("I LOVE YOU", 64, 120);   // permuted, every line cut deeper
-//      plot.draw();
-//
-//  chant() is the intent verb for exactly the movement this poster makes:
-//  GysinText.permute() rearranges the phrase into orders, then every order
-//  runs through textCutup(), each line cut a little deeper. This poster
-//  performs that same two-step BY HAND - permute() first, then its own
-//  decay curve into textCutup() per row - because a poster wants control
-//  over every repeat, pen and layer. chant() is the recipe; this sheet is
-//  the recipe elaborated. Every other option below (letters, hatch fill,
-//  breathe, dropout, pressure…) is optional and defaults to zero.
+// permutation_poem — six ordered returns of one phrase.
+// GysinText.permute() supplies the strings; textCutup() shapes each row.
+// The calls stay separate so weight, cut, pen, and layer can diverge.
 //  This sketch builds the poster one layer at a time; read the
 //  numbered sections in buildPoster() from top to bottom. Each is a
 //  compositional layer, drawn back to front, and can be deleted on its own

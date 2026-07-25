@@ -1,20 +1,5 @@
-// ═══════════════════════════════════════════════════════════════════
-//  gysin_demo - a cut-up poster that rubs its own words away
-// ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole core is three lines:
-//
-//      const plot = new GysinPlot({ seed: 19600319 });
-//      plot.text("RUB OUT", 75, 145);   // clean, mechanical text
-//      plot.draw();
-//
-//  Every option below (breathe, dropout, rubout, cut-up, letters…)
-//  is OPTIONAL disturbance layered on top of that core. The defaults are
-//  all zero, so a call with no options just draws clean - nothing here is
-//  required to use the library. This sketch adds the layers one at a time;
-//  read the numbered sections in buildPlot() from top to bottom. Each is a
-//  compositional layer, drawn back to front, and can be deleted on its own
-//  without breaking the rest.
-// ═══════════════════════════════════════════════════════════════════
+// gysin_demo — rubbed titles, a ruled band, and a letter field.
+// Both controls rebuild the poster from its fixed seed.
 
 // p5.gysin demo - "RUB OUT THE WORD"
 // A cut-up typographic poster read in clear zones: two titles, a ruled band,

@@ -1,15 +1,5 @@
-// ═══════════════════════════════════════════════════════════════════
-//  the_letter - a period-typed letter: the whole underwood grammar
-//  in its natural habitat.
-//
-//  The whole piece, in three lines - this alone is a complete sketch:
-//      const plot = new GysinPlot({ seed: 1912 });
-//      plot.underwood("DEAR READER,\nTHE MACHINE HAS ONE FACE.", 60, 150);
-//      plot.draw();
-//  Everything below is the full letter: dateline, salutation, body,
-//  a struck-over correction, the three period emphases, and the
-//  small voice that signs. All options are opt-in.
-// ═══════════════════════════════════════════════════════════════════
+// the_letter — dateline, salutation, body, correction, and signature.
+// Every mark uses the bundled single-stroke typewriter face.
 
 const INK = "#151515";
 const W = 700;

@@ -1,20 +1,5 @@
-// ═══════════════════════════════════════════════════════════════════
-//  parameter_lab - one slider owns one element, each in its own colour
-// ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole core is three lines:
-//
-//      const plot = new GysinPlot({ seed: 8319 });
-//      plot.text("PISTOL POEM", 70, 150);   // clean, mechanical text
-//      plot.draw();
-//
-//  Every option below (breathe, dropout, repeat, rubout, ruled block,
-//  letter field…) is OPTIONAL disturbance layered on top of that
-//  core. The defaults are all zero, so a call with no options just draws
-//  clean - nothing here is required to use the library. This sketch adds
-//  the layers one at a time; read the numbered sections in buildPlot()
-//  from top to bottom. Each is a compositional layer, drawn back to
-//  front, and can be deleted on its own without breaking the rest.
-// ═══════════════════════════════════════════════════════════════════
+// parameter_lab — one control and one colour per trace variable.
+// Hover and tap isolation are wired below the plot construction.
 
 let plot;
 let seedValue = 8319;

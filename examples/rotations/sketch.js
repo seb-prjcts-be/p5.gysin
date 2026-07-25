@@ -1,19 +1,5 @@
-// ═══════════════════════════════════════════════════════════════════
-//  rotations - the turned sheet as palimpsest
-//
-//  The whole piece, in three lines - this alone is a complete sketch:
-//      const plot = new GysinPlot({ seed: 1960 });
-//      plot.lattice("COME TO FREE THE WORDS", 0, 0, 700, 1160, { turns: [4, 94] });
-//      plot.text("FREE THE WORDS COME TO", 120, 300, { size: 24, angle: 96 });
-//      plot.draw();
-//  Everything below is elaboration, layered the way the studio layered:
-//  the machine drawing (a roller grid, turned slightly off true) as the
-//  ground, the written field crossing it edge to edge in two off-square
-//  passes, and the silent script over everything - the five cyclic
-//  orders of the phrase scattered at their own angles, some running as
-//  columns, one upside down. Nothing centres, nothing reads top-left to
-//  bottom-right; the sheet is entered anywhere.
-// ═══════════════════════════════════════════════════════════════════
+// rotations — a roller grid, two lattice passes, five cyclic orders.
+// Angles stay slightly off-square; no layer establishes a fixed entrance.
 
 const PHRASE = "COME TO FREE THE WORDS";
 const INK = "#151515";

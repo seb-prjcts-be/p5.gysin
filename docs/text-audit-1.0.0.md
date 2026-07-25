@@ -221,3 +221,39 @@ Beslissing: functionele redirectcopy behouden; alleen linkcheck uitvoeren.
 - een globale zoek/vervangactie;
 - nieuwe historische slogans of Gysin-frases als decoratie;
 - bestaande redirects opruimen.
+
+## Fase 10 — sitebrede hercontrole
+
+Uitgevoerd op 25 juli 2026, na de consolidatie van homepage, voorbeelden,
+Collage, System, README en Vision.
+
+### Concrete overtreding
+
+Dertien volledige voorbeeldsketches begonnen nog met varianten van hetzelfde
+lange tutorialsjabloon: “New to p5.gysin?”, “the whole core”, “every option” en
+een voorgeschreven leesroute van boven naar beneden. Die tekst stond niet meer
+op de voorbeeldpagina, maar bleef bereikbaar via elke link naar de bronsketch.
+
+Beslissing: de repetitieve kopcommentaren zijn vervangen door één tot drie
+werk-specifieke technische regels. Uitvoerbare JavaScript, controls, ids en
+beeldopbouw zijn niet gewijzigd.
+
+### Bewust behouden
+
+- “This page moved” op drie redirects: noodzakelijke routehulp.
+- “the whole exported sheet” in System: precieze afbakening tussen
+  shape-rotatie en paginarotatie.
+- de ene tegenstelling “not as clean geometry but as fragile vector material”
+  in Sebs persoonlijke oorsprongstekst: geen terugkerend sjabloon.
+- de naam Gysin in Vision en in API-/bestandsnamen; op de werkpagina’s spreekt
+  de methode zelf.
+- korte technische commentaren waarin “whole” letterlijk een volledig vlak,
+  spoor of exportblad aanduidt.
+
+### Samenhang
+
+De veertien werkintro’s tellen 7 tot 19 woorden en gebruiken geen vaste
+openingszin. `worn_word` en `permutation_poem` blijven de twee korte
+toonankers. Bedieningshulp staat bij controls of sneltoetsen; de actuele site
+bevat 77 knoppen, 11 inputs en 2 tekstvelden. De signalenscan is handmatig
+beoordeeld; er is geen globale vervanging uitgevoerd.

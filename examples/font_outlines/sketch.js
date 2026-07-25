@@ -1,21 +1,5 @@
-// ═══════════════════════════════════════════════════════════════════
-//  font_outlines - the same glyphs, hatch-filled two ways, then undone
-// ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole core is three lines:
-//
-//      const plot = new GysinPlot({ seed: 8088 });
-//      plot.text("O8", 64, 190, { font });   // an outline font -> real letter bodies
-//      plot.draw();
-//
-//  A real outline font is the ONLY extra this example needs: with it, fill can
-//  hatch the letter bodies and leave the inner counters empty. Every other
-//  option below (fill mode, weave spacing/angle, breathe, cut-up, asemic…) is
-//  OPTIONAL disturbance layered on top, and every default is zero - a call with
-//  no options draws clean. This sketch adds the layers one at a time; read the
-//  numbered sections in buildPlot() from top to bottom. Each is a compositional
-//  layer, drawn back to front, and can be deleted on its own without breaking
-//  the rest.
-// ═══════════════════════════════════════════════════════════════════
+// font_outlines — the same glyphs filled two ways, then undone.
+// Oswald supplies closed contours; hatch lines leave their counters open.
 
 const FONT_URLS = {
   Oswald: "assets/Oswald-Regular.otf",

@@ -1,21 +1,5 @@
-// ═══════════════════════════════════════════════════════════════════
-//  plotter_export - one layered plate, exported to SVG, JSON and HPGL
-// ═══════════════════════════════════════════════════════════════════
-//  New to p5.gysin? The whole core is three lines:
-//
-//      const plot = new GysinPlot({ seed: 7475 });
-//      plot.text("PLOT", 118, 188);   // clean, mechanical text
-//      plot.draw();
-//
-//  Every option below (breathe, dropout, typed subtitle, per-pen
-//  layers, page + export…) is OPTIONAL on top of that core. The defaults are
-//  all zero, so a call with no options just draws clean - nothing here
-//  is required to use the library. This sketch stacks the layers one at
-//  a time; read the numbered sections in shapesFor() from top to bottom.
-//  Each is a compositional layer, drawn back to front, and can be
-//  deleted on its own without breaking the rest. Export is just handing
-//  the same plot to plot.downloadSVG() / downloadJSON() / downloadHPGL().
-// ═══════════════════════════════════════════════════════════════════
+// plotter_export — one layered plate sent to SVG, JSON, and HPGL.
+// shapesFor() builds the shared trace set; export handlers add page and pen data.
 
 const SEED = 7475;
 const EXPORT_PAGE = {
