@@ -455,13 +455,17 @@ beperkt tot:
 
 Taken:
 
-- [ ] Implementeer alleen het goedgekeurde contract.
-- [ ] Voeg tests toe voor twee bronnen, duplicaten, lege invoer, provenance,
+- [x] Implementeer alleen het goedgekeurde contract.
+- [x] Voeg tests toe voor twee bronnen, duplicaten, lege invoer, provenance,
       determinisme, freeze, reroll en alle exports.
-- [ ] Houd source en browserbuild semantisch gelijk.
-- [ ] Maak één voorbeeld met twee originele of door Seb aangeleverde bronnen.
-- [ ] Gebruik geen canonieke Gysin-catchphrases als standaardinhoud.
-- [ ] Meet voorbeeldcomplexiteit; de normale sketch blijft maximaal 40 regels.
+- [x] Houd source en browserbuild semantisch gelijk.
+- [x] Maak één voorbeeld met twee originele of door Seb aangeleverde bronnen.
+- [x] Gebruik geen canonieke Gysin-catchphrases als standaardinhoud.
+- [x] Meet voorbeeldcomplexiteit; de normale sketch blijft maximaal 40 regels.
+
+Bewijs: bron- en min-build leveren dezelfde semantische en getekende output;
+`npm test` controleert fouten, offsets, ids, freeze/reroll en JSON/SVG/HPGL.
+`examples/splice/sketch.js` telt 38 fysieke regels.
 
 Acceptance:
 

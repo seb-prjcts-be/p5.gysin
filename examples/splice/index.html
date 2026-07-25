@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Splice | p5.gysin examples</title>
+  <link rel="stylesheet" href="../../docs/style.css">
+  <style>
+    .splice-layout { grid-template-columns: minmax(310px, 0.68fr) minmax(420px, 1fr); max-width: 1320px; }
+    .splice-canvas { background: #eee9dc; }
+    .source-pair { display: grid; gap: 0.65rem; margin-top: 1rem; }
+    .source-pair label { color: var(--muted); font-size: 0.76rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    .source-pair textarea {
+      box-sizing: border-box; width: 100%; min-height: 5.5rem; margin-top: 0.3rem; padding: 0.65rem;
+      resize: vertical; color: inherit; background: rgba(255,255,255,0.06); border: 1px solid currentColor;
+      border-radius: 4px; font: 0.88rem/1.45 inherit;
+    }
+    @media (max-width: 900px) { .splice-layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <script>if (window.self !== window.top) document.documentElement.classList.add("embedded");</script>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../../docs/collage/">Collage</a></li>
+      <li><a href="../../docs/system.html">System</a></li>
+      <li><a href="../../docs/vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">splice() · semantic cut-up · source provenance</div>
+      <h1>Splice</h1>
+      <p>Two notices meet at the seam. Every fragment remembers where it came from.</p>
+    </div>
+    <div class="demo-layout splice-layout">
+      <div class="demo-code">
+        <div class="code-label">The gesture</div>
+        <pre><code class="language-javascript">const sources = [
+  { id: "window", text: "The window keeps..." },
+  { id: "letter", text: "Your letter arrived..." }
+];
+
+const ids = plot.splice(sources, 48, 82, {
+  seed: 1960,
+  lines: 5
+});
+
+plot.draw();</code></pre>
+        <div class="source-pair">
+          <label>Window
+            <textarea id="source-a" maxlength="20000">The window keeps the last light of the street. Someone closes the curtains before the rain arrives.</textarea>
+          </label>
+          <label>Letter
+            <textarea id="source-b" maxlength="20000">Your letter arrived after the room was empty. I left its folded weather beside the door.</textarea>
+          </label>
+        </div>
+        <div class="demo-actions" aria-label="Splice actions">
+          <button type="button" id="cut-button">New cut</button>
+          <button type="button" id="ink-button">Reroll ink</button>
+          <button type="button" id="json-button">Download JSON</button>
+          <button type="button" id="svg-button">Download SVG</button>
+        </div>
+        <div class="demo-note"><strong>New cut</strong> changes the collision. <strong>Reroll ink</strong> keeps the words and disturbs only their trace.</div>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas splice-canvas" id="sketch" role="img" aria-label="Five plotter-drawn lines spliced from two editable source texts."></div>
+        <div class="demo-note" id="splice-status" role="status" aria-live="polite">Cutting the two sources…</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p><a href="../../index.html#lib-text">Text works</a> &nbsp;&middot;&nbsp; <a href="../../docs/system.html">System</a></p>
+    <p class="footer-sub">Optional text addon &nbsp;&middot;&nbsp; p5.gysin &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.text.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

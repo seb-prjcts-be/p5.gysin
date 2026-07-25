@@ -25,6 +25,7 @@ function loadTextAddon(filename) {
   vm.runInContext(fs.readFileSync(filename, "utf8"), context, { filename });
   assert.equal(typeof context.GysinText, "object");
   assert.equal(typeof context.GysinText.permute, "function");
+  assert.equal(typeof context.GysinText.splice, "function");
   assert.equal(typeof context.GysinPlot, "undefined");
   return context.GysinText;
 }
@@ -55,6 +56,50 @@ assert.deepEqual(
 assert.throws(() => SourceText.permute("  "), /at least one word/);
 assert.throws(() => SourceText.permute("one two", { limit: 0 }), /from 1 through 1000/);
 assert.throws(() => SourceText.permute("one two", { order: "grammar" }), /order must be one of/);
+
+// --- splice(): semantic collision with exact source provenance ---------------
+const spliceSources = [
+  { id: "window", text: "The window keeps the last light of the street." },
+  { id: "letter", text: "Your letter arrived after the room was empty." },
+  { id: "notice", text: "Leave every borrowed name beside the door." }
+];
+const spliceInputBefore = JSON.stringify(spliceSources);
+const spliceA = SourceText.splice(spliceSources, { seed: 1960, lines: 4, unit: "phrase" });
+const spliceB = SourceText.splice(spliceSources, { seed: 1960, lines: 4, unit: "phrase" });
+const spliceMin = MinText.splice(spliceSources, { seed: 1960, lines: 4, unit: "phrase" });
+assert.equal(spliceA.lines.length, 4);
+assert.equal(JSON.stringify(spliceA), JSON.stringify(spliceB), "splice is deterministic");
+assert.equal(JSON.stringify(spliceA), JSON.stringify(spliceMin), "splice min build matches source");
+assert.equal(JSON.stringify(spliceSources), spliceInputBefore, "splice does not mutate its sources");
+for (const line of spliceA.lines) {
+  assert.ok(new Set(line.fragments.map((fragment) => fragment.source)).size >= 2);
+  for (const fragment of line.fragments) {
+    const source = spliceSources[fragment.sourceIndex];
+    assert.equal(source.id, fragment.source);
+    assert.equal(source.text.slice(fragment.start, fragment.end), fragment.text);
+  }
+}
+assert.notEqual(
+  JSON.stringify(SourceText.splice(spliceSources, { seed: 1961, lines: 4 })),
+  JSON.stringify(spliceA),
+  "a new splice seed can form a new collision"
+);
+for (const unit of ["word", "phrase", "clause"]) {
+  const result = SourceText.splice(spliceSources, { seed: 3, lines: 2, unit });
+  assert.ok(result.lines.length > 0, `${unit} produces splice lines`);
+}
+assert.equal(SourceText.splice(["one", "two"], { lines: 4, fragments: 2 }).lines.length, 2);
+assert.throws(() => SourceText.splice("one"), /sources must be an array/);
+assert.throws(() => SourceText.splice(["one"]), /from 2 through 8 sources/);
+assert.throws(() => SourceText.splice(Array(9).fill("one")), /from 2 through 8 sources/);
+assert.throws(() => SourceText.splice(["one", "  "]), /needs visible text/);
+assert.throws(() => SourceText.splice(["one", null]), /must be text or an object with text/);
+assert.throws(() => SourceText.splice(["one", {}]), /must be text or an object with text/);
+assert.throws(() => SourceText.splice([{ id: "same", text: "one" }, { id: "same", text: "two" }]), /duplicated/);
+assert.throws(() => SourceText.splice(["one", "two"], { unit: "letter" }), /unit must be one of/);
+assert.throws(() => SourceText.splice(["one", "two"], { lines: 0 }), /from 1 through 100/);
+assert.throws(() => SourceText.splice(["one", "two"], { fragments: 7 }), /from 2 through 6/);
+assert.throws(() => SourceText.splice(["x".repeat(20001), "two"]), /exceeds 20000/);
 
 function build(Plot) {
   const plot = new Plot({ seed: 123, width: 400, height: 300 });
@@ -562,8 +607,10 @@ assert.throws(() => new SourcePlot().rub("X", Infinity, 0), /finite number/);
 // --- missing-addon stubs: fail loudly and name the file to load -----------------
 for (const Plot of [SourcePlot, MinPlot]) {
   assert.throws(() => new Plot().chant("CUT", 0, 0), /requires the optional addon p5\.gysin\.text\.js/);
+  assert.throws(() => new Plot().splice(["CUT", "PASTE"], 0, 0), /requires the optional addon p5\.gysin\.text\.js/);
   assert.throws(() => new Plot().underwood("CUT", 0, 0), /requires the optional addon p5\.gysin\.underwood\.js/);
   assert.ok(Plot.prototype.chant.gysinAddonStub, "chant stub carries the marker the addon checks");
+  assert.ok(Plot.prototype.splice.gysinAddonStub, "splice stub carries the marker the addon checks");
   assert.ok(Plot.prototype.underwood.gysinAddonStub, "underwood stub carries the marker the addon checks");
 }
 
@@ -627,6 +674,8 @@ function loadCombined(coreFile, textFile) {
   }
   assert.equal(typeof context.GysinPlot.prototype.chant, "function");
   assert.ok(!context.GysinPlot.prototype.chant.gysinAddonStub, "addon replaced the core stub");
+  assert.equal(typeof context.GysinPlot.prototype.splice, "function");
+  assert.ok(!context.GysinPlot.prototype.splice.gysinAddonStub, "addon replaced the core stub");
   return context;
 }
 
@@ -662,6 +711,70 @@ assert.notEqual(chantFlat.svg, chantDefault.svg, "descent and material options c
 assert.throws(() => buildChant(chantSource, { lines: 0 }), /from 1 through 1000/);
 assert.throws(() => buildChant(chantSource, { order: "grammar" }), /order must be one of/);
 assert.throws(() => chantSource.GysinPlot.prototype.chant.call({}, "A B", 0, 0), /needs a GysinPlot/);
+
+// splice() draws readable text lines, preserves provenance in JSON, and stays
+// compatible with the ordinary addressing contract.
+function buildSplice(ctx, options) {
+  const plot = new ctx.GysinPlot({ seed: 1960, width: 700, height: 420 });
+  const ids = plot.splice(spliceSources, 54, 90, Object.assign({
+    size: 25,
+    leading: 58,
+    breathe: 0.35,
+    layer: "third"
+  }, options));
+  return { plot, ids };
+}
+
+const splicePlotA = buildSplice(chantSource);
+const splicePlotB = buildSplice(chantSource);
+const splicePlotMin = buildSplice(chantMin);
+assert.equal(splicePlotA.ids.length, 4);
+assert.ok(splicePlotA.ids.every((id) => splicePlotA.plot.get(id).type === "text"));
+assert.equal(
+  JSON.stringify(splicePlotA.ids.map((id) => splicePlotA.plot.get(id).generated)),
+  JSON.stringify(splicePlotB.ids.map((id) => splicePlotB.plot.get(id).generated)),
+  "plot.splice is deterministic"
+);
+assert.equal(
+  JSON.stringify(splicePlotA.ids.map((id) => splicePlotA.plot.get(id).generated)),
+  JSON.stringify(splicePlotMin.ids.map((id) => splicePlotMin.plot.get(id).generated)),
+  "plot.splice min build matches source"
+);
+for (const id of splicePlotA.ids) {
+  const shape = splicePlotA.plot.get(id);
+  assert.equal(shape.exportSettings.layer, "third");
+  assert.equal(shape.params.splice.fragments.length, 3);
+  assert.ok(shape.params.splice.fragments.every((fragment) => fragment.source));
+}
+const detachedSplice = splicePlotA.plot.get(splicePlotA.ids[0]);
+const originalSpliceSource = detachedSplice.params.splice.fragments[0].source;
+detachedSplice.params.splice.fragments[0].source = "changed outside";
+assert.equal(
+  splicePlotA.plot.get(splicePlotA.ids[0]).params.splice.fragments[0].source,
+  originalSpliceSource,
+  "splice provenance in snapshots is detached"
+);
+const spliceJSON = JSON.parse(splicePlotA.plot.exportJSON());
+assert.equal(spliceJSON.shapes[0].params.splice.unit, "phrase");
+assert.equal(spliceJSON.shapes[0].params.splice.fragments[0].source.length > 0, true);
+assert.match(splicePlotA.plot.exportSVG(), /data-shape-id=/);
+assert.match(splicePlotA.plot.exportHPGL(), /PD/);
+
+const frozenSpliceId = splicePlotA.ids[0];
+const movingSpliceId = splicePlotA.ids[1];
+const frozenSpliceBefore = JSON.stringify(splicePlotA.plot.get(frozenSpliceId).generated);
+const movingSpliceBefore = JSON.stringify(splicePlotA.plot.get(movingSpliceId).generated);
+const frozenSpliceText = splicePlotA.plot.get(frozenSpliceId).params.value;
+const movingSpliceText = splicePlotA.plot.get(movingSpliceId).params.value;
+splicePlotA.plot.freeze(frozenSpliceId);
+splicePlotA.plot.reroll();
+assert.equal(JSON.stringify(splicePlotA.plot.get(frozenSpliceId).generated), frozenSpliceBefore);
+assert.notEqual(JSON.stringify(splicePlotA.plot.get(movingSpliceId).generated), movingSpliceBefore);
+assert.equal(splicePlotA.plot.get(frozenSpliceId).params.value, frozenSpliceText);
+assert.equal(splicePlotA.plot.get(movingSpliceId).params.value, movingSpliceText);
+assert.throws(() => buildSplice(chantSource, { size: 0 }), /size must be greater than zero/);
+assert.throws(() => buildSplice(chantSource, { leading: 0 }), /leading must be greater than zero/);
+assert.throws(() => chantSource.GysinPlot.prototype.splice.call({}, spliceSources, 0, 0), /needs a GysinPlot/);
 
 // The turned sheet: angle/pivot and the lattice() verb stay deterministic and
 // identical across the source and min builds; angle 0 stays byte-identical.
