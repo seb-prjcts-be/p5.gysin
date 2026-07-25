@@ -1,5 +1,6 @@
 const fs = require("node:fs");
 const path = require("node:path");
+const vm = require("node:vm");
 
 const root = path.resolve(__dirname, "..");
 const packagePath = path.join(root, "package.json");
@@ -34,6 +35,33 @@ const exportsList = exportOrder.filter(function (name) {
   return name.replace(/^export/, "");
 });
 
+function publicMethods() {
+  function P5() {}
+  P5.prototype = {};
+  const context = { console, p5: P5 };
+  context.globalThis = context;
+  vm.createContext(context);
+
+  for (const filename of ["p5.gysin.js", "p5.gysin.text.js", "p5.gysin.underwood.js"]) {
+    vm.runInContext(fs.readFileSync(path.join(root, filename), "utf8"), context, { filename });
+  }
+
+  const methods = ["new GysinPlot"];
+  for (const name of Object.getOwnPropertyNames(context.GysinPlot.prototype)) {
+    if (name !== "constructor" && !name.startsWith("_")) methods.push(`GysinPlot.${name}`);
+  }
+  if (typeof context.p5.prototype.createGysinPlot === "function") {
+    methods.push("p5.createGysinPlot");
+  }
+  for (const name of Object.keys(context.GysinText || {})) {
+    if (typeof context.GysinText[name] === "function") methods.push(`GysinText.${name}`);
+  }
+  for (const name of Object.keys(context.GysinUnderwood || {})) {
+    if (typeof context.GysinUnderwood[name] === "function") methods.push(`GysinUnderwood.${name}`);
+  }
+  return methods;
+}
+
 let examples = [];
 if (fs.existsSync(examplesDir)) {
   examples = fs.readdirSync(examplesDir, { withFileTypes: true })
@@ -55,6 +83,7 @@ const manifest = {
   pages_url: "https://seb-prjcts-be.github.io/p5.gysin/docs/p5.gysin.manifest.json",
   p5js_target: curated.p5js_target,
   audience: curated.audience,
+  public_methods: publicMethods(),
   shape_methods: shapeMethods,
   exports: exportsList,
   examples: examples,

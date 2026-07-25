@@ -16,7 +16,7 @@
   "scripts": {
     "build:min": "node tools/build-min.js",
     "manifest": "node tools/gen-manifest.js",
-    "test": "node tests/snapshot.js && node tools/check-links.js"
+    "test": "node tests/snapshot.js && node tools/check-api-docs.js && node tools/check-links.js"
   },
   "repository": "github:seb-prjcts-be/p5.gysin",
   "license": "MIT",

@@ -39,7 +39,7 @@ standalone works with their source code.
 - `p5.gysin.text.js` and `p5.gysin.text.min.js` add pure permutation and
   semantic-splice operations, plus `plot.chant()` and `plot.splice()`.
 - `p5.gysin.underwood.js` and `p5.gysin.underwood.min.js` add
-  `plot.underwood()`.
+  `plot.underwood()` and the low-level `GysinUnderwood` helper.
 - `index.html` and `docs/` form the public site.
 - `examples/<name>/` contains each standalone work and its sketch.
 

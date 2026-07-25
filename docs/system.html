@@ -273,6 +273,7 @@ plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice
 plot.underwood("the small voice.", 60, 190);</code>
       </div>
       <p><code>bold: true</code> double-strikes each letter, <code>underline</code> draws one to three rules, and <code>wear</code> (0 and up) scales strike variation. Every glyph is a single pen line.</p>
+      <p>Low-level access is available through the frozen <code>GysinUnderwood</code> object. <code>GysinUnderwood.glyphPolylines(d)</code> parses one bundled glyph path into polylines; <code>GysinUnderwood.render(plot, text, x, y, options)</code> calls the renderer used by <code>plot.underwood()</code>. The glyph dataset is exposed as <code>GysinUnderwood.face</code>.</p>
     </section>
 
     <section class="guide-block">
@@ -301,7 +302,7 @@ plot.clear();         // empty the sheet: shapes, ids, and selection</code>
       <p>Core creation and drawing: <code>new GysinPlot()</code>, <code>p.createGysinPlot()</code>, <code>plot.line()</code>, <code>plot.rect()</code>, <code>plot.circle()</code>, <code>plot.polygon()</code>, <code>plot.path()</code>, <code>plot.text()</code>, <code>plot.textCutup()</code>, <code>plot.asemic()</code>, <code>plot.grid()</code>, <code>plot.letters()</code>, <code>plot.symbols()</code>, <code>plot.rub()</code>, <code>plot.lattice()</code>, and <code>plot.draw()</code>.</p>
       <p>Core addressing: <code>plot.get()</code>, <code>plot.select()</code>, <code>plot.freeze()</code>, <code>plot.thaw()</code>, <code>plot.regenerate()</code>, <code>plot.reroll()</code>, <code>plot.remove()</code>, <code>plot.update()</code>, <code>plot.setSeed()</code>, and <code>plot.clear()</code>.</p>
       <p>Core output: <code>plot.exportSVG()</code>, <code>plot.exportJSON()</code>, <code>plot.exportHPGL()</code>, <code>plot.downloadSVG()</code>, <code>plot.downloadJSON()</code>, <code>plot.downloadHPGL()</code>, and <code>plot.stats()</code>.</p>
-      <p>Text addon: <code>GysinText.permute()</code>, <code>GysinText.splice()</code>, <code>plot.chant()</code>, and <code>plot.splice()</code>. Typewriter addon: <code>plot.underwood()</code>.</p>
+      <p>Text addon: <code>GysinText.permute()</code>, <code>GysinText.splice()</code>, <code>plot.chant()</code>, and <code>plot.splice()</code>. Typewriter addon: <code>plot.underwood()</code>, <code>GysinUnderwood.glyphPolylines()</code>, and <code>GysinUnderwood.render()</code>.</p>
     </section>
 
     <section class="guide-block">

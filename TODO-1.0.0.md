@@ -640,18 +640,18 @@ pakket vormen.
 
 Taken:
 
-- [ ] `npm run build:min`
-- [ ] `npm run manifest`
-- [ ] `npm test`
-- [ ] `node --check` op gewijzigde JavaScriptbestanden
-- [ ] `git diff --check`
-- [ ] Lokale HTTP 200-controle voor homepage, docs en alle voorbeelden
-- [ ] Desktop- en mobiele browsercontrole
-- [ ] Bron/build/API/manifest-methoden vergelijken
-- [ ] Zoeken op achtergebleven versies en tijdelijke labels:
+- [x] `npm run build:min`
+- [x] `npm run manifest`
+- [x] `npm test`
+- [x] `node --check` op gewijzigde JavaScriptbestanden
+- [x] `git diff --check`
+- [x] Lokale HTTP 200-controle voor homepage, docs en alle voorbeelden
+- [x] Desktop- en mobiele browsercontrole
+- [x] Bron/build/API/manifest-methoden vergelijken
+- [x] Zoeken op achtergebleven versies en tijdelijke labels:
       `0.4.0`, `next`, oude CDN-paden
-- [ ] Controleren dat v0.4.0-tag en URLs onaangeroerd blijven
-- [ ] Beslissing over een eventueel site-archief uitvoeren en testen
+- [x] Controleren dat v0.4.0-tag en URLs onaangeroerd blijven
+- [x] Beslissing over een eventueel site-archief uitvoeren en testen
 
 Acceptance:
 

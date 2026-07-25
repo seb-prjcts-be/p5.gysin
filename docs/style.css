@@ -1053,6 +1053,11 @@ body.chapters .ce-module.chapter-active {
   align-items: start;
 }
 
+.ce-preview,
+.ce-codewrap {
+  min-width: 0;
+}
+
 .ce-canvas {
   width: 100%;
   background: var(--sheet);
