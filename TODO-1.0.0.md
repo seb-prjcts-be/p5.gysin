@@ -111,26 +111,26 @@ Alle andere nieuwe features blijven buiten 1.0.0.
 
 Versie 1.0.0 is pas klaar als **alle** onderstaande punten waar zijn.
 
-- [ ] De bestaande v0.4.0-methodes en outputs blijven achterwaarts compatibel.
-- [ ] `splice()` of de goedgekeurde alternatieve naam laat minstens twee
+- [x] De bestaande v0.4.0-methodes en outputs blijven achterwaarts compatibel.
+- [x] `splice()` of de goedgekeurde alternatieve naam laat minstens twee
       tekstbronnen semantisch botsen met sterke defaults.
-- [ ] De nieuwe methode ondersteunt provenance, ids, determinisme,
+- [x] De nieuwe methode ondersteunt provenance, ids, determinisme,
       `freeze()`, `reroll()` en export.
-- [ ] De publieke site legt handelingen helder uit zonder werken vooraf te
+- [x] De publieke site legt handelingen helder uit zonder werken vooraf te
       interpreteren.
-- [ ] De homepage geeft toegang en atmosfeer, geen volledige rondleiding.
-- [ ] Voorbeeldpagina’s herhalen de code niet in proza.
-- [ ] `Collage` blijft bruikbaar maar leest niet meer als een lineaire cursus.
-- [ ] `System` bevat alle technische details die elders bewust zijn weggelaten.
-- [ ] `README`, `System`, voorbeelden, manifest en broncode spreken elkaar niet
+- [x] De homepage geeft toegang en atmosfeer, geen volledige rondleiding.
+- [x] Voorbeeldpagina’s herhalen de code niet in proza.
+- [x] `Collage` blijft bruikbaar maar leest niet meer als een lineaire cursus.
+- [x] `System` bevat alle technische details die elders bewust zijn weggelaten.
+- [x] `README`, `System`, voorbeelden, manifest en broncode spreken elkaar niet
       tegen.
 - [ ] Er zijn goedgekeurde tekstvoorbeelden waarmee een nieuwe AI-sessie de
       juiste stem opnieuw kan herkennen.
-- [ ] Alle automatische tests, linkchecks en syntaxiscontroles slagen.
-- [ ] De echte localhost-site is op desktop en mobiel gecontroleerd.
+- [x] Alle automatische tests, linkchecks en syntaxiscontroles slagen.
+- [x] De echte localhost-site is op desktop en mobiel gecontroleerd.
 - [ ] Seb heeft de pilootpagina’s en de uiteindelijke site visueel goedgekeurd.
-- [ ] Beslist is hoe de oude v0.4.0-site raadpleegbaar blijft.
-- [ ] De versie wordt pas op het einde overal naar `1.0.0` gebracht.
+- [x] Beslist is hoe de oude v0.4.0-site raadpleegbaar blijft.
+- [x] De versie wordt pas op het einde overal naar `1.0.0` gebracht.
 - [ ] Tag, commit, push en publicatie gebeuren alleen na expliciet akkoord.
 
 ---
@@ -293,9 +293,10 @@ Taken:
       homepage, `worn_word`, `permutation_poem`, `rotations`, `the_letter`,
       `Collage` en `System`.
 - [x] Noteer welke ontracked bestanden al van Seb waren; raak ze niet aan.
-- [ ] **MORGEN — menselijke controle:** laat Seb kiezen:
+- [x] **Menselijke keuze vastgelegd:** Seb koos vóór de marathon:
       **A.** v0.4.0 blijft beschikbaar via tag/CDN, of
       **B.** ook de oude site wordt onder een versiepad gearchiveerd.
+      Uitgevoerd als **A**; er is geen dubbel Pages-archief gemaakt.
 
 Acceptance:
 
