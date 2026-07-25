@@ -12,7 +12,7 @@ Load p5.js, then the core library:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/p5@2.3.1/lib/p5.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.0.0/p5.gysin.min.js"></script>
 ```
 
 ```js
@@ -49,8 +49,8 @@ kept readable and must remain behaviourally identical to their sources.
 Load either addon after the core and before your sketch:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.text.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.underwood.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.0.0/p5.gysin.text.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.0.0/p5.gysin.underwood.min.js"></script>
 ```
 
 The pure `GysinText.permute()` and `GysinText.splice()` functions can also run
@@ -58,7 +58,7 @@ from the text addon without p5.js or the core.
 
 ## Compatibility
 
-Version 0.4.0 supports p5.js 2.x in global and instance mode. In instance mode,
+Version 1.0.0 supports p5.js 2.x in global and instance mode. In instance mode,
 create a linked plot after `p.createCanvas()` with
 `p.createGysinPlot(options)`. The vector and export core needs no p5 runtime.
 p5.js 1.x is not part of the tested support matrix.

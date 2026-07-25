@@ -1,23 +1,8 @@
 /*
  * p5.gysin.underwood
- * Optional, period-correct single-stroke typewriter for p5.gysin.
- *
- * Adds one intent verb: plot.underwood(text, x, y, options). Defaults alone give a
- * period-correct typewriter page - single-stroke letterforms, fixed monospace
- * pitch and line height (10 characters-per-inch / 6 lines-per-inch, the classic
- * Pica machine), and the small strike irregularity of a real typed sheet. Every
- * option is opt-in, so the one-liner is complete.
- *
- * Historical grain (see docs/typewriter-decoration-research.md): a typewriter
- * had no bold and no italic. The only "bold" is OVERSTRIKE - the same key
- * struck twice, a hair offset. Emphasis was underline, ALL CAPS, or spacing.
- * This module honours that: bold: true doubles every strike, underline draws
- * the underscore rule, and nothing here fakes a heavier or slanted typeface.
- *
- * The letterforms are Hershey "futural" (Sans 1-stroke), public domain, bundled
- * here so the verb is self-contained (no external font to load).
- *
- * Requires p5.gysin core (GysinPlot) loaded first.
+ * Optional single-stroke typewriter addon for p5.gysin.
+ * Adds plot.underwood() and exposes the bundled Hershey futural face through
+ * GysinUnderwood. Requires the p5.gysin core.
  */
 (function (global) {
   "use strict";

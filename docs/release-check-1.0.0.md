@@ -70,3 +70,22 @@ de bestaande tag en gepinde CDN-URLs, zoals Seb vóór de marathon aangaf.
 De drie vooraf bestaande lokale onderzoeksdocumenten blijven ongetrackt en
 buiten iedere stagingactie. Er is nog geen 1.0.0-tag, release of publicatie
 uitgevoerd.
+
+## Definitieve 1.0.0-hercontrole
+
+Uitgevoerd na de versiesprong en de definitieve build:
+
+- package, manifest en drie buildbanners melden `1.0.0`;
+- snapshot, API/docs-contract en 22-linktest groen;
+- 26 JavaScriptbestanden slagen voor `node --check`;
+- alle 22 HTML-routes antwoorden lokaal met HTTP 200;
+- Chrome opnieuw groen voor 22 routes op desktop en mobiel: 44 controles;
+- `git diff --check` groen;
+- de resterende `0.4.0`-treffers zijn uitsluitend de hierboven vastgelegde
+  historische verwijzingen;
+- exacte v0.4.0-vergelijking groen voor een seeded compositie met bestaande
+  core-methoden (JSON, SVG, HPGL en statistieken), de vier permutatiemodi en
+  underwood-uitvoer.
+
+De v1.0.0-CDN-URLs kunnen pas na een toegestane tag en publicatie worden
+gecontroleerd. Tot dan zijn ze alleen de gedocumenteerde releasepaden.

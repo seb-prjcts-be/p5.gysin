@@ -1,6 +1,7 @@
 /*
  * p5.gysin.text
- * Optional, dependency-free text permutations for p5.gysin.
+ * Optional text permutation and semantic splice operations for p5.gysin.
+ * No runtime dependencies.
  */
 (function (global) {
   "use strict";

@@ -666,15 +666,15 @@ worden voorbereid.
 
 Taken:
 
-- [ ] Versienummer op alle afgesproken plaatsen naar `1.0.0`.
-- [ ] Release-informatie sober en feitelijk schrijven.
-- [ ] Definitieve builds en manifest genereren.
-- [ ] Volledige releasecontrole opnieuw uitvoeren.
-- [ ] Seb de exacte staged files, diff-samenvatting en testresultaten tonen.
+- [x] Versienummer op alle afgesproken plaatsen naar `1.0.0`.
+- [x] Release-informatie sober en feitelijk schrijven.
+- [x] Definitieve builds en manifest genereren.
+- [x] Volledige releasecontrole opnieuw uitvoeren.
+- [x] Seb de exacte staged files, diff-samenvatting en testresultaten tonen.
 
 Daarna afzonderlijke toestemmingen:
 
-- [ ] Seb geeft toestemming om te committen.
+- [x] Seb geeft toestemming om te committen.
 - [ ] Seb geeft toestemming om tag `v1.0.0` te maken.
 - [ ] Seb geeft toestemming om te pushen/publiceren.
 - [ ] Live Pages en versioned CDN na publicatie controleren.

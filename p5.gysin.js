@@ -1,7 +1,7 @@
 /*
  * p5.gysin
- * Vector-first humanized drawing traces for p5.js.
- * No build step, no dependencies.
+ * Vector capture, seeded trace variation, and plotter export for p5.js.
+ * No runtime dependencies.
  */
 (function (global) {
   "use strict";
