@@ -21,10 +21,9 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">underwood() &middot; the whole grammar</div>
+      <div class="demo-number">underwood() &middot; correspondence</div>
       <h1>The Letter</h1>
-      <p>The typewriter's natural habitat was never the poster - it was the letter. This sheet types one complete piece of correspondence and, along the way, uses every voice the machine ever had: the <em>S&nbsp;p&nbsp;e&nbsp;r&nbsp;r&nbsp;s&nbsp;a&nbsp;t&nbsp;z</em> dateline, the ruled salutation, the double strike, and the row of asterisks that divides a page.</p>
-      <p>Look closely at the fourth line of events: a word is unsaid the only way the machine allowed - typed over with X's, <code>bold: true</code> striking the same cell twice. And the signature drops to lowercase: both cases live on the same keys.</p>
+      <p>A complete piece of correspondence: spaced dateline, ruled salutation, overstrike, lowercase hand.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
@@ -34,11 +33,11 @@ const plot = new GysinPlot({ seed: 1912 });
 plot.underwood("DEAR READER,", 60, 150, { underline: 1 });
 plot.underwood("THE MACHINE HAS ONE FACE, ONE SIZE.\n...", 60, 210);
 
-// unsaying a word, the period way - struck over with X's:
+// One word struck over with X's.
 plot.underwood("FORGET", 60, 360);
 plot.underwood("XXXXXX", 60, 360, { bold: true });
 
-// and the small voice signs:
+// The small hand signs.
 plot.underwood("the small hand.", 60, 600);
 plot.draw();</code></pre>
       </div>
@@ -48,7 +47,7 @@ plot.draw();</code></pre>
           <button type="button" id="reroll-button">New strike</button>
           <button type="button" id="svg-button">Download SVG</button>
         </div>
-        <div class="demo-note"><strong>New strike</strong> retypes the same letter with the next seeded wear - every strike lands differently, the words hold. <strong>Download SVG</strong> saves the plotter-ready file; every letter is a single pen line. <code>R</code> and <code>S</code> do the same from the keyboard.</div>
+        <div class="demo-note"><strong>New strike</strong> or <code>R</code> keeps the letter and changes seeded wear. <strong>Download SVG</strong> or <code>S</code> saves the single-line paths.</div>
       </div>
     </div>
   </main>

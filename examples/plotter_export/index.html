@@ -23,53 +23,32 @@
     <div class="demo-header">
       <div class="demo-number">SVG · JSON · HPGL</div>
       <h1>Plotter Export</h1>
-      <p><em>Half of the <strong>Transmission</strong> room.</em> The other half is <a href="../plotter_calibration/">Plotter Calibration</a>: the sheet that tunes pens, margins, and route before anything is sent.</p>
-      <p>A compact export workflow for pen plotters and vector tools. The same generated traces are drawn on canvas and exported as SVG, JSON, or HPGL. Each layer is stroked in its export-pen colour, so the canvas already <em>is</em> the pen map.</p>
-      <p><strong>How to read it</strong></p>
-      <ul>
-        <li><strong>Pen 1</strong> (ink) - the frame and the registration work: a cross in every corner plus a circle and triangle on the diagonal. The frame <em>hesitates</em> mid-edge and the crosses <em>overshoot</em> and <em>fray</em>, the way a hand-set mark runs past its own centre.</li>
-        <li><strong>Pen 2</strong> (red) - the type: the hero word and a typed subtitle (the optional <code>underwood()</code> typewriter, single-stroke at period pitch), which spells the four export layers <strong>FRAME / TYPE / FIELD / REG</strong> so the plate captions its own pen map.</li>
-        <li><strong>Pen 3</strong> (blue) - the fields: a decaying letter field and an airy full-width band of operator glyphs. No filled masses - the lower band is signs, not tone.</li>
-        <li><strong>Legend</strong> - names which pen draws which layer, its path count, and roughly how many seconds it keeps the machine busy (drawn length ÷ draw speed). The <strong>status line</strong> adds the total paths, millimetres of ink, and estimated plot time.</li>
-      </ul>
-      <p><strong>Controls</strong></p>
-      <ul>
-        <li><strong>New variation</strong> - or press <strong>R</strong> - rerolls the plate: a new symbol set and freshly reshaped glyphs, so every variation reads as a different plate.</li>
-        <li><strong>Rougher +</strong> / <strong>Cleaner −</strong> - or the <strong>↑ / ↓</strong> keys - scale every perturbation from a clean plot up toward heavily hand-disturbed. The <strong>CLEAN … ROUGH</strong> meter shows where the human scale sits between 0 and 2.</li>
-        <li><strong>Reset</strong> - returns the plate to its canonical state (variation 0, human x1.00), always one click away.</li>
-        <li><strong>Download SVG / JSON / HPGL</strong> - takes the exact plate on screen to a plotter or vector tool. Seed, variation and human scale are printed on the plate, so any export is reproducible.</li>
-      </ul>
+      <p>One plate, three files. Canvas colour follows the physical pen map. For margins, pens and route, open <a href="../plotter_calibration/">Plotter Calibration</a>.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">// The whole core, in three lines - this alone is a complete sketch:
+        <pre><code class="language-javascript">// One clean mark.
 const plot = new GysinPlot({ seed: 7475 });
 plot.text("PLOT", 118, 188);   // clean, mechanical text
 plot.draw();
 
-// Everything below is OPTIONAL on top. Defaults are all zero, so options are
-// opt-in. This example adds, in order:
-
-// 1) per-pen layers: tag each call with a { layer } so one pen == one ink,
-//    and the same tags drive the HPGL pen map on export
+// Layer names drive the pen map.
 const penMap = { frame: 1, type: 2, field: 3, registration: 1 };
 const ink = { 1: "#151515", 2: "#b5362b", 3: "#244f73" };
 
-// 2) the composition as data: [layer, method, geometry, perturbation]. One pass
-//    over the array draws the plate - frame, type, fields, registration -
-//    with the stroke derived from the pen map, not written per shape
+// Composition data carries layer, method, geometry and disturbance.
 for (const [layer, method, geom, opts] of shapesFor(composition(variation))) {
   plot[method](...geom, { layer, stroke: ink[penMap[layer]], ...humanize(opts) });
 }
 plot.draw();
 
-// 3) export the exact plate on screen - same plot, three plotter-ready formats
+// Export the shown plate in three formats.
 plot.downloadSVG("plate.svg", { page, optimize: true });
 plot.downloadJSON("plate.json", { includeGenerated: true });
 plot.downloadHPGL("plate.hpgl", { page, penMap, speed: 20 });
 
-// 4) stats() reports the plate before it plots: paths, ink length, plot time
+// Report path cost before plotting.
 const stats = plot.stats({ page, drawSpeed: 20, travelSpeed: 60 });
 // per pen: stats.layers.type.drawnLength / drawSpeed
 // whole plate: stats.estimatedSeconds -> total plot time</code></pre>
@@ -82,6 +61,7 @@ const stats = plot.stats({ page, drawSpeed: 20, travelSpeed: 60 });
           <button type="button" id="cleaner-button">Cleaner −</button>
           <button type="button" id="reset-button">Reset</button>
         </div>
+        <div class="demo-note"><code>R</code> changes variation; <code>&uarr;</code>/<code>&darr;</code> change roughness; <strong>Reset</strong> returns variation 0 and human &times;1. SVG, JSON and HPGL export the plate shown; its seed, variation and human scale are printed on the sheet.</div>
       </div>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch" role="img" aria-label="A layered plotter composition prepared for SVG, JSON, and HPGL export."></div>

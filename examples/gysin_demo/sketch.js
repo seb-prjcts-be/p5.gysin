@@ -166,7 +166,7 @@ function buildPlot() {
 function updateCodeCaption() {
   const el = document.getElementById("code-caption");
   if (!el) return;
-  el.textContent = `now driving the code above: rubout ${titleRubout.toFixed(2)} · glyphJitter ${letterJitter.toFixed(2)}`;
+  el.textContent = `rubout ${titleRubout.toFixed(2)} · glyphJitter ${letterJitter.toFixed(2)}`;
 }
 
 function draw() {

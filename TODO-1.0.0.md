@@ -528,13 +528,20 @@ Volgorde:
 
 Per pagina:
 
-- [ ] Auditbeslissingen uitvoeren: eerst schrappen/verplaatsen, dan herschrijven.
-- [ ] Bedieningsinformatie naast de bediening zetten.
-- [ ] Geen code in proza navertellen.
-- [ ] Geen nieuwe aforismen toevoegen om ruimte op te vullen.
-- [ ] Unieke stem en functie van het werk behouden.
-- [ ] Desktop, mobiel en interactie controleren.
-- [ ] Pas daarna naar de volgende pagina gaan.
+- [x] Auditbeslissingen uitvoeren: eerst schrappen/verplaatsen, dan herschrijven.
+- [x] Bedieningsinformatie naast de bediening zetten.
+- [x] Geen code in proza navertellen.
+- [x] Geen nieuwe aforismen toevoegen om ruimte op te vullen.
+- [x] Unieke stem en functie van het werk behouden.
+- [x] Desktop, mobiel en interactie controleren.
+- [x] Pas daarna naar de volgende pagina gaan.
+
+Bewijs: de elf pagina’s zijn in de vastgelegde volgorde behandeld; geen
+control-id veranderde. Een echte headless-Chromeproef op 1400 px en exact
+geëmuleerde 390 px vond per pagina een canvas, alle controls, geen horizontale
+overloop en geen runtimefout. Op iedere pagina veranderde één bediende control
+aantoonbaar de readout, status of canvas. De elf desktop-renders zijn
+afzonderlijk bekeken.
 
 Acceptance:
 

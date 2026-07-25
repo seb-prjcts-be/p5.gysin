@@ -70,42 +70,37 @@
     <div class="demo-header">
       <div class="demo-number">breathe · dropout · repeat · rubout</div>
       <h1>Parameter Lab</h1>
-      <p>One slider owns one element, in its own colour. Hover a control - or <strong>tap a legend row</strong> on touch - to preview which element it owns; drag the slider and only that element moves - darkening to a strong figure while the rest fade to a quiet ground, in the canvas <em>and</em> the exported SVG.</p>
+      <p>Four controls, four elements. Hover a slider or tap a legend row to isolate its element.</p>
       <ul class="legend" aria-label="Tap a row to isolate its element">
         <li data-focus="breathe"><span class="dot" style="background:#b26a00"></span><span style="color:#b26a00">Breathe</span> bends the <strong>title</strong></li>
         <li data-focus="rubout"><span class="dot" style="background:#b0203a"></span><span style="color:#b0203a">Rubout</span> tears <strong>ERASE</strong> away</li>
         <li data-focus="repeat"><span class="dot" style="background:#2b4fb0"></span><span style="color:#2b4fb0">Repeat</span> thickens the <strong>line band</strong></li>
         <li data-focus="dropout"><span class="dot" style="background:#0f7a6c"></span><span style="color:#0f7a6c">Dropout</span> opens the <strong>ruled block</strong></li>
       </ul>
-      <p class="intro-sub">The letter field and corner marks obey no slider - fixed reference ink that travels into the SVG. The <code>stats()</code> readout shows total plot cost and the shown element's share of it.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">// The whole core, in three lines - this alone is a complete sketch:
+        <pre><code class="language-javascript">// A clean title.
 const plot = new GysinPlot({ seed: 8319 });
 plot.text("PISTOL POEM", 70, 150);   // clean, mechanical text
 plot.draw();
 
-// Everything below is OPTIONAL disturbance layered on top. Defaults are
-// all zero, so options are opt-in. This example builds, back to front:
-
-// 1) a plate: thin border + corner registration marks (fixed grey ink)
-// 2) the title "PISTOL POEM", whole but bent - owned by the BREATHE slider
+// The title belongs to BREATHE.
 plot.text("PISTOL POEM", 70, 150, { breathe: value("breathe") });
 
-// 3) the word "ERASE", torn away - owned by the RUBOUT slider
+// ERASE belongs to RUBOUT.
 plot.text("ERASE", 70, 214, { rubout: value("rubout") });
 
-// 4) a woven line band - each row drawn `repeat` times, owned by REPEAT
+// The line band belongs to REPEAT.
 plot.path(waveRow(70, 490, y, amp, phase), { repeat: value("repeat") });
 
-// 5) a ruled block - closely set rules, no fill - owned by DROPOUT
+// The ruled block belongs to DROPOUT.
 for (let i = 0; i < 9; i++) {
   plot.line(70, 428 + i * 8, 490, 428 + i * 8, { dropout: value("dropout") });
 }
 
-// 6) a dense letter field: fixed reference ink, obeys no slider
+// The letter field remains fixed reference ink.
 plot.letters("WORD CUT FREE", 300, 150, 190, 100, { size: 10 });
 
 plot.draw();</code></pre>
@@ -136,7 +131,7 @@ plot.draw();</code></pre>
           <button type="button" id="svg-button">Download SVG</button>
           <output id="stats" class="stat-readout" aria-label="Plot cost">measuring…</output>
         </div>
-        <div class="demo-note">Watch: hover a slider (or tap a legend row on touch) to preview its element, then drag it - the element darkens while the rest fade back and the readout names its share of the ink. Sweep <span style="color:#b0203a">rubout</span> to tear ERASE from intact to shredded, or <span style="color:#2b4fb0">repeat</span> to see the woven band thicken and spread wider with every added pass. Hit <strong>Reset sliders</strong> to return every element to full ink. Use the buttons, or press <code>R</code> (new variation) and <code>S</code> (save SVG).</div>
+        <div class="demo-note">The stats show total plot cost and the active element's share. <strong>Reset sliders</strong> restores the plate; <code>R</code> rerolls and <code>S</code> saves SVG.</div>
       </div>
     </div>
   </main>

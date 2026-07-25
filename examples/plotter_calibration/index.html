@@ -32,30 +32,27 @@
     <div class="demo-header">
       <div class="demo-number">page · mm · pens · stats</div>
       <h1>Plotter Calibration</h1>
-      <p><em>Half of the <strong>Transmission</strong> room.</em> The other half is <a href="../plotter_export/">Plotter Export</a>: the same traces leaving the browser as SVG, JSON, and HPGL.</p>
-      <p>A readable A4 calibration instrument, plotted the way you actually plot&nbsp;-&nbsp;with just <strong>three pens</strong>. Black carries all the structure, text and measurement; a single <strong>red</strong> pen is reserved for the rings, so they read as the focal point rather than one accent among many; and a muted <strong>tint</strong> lays down the hatch-fill mass. That restraint gives the plate a real pen hierarchy and makes the HPGL export honest. The title is drawn through the composition layer&nbsp;-&nbsp;per-glyph jitter and a doubled stroke&nbsp;-&nbsp;so the header itself demonstrates the disturbance the sheet measures, with a small <code>plot.letters()</code> specimen beside it. Below it, every zone isolates one parameter: a mm ruler with numbered ticks; concentric rings labelled by diameter with a centre registration cross and a cross-hatched core, flanked by a <code>pressure</code>-toned cross-hatched ink mass and a dense field of true <em>asemic</em> marks from <code>plot.asemic()</code>; a mirrored ramp where dropout climbs 0.0&nbsp;&rarr;&nbsp;0.4 on the left and <em>breathe</em> climbs 0.0&nbsp;&rarr;&nbsp;the slider value on the right; a hatch-density gradient of five diamonds, spacing 0.8&nbsp;&rarr;&nbsp;2.4&nbsp;mm with a sweeping angle; a pen-weight ramp of bars with rising strokeWeight; and four segments isolating <em>hesitate</em>, <em>fray</em>, <em>pressure</em> and <em>rubout</em>, each above a straight shadow line so the effect reads against a true zero, closed by a full-width <code>plot.symbols()</code> band. Captions are kept small and light on purpose, so the rings and ink mass carry the image. All text is the built-in single-stroke alphabet, so the sheet stays plotter-safe.</p>
-      <p><strong>How to read it:</strong> drag the <em>Live breathe</em> slider and watch the right-hand ramp&nbsp;-&nbsp;the zero line stays put at the top and fans out further as breathe rises, so you can <em>see</em> what the parameter does. The note under the canvas shows the live path cost (seed · paths · mm drawn · mm travel), and the legend maps each pen colour to its physical pen number for the HPGL export. Hit <em>Reroll seed</em> to jump the seed and watch that cost change, <em>Reference sheet</em> to snap back to the reproducible plate, then export to SVG or HPGL. The buttons are mirrored on the keyboard: <kbd>0</kbd>, <kbd>R</kbd>, <kbd>S</kbd>, <kbd>H</kbd>.</p>
+      <p>An A4 instrument for three pens: ruler, rings, disturbance ramps, weight and route cost. Its companion is <a href="../plotter_export/">Plotter Export</a>.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
         <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">// The whole core, in three lines - this alone is a complete sketch:
+        <pre><code class="language-javascript">// One clean label.
 const plot = new GysinPlot({ seed: 210297 });
 plot.text("P5.GYSIN CALIBRATION", 48, 39);   // clean, mechanical text
 plot.draw();
 
-// Everything below is OPTIONAL. This sheet is a physical instrument on an
-// A4 page, so it works in millimetres and maps each layer to a pen:
+// The sheet works in millimetres and maps each layer to a pen.
 const mm = (v) =&gt; v * MM;   // millimetres -&gt; canvas pixels
 
-// 1) a mm ruler: one tick plus its number, both single-stroke plotter-safe
+// A millimetre ruler.
 plot.line(x, y, x, y - mm(5), { layer: "label" });
 plot.text("50", x, y + mm(6), { size: mm(3), layer: "label" });
 
-// 2) rings over a cross-hatched ink mass; pressure reads as tonal ink
+// Rings over a cross-hatched ink mass.
 plot.circle(cx, cy, d, { fill: "cross", hatchSpacing: mm(0.9), pressure: 0.4, layer: "fill" });
 
-// 3) a type specimen: the built-in alphabet dissolved into varied glyphs
+// A built-in single-stroke type specimen.
 plot.letters("P5 GYSIN", x, y, w, h, { glyphJitter: 0.6, layer: "label" });
 
 // …then dropout/breathe, hatch and pen-weight ramps, and disturbance verbs.
