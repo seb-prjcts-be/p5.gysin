@@ -318,15 +318,15 @@ Toegestane wijzigingen:
 
 Taken:
 
-- [ ] Leg de regels uit §3.3 en §6 vast in één kort stemcontract.
-- [ ] Inventariseer homepage, voorbeelden, `Collage`, `System`, `README` en
+- [x] Leg de regels uit §3.3 en §6 vast in één kort stemcontract.
+- [x] Inventariseer homepage, voorbeelden, `Collage`, `System`, `README` en
       `Vision`.
-- [ ] Label passages als `HANDELING`, `REFERENTIE`, `DUBBEL`,
+- [x] Label passages als `HANDELING`, `REFERENTIE`, `DUBBEL`,
       `INTERPRETATIE` of `HISTORIE`.
-- [ ] Markeer herhaalde claims zoals “one call” en “the whole”.
-- [ ] Maak per pagina een beslislijst: behouden, verplaatsen, schrappen,
+- [x] Markeer herhaalde claims zoals “one call” en “the whole”.
+- [x] Maak per pagina een beslislijst: behouden, verplaatsen, schrappen,
       herschrijven.
-- [ ] Verander nog geen publieke tekst.
+- [x] Verander nog geen publieke tekst.
 
 Acceptance:
 
