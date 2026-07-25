@@ -2,24 +2,13 @@
 
 [Open the public p5.gysin site](https://seb-prjcts-be.github.io/p5.gysin/)
 
-p5.gysin is a vector-first p5.js library for generative, plottable drawings:
-cut-up text, rubout zones, breathe, dropout, selective ink bleed, and export to
-SVG, JSON, and HPGL. Version 0.3.0 added intent verbs (`rub()`, `chant()`,
-`underwood()`) that compose the primitives into finished gestures, plus the
-optional text and underwood addons. Version 0.4.0 makes the turned sheet a
-first-class gesture: every shape takes `angle` and `pivot`, and the `lattice()`
-verb writes a field, turns the paper, and writes across it - Gysin's
-calligraphic method as one call.
-
-The repository follows the same publishing structure as `p5.waves`: the library
-lives at the root, GitHub Pages uses `index.html` and `docs/`, and examples live
-as standalone pages under `examples/`.
+p5.gysin is a vector-first p5.js library for generative, plottable drawings.
+It captures cut-up text, interrupted traces, repeated ink, and composed fields,
+then exports the same work to SVG, JSON, or HPGL.
 
 ## Start
 
-Two script lines and a sketch - this is the whole core. The library ships as
-three script files; the two optional addons, text and underwood, each add one
-line (see below):
+Load p5.js, then the core library:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/p5@2.3.1/lib/p5.js"></script>
@@ -29,402 +18,61 @@ line (see below):
 ```js
 function setup() {
   createCanvas(700, 300);
+
   const plot = new GysinPlot({ seed: 1960 });
-  plot.text("RUB OUT THE WORD", 60, 170, { size: 52, breathe: 2 });
+  plot.text("RUB OUT THE WORD", 60, 170, {
+    size: 52,
+    breathe: 2
+  });
   plot.draw();
 }
 ```
 
-The full reference is
-[System](https://seb-prjcts-be.github.io/p5.gysin/docs/system.html); the guided
-tour is [Collage](https://seb-prjcts-be.github.io/p5.gysin/docs/collage/).
+The complete API, options, mutation model, and export model are documented in
+[System](https://seb-prjcts-be.github.io/p5.gysin/docs/system.html). The
+[gallery](https://seb-prjcts-be.github.io/p5.gysin/#examples) leads to
+standalone works with their source code.
 
-## Structure
+## Distribution
 
-- `p5.gysin.js` - source library
-- `p5.gysin.min.js` - semantically identical browser build for examples/docs; intentionally not aggressively minified
-- `p5.gysin.text.js` - optional, standalone text permutations; runs without p5.js and without the core
-- `p5.gysin.text.min.js` - semantically identical browser build of the text module
-- `index.html` - Pages showcase
-- `docs/examples.html` - overview of examples
-- `docs/system.html` - the system: public API reference
-- `docs/about.html` - context and status
-- `docs/technical-blueprint.md` - technical blueprint
-- `docs/ink-bleed-design.md` - design and safety model for additive ink build-up
-- `examples/gysin_demo/` - standalone demo
-- `tests/snapshot.js` - minimal runtime/snapshot check
+- `p5.gysin.js` and `p5.gysin.min.js` contain the core.
+- `p5.gysin.text.js` and `p5.gysin.text.min.js` add pure permutation and
+  semantic-splice operations, plus `plot.chant()` and `plot.splice()`.
+- `p5.gysin.underwood.js` and `p5.gysin.underwood.min.js` add
+  `plot.underwood()`.
+- `index.html` and `docs/` form the public site.
+- `examples/<name>/` contains each standalone work and its sketch.
 
-## Basic usage
+The `.min.js` files are release builds of the adjacent source files. They are
+kept readable and must remain behaviourally identical to their sources.
 
-```html
-<script src="https://cdn.jsdelivr.net/npm/p5@2.3.1/lib/p5.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.min.js"></script>
-```
-
-```js
-let plot;
-
-function setup() {
-  createCanvas(800, 800);
-  plot = new GysinPlot({ seed: 1960 });
-
-  plot.text("RUB OUT THE WORD", 80, 180, {
-    size: 72,
-    breathe: 2,
-    dropout: 0.12,
-    bleed: 0.2,
-    bleedPasses: 2,
-    bleedSpread: 0.8,
-    rubout: 0.25
-  });
-
-  plot.line(80, 260, 720, 280, {
-    breathe: 1,
-    dropout: 0.05,
-    overshoot: 8
-  });
-
-plot.draw();
-}
-```
-
-`breathe` is the hand tremor that keeps a line alive. It works on every verb.
-
-```js
-plot.line(80, 260, 720, 280, { breathe: 1 });   // the line breathes
-```
-
-## Selective ink build-up
-
-`dropout` and `rubout` remove line material. `bleed` is the additive
-counterpart: the core deterministically selects contiguous fragments and gives
-only those one or more extra, slightly shifted passes.
-
-```js
-plot.text("RUB OUT THE WORD", 80, 180, {
-  bleed: 0.22,       // share of the written contour length
-  bleedPasses: 2,    // max number of extra passes, capped at 3
-  bleedSpread: 0.8,  // coherent shift; at least 0.1 when bleed is active
-  bleedCluster: 18   // desired length of an ink cluster
-});
-```
-
-The extra traces get `role: "bleed"` and a physical pass number in SVG/JSON.
-`plot.stats()` reports `bleedPaths`, `bleedLength`, `overdrawRatio`, and
-`maxLocalPasses`. For cutting tools, `tool: "blade"` filters all second and
-later passes out of the export; `tool: "pen"` keeps the ink build-up. The
-`ink_bleed` example is this feature in three states of one phrase, with both
-exports side by side.
-
-## Filled letters
-
-Letterforms are outline-only by default. `fill: "hatch"` fills the interior
-with parallel plotter lines, so type becomes solid instead of hollow:
-
-```js
-plot.text("RUB OUT", 60, 200, {
-  size: 96,
-  font: outlineFont,   // fill requires real font contours
-  fill: "hatch",
-  hatchSpacing: 2
-});
-```
-
-**House rule: fill is for letterforms.** `rect`, `circle`, and `polygon`
-accept the same fill options, but empty tone planes are not part of the house
-style - a block on the sheet is made of closely set lines, letters, or signs
-(see the ruled blocks in `parameter_lab`), so every mark stays
-writing. See `docs/example-conventions.md`, rule 8.
-
-- `hatchSpacing` (default 2) is the distance between the fill lines; minimum 0.25.
-- `hatchAngle` (default 0) rotates the hatching, in degrees.
-- `fill: "cross"` lays two hatchings perpendicular to each other; that reads more
-  even and solid than single strokes - nicer for filled typography.
-
-**Readability of filled text.** The outline is always drawn as well, so filled
-letters have sharp edges and a filled body. Practical rule of thumb: use fill for
-**display sizes (≥~16px)** - there `"cross"` reads solid and legible - and leave
-**small text outline-only or single-stroke**.
-
-**Pen width and small text (plotter).** With a real pen, the double lines of a
-small outline or filled letter close up into a blot. For small text, use the
-**built-in single-stroke alphabet** (omit `font`): there the pen width itself is
-the stroke, so it scales along. That font draws on a `size/7` grid, so the
-strokes stay separate as long as:
-
-```text
-glyph size  ≳  7–8 × pen width
-```
-
-Example: with a 1.7px pen, `size 14` is the legible lower bound; with a thicker
-pen it shifts up accordingly. Keep `glyphJitter` low (~0.1) for small text.
-Filled/outline fonts need ~2–3× more size to stay legible, so they are for
-headings, not small fields.
-- The fill uses the even-odd rule, so letter counters and holes (the cavity in
-  `O`, `A`, `e`) stay open.
-- Fill works on `rect`, `circle`, `polygon`, and on `text`/`textCutup` with an
-  outline font. Open shapes (`line`, `path`) and the built-in bitmap alphabet
-  have no interior and are skipped.
-- Fill lines get `role: "fill"`; `plot.stats()` reports `fillPaths` and
-  `fillLength`. `tool: "blade"` leaves out all fill (a blade doesn't fill an
-  area), `tool: "pen"` keeps them.
-
-> Roadmap: `fill: "dots"` (loose plotter dots with a density gradient for letter
-> decay and tables) is the next step in
-> [`docs/composition-plan.md`](docs/composition-plan.md).
-
-### Every letter unique
-
-No two rendered letters are identical - not even the same letter twice. Every
-glyph gets its own, independent variation (small rotation, shift, and scale
-around its centroid). The fill inherits this, since it is computed from the
-varied contour.
-
-```js
-plot.text("RUB OUT THE WORD", 60, 200, {
-  size: 72,
-  font: outlineFont,
-  glyphJitter: 0.6   // 0 = off (exact font shape), higher = more deviation
-});
-```
-
-`glyphJitter` defaults to `0.35`. The variation is deterministic: the same seed
-gives the same letters, `reroll()` gives a new set. Works on `text` and
-`textCutup` (outline and bitmap alphabet). Set `glyphJitter: 0` for mechanically
-exact type.
-
-## Intent verbs
-
-The calls above are primitives - you compose them yourself. `rub()` is the first
-*intent verb*: one call that composes `text`, `textCutup`, and `asemic` into a
-finished gesture - a word worn away in three copies (legible, cut up, asemic
-scribble). Strong defaults make the one-liner complete; every option is an opt-in
-escape hatch, and the primitives stay underneath.
-
-```js
-plot.rub("RUB OUT", 46, 248);                        // the whole gesture, defaults
-plot.rub("RUB OUT", 46, 248, { decay: 2 });          // one knob scales the wear
-plot.rub("RUB OUT", 46, 248, { font: outlineFont }); // fills the legible head
-```
-
-- `decay` (default 1) scales breathe/drift/dropout/rubout/fray across every copy at
-  once; `0` draws clean, higher wears the word away and buries it wider.
-- `size` (default 46), `font` (fills the legible head), `stroke`.
-- `tail` (default true) is the asemic burial of the last copy; set `false` to leave
-  the word unburied.
-- `stepX`/`stepY` set the drift between copies; `stages`/`tangles` replace the
-  built-in recipe wholesale.
-
-`rub()` returns the id of every copy and tangle, so each can be `freeze`d,
-`reroll`ed, updated, or exported like any other shape. Same seed, same result. See
-the `worn_word` example - the whole sketch is this one call.
-
-## The turned sheet
-
-Every shape takes `angle` (degrees) and `pivot`. This is Gysin's physical
-gesture - write, turn the paper, write again - as geometry, not as an export
-afterthought. The rotation runs before breathe, dropout, bleed and hatching,
-so every disturbance lives on the turned line.
-
-```js
-plot.text("RUB OUT", 80, 120, { angle: 90 });                      // turns about its pen-down anchor
-plot.text("RUB OUT", 80, 120, { angle: 45, pivot: "center" });     // turns about its own middle
-plot.rect(60, 60, 200, 90, { angle: 30, pivot: { x: 60, y: 60 } }); // turns about an explicit pin
-plot.update(id, { angle: 180 });                                    // any standing shape can be turned
-```
-
-- `pivot: "anchor"` (default): text and textCutup turn about their pen-down
-  point, rect and circle about their centre, path and polygon about their
-  centroid, line about its midpoint.
-- `pivot: "center"` turns about the sampled bounds; `{ x, y }` sets the pin.
-- `angle: 0` stays byte-identical to a shape without the option.
-- `page.rotation` still exists and still means the whole exported page; `angle`
-  is the shape-level turn the page model never gave you.
-
-`lattice()` composes the turn into the finished method: a phrase written in
-rows that fill a field, then the sheet turned and written across again. Each
-row cycles the word order by one, so the permutation runs inside the turning.
-Later passes wear more.
-
-```js
-plot.lattice("RUB OUT THE WORD", 60, 60, 480, 480);                 // two passes, 0 and 90
-plot.lattice("JUNK IS NO GOOD BABY", 60, 60, 480, 480, {
-  turns: [0, 90, 180],  // one more crossing
-  size: 16,
-  wear: 1.6,            // one knob scales breathe/dropout/drift per pass
-  stroke: "#244f73"
-});
-```
-
-`lattice()` returns the id of every written row (pass by pass), so rows can be
-`freeze`d, `update`d, or `reroll`ed like any other shape - freeze the first
-pass and only the later hand rerolls. See the `rotations` example: the turning
-cross, the lattice, and the page-level 180 export live on one sheet.
-
-## Optional text permutations
-
-Load the text module only when you want to reorder phrases. The module needs
-no p5.js or `GysinPlot` and returns plain strings:
+Load either addon after the core and before your sketch:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.text.min.js"></script>
-```
-
-```js
-const rows = GysinText.permute("I LOVE YOU", {
-  seed: 1960,
-  limit: 6,
-  order: "walk"
-});
-```
-
-Combine both modules to run each permutation through the existing graphic
-cut-up. `plot.chant()` is the intent verb for that whole recipe - one call
-permutes the phrase and sends every order through `textCutup()`, each line cut
-a little deeper:
-
-```js
-plot.chant("CUT ARRANGE GLUE", 60, 90);                  // the whole poem, defaults
-plot.chant("CUT ARRANGE GLUE", 60, 90, { descent: 0 });  // every line cut equally
-```
-
-`chant()` appears on every plot once the text module is loaded. `lines`,
-`order`, and `seed` reach `permute()`; `descent` scales the escalation; `size`,
-`leading`, `slices`, `sliceOffset`, and every other `textCutup()` option pass
-through. The primitives stay underneath when you want them:
-
-```js
-rows.forEach((row, index) => {
-  plot.textCutup(row, 70, 150 + index * 100, {
-    slices: 7 + index,
-    sliceOffset: 14 + index * 6
-  });
-});
-```
-
-Available orderings are `walk`, `random`, `lexical`, and `rotate`. The original
-phrase always comes first; duplicate words don't produce duplicate lines.
-`limit` defaults to 24 and maxes at 1,000.
-
-The language and image processing stay deliberately separate:
-`GysinText.permute()` deconstructs the word order, after which `textCutup()`
-re-slices each chosen line as letter contours. The `permutation_poem` example
-uses this two-step method for a monochrome A3 composition with repeated text
-fields, a symbolic code column, and a modular grid.
-
-## Optional typewriter (underwood)
-
-Load the typewriter module for one period-correct intent verb. It bundles a
-single-stroke (Hershey) face, so it needs no external font:
-
-```html
-<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.underwood.min.js"></script>
 ```
 
-```js
-plot.underwood("KICK THAT HABIT MAN", 60, 90);
-```
-
-Defaults alone give a period-correct typed page: single-stroke letters, fixed
-monospace pitch and line height (10 characters-per-inch, 6 lines-per-inch), and
-the small strike wear of a real sheet. Named after the Underwood No. 5, the
-machine Burroughs cut up the world on. A typewriter had no bold and no italic,
-so the only decoration is what it could actually do: `bold: true` double-strikes
-(the nearest thing to bold), `underline: 1..3` draws the underscore rule, and
-symbol dividers (`********`, `-_-_`) are just typed strings. `wear` scales the
-whole strike irregularity from one knob (`0` = mechanically clean). See
-[`docs/typewriter-decoration-research.md`](docs/typewriter-decoration-research.md)
-for what was and was not possible in that era.
-
-## Plotter export
-
-Use an optional page model to bring the same trace data to physical SVG and HPGL
-output:
-
-```js
-const page = {
-  width: 210,
-  height: 297,
-  units: "mm",
-  margin: 10,
-  scale: 0.25,
-  clip: true
-};
-
-plot.downloadSVG("drawing.svg", { page, optimize: true, tool: "pen" });
-plot.downloadHPGL("drawing.hpgl", {
-  page,
-  tool: "pen",
-  penMap: { frame: 1, type: 2 },
-  speed: 20
-});
-
-console.log(plot.stats({ page, tool: "pen", drawSpeed: 20, travelSpeed: 60 }));
-```
-
-Make a safe variant for a blade without rebuilding the composition:
-
-```js
-plot.downloadSVG("drawing-blade.svg", { page, tool: "blade" });
-```
-
-`regenerate()` keeps the seed; use `reroll()` to give only unfrozen shapes a new
-variant. Non-finite geometry, duplicate ids, and extreme sampling are rejected
-early with a clear error.
-
-## Examples
-
-Open locally:
-
-```text
-index.html
-docs/examples.html
-examples/first_trace/index.html
-examples/gysin_demo/index.html
-examples/parameter_lab/index.html
-examples/plotter_export/index.html
-```
-
-The examples follow the same three-layer structure as `p5.waves`:
-
-- live preview and snippet in `docs/examples.html`
-- standalone page in `examples/<name>/index.html`
-- full sketch in `examples/<name>/sketch.js`
-
-Available examples:
-
-- `first_trace` - minimal trace composition
-- `gysin_demo` - cut-up typography and rubout
-- `permutation_poem` - A3 poster where all word permutations run through `textCutup()` again
-- `rotations` - the turned sheet as palimpsest: `lattice()`, per-shape `angle`, and the page-level 180 export
-- `typewriter` - a period-correct single-stroke typewriter sheet built with the optional `underwood()` verb
-- `the_letter` - one complete piece of typed correspondence: the whole `underwood()` grammar
-- `parameter_lab` - live control over trace parameters
-- `plotter_export` - SVG/JSON/HPGL export workflow
-- `font_outlines` - real font contours with separate counters
-- `plotter_calibration` - physical A4 sizes, margins, and pen layers
-- `frequencies` - abstract paths and repeatable data scores
-- `worn_word` - one word worn away: the `rub()` intent verb in a single call
-- `ink_bleed` - selective ink build-up: `bleed` in three states, pen vs blade export
+The pure `GysinText.permute()` and `GysinText.splice()` functions can also run
+from the text addon without p5.js or the core.
 
 ## Compatibility
 
-Version 0.4.0 supports p5.js 2.x in global mode and instance mode. In instance
-mode, create a linked plot after `p.createCanvas()` with
-`p.createGysinPlot(options)`. The vector and export core needs no p5 runtime,
-but p5.js 1.x is not part of the tested support matrix.
+Version 0.4.0 supports p5.js 2.x in global and instance mode. In instance mode,
+create a linked plot after `p.createCanvas()` with
+`p.createGysinPlot(options)`. The vector and export core needs no p5 runtime.
+p5.js 1.x is not part of the tested support matrix.
 
-The distribution is intended as a browser script via GitHub/jsDelivr. The
-package is currently not set up as an npm, ESM, CommonJS, or TypeScript package.
+The distribution is intended for browser scripts through GitHub or jsDelivr.
+It is not packaged as npm, ESM, CommonJS, or TypeScript.
 
-## Test
+## Verify a checkout
 
 ```powershell
 npm test
 ```
 
-Regenerate release files:
+Regenerate and verify release files:
 
 ```powershell
 node tools/build-min.js

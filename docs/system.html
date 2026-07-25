@@ -21,7 +21,7 @@
   <header class="page-header">
     <div class="section-tag">API reference</div>
     <h1>System</h1>
-    <p>p5.gysin is plain script files: one core, and two optional voices for permutation and type. Your own <code>sketch.js</code> always comes last.</p>
+    <p>p5.gysin ships as plain script files: one core and two optional addons. Your own <code>sketch.js</code> comes last.</p>
   </header>
 
   <main class="section guide-layout">
@@ -31,8 +31,8 @@
       <ul>
         <li><strong><code>p5.js</code> is the creative-coding foundation.</strong> Load it when you want <code>GysinPlot</code> to draw the generated paths on a canvas.</li>
         <li><strong><code>p5.gysin.min.js</code> is the core library.</strong> It provides <code>GysinPlot</code>, drawing methods such as <code>textCutup()</code>, and SVG, JSON, and HPGL export.</li>
-        <li><strong><code>p5.gysin.text.min.js</code> is the permutation voice.</strong> It provides <code>GysinText.permute()</code>. Load it whenever you want to generate permutation poems.</li>
-        <li><strong><code>p5.gysin.underwood.min.js</code> is the typed voice.</strong> It provides <code>plot.underwood()</code>, the period-correct typewriter.</li>
+        <li><strong><code>p5.gysin.text.min.js</code> is the text addon.</strong> It provides <code>GysinText.permute()</code>, <code>GysinText.splice()</code>, <code>plot.chant()</code>, and <code>plot.splice()</code>.</li>
+        <li><strong><code>p5.gysin.underwood.min.js</code> is the typewriter addon.</strong> It provides <code>plot.underwood()</code>.</li>
       </ul>
       <p>Load what you need, in this order - with <code>p5.js</code> first when you draw to a canvas:</p>
       <div class="code-preview">
@@ -40,7 +40,7 @@
 &lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.text.min.js"&gt;&lt;/script&gt;
 &lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.underwood.min.js"&gt;&lt;/script&gt;</code>
       </div>
-      <p>The voices are optional. Both are dependency-free; <code>p5.gysin.text.min.js</code> even runs without p5.js or <code>GysinPlot</code>.</p>
+      <p>The addons are optional. The pure <code>GysinText</code> operations run without p5.js or <code>GysinPlot</code>; the <code>plot.*</code> methods attach when the core is present.</p>
     </section>
 
     <section class="guide-block">
@@ -93,7 +93,7 @@ function setup() {
 
     <section class="guide-block">
       <h2>Fields and Marks</h2>
-      <p>Four capture methods fill a region instead of drawing one shape. Each returns ordinary shape ids (or cell rectangles), so everything they write stays addressable.</p>
+      <p>These methods fill a region instead of drawing one isolated shape. They return shape ids or cell rectangles that can be addressed later.</p>
       <div class="code-preview">
         <code>const cells = plot.grid(40, 40, 480, 320, 3, 2);   // frame grid; returns cell rects
 plot.letters("RUB OUT", 60, 60, 200, 120);          // a decaying letter field
@@ -166,13 +166,13 @@ plot.asemic(60, 220, 160, 120);                     // a cursive, wordless tangl
     </section>
 
     <section class="guide-block">
-      <h2>Intent Verbs</h2>
-      <p>The methods above are primitives that you compose yourself. An <em>intent verb</em> is one call that composes several primitives into a finished gesture, with strong defaults, so the common case is a single line. The primitives stay underneath as the escape hatch.</p>
+      <h2>Composed Methods</h2>
+      <p>Composed methods combine existing capture methods and return the ids they create. Their options can replace or adjust the built-in composition.</p>
       <p><code>plot.rub(text, x, y, options)</code> draws a word worn away in three copies - legible, cut up, then an asemic scribble that buries the last one. It composes <code>text</code>, <code>textCutup</code>, and <code>asemic</code>.</p>
       <div class="code-preview">
-        <code>plot.rub("RUB OUT", 46, 248);                        // the whole gesture, defaults
-plot.rub("RUB OUT", 46, 248, { decay: 2 });          // one knob scales the wear
-plot.rub("RUB OUT", 46, 248, { font: outlineFont }); // fills the legible head</code>
+        <code>plot.rub("RUB OUT", 46, 248);
+plot.rub("RUB OUT", 46, 248, { decay: 2 });
+plot.rub("RUB OUT", 46, 248, { font: outlineFont });</code>
       </div>
       <ul>
         <li><code>decay</code>: scales breathe/drift/dropout/rubout/fray across every copy at once; default <code>1</code>, <code>0</code> draws clean.</li>
@@ -180,7 +180,7 @@ plot.rub("RUB OUT", 46, 248, { font: outlineFont }); // fills the legible head</
         <li><code>tail</code>: the asemic burial of the last copy; default <code>true</code>, set <code>false</code> to leave the word unburied.</li>
         <li><code>stepX</code>/<code>stepY</code>: the drift between copies. <code>stages</code>/<code>tangles</code> replace the built-in recipe wholesale.</li>
       </ul>
-      <p><code>rub()</code> returns the id of every copy and tangle, so each can be frozen, rerolled, updated, or exported like any other shape. The <code>worn_word</code> example is this one call.</p>
+      <p><code>rub()</code> returns the id of every copy and tangle, so each can be frozen, rerolled, updated, or exported like any other shape.</p>
     </section>
 
     <section class="guide-block">
@@ -195,7 +195,7 @@ plot.update(id, { angle: 180 });</code></div>
         <li><code>pivot: "center"</code> turns about the sampled bounds; an <code>{ x, y }</code> object sets the pin explicitly.</li>
         <li><code>angle: 0</code> stays byte-identical to a shape without the option. Page-level <code>page.rotation</code> is unchanged and still means the whole exported sheet.</li>
       </ul>
-      <p><code>plot.lattice(text, x, y, w, h, options)</code> composes the turn into the finished method: a phrase written in rows that fill a field, then the sheet turned and written across again. Each row cycles the word order by one, so the permutation runs inside the turning; later passes wear more.</p>
+      <p><code>plot.lattice(text, x, y, w, h, options)</code> writes a phrase in rows that fill a field, then writes across it at each requested turn. Each row cycles the word order by one; later passes can carry more wear.</p>
       <div class="code-preview"><code>plot.lattice("RUB OUT THE WORD", 60, 60, 480, 480);   // two passes, 0 and 90
 plot.lattice("JUNK IS NO GOOD BABY", 60, 60, 480, 480, {
   turns: [0, 90, 180],
@@ -206,13 +206,13 @@ plot.lattice("JUNK IS NO GOOD BABY", 60, 60, 480, 480, {
         <li><code>turns</code> (default <code>[0, 90]</code>): the sheet's angles, one written pass per entry. Near-perpendicular passes write along the field's other axis so their rows still fill it.</li>
         <li><code>wear</code> (default <code>1</code>): one knob that scales breathe/dropout/drift per pass; <code>0</code> writes every pass clean.</li>
         <li><code>size</code> (default <code>14</code>), <code>lineHeight</code>, <code>letterSpacing</code>, <code>stroke</code>, <code>font</code>, <code>alpha</code>, <code>layer</code> (default <code>"lattice"</code>); <code>extra</code> passes any other trace option to every row.</li>
-        <li>Returns the id of every written row, pass by pass - freeze the first pass and only the later hand rerolls. The <code>rotations</code> example is this sheet.</li>
+        <li>Returns the id of every written row, pass by pass. Freeze one pass to keep it unchanged while later passes reroll.</li>
       </ul>
     </section>
 
     <section class="guide-block">
-      <h2>Optional Text Permutations</h2>
-      <p><code>p5.gysin.text.min.js</code> returns ordinary strings that can be used on their own or drawn through the core library.</p>
+      <h2>Optional Text Operations</h2>
+      <p><code>p5.gysin.text.min.js</code> provides pure text operations and two matching plot methods.</p>
       <div class="code-preview">
         <code>&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v0.4.0/p5.gysin.text.min.js"&gt;&lt;/script&gt;
 
@@ -230,9 +230,8 @@ lines.forEach((line, index) =&gt; {
   });
 });</code>
       </div>
-      <p>The first line stays almost completely readable. Each following line increases the slice offset by one pixel, so the poem gradually moves from legible text toward a stronger cut-up.</p>
       <p>Orders: <code>walk</code>, <code>random</code>, <code>lexical</code>, and <code>rotate</code>. The source line stays first, duplicate words produce only unique lines, and <code>limit</code> is capped at 1,000.</p>
-      <p><code>plot.chant(text, x, y, options)</code> is the intent verb for that whole recipe: one call takes a phrase through its permutations and sends every new order through <code>textCutup()</code>, each line cut a little deeper. It appears on every plot once this addon is loaded.</p>
+      <p><code>plot.chant(text, x, y, options)</code> sends the result of <code>permute()</code> through <code>textCutup()</code>. It is added to each plot when the addon is loaded.</p>
       <div class="code-preview">
         <code>plot.chant("CUT ARRANGE GLUE", 60, 90);            // the whole poem, defaults
 plot.chant("CUT ARRANGE GLUE", 60, 90, { descent: 0 }); // every line cut equally
@@ -243,19 +242,37 @@ plot.chant("CUT ARRANGE GLUE", 60, 90, { order: "rotate", breathe: 1 });</code>
         <li><code>descent</code> (default <code>1</code>): scales how much deeper each line is cut; <code>0</code> cuts them all equally light.</li>
         <li><code>size</code>, <code>leading</code>, <code>slices</code>, <code>sliceOffset</code> set the type; every other <code>textCutup()</code> option (breathe, dropout, bleed, layer, ...) passes straight through.</li>
       </ul>
+      <h3>Semantic splice</h3>
+      <div class="code-preview"><code>const cut = GysinText.splice([
+  { id: "left", text: "The first source." },
+  { id: "right", text: "The second source." }
+], {
+  seed: 1960,
+  unit: "phrase",
+  lines: 4,
+  fragments: 3
+});
+
+const ids = plot.splice(cutSources, 60, 90, {
+  seed: 1960,
+  unit: "clause"
+});</code></div>
+      <p><code>GysinText.splice(sources, options)</code> cuts and recombines two to eight sources without drawing. A source is a string or <code>{ id, text }</code>; each text may contain at most 20,000 characters and source ids must be unique. The method does not fetch files or URLs.</p>
+      <p>Options are <code>seed</code> (default <code>1</code>), <code>unit</code> (<code>word</code>, <code>phrase</code>, or <code>clause</code>; default <code>phrase</code>), <code>lines</code> (1&ndash;100; default <code>4</code>), and <code>fragments</code> (2&ndash;6; default <code>3</code>). The result is <code>{ seed, unit, lines }</code>. Each output line contains <code>text</code> and a <code>fragments</code> array; every fragment records <code>source</code>, <code>sourceIndex</code>, <code>start</code>, <code>end</code>, and <code>text</code>. Offsets refer to the trimmed input text.</p>
+      <p><code>plot.splice(sources, x, y, options)</code> draws the result as text and returns the generated ids. It defaults to the plot seed, <code>size: 26</code>, and <code>leading: 42</code>. Provenance is retained in each shape&rsquo;s <code>params.splice</code> and in JSON export. SVG and HPGL retain shape ids and paths, not source text metadata.</p>
+      <p><code>reroll()</code> changes only the drawn trace. To make a new semantic cut, call <code>splice()</code> again with a new seed. <code>freeze()</code> and <code>thaw()</code> behave as they do for other captured shapes.</p>
     </section>
 
     <section class="guide-block">
       <h2>Optional Typewriter (underwood)</h2>
-      <p><code>p5.gysin.underwood.min.js</code> adds one verb: <code>plot.underwood(text, x, y, options)</code> types period-correct single-stroke letters at a fixed pitch - ten characters per inch, six lines per inch, light strike wear. The face carries both voices, capitals and lowercase, plus marks like <code>+ # &amp;</code> that the built-in vector alphabet lacks.</p>
+      <p><code>p5.gysin.underwood.min.js</code> adds <code>plot.underwood(text, x, y, options)</code>: single-stroke letters at a fixed pitch of ten characters and six lines per inch. The bundled face includes capitals, lowercase, and marks such as <code>+ # &amp;</code>.</p>
       <div class="code-preview">
         <code>plot.underwood("KICK THAT HABIT MAN", 60, 90);
 plot.underwood("HEADING", 60, 130, { underline: 1 });
 plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice
 plot.underwood("the small voice.", 60, 190);</code>
       </div>
-      <p>The machine has no bold and no italic: <code>bold: true</code> strikes the same key twice, <code>underline</code> draws the underscore ladder, and <code>wear</code> (0 and up) is the one ageing knob. Every letter is a single pen line, so it plots exactly as typed.</p>
-      <p>That grammar of emphasis has a name: <em>Sperrsatz</em>. One face, at one size, upright - so a word was made to matter by spacing it out, striking it twice, or ruling a line beneath it. The options above are not features added to a font; they are the whole typographic voice the machine ever had, kept on purpose.</p>
+      <p><code>bold: true</code> double-strikes each letter, <code>underline</code> draws one to three rules, and <code>wear</code> (0 and up) scales strike variation. Every glyph is a single pen line.</p>
     </section>
 
     <section class="guide-block">
@@ -276,7 +293,15 @@ plot.freeze();        // same as plot.freeze(titleId)
 plot.setSeed(1961);   // re-seed and regenerate every unpinned shape
 plot.clear();         // empty the sheet: shapes, ids, and selection</code>
       </div>
-      <p><code>regenerate()</code> recalculates with the same seed. Use <code>reroll()</code> only when you want a new deterministic variation. <code>select()</code> sets the default target for id-less addressing calls; <code>setSeed()</code> changes the plot seed and regenerates every shape without an explicit <code>seed</code> of its own; <code>clear()</code> removes all shapes and the selection.</p>
+      <p><code>get(id)</code> returns a detached snapshot. <code>regenerate()</code> recalculates with the same seed; <code>reroll()</code> assigns a new deterministic variation. <code>select()</code> sets the default target for id-less addressing calls; <code>setSeed()</code> changes the plot seed and regenerates every shape without an explicit <code>seed</code> of its own; <code>clear()</code> removes all shapes and the selection.</p>
+    </section>
+
+    <section class="guide-block">
+      <h2>Public Method Index</h2>
+      <p>Core creation and drawing: <code>new GysinPlot()</code>, <code>p.createGysinPlot()</code>, <code>plot.line()</code>, <code>plot.rect()</code>, <code>plot.circle()</code>, <code>plot.polygon()</code>, <code>plot.path()</code>, <code>plot.text()</code>, <code>plot.textCutup()</code>, <code>plot.asemic()</code>, <code>plot.grid()</code>, <code>plot.letters()</code>, <code>plot.symbols()</code>, <code>plot.rub()</code>, <code>plot.lattice()</code>, and <code>plot.draw()</code>.</p>
+      <p>Core addressing: <code>plot.get()</code>, <code>plot.select()</code>, <code>plot.freeze()</code>, <code>plot.thaw()</code>, <code>plot.regenerate()</code>, <code>plot.reroll()</code>, <code>plot.remove()</code>, <code>plot.update()</code>, <code>plot.setSeed()</code>, and <code>plot.clear()</code>.</p>
+      <p>Core output: <code>plot.exportSVG()</code>, <code>plot.exportJSON()</code>, <code>plot.exportHPGL()</code>, <code>plot.downloadSVG()</code>, <code>plot.downloadJSON()</code>, <code>plot.downloadHPGL()</code>, and <code>plot.stats()</code>.</p>
+      <p>Text addon: <code>GysinText.permute()</code>, <code>GysinText.splice()</code>, <code>plot.chant()</code>, and <code>plot.splice()</code>. Typewriter addon: <code>plot.underwood()</code>.</p>
     </section>
 
     <section class="guide-block">

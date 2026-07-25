@@ -594,13 +594,13 @@ Volgorde:
 
 Taken:
 
-- [ ] `System` aanvullen waar voorbeelden bewust uitleg verloren.
-- [ ] Controleren dat iedere publieke methode vindbaar is.
-- [ ] Dubbele uitleg binnen `System` zelf verwijderen.
-- [ ] `README` tot praktische start en distributie-informatie beperken.
-- [ ] `Vision` controleren op bron, feit, interpretatie en promotietaal.
-- [ ] Geen historisch citaat toevoegen zonder primaire of gezaghebbende bron.
-- [ ] Duidelijk houden dat p5.gysin een studie/instrument is, geen
+- [x] `System` aanvullen waar voorbeelden bewust uitleg verloren.
+- [x] Controleren dat iedere publieke methode vindbaar is.
+- [x] Dubbele uitleg binnen `System` zelf verwijderen.
+- [x] `README` tot praktische start en distributie-informatie beperken.
+- [x] `Vision` controleren op bron, feit, interpretatie en promotietaal.
+- [x] Geen historisch citaat toevoegen zonder primaire of gezaghebbende bron.
+- [x] Duidelijk houden dat p5.gysin een studie/instrument is, geen
       vertegenwoordiging van Gysins oeuvre.
 
 Acceptance:
