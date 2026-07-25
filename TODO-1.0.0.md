@@ -89,8 +89,8 @@ Deze regels mogen tijdens de uitvoering niet geleidelijk verwateren.
 ### 3.4 Hoofdregel voor nieuwe functionaliteit
 
 Versie 1.0.0 krijgt hoogstens **één** nieuwe conceptuele methode:
-een semantische cut-up die twee of meer aangeleverde tekstbronnen kan laten
-botsen. Werknaam: `splice()`.
+een tekstweefsel dat fragmenten uit twee of meer aangeleverde bronnen kan
+laten botsen. Definitieve naam: `weave()`.
 
 Deze methode:
 
@@ -112,7 +112,7 @@ Alle andere nieuwe features blijven buiten 1.0.0.
 Versie 1.0.0 is pas klaar als **alle** onderstaande punten waar zijn.
 
 - [x] De bestaande v0.4.0-methodes en outputs blijven achterwaarts compatibel.
-- [x] `splice()` of de goedgekeurde alternatieve naam laat minstens twee
+- [x] `weave()` laat minstens twee
       tekstbronnen semantisch botsen met sterke defaults.
 - [x] De nieuwe methode ondersteunt provenance, ids, determinisme,
       `freeze()`, `reroll()` en export.
@@ -466,7 +466,7 @@ Taken:
 
 Bewijs: bron- en min-build leveren dezelfde semantische en getekende output;
 `npm test` controleert fouten, offsets, ids, freeze/reroll en JSON/SVG/HPGL.
-`examples/splice/sketch.js` telt 38 fysieke regels.
+`examples/weave/sketch.js` telt 38 fysieke regels.
 
 Acceptance:
 

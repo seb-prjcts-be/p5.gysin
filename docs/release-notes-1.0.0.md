@@ -1,12 +1,12 @@
 # p5.gysin v1.0.0
 
-## Text splice
+## Text weave
 
-- `GysinText.splice(sources, options)` recombines two to eight supplied text
+- `GysinText.weave(sources, options)` recombines two to eight supplied text
   sources by word, phrase, or clause.
-- `plot.splice(sources, x, y, options)` draws the resulting lines through the
+- `plot.weave(sources, x, y, options)` draws the resulting lines through the
   existing text and trace system.
-- The same seed and sources return the same cut.
+- The same seed and sources return the same weave.
 - Every fragment records its source id, source index, exact character offsets,
   and text. Plot shapes retain that provenance in JSON export.
 - The method performs no network request and includes no text corpus.
@@ -14,6 +14,8 @@
 ## Existing API
 
 - No v0.4.0 method was removed or renamed.
+- `GysinText.permute()` orders `walk` and `random` now respect `limit` in every
+  fallback path.
 - Existing ids, seeds, freeze/thaw, regenerate/reroll, drawing, SVG, JSON, and
   HPGL behaviour remain available.
 - The text and underwood addons remain optional browser scripts.

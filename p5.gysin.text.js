@@ -1,6 +1,6 @@
 /*
  * p5.gysin.text
- * Optional text permutation and semantic splice operations for p5.gysin.
+ * Optional text permutation and source-weaving operations for p5.gysin.
  * No runtime dependencies.
  */
 (function (global) {
@@ -10,13 +10,13 @@
   const MAX_LIMIT = 1000;
   const MAX_WORDS = 12;
   const ORDERS = new Set(["walk", "random", "lexical", "rotate"]);
-  const SPLICE_UNITS = new Set(["word", "phrase", "clause"]);
-  const MIN_SPLICE_SOURCES = 2;
-  const MAX_SPLICE_SOURCES = 8;
-  const MAX_SPLICE_SOURCE_LENGTH = 20000;
-  const MAX_SPLICE_LINES = 100;
-  const MIN_SPLICE_FRAGMENTS = 2;
-  const MAX_SPLICE_FRAGMENTS = 6;
+  const WEAVE_UNITS = new Set(["word", "phrase", "clause"]);
+  const MIN_WEAVE_SOURCES = 2;
+  const MAX_WEAVE_SOURCES = 8;
+  const MAX_WEAVE_SOURCE_LENGTH = 20000;
+  const MAX_WEAVE_LINES = 100;
+  const MIN_WEAVE_FRAGMENTS = 2;
+  const MAX_WEAVE_FRAGMENTS = 6;
 
   class SeededRandom {
     constructor(seed) {
@@ -145,9 +145,10 @@
 
   function fillFromLexical(result, seen, words, target) {
     const current = words.slice().sort(compareWords);
-    do {
+    while (result.length < target) {
       addWords(result, seen, current);
-    } while (result.length < target && nextPermutation(current));
+      if (!nextPermutation(current)) break;
+    }
   }
 
   function nextPermutation(values) {
@@ -205,28 +206,28 @@
     return hash >>> 0;
   }
 
-  function spliceSources(input, options = {}) {
-    const sources = normalizeSpliceSources(input);
+  function weaveSources(input, options = {}) {
+    const sources = normalizeWeaveSources(input);
     const seed = options.seed === undefined ? 1 : options.seed;
     const unit = options.unit === undefined ? "phrase" : String(options.unit);
-    if (!SPLICE_UNITS.has(unit)) {
-      throw new RangeError(`unit must be one of: ${Array.from(SPLICE_UNITS).join(", ")}.`);
+    if (!WEAVE_UNITS.has(unit)) {
+      throw new RangeError(`unit must be one of: ${Array.from(WEAVE_UNITS).join(", ")}.`);
     }
     const lineCount = boundedWholeNumber(
       options.lines === undefined ? 4 : options.lines,
       "lines",
       1,
-      MAX_SPLICE_LINES
+      MAX_WEAVE_LINES
     );
     const fragmentCount = boundedWholeNumber(
       options.fragments === undefined ? 3 : options.fragments,
       "fragments",
-      MIN_SPLICE_FRAGMENTS,
-      MAX_SPLICE_FRAGMENTS
+      MIN_WEAVE_FRAGMENTS,
+      MAX_WEAVE_FRAGMENTS
     );
-    const pools = sources.map((source) => spliceUnits(source, unit));
+    const pools = sources.map((source) => weaveUnits(source, unit));
     if (pools.some((pool) => pool.length === 0)) {
-      throw new RangeError(`splice() could not find a ${unit} fragment in every source.`);
+      throw new RangeError(`weave() could not find a ${unit} fragment in every source.`);
     }
 
     const rng = new SeededRandom(seed);
@@ -253,7 +254,7 @@
         previousSource = selected.sourceIndex;
       }
 
-      const text = joinSpliceFragments(fragments);
+      const text = joinWeaveFragments(fragments);
       if (!text || seen.has(text)) continue;
       seen.add(text);
       lines.push(Object.freeze({
@@ -263,7 +264,7 @@
     }
 
     if (lines.length === 0) {
-      throw new RangeError("splice() could not form a unique line from these sources.");
+      throw new RangeError("weave() could not form a unique line from these sources.");
     }
 
     return Object.freeze({
@@ -273,12 +274,12 @@
     });
   }
 
-  function normalizeSpliceSources(input) {
+  function normalizeWeaveSources(input) {
     if (!Array.isArray(input)) {
-      throw new TypeError("splice() sources must be an array.");
+      throw new TypeError("weave() sources must be an array.");
     }
-    if (input.length < MIN_SPLICE_SOURCES || input.length > MAX_SPLICE_SOURCES) {
-      throw new RangeError(`splice() needs from ${MIN_SPLICE_SOURCES} through ${MAX_SPLICE_SOURCES} sources.`);
+    if (input.length < MIN_WEAVE_SOURCES || input.length > MAX_WEAVE_SOURCES) {
+      throw new RangeError(`weave() needs from ${MIN_WEAVE_SOURCES} through ${MAX_WEAVE_SOURCES} sources.`);
     }
 
     const seen = new Set();
@@ -286,22 +287,22 @@
       const stringSource = typeof entry === "string";
       const objectSource = entry && typeof entry === "object" && !Array.isArray(entry);
       if (!stringSource && (!objectSource || typeof entry.text !== "string")) {
-        throw new TypeError(`splice() source ${index + 1} must be text or an object with text.`);
+        throw new TypeError(`weave() source ${index + 1} must be text or an object with text.`);
       }
       const id = objectSource && entry.id !== undefined ? String(entry.id).trim() : `source-${index + 1}`;
       const text = String(objectSource ? entry.text : entry).trim();
-      if (!id) throw new TypeError(`splice() source ${index + 1} needs a non-empty id.`);
-      if (seen.has(id)) throw new RangeError(`splice() source id "${id}" is duplicated.`);
-      if (!text) throw new TypeError(`splice() source "${id}" needs visible text.`);
-      if (text.length > MAX_SPLICE_SOURCE_LENGTH) {
-        throw new RangeError(`splice() source "${id}" exceeds ${MAX_SPLICE_SOURCE_LENGTH} characters.`);
+      if (!id) throw new TypeError(`weave() source ${index + 1} needs a non-empty id.`);
+      if (seen.has(id)) throw new RangeError(`weave() source id "${id}" is duplicated.`);
+      if (!text) throw new TypeError(`weave() source "${id}" needs visible text.`);
+      if (text.length > MAX_WEAVE_SOURCE_LENGTH) {
+        throw new RangeError(`weave() source "${id}" exceeds ${MAX_WEAVE_SOURCE_LENGTH} characters.`);
       }
       seen.add(id);
       return Object.freeze({ id, text });
     });
   }
 
-  function spliceUnits(source, unit) {
+  function weaveUnits(source, unit) {
     if (unit === "word") return wordUnits(source.text);
     if (unit === "clause") return clauseUnits(source.text);
     const words = wordUnits(source.text);
@@ -341,7 +342,7 @@
     return units;
   }
 
-  function joinSpliceFragments(fragments) {
+  function joinWeaveFragments(fragments) {
     return fragments
       .map((fragment) => fragment.text.replace(/\s+/gu, " ").trim())
       .filter(Boolean)
@@ -359,7 +360,7 @@
     return number;
   }
 
-  global.GysinText = Object.freeze({ permute, splice: spliceSources });
+  global.GysinText = Object.freeze({ permute, weave: weaveSources });
 
   // chant() is the intent verb for a permutation poem: one call takes a phrase
   // through its permutations and sends every new order through the scissors,
@@ -421,7 +422,7 @@
     return ids;
   }
 
-  const SPLICE_OWN = new Set([
+  const WEAVE_OWN = new Set([
     "seed",
     "lines",
     "unit",
@@ -430,21 +431,21 @@
     "leading"
   ]);
 
-  function splicePlot(sources, x, y, options) {
+  function weavePlot(sources, x, y, options) {
     if (!this || typeof this.text !== "function" || typeof this.update !== "function") {
-      throw new TypeError("splice() needs a GysinPlot instance.");
+      throw new TypeError("weave() needs a GysinPlot instance.");
     }
     const o = options || {};
-    const startX = requireFinite(x, "splice x");
-    const startY = requireFinite(y, "splice y");
+    const startX = requireFinite(x, "weave x");
+    const startY = requireFinite(y, "weave y");
     const seed = o.seed === undefined
       ? (this.globalSeed === undefined ? 1 : this.globalSeed)
       : o.seed;
-    const size = o.size === undefined ? 26 : requirePositive(o.size, "splice size");
+    const size = o.size === undefined ? 26 : requirePositive(o.size, "weave size");
     const leading = o.leading === undefined
       ? 42
-      : requirePositive(o.leading, "splice leading");
-    const result = spliceSources(sources, {
+      : requirePositive(o.leading, "weave leading");
+    const result = weaveSources(sources, {
       seed,
       lines: o.lines,
       unit: o.unit,
@@ -455,12 +456,12 @@
     result.lines.forEach((line, index) => {
       const textOptions = { size };
       for (const key of Object.keys(o)) {
-        if (!SPLICE_OWN.has(key)) textOptions[key] = o[key];
+        if (!WEAVE_OWN.has(key)) textOptions[key] = o[key];
       }
       const id = this.text(line.text, startX, startY + index * leading, textOptions);
       this.update(id, {
         params: {
-          splice: {
+          weave: {
             seed,
             unit: result.unit,
             line: index,
@@ -497,8 +498,8 @@
   if (global.GysinPlot && global.GysinPlot.prototype && (!coreChant || coreChant.gysinAddonStub)) {
     global.GysinPlot.prototype.chant = chant;
   }
-  const coreSplice = global.GysinPlot && global.GysinPlot.prototype && global.GysinPlot.prototype.splice;
-  if (global.GysinPlot && global.GysinPlot.prototype && (!coreSplice || coreSplice.gysinAddonStub)) {
-    global.GysinPlot.prototype.splice = splicePlot;
+  const coreWeave = global.GysinPlot && global.GysinPlot.prototype && global.GysinPlot.prototype.weave;
+  if (global.GysinPlot && global.GysinPlot.prototype && (!coreWeave || coreWeave.gysinAddonStub)) {
+    global.GysinPlot.prototype.weave = weavePlot;
   }
 })(typeof globalThis !== "undefined" ? globalThis : window);

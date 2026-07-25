@@ -38,11 +38,11 @@
     "GysinPlot.downloadHPGL",
     "GysinPlot.stats",
     "GysinPlot.chant",
-    "GysinPlot.splice",
+    "GysinPlot.weave",
     "GysinPlot.underwood",
     "p5.createGysinPlot",
     "GysinText.permute",
-    "GysinText.splice",
+    "GysinText.weave",
     "GysinUnderwood.glyphPolylines",
     "GysinUnderwood.render"
   ],
@@ -71,9 +71,9 @@
     "plotter_calibration",
     "plotter_export",
     "rotations",
-    "splice",
     "the_letter",
     "typewriter",
+    "weave",
     "worn_word"
   ],
   "removed_apis": [],
@@ -115,10 +115,10 @@
       "note": "Intent verb: writes a phrase in rows that fill a field, turns the sheet once per entry in turns, and writes across again; each row cycles the word order by one and wear scales the disturbance per pass. Returns every row id, pass by pass."
     },
     {
-      "name": "GysinText.splice / splice",
+      "name": "GysinText.weave / weave",
       "added_in": "1.0.0",
       "status": "optional-addon",
-      "note": "Seeded semantic cut-up across two through eight sources. The pure helper returns lines with exact source offsets; the plot verb writes those lines and preserves their provenance in JSON."
+      "note": "Seeded text weaving across two through eight sources. The pure helper returns lines with exact source offsets; the plot verb writes those lines and preserves their provenance in JSON."
     }
   ]
 }

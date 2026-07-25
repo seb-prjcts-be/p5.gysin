@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Splice | p5.gysin examples</title>
+  <title>Weave | p5.gysin examples</title>
   <link rel="stylesheet" href="../../docs/style.css">
   <style>
-    .splice-layout { grid-template-columns: minmax(310px, 0.68fr) minmax(420px, 1fr); max-width: 1320px; }
-    .splice-canvas { background: #eee9dc; }
+    .weave-layout { grid-template-columns: minmax(310px, 0.68fr) minmax(420px, 1fr); max-width: 1320px; }
+    .weave-canvas { background: #eee9dc; }
     .source-pair { display: grid; gap: 0.65rem; margin-top: 1rem; }
     .source-pair label { color: var(--muted); font-size: 0.76rem; letter-spacing: 0.04em; text-transform: uppercase; }
     .source-pair textarea {
@@ -15,7 +15,7 @@
       resize: vertical; color: inherit; background: rgba(255,255,255,0.06); border: 1px solid currentColor;
       border-radius: 4px; font: 0.88rem/1.45 inherit;
     }
-    @media (max-width: 900px) { .splice-layout { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .weave-layout { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -33,11 +33,11 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">splice() · semantic cut-up · source provenance</div>
-      <h1>Splice</h1>
+      <div class="demo-number">weave() · two sources · one seam</div>
+      <h1>Weave</h1>
       <p>Two notices meet at the seam. Every fragment remembers where it came from.</p>
     </div>
-    <div class="demo-layout splice-layout">
+    <div class="demo-layout weave-layout">
       <div class="demo-code">
         <div class="code-label">The gesture</div>
         <pre><code class="language-javascript">const sources = [
@@ -45,7 +45,7 @@
   { id: "letter", text: "Your letter arrived..." }
 ];
 
-const ids = plot.splice(sources, 48, 82, {
+const ids = plot.weave(sources, 48, 82, {
   seed: 1960,
   lines: 5
 });
@@ -59,7 +59,7 @@ plot.draw();</code></pre>
             <textarea id="source-b" maxlength="20000">Your letter arrived after the room was empty. I left its folded weather beside the door.</textarea>
           </label>
         </div>
-        <div class="demo-actions" aria-label="Splice actions">
+        <div class="demo-actions" aria-label="Weave actions">
           <button type="button" id="cut-button">New cut</button>
           <button type="button" id="ink-button">Reroll ink</button>
           <button type="button" id="json-button">Download JSON</button>
@@ -68,8 +68,8 @@ plot.draw();</code></pre>
         <div class="demo-note"><strong>New cut</strong> changes the collision. <strong>Reroll ink</strong> keeps the words and disturbs only their trace.</div>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas splice-canvas" id="sketch" role="img" aria-label="Five plotter-drawn lines spliced from two editable source texts."></div>
-        <div class="demo-note" id="splice-status" role="status" aria-live="polite">Cutting the two sources…</div>
+        <div class="demo-canvas weave-canvas" id="sketch" role="img" aria-label="Five plotter-drawn lines woven from two editable source texts."></div>
+        <div class="demo-note" id="weave-status" role="status" aria-live="polite">Weaving the two sources…</div>
       </div>
     </div>
   </main>

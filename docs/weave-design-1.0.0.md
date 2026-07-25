@@ -1,8 +1,8 @@
-# p5.gysin 1.0.0 — semantische cut-up
+# p5.gysin 1.0.0 — tekstweefsel
 
 Status: implementatiecontract voor fase 5
 
-Werknaam en aanbeveling: `splice()`
+Definitieve naam: `weave()`
 
 ## Diagnose
 
@@ -17,7 +17,8 @@ wordt semantisch toeval opnieuw alleen textuur.
 
 ## Bestaande contracten die blijven gelden
 
-- `GysinText.permute(value, options)` blijft ongewijzigd.
+- `GysinText.permute(value, options)` houdt zijn signatuur en orders; `limit`
+  blijft een harde bovengrens.
 - `textCutup()` blijft een grafische contoursnede.
 - `chant()` blijft één frase permuteren en tekenen.
 - `rub()` blijft één woord visueel slijten.
@@ -27,19 +28,27 @@ wordt semantisch toeval opnieuw alleen textuur.
 - SVG en HPGL blijven de getekende traces exporteren.
 
 `reroll()` verandert in 1.0.0 bewust niet stilzwijgend de woorden van een
-bestaande shape. Een nieuwe semantische botsing ontstaat door `splice()` met
+bestaande shape. Een nieuw tekstweefsel ontstaat door `weave()` met
 een andere seed opnieuw aan te roepen. Zo blijft een eenmaal gekozen zin
 adresseerbaar en reproduceerbaar.
 
 ## Naamvergelijking
 
-### `splice()` — aanbevolen
+### `weave()` — gekozen
+
+- Brengt meerdere stemmen samen zonder een regelmatig patroon te beloven.
+- Begrijpelijk, maar minder technisch dan de implementatieterm.
+- Kort naast `rub()`, `chant()` en `lattice()`.
+- Heeft geen naamconflict met p5.js 2.3.1 of de globale browsercontext.
+- Nadeel: klinkt zachter dan de snede die eraan voorafgaat.
+
+### `splice()`
 
 - Concreet: knippen en verbinden.
-- Werkt voor tekst, tape, film en code zonder een historisch kostuum te worden.
-- Kort naast `rub()`, `chant()` en `lattice()`.
-- Nadeel: JavaScript kent `Array.prototype.splice()`. Deze methode muteert
-  bronnen echter nooit en staat duidelijk onder `GysinText` of een plot.
+- Werkt voor tekst, tape, film en code.
+- Niet gekozen: JavaScript kent `Array.prototype.splice()` en p5.js 1.x kende
+  een globale `splice()`-helper. De namen zouden technisch naast elkaar kunnen
+  bestaan, maar maken het publieke gebaar onnodig beladen.
 
 ### `interleave()`
 
@@ -52,14 +61,15 @@ adresseerbaar en reproduceerbaar.
 - Stuurt de uitkomst te sterk naar montage tussen exact twee bronnen, terwijl
   het contract twee of meer bronnen ondersteunt.
 
-Besluit: `splice()`.
+Besluit op 26 juli 2026: `weave()`, zonder `splice()`-alias. De functie benoemt
+het werk dat uit de snede ontstaat; `textCutup()` blijft de expliciete schaar.
 
 ## Publieke API
 
 ### Pure taalbewerking
 
 ```js
-const result = GysinText.splice(
+const result = GysinText.weave(
   [
     { id: "a", text: "The first source ..." },
     { id: "b", text: "The second source ..." }
@@ -101,7 +111,7 @@ bronteksten worden niet gewijzigd.
 ### Getekend gebaar
 
 ```js
-const ids = plot.splice(sources, 60, 90);
+const ids = plot.weave(sources, 60, 90);
 ```
 
 Defaults:
@@ -131,7 +141,7 @@ Advanced escape hatch:
 - bestaande `text()`-materiaalopties zoals `breathe`, `dropout`, `stroke`,
   `layer` en `font`
 
-De gewone defaults tekenen leesbare `text()`-regels. `splice()` gebruikt
+De gewone defaults tekenen leesbare `text()`-regels. `weave()` gebruikt
 standaard niet opnieuw `textCutup()`: de taalsnede moet zichtbaar blijven.
 
 Return: `id[]`, één id per regel.
@@ -203,11 +213,11 @@ Dezelfde bronnen, opties en seed geven byte-identiek hetzelfde resultaat.
 
 ## Provenance in het plot
 
-Iedere door `plot.splice()` gemaakte text-shape krijgt in `params`:
+Iedere door `plot.weave()` gemaakte text-shape krijgt in `params`:
 
 ```js
 {
-  splice: {
+  weave: {
     seed: 1960,
     unit: "phrase",
     line: 0,
@@ -226,8 +236,8 @@ publieke plotbestanden.
 
 - `freeze(id)` bewaart de gekozen regel als exacte trace.
 - `reroll(id)` verandert alleen de getekende variatie van die regel.
-- Een nieuwe semantische variant gebruikt een nieuwe `seed` en een nieuwe
-  `splice()`-aanroep.
+- Een nieuw weefsel gebruikt een nieuwe `seed` en een nieuwe
+  `weave()`-aanroep.
 - Het voorbeeld maakt deze grens zichtbaar als `new cut` tegenover
   `reroll ink`.
 
@@ -242,7 +252,7 @@ Expliciete fouten voor:
 - `lines` buiten 1–100;
 - `fragments` buiten 2–6;
 - ongeldige `size`, `leading`, `x` of `y`;
-- `plot.splice()` zonder text-addon;
+- `plot.weave()` zonder text-addon;
 - een tokenisatie die geen bruikbare botsing kan maken.
 
 ## Voorbeeldsketch — 18 regels
@@ -258,7 +268,7 @@ let plot;
 function setup() {
   createCanvas(700, 420);
   plot = new GysinPlot({ seed: 1960 });
-  plot.splice(sources, 54, 90, {
+  plot.weave(sources, 54, 90, {
     size: 25,
     leading: 58,
     breathe: 0.35
@@ -270,7 +280,7 @@ function setup() {
 
 ## Testcontract
 
-### `GysinText.splice()`
+### `GysinText.weave()`
 
 - bronstrings en `{ id, text }`;
 - twee en acht bronnen geldig;
@@ -287,13 +297,13 @@ function setup() {
 - invoer niet gemuteerd;
 - source/min-build parity.
 
-### `plot.splice()`
+### `plot.weave()`
 
 - addon vervangt de core-stub;
 - zonder addon duidelijke fout;
 - één id per resultaatregel;
 - ids zijn adresseerbaar;
-- provenance staat in `get(id).params.splice`;
+- provenance staat in `get(id).params.weave`;
 - provenance staat in JSON;
 - `freeze()` bewaart trace;
 - `reroll()` verandert niet-bevroren trace, niet de tekst;
@@ -317,6 +327,6 @@ function setup() {
 
 Seb heeft menselijke controles expliciet naar het laatste blok verplaatst en
 opgedragen de marathon niet te onderbreken. Daarom geldt dit afgebakende
-contract als implementatiebasis voor fase 5. Naam, defaults en het uiteindelijke
-beeld blijven gemarkeerd voor zijn slotcontrole; agents mogen het contract
-onderweg niet uitbreiden.
+contract als implementatiebasis voor fase 5. De naam is daarna door Seb als
+`weave()` goedgekeurd. Defaults en het uiteindelijke beeld blijven gemarkeerd
+voor zijn slotcontrole; agents mogen het contract onderweg niet uitbreiden.

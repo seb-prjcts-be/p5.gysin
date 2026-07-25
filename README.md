@@ -37,7 +37,7 @@ standalone works with their source code.
 
 - `p5.gysin.js` and `p5.gysin.min.js` contain the core.
 - `p5.gysin.text.js` and `p5.gysin.text.min.js` add pure permutation and
-  semantic-splice operations, plus `plot.chant()` and `plot.splice()`.
+  source-weaving operations, plus `plot.chant()` and `plot.weave()`.
 - `p5.gysin.underwood.js` and `p5.gysin.underwood.min.js` add
   `plot.underwood()` and the low-level `GysinUnderwood` helper.
 - `index.html` and `docs/` form the public site.
@@ -53,7 +53,7 @@ Load either addon after the core and before your sketch:
 <script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.0.0/p5.gysin.underwood.min.js"></script>
 ```
 
-The pure `GysinText.permute()` and `GysinText.splice()` functions can also run
+The pure `GysinText.permute()` and `GysinText.weave()` functions can also run
 from the text addon without p5.js or the core.
 
 ## Compatibility

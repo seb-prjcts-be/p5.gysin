@@ -31,7 +31,7 @@
       <ul>
         <li><strong><code>p5.js</code> is the creative-coding foundation.</strong> Load it when you want <code>GysinPlot</code> to draw the generated paths on a canvas.</li>
         <li><strong><code>p5.gysin.min.js</code> is the core library.</strong> It provides <code>GysinPlot</code>, drawing methods such as <code>textCutup()</code>, and SVG, JSON, and HPGL export.</li>
-        <li><strong><code>p5.gysin.text.min.js</code> is the text addon.</strong> It provides <code>GysinText.permute()</code>, <code>GysinText.splice()</code>, <code>plot.chant()</code>, and <code>plot.splice()</code>.</li>
+        <li><strong><code>p5.gysin.text.min.js</code> is the text addon.</strong> It provides <code>GysinText.permute()</code>, <code>GysinText.weave()</code>, <code>plot.chant()</code>, and <code>plot.weave()</code>.</li>
         <li><strong><code>p5.gysin.underwood.min.js</code> is the typewriter addon.</strong> It provides <code>plot.underwood()</code>.</li>
       </ul>
       <p>Load what you need, in this order - with <code>p5.js</code> first when you draw to a canvas:</p>
@@ -242,25 +242,27 @@ plot.chant("CUT ARRANGE GLUE", 60, 90, { order: "rotate", breathe: 1 });</code>
         <li><code>descent</code> (default <code>1</code>): scales how much deeper each line is cut; <code>0</code> cuts them all equally light.</li>
         <li><code>size</code>, <code>leading</code>, <code>slices</code>, <code>sliceOffset</code> set the type; every other <code>textCutup()</code> option (breathe, dropout, bleed, layer, ...) passes straight through.</li>
       </ul>
-      <h3>Semantic splice</h3>
-      <div class="code-preview"><code>const cut = GysinText.splice([
+      <h3>Weave</h3>
+      <div class="code-preview"><code>const sources = [
   { id: "left", text: "The first source." },
   { id: "right", text: "The second source." }
-], {
+];
+
+const woven = GysinText.weave(sources, {
   seed: 1960,
   unit: "phrase",
   lines: 4,
   fragments: 3
 });
 
-const ids = plot.splice(cutSources, 60, 90, {
+const ids = plot.weave(sources, 60, 90, {
   seed: 1960,
   unit: "clause"
 });</code></div>
-      <p><code>GysinText.splice(sources, options)</code> cuts and recombines two to eight sources without drawing. A source is a string or <code>{ id, text }</code>; each text may contain at most 20,000 characters and source ids must be unique. The method does not fetch files or URLs.</p>
+      <p><code>GysinText.weave(sources, options)</code> cuts and recombines fragments from two to eight sources without drawing. A source is a string or <code>{ id, text }</code>; each text may contain at most 20,000 characters and source ids must be unique. The method does not fetch files or URLs.</p>
       <p>Options are <code>seed</code> (default <code>1</code>), <code>unit</code> (<code>word</code>, <code>phrase</code>, or <code>clause</code>; default <code>phrase</code>), <code>lines</code> (1&ndash;100; default <code>4</code>), and <code>fragments</code> (2&ndash;6; default <code>3</code>). The result is <code>{ seed, unit, lines }</code>. Each output line contains <code>text</code> and a <code>fragments</code> array; every fragment records <code>source</code>, <code>sourceIndex</code>, <code>start</code>, <code>end</code>, and <code>text</code>. Offsets refer to the trimmed input text.</p>
-      <p><code>plot.splice(sources, x, y, options)</code> draws the result as text and returns the generated ids. It defaults to the plot seed, <code>size: 26</code>, and <code>leading: 42</code>. Provenance is retained in each shape&rsquo;s <code>params.splice</code> and in JSON export. SVG and HPGL retain shape ids and paths, not source text metadata.</p>
-      <p><code>reroll()</code> changes only the drawn trace. To make a new semantic cut, call <code>splice()</code> again with a new seed. <code>freeze()</code> and <code>thaw()</code> behave as they do for other captured shapes.</p>
+      <p><code>plot.weave(sources, x, y, options)</code> draws the result as text and returns the generated ids. It defaults to the plot seed, <code>size: 26</code>, and <code>leading: 42</code>. Provenance is retained in each shape&rsquo;s <code>params.weave</code> and in JSON export. SVG and HPGL retain shape ids and paths, not source text metadata.</p>
+      <p><code>reroll()</code> changes only the drawn trace. To make a new weave, call <code>weave()</code> again with a new seed. <code>freeze()</code> and <code>thaw()</code> behave as they do for other captured shapes.</p>
     </section>
 
     <section class="guide-block">
@@ -302,7 +304,7 @@ plot.clear();         // empty the sheet: shapes, ids, and selection</code>
       <p>Core creation and drawing: <code>new GysinPlot()</code>, <code>p.createGysinPlot()</code>, <code>plot.line()</code>, <code>plot.rect()</code>, <code>plot.circle()</code>, <code>plot.polygon()</code>, <code>plot.path()</code>, <code>plot.text()</code>, <code>plot.textCutup()</code>, <code>plot.asemic()</code>, <code>plot.grid()</code>, <code>plot.letters()</code>, <code>plot.symbols()</code>, <code>plot.rub()</code>, <code>plot.lattice()</code>, and <code>plot.draw()</code>.</p>
       <p>Core addressing: <code>plot.get()</code>, <code>plot.select()</code>, <code>plot.freeze()</code>, <code>plot.thaw()</code>, <code>plot.regenerate()</code>, <code>plot.reroll()</code>, <code>plot.remove()</code>, <code>plot.update()</code>, <code>plot.setSeed()</code>, and <code>plot.clear()</code>.</p>
       <p>Core output: <code>plot.exportSVG()</code>, <code>plot.exportJSON()</code>, <code>plot.exportHPGL()</code>, <code>plot.downloadSVG()</code>, <code>plot.downloadJSON()</code>, <code>plot.downloadHPGL()</code>, and <code>plot.stats()</code>.</p>
-      <p>Text addon: <code>GysinText.permute()</code>, <code>GysinText.splice()</code>, <code>plot.chant()</code>, and <code>plot.splice()</code>. Typewriter addon: <code>plot.underwood()</code>, <code>GysinUnderwood.glyphPolylines()</code>, and <code>GysinUnderwood.render()</code>.</p>
+      <p>Text addon: <code>GysinText.permute()</code>, <code>GysinText.weave()</code>, <code>plot.chant()</code>, and <code>plot.weave()</code>. Typewriter addon: <code>plot.underwood()</code>, <code>GysinUnderwood.glyphPolylines()</code>, and <code>GysinUnderwood.render()</code>.</p>
     </section>
 
     <section class="guide-block">
