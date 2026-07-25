@@ -487,13 +487,19 @@ Toegestane bestanden:
 
 Taken:
 
-- [ ] Verwijder de volledige viewerhandleiding uit de introductie.
-- [ ] Zet noodzakelijke pijltjes- en Escape-hints in of bij de viewer.
-- [ ] Behoud toegankelijke labels en toetsenbordbediening.
-- [ ] Beperk contact-sheetcopy tot titel + methode of materiaal.
-- [ ] Laat “one call” en volledige API-uitleg naar `System` verwijzen.
-- [ ] Controleer dat alle werken nog bereikbaar zijn.
-- [ ] Verander het aantal werken niet zonder afzonderlijk akkoord.
+- [x] Verwijder de volledige viewerhandleiding uit de introductie.
+- [x] Zet noodzakelijke pijltjes- en Escape-hints in of bij de viewer.
+- [x] Behoud toegankelijke labels en toetsenbordbediening.
+- [x] Beperk contact-sheetcopy tot titel + methode of materiaal.
+- [x] Laat “one call” en volledige API-uitleg naar `System` verwijzen.
+- [x] Controleer dat alle werken nog bereikbaar zijn.
+- [x] Verander het aantal werken niet zonder afzonderlijk akkoord.
+
+Bewijs: 14 contacttegels voor 14 voorbeeldmappen; alle tegelankers blijven
+echte no-JavaScriptlinks. De geopende viewer toont twee pijltjestoetsen en
+`Esc`, geeft ze `aria-keyshortcuts`, zet titel/teller en herstelt focus bij
+sluiten. Deep-linkrender, `npm test`, 22-pagina-linkcheck en desktoprender zijn
+groen.
 
 Acceptance:
 

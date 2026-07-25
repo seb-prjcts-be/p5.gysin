@@ -9,7 +9,7 @@
   <meta property="og:description" content="Vector-first traces for cut-up text, rubout gaps, dropout lines, repeats, breathe, SVG, JSON, and HPGL export.">
   <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="docs/style.css?v=start-air">
+  <link rel="stylesheet" href="docs/style.css?v=v1-voice">
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="p5.gysin.min.js"></script>
 </head>
@@ -41,7 +41,7 @@
   <section id="studies" class="section group-intro">
     <div class="section-header">
       <div class="section-tag">Cut. Permute. Free. &middot; v0.4.0</div>
-      <p class="section-desc">The library ships as three script files, and this page is organised the same way. The core captures shapes as traces, disturbs them, and exports them for the plotter. Two optional addons add a voice each: the word operations and the typewriter. Every group opens with the exact pinned file it demonstrates; every preview is a live sketch.</p>
+      <p class="section-desc">Three scripts: traces, words, typewriter. Each keeps its own sheet of live works.</p>
     </div>
     <div class="method-strip" aria-label="The three-library sequence">
       <a href="#lib-core"><span>01 &middot; CORE</span><strong>p5.gysin.js</strong><small>Capture, disturb, export.</small></a>
@@ -50,7 +50,6 @@
     </div>
     <div class="section-header" id="the-works">
       <div class="section-tag">Each library keeps its own sheet</div>
-      <p class="section-desc">Every library below opens with a contact sheet of the works that run on it. Click a tile and the work fills the screen - story, live sketch and code together. Browse them all with the arrow keys or the edge arrows, leave with Esc. Without JavaScript the links jump to the cards below instead.</p>
     </div>
   </section>
 
@@ -60,7 +59,7 @@
     <div class="section-header">
       <div class="section-tag">Library 01 &middot; the core &middot; required</div>
       <h2>p5.gysin.<span class="accent">js</span></h2>
-      <p class="section-desc">Everything on one sheet: capture shapes and letterforms as traces, disturb them with breathe, dropout, rubout, and bleed, then draw or export the same polylines as SVG, JSON, or HPGL.</p>
+      <p class="section-desc">Shapes and letterforms become traces: disturbed, drawn, carried to paper.</p>
     </div>
     <div class="contact-sheet">
       <a class="cs-tile" href="#plate-first-trace" data-page="examples/first_trace/" data-slug="first_trace"><strong>First Trace</strong><small>text() &middot; three states</small></a>
@@ -144,14 +143,14 @@ plot.textCutup("I THINK THEREFORE I AM", 76, 260, {
     <div class="section-header">
       <div class="section-tag">rub() &middot; one intent verb</div>
       <h2>Writing escapes the <span class="accent">word</span></h2>
-      <p class="section-desc">One intent verb. rub() composes text, cut-up, and asemic into a single decaying gesture - the whole piece in one call, defaults and all.</p>
+      <p class="section-desc"><strong>WORN</strong>, in three passages: intact, cut, buried.</p>
     </div>
     <div class="ex-preview">
       <div id="ex-worn-word" class="ex-canvas"></div>
       <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
 const outlineFont = await loadFont(FONT_URL);   // fills the legible head
 
-// one word, worn away - legible → cut up → asemic, in one call
+// one word: legible → cut up → asemic
 plot.rub("WORN", 46, 72, {
   size: 48,
   font: outlineFont
@@ -169,7 +168,7 @@ plot.draw();</code></pre>
     <div class="section-header">
       <div class="section-tag">breathe &middot; dropout &middot; repeat &middot; rubout</div>
       <h2>Parameter <span class="accent">Lab</span></h2>
-      <p class="section-desc">One slider owns one element, each in its own ink: breathe bends the whole title, rubout tears the word, repeat thickens the band, dropout opens the ruled block.</p>
+      <p class="section-desc">Four controls, four elements: breathe, rubout, repeat, dropout.</p>
     </div>
     <div class="ex-preview">
       <div id="ex-parameter" class="ex-canvas"></div>
@@ -255,12 +254,11 @@ plot.path(signal, {
     <div class="section-header">
       <div class="section-tag">bleed &middot; the additive counterpart</div>
       <h2>Ink <span class="accent">Bleed</span></h2>
-      <p class="section-desc">dropout and rubout take line material away; bleed gives chosen fragments extra, slightly shifted passes - ink gathering where the pen returned. No cut-up: the phrase stays whole. <code>tool: "blade"</code> strips the build-up again for cutting machines.</p>
+      <p class="section-desc">Ink gathers in shifted return passages. Blade export keeps only the first.</p>
     </div>
     <div class="ex-preview">
       <div id="ex-ink-bleed" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">// the same whole line three times - the ink returns harder each
-// row, gathering along real outline letterforms
+      <pre class="ex-code-block"><code class="language-javascript">// the ink returns harder on each line
 plot.text("I AM THAT I AM", 42, 90, { font: outlineFont, size: 34 });
 plot.text("I AM THAT I AM", 42, 180, {
   font: outlineFont,
@@ -345,14 +343,13 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });
     <div class="section-header">
       <div class="section-tag">chant() &middot; permute</div>
       <h2>Coincidence is a <span class="accent">method</span></h2>
-      <p class="section-desc">One call reorders the words and sends every resulting line through the contour cut-up, each cut a little deeper. The library does the orchestration.</p>
+      <p class="section-desc">One phrase changes order. Each return meets a deeper cut.</p>
       <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js</p>
     </div>
     <div class="ex-preview">
       <div id="ex-permutation" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">// the whole permutation poem in one call: the phrase
-// through its orders, every line cut a little deeper,
-// through real outline letterforms
+      <pre class="ex-code-block"><code class="language-javascript">// one phrase through its orders;
+// each line cut a little deeper
 plot.chant("I LOVE YOU", 48, 90, {
   lines: 6,
   font: outlineFont
@@ -390,7 +387,7 @@ plot.splice(sources, 34, 56, { lines: 4 });</code></pre>
     <div class="section-header">
       <div class="section-tag">angle &middot; pivot &middot; lattice() &middot; permute()</div>
       <h2>Rota<span class="accent">tions</span></h2>
-      <p class="section-desc">The turned sheet as palimpsest: a roller grid off true as ground, lattice() writing the sheet edge to edge in two off-square passes, and the five cyclic orders of the phrase scattered over it at their own angles - columns among rows, one upside down.</p>
+      <p class="section-desc">The sheet turns between passages. A grid persists; orders cross it at their own angles.</p>
       <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js</p>
     </div>
     <div class="ex-preview">
@@ -416,7 +413,7 @@ GysinText.permute("COME TO FREE THE WORDS", { order: "rotate" })
     </div>
     <div class="contact-sheet">
       <a class="cs-tile" href="#plate-typewriter" data-page="examples/typewriter/" data-slug="typewriter"><strong>Typewriter</strong><small>underwood()</small></a>
-      <a class="cs-tile" href="#plate-the-letter" data-page="examples/the_letter/" data-slug="the_letter"><strong>The Letter</strong><small>the whole grammar</small></a>
+      <a class="cs-tile" href="#plate-the-letter" data-page="examples/the_letter/" data-slug="the_letter"><strong>The Letter</strong><small>letter &middot; overstrike</small></a>
     </div>
   </section>
 
@@ -424,7 +421,7 @@ GysinText.permute("COME TO FREE THE WORDS", { order: "rotate" })
     <div class="section-header">
       <div class="section-tag">underwood() &middot; single-stroke &middot; period</div>
       <h2>Type<span class="accent">writer</span></h2>
-      <p class="section-desc">Burroughs' Underwood No. 5 as an intent verb. Single-stroke letters, period pitch and line height, no bold or italic - "bold" is just the same key struck twice.</p>
+      <p class="section-desc">Fixed-pitch single-stroke letters. The underscore is a rule; emphasis is a second strike.</p>
       <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js + p5.gysin.underwood.min.js</p>
     </div>
     <div class="ex-preview">
@@ -450,7 +447,7 @@ plot.underwood("the small voice.", 60, 190);</code></pre>
     <div class="section-header">
       <div class="section-tag">underwood() &middot; correspondence</div>
       <h2>The <span class="accent">Letter</span></h2>
-      <p class="section-desc">The machine's natural habitat: one complete typed letter. Spaced dateline, ruled salutation, a word unsaid with X's struck over it, and a signature in the small voice.</p>
+      <p class="section-desc">A complete typed letter. One word is struck through.</p>
       <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
     </div>
     <div class="ex-preview">
@@ -470,21 +467,7 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
     <div class="section-header">
       <div class="section-tag">Draw as traces</div>
       <h2>Not pixels. <span class="accent">Paths.</span></h2>
-      <p class="section-desc">Every call captures a vector shape, samples it into points, applies seeded damage and hesitation, then draws or exports the same generated polylines.</p>
-    </div>
-    <div class="feature-grid">
-      <article>
-        <h3>Capture</h3>
-        <p>Use <code>plot.line()</code>, <code>plot.rect()</code>, <code>plot.circle()</code>, <code>plot.polygon()</code>, <code>plot.path()</code>, <code>plot.text()</code>, and <code>plot.textCutup()</code>.</p>
-      </article>
-      <article>
-        <h3>Disturb</h3>
-        <p>Shape the trace with <code>breathe</code>, <code>dropout</code>, <code>repeat</code>, <code>drift</code>, <code>rubout</code>, <code>fray</code>, <code>overshoot</code>, and <code>pressure</code>.</p>
-      </article>
-      <article>
-        <h3>Export</h3>
-        <p>Keep output plotter-friendly with SVG, JSON, and HPGL export. No raster erase, no canvas pixel analysis.</p>
-      </article>
+      <p class="section-desc">The same seeded traces pass through canvas and onto paper. Methods, addressing and export live in <a href="docs/system.html">System</a>.</p>
     </div>
   </section>
 
@@ -762,8 +745,7 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
       height: canvasH,
       style: { stroke: "#171717", strokeWeight: 0.82, alpha: 0.88 }
     });
-    // The card's one call: chant() permutes and cuts every line itself,
-    // through real outline letterforms when the face loads.
+    // chant() permutes and cuts every line through outline letterforms.
     const options = {
       lines: 6,
       size: canvasW * (outlineFont ? 0.062 : 0.041),
@@ -1031,14 +1013,14 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
   </script>
   <script src="docs/sketch.js?v=passes1"></script>
 
-  <div id="plate-chrome" hidden>
+  <div id="plate-chrome" role="region" aria-label="Work viewer" hidden>
     <div class="plate-bar">
-      <span id="plate-counter"></span>
+      <span id="plate-counter" aria-live="polite"></span>
       <span id="plate-title"></span>
-      <button type="button" id="plate-close">Esc &times;</button>
+      <button type="button" id="plate-close" aria-label="Close work viewer" aria-keyshortcuts="Escape">Esc &times;</button>
     </div>
-    <button type="button" id="plate-prev" class="plate-arrow" aria-label="Previous plate">&larr;</button>
-    <button type="button" id="plate-next" class="plate-arrow" aria-label="Next plate">&rarr;</button>
+    <button type="button" id="plate-prev" class="plate-arrow" aria-label="Previous work" aria-keyshortcuts="ArrowLeft">&larr;</button>
+    <button type="button" id="plate-next" class="plate-arrow" aria-label="Next work" aria-keyshortcuts="ArrowRight">&rarr;</button>
   </div>
   <script>
   // The sheet turner: a tile turns to its own plate in place, one work at a
@@ -1064,14 +1046,20 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
 
     // The folder stays closed: with the turner available the card stream hides.
     document.body.classList.add("folder");
+    items.forEach(function(item) { item.tile.setAttribute("aria-expanded", "false"); });
 
     function openPlate(index) {
+      const wasClosed = current === -1;
       current = (index + items.length) % items.length;
       document.body.classList.add("plate-mode");
       chrome.hidden = false;
       items.forEach(function(item, i) {
         item.plate.classList.toggle("plate-active", i === current);
+        item.tile.setAttribute("aria-expanded", i === current ? "true" : "false");
       });
+      document.getElementById("plate-counter").textContent = `${current + 1} / ${items.length}`;
+      document.getElementById("plate-title").textContent =
+        items[current].tile.querySelector("strong").textContent;
       // The plate was hidden until now, so its live preview sized itself to
       // nothing; a resize makes it re-measure the open panel and redraw at full
       // width. Reading the panel width forces layout, so a plate opened by hand
@@ -1091,14 +1079,20 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
         setTimeout(function() { settle(tries - 1); }, 150);
       })(16);
       history.replaceState(null, "", "#sheet-" + items[current].slug);
+      if (wasClosed) document.getElementById("plate-close").focus();
     }
 
     function closePlates() {
+      const closing = current;
       current = -1;
       document.body.classList.remove("plate-mode");
       chrome.hidden = true;
-      items.forEach(function(item) { item.plate.classList.remove("plate-active"); });
+      items.forEach(function(item) {
+        item.plate.classList.remove("plate-active");
+        item.tile.setAttribute("aria-expanded", "false");
+      });
       history.replaceState(null, "", location.pathname + location.search);
+      if (items[closing] && items[closing].tile) items[closing].tile.focus();
     }
 
     tiles.forEach(function(tile) {
