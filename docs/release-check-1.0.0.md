@@ -36,7 +36,7 @@ alleen actuele versie-uitingen en gepinde installatiepaden vervangen:
 - het gegenereerde manifest.
 
 Historische verwijzingen blijven staan: `added_in: "0.4.0"`, het
-0.4.0-releasebericht en de controles/beslissingen in `TODO-1.0.0.md`.
+0.4.0-releasebericht en de intern bewaarde controles en beslissingen.
 Er zijn geen project-CDN-paden met `@next`, `@main`, `@master` of een release
 vóór v0.4.0.
 
