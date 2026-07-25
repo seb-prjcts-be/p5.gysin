@@ -415,17 +415,17 @@ Toegestane wijzigingen:
 
 Taken:
 
-- [ ] Beschrijf exact wat `textCutup()`, `GysinText.permute()`, `chant()`,
+- [x] Beschrijf exact wat `textCutup()`, `GysinText.permute()`, `chant()`,
       `rub()`, `freeze()` en `reroll()` nu doen.
-- [ ] Wijs aan waar toeval grafisch werkt en waar het betekenis verandert.
-- [ ] Vergelijk maximaal drie namen; geef één gemotiveerde aanbeveling.
-- [ ] Ontwerp één minimale aanroep met twee bronnen.
-- [ ] Ontwerp fragmentatie op woord-, frase- en zinsdeelniveau.
-- [ ] Definieer provenance in JSON-export.
-- [ ] Definieer ids, determinisme, freeze, reroll en exportgedrag.
-- [ ] Schrijf één voorbeeldsketch van maximaal 40 regels.
-- [ ] Schrijf concrete tests en foutgevallen.
-- [ ] Benoem expliciet wat niet wordt gebouwd.
+- [x] Wijs aan waar toeval grafisch werkt en waar het betekenis verandert.
+- [x] Vergelijk maximaal drie namen; geef één gemotiveerde aanbeveling.
+- [x] Ontwerp één minimale aanroep met twee bronnen.
+- [x] Ontwerp fragmentatie op woord-, frase- en zinsdeelniveau.
+- [x] Definieer provenance in JSON-export.
+- [x] Definieer ids, determinisme, freeze, reroll en exportgedrag.
+- [x] Schrijf één voorbeeldsketch van maximaal 40 regels.
+- [x] Schrijf concrete tests en foutgevallen.
+- [x] Benoem expliciet wat niet wordt gebouwd.
 
 Acceptance:
 
@@ -434,8 +434,9 @@ Acceptance:
 - Geen externe bronfetching en geen ingebouwd auteursrechtelijk corpus.
 - Bestaande API hoeft niet te breken.
 
-**Menselijke gate:** geen implementatie voordat Seb naam, signatuur en defaults
-expliciet goedkeurt.
+**Menselijke gate — MORGEN:** naam, signatuur en defaults blijven voor Sebs
+slotcontrole gemarkeerd. Zijn expliciete marathoninstructie verplaatst deze
+controle naar achteren en machtigt uitvoering volgens het nu bevroren contract.
 
 ### Fase 5 — Semantische cut-up implementeren
 
