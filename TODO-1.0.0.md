@@ -348,12 +348,12 @@ Toegestane bestanden:
 
 Taken:
 
-- [ ] Behoud de zichtbare handeling: `rub()`, drie passages en `decay`.
-- [ ] Verplaats bediening naar de controls of een compacte utilityregel.
-- [ ] Schrap uitleg die de code herhaalt.
-- [ ] Schrap “this whole sketch is one call” en vergelijkbare verkooptaal.
-- [ ] Voeg geen vervangende kunstaforismen toe.
-- [ ] Controleer dat links, toetsen, controls en sketch identiek blijven werken.
+- [x] Behoud de zichtbare handeling: `rub()`, drie passages en `decay`.
+- [x] Verplaats bediening naar de controls of een compacte utilityregel.
+- [x] Schrap uitleg die de code herhaalt.
+- [x] Schrap “this whole sketch is one call” en vergelijkbare verkooptaal.
+- [x] Voeg geen vervangende kunstaforismen toe.
+- [x] Controleer dat links, toetsen, controls en sketch identiek blijven werken.
 
 Acceptance:
 
@@ -363,7 +363,9 @@ Acceptance:
 - Localhost desktop en mobiel zijn gecontroleerd.
 - Voor/na-beeld en tekstdiff zijn aan Seb voorgelegd.
 
-**Menselijke gate:** stop na deze fase voor Sebs oordeel over de stem.
+**Menselijke gate — MORGEN:** Sebs oordeel over de stem is bewust naar het
+laatste marathonblok verplaatst. Automatische en visuele controles zijn groen;
+de uitvoering gaat op zijn expliciete verzoek door.
 
 ### Fase 3 — Tekstpiloot 2: Permutation Poem
 
@@ -379,13 +381,14 @@ Toegestane bestanden:
 
 Taken:
 
-- [ ] Verwijder de kop “How to read it”.
-- [ ] Laat nummering en compositie het leespad dragen.
-- [ ] Behoud één concrete invoerinstructie bij het invoerveld.
-- [ ] Verplaats ordermodi en exportdetails naar een compacte technische noot.
-- [ ] Verwijder de lijst met canonieke Gysin-frases.
-- [ ] Controleer lege invoer, Enter, nieuwe order, nieuwe seed en export.
-- [ ] Leg de goedgekeurde passages uit fase 2 en 3 als toonvoorbeelden vast.
+- [x] Verwijder de kop “How to read it”.
+- [x] Laat nummering en compositie het leespad dragen.
+- [x] Behoud één concrete invoerinstructie bij het invoerveld.
+- [x] Verplaats ordermodi en exportdetails naar een compacte technische noot.
+- [x] Verwijder de lijst met canonieke Gysin-frases.
+- [x] Controleer lege invoer, Enter, nieuwe order, nieuwe seed en export.
+- [ ] **MORGEN — menselijke controle:** leg de door Seb goedgekeurde passages uit
+      fase 2 en 3 als toonvoorbeelden vast.
 
 Acceptance:
 
@@ -394,8 +397,9 @@ Acceptance:
 - Alle interacties en exports werken.
 - De goedgekeurde voorbeelden staan in het stemcontract.
 
-**Menselijke gate:** Seb keurt de twee pilootpagina’s samen goed voordat de
-sitebrede pass begint.
+**Menselijke gate — MORGEN:** Seb keurt de twee pilootpagina’s samen goed.
+Op zijn expliciete marathoninstructie gaat de technische uitvoering door; de
+definitieve toonvoorbeelden worden pas na zijn oordeel vastgezet.
 
 ### Fase 4 — Semantische cut-up ontwerpen
 

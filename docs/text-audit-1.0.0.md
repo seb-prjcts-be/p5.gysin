@@ -1,7 +1,9 @@
 # p5.gysin 1.0.0 — volledige tekstaudit
 
-Datum: 25 juli 2026  
-Baseline: `6f179d8`  
+Datum: 25 juli 2026
+
+Baseline: `6f179d8`
+
 Status: beslislijst; publieke copy nog niet gewijzigd
 
 ## Methode
