@@ -561,14 +561,19 @@ Toegestane bestanden:
 
 Taken:
 
-- [ ] Behoud de materiële hoofdstukstructuur:
+- [x] Behoud de materiële hoofdstukstructuur:
       sheet, scraps, word, scissors, arrange, turn, glue, wear en de overige
       bestaande delen.
-- [ ] Beperk iedere stap tot de noodzakelijke passage vóór beeld/code.
-- [ ] Verwijder herhaling van `chant()`, `rub()` en “one call”.
-- [ ] Verplaats API-details naar `System`.
-- [ ] Behoud copy-knoppen, navigatie, canvassen en code.
-- [ ] Maak de pagina niet kunstmatig cryptisch.
+- [x] Beperk iedere stap tot de noodzakelijke passage vóór beeld/code.
+- [x] Verwijder herhaling van `chant()`, `rub()` en “one call”.
+- [x] Verplaats API-details naar `System`.
+- [x] Behoud copy-knoppen, navigatie, canvassen en code.
+- [x] Maak de pagina niet kunstmatig cryptisch.
+
+Bewijs: 15 hoofdstukken, 15 chips, 15 canvassen, 15 codeblokken en 15
+kopieknoppen blijven bestaan; alle 33 ids zijn ongewijzigd. De hoofdstukturner,
+pijltjes, toetsen, deep links en een gestubde clipboardactie zijn in Chrome
+bediend; desktop en 390 px hebben geen runtimefout of horizontale overloop.
 
 Acceptance:
 

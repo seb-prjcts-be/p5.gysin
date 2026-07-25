@@ -19,9 +19,9 @@
   </nav>
 
   <header class="page-header">
-    <div class="section-tag">Deep guide &middot; v0.4.0</div>
+    <div class="section-tag">Montage &middot; v0.4.0</div>
     <h1>Col<span class="accent">lage</span></h1>
-    <p>Collage, here, is done to language, not to paper. Words are the scraps: a phrase is cut apart, its words change neighbours, and the new order is fixed to the sheet as drawn lines. Three acts - cut, arrange, glue - and one word, COLLAGE, run through the library function by function, each with a live preview and a block you can copy. At the end the acts fix themselves to one sheet.</p>
+    <p>One sheet. Words, rules, scraps and marks are cut, placed, turned, worn and sent to paper.</p>
     <ul class="ce-chips">
       <li><a href="#sheet">01 the sheet</a></li>
       <li><a href="#scraps">02 scraps</a></li>
@@ -46,12 +46,7 @@
     <div class="section-header">
       <div class="section-tag">01 &middot; grid()</div>
       <h2>The sheet</h2>
-      <p class="section-desc">Every collage starts with the board it is glued to. <code>grid()</code> divides the sheet with ink-bled rules and hands back the cell rectangles, so every later fragment knows where it may land.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>Divide the sheet</h4><p>Choose the columns and rows the board is built from.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Ink-bled rules</h4><p>The frame carries bleed, so the black lines build up unevenly like a worn print.</p></div>
-      <div class="ce-step"><span>glue</span><h4>Cells to place into</h4><p><code>grid()</code> returns each cell, so fragments land declaratively.</p></div>
+      <p class="section-desc"><code>grid()</code> divides the sheet and returns its cells.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-sheet" class="ce-canvas"></div></div>
@@ -75,12 +70,7 @@ const cells = plot.grid(60, 60, 680, 520, 4, 3, {
     <div class="section-header">
       <div class="section-tag">02 &middot; line() &middot; rect() &middot; circle() &middot; path()</div>
       <h2>Scraps</h2>
-      <p class="section-desc">The non-text material: strips, patches, rings, and free clippings. Four primitives with torn edges - <code>breathe</code> makes them hand-cut, <code>dropout</code> tears gaps, <code>repeat</code> and <code>overshoot</code> let the scissors pass twice and run past the corner.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>Four kinds of scrap</h4><p>A strip, a patch, a ring, and a free polyline clipping.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Torn, not drawn</h4><p><code>breathe</code> and <code>dropout</code> give every edge the uncertainty of a hand tear.</p></div>
-      <div class="ce-step"><span>glue</span><h4>Passes of the blade</h4><p><code>repeat</code> doubles the pass, <code>overshoot</code> runs past the corner like a real cut.</p></div>
+      <p class="section-desc">Strips, patches, rings and free clippings: material before language.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-scraps" class="ce-canvas"></div></div>
@@ -110,12 +100,7 @@ plot.path([[380, 420], [520, 380], [660, 440], [600, 520]], {
     <div class="section-header">
       <div class="section-tag">03 &middot; text() &middot; breathe &middot; dropout &middot; rubout</div>
       <h2>The word</h2>
-      <p class="section-desc">The word is the material - not what is printed on the scrap, but the scrap itself. <code>text()</code> traces it as vector contours; the material options set its condition: <code>breathe</code> is the tremor of the hand, <code>dropout</code> the print that skips, <code>rubout</code> the eraser that has already been here.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>One clean clipping</h4><p>The word traced as letter contours, nearly steady.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Its condition</h4><p><code>breathe</code>, <code>dropout</code>, and <code>rubout</code> age the same clipping in states.</p></div>
-      <div class="ce-step"><span>glue</span><h4>Same trace, worn</h4><p>Each state is the same paths, sampled with more uncertainty.</p></div>
+      <p class="section-desc">The word is traced as material, then worn.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-word" class="ce-canvas"></div></div>
@@ -145,12 +130,7 @@ plot.text("COLLAGE", 60, 400, {
     <div class="section-header">
       <div class="section-tag">04 &middot; textCutup()</div>
       <h2>Scissors</h2>
-      <p class="section-desc">The defining act. <code>textCutup()</code> slices the word into horizontal bands and shifts each band sideways, exactly like scissors through a printed line. Cut shallow and it stays legible; cut deep and the word becomes texture.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>Slice into bands</h4><p><code>slices</code> sets how many strips the scissors make.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Shift each band</h4><p><code>sliceOffset</code> slides the strips out of register.</p></div>
-      <div class="ce-step"><span>glue</span><h4>Two depths of cut</h4><p>The same word twice: one careful cut, one deep cut with tears.</p></div>
+      <p class="section-desc"><code>textCutup()</code> slices a line into horizontal bands and shifts them out of register.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-scissors" class="ce-canvas"></div></div>
@@ -177,23 +157,15 @@ plot.textCutup("COLLAGE", 60, 380, {
     <div class="section-header">
       <div class="section-tag">05 &middot; chant()</div>
       <h2>Arrange</h2>
-      <p class="section-desc">This is the essence of the whole page: collage as an act on word order - and it is the library's work, not yours. One call takes the three acts through their permutations and sends every new order through the scissors, each line cut a little deeper. <code>permute()</code> and <code>textCutup()</code> stay underneath as the escape hatch.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>One call</h4><p><code>chant()</code> composes <code>permute()</code> and <code>textCutup()</code> with strong defaults.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Every order</h4><p><code>order</code>: walk, random, lexical, rotate; <code>lines</code> picks how many return.</p></div>
-      <div class="ce-step"><span>glue</span><h4>One knob</h4><p><code>descent</code> scales how much deeper every line is cut; 0 cuts them all equally light.</p></div>
+      <p class="section-desc">A phrase changes order. Each return meets the scissors.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-arrange" class="ce-canvas"></div></div>
       <div class="ce-codewrap">
         <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">// the whole poem, one call: the phrase through its
-// permutations, every new order cut a little deeper
+        <pre><code class="language-javascript">// the phrase through its orders, each cut deeper
 plot.chant("CUT ARRANGE GLUE", 60, 90);
-
-// escape hatches: lines, order, seed, descent, size,
-// leading - and every textCutup option passes through</code></pre>
+</code></pre>
       </div>
     </div>
   </section>
@@ -203,12 +175,7 @@ plot.chant("CUT ARRANGE GLUE", 60, 90);
     <div class="section-header">
       <div class="section-tag">06 &middot; letters() &middot; glyphJitter</div>
       <h2>The letter box</h2>
-      <p class="section-desc">Cut the word small enough and only its letters remain: a box of loose type, like clippings sifted from a magazine. <code>letters()</code> fills a region from the word's own letter pool, and <code>glyphJitter</code> gives every glyph its own small deviation - no two clippings alike.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>Down to letters</h4><p>The word becomes the pool the field is built from.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Fill a region</h4><p>Rows of loose type fill the box you hand it.</p></div>
-      <div class="ce-step"><span>glue</span><h4>Each glyph unique</h4><p><code>glyphJitter</code> varies every letter; <code>dropout</code> thins the field into noise.</p></div>
+      <p class="section-desc"><code>letters()</code> fills a region from the word’s own characters.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-letterbox" class="ce-canvas"></div></div>
@@ -229,12 +196,7 @@ plot.chant("CUT ARRANGE GLUE", 60, 90);
     <div class="section-header">
       <div class="section-tag">07 &middot; direction &middot; the turned sheet</div>
       <h2>The turn</h2>
-      <p class="section-desc">Writing has a direction, and the sheet can be turned against it. The typed line runs left to right; the word answers in columns, top to bottom, written straight over what was already there. Nothing here is a new function: it is <code>text()</code> released from its row, one letter under the last, direction against direction until the page starts to weave.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>One letter at a time</h4><p>A column is the word freed from its row: each letter set under the last.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Turn the sheet</h4><p>Write across what is already written; the row keeps running underneath.</p></div>
-      <div class="ce-step"><span>glue</span><h4>The weave</h4><p>Where the directions cross, the ink thickens; the words stay, the reading dissolves.</p></div>
+      <p class="section-desc">A line crosses columns. The sheet holds both directions.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-turn" class="ce-canvas"></div></div>
@@ -265,12 +227,7 @@ for (let column = 0; column &lt; 4; column++) {
     <div class="section-header">
       <div class="section-tag">08 &middot; symbols()</div>
       <h2>The mark box</h2>
-      <p class="section-desc">Next to the letters, a box of punctuation: the small hard marks that hold a page together. <code>symbols()</code> works like the letter box but pools marks instead of letters, and <code>cluster</code> repeats them in short bursts so the band reads as rhythm, not static.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>Pick an alphabet of marks</h4><p>A short string of punctuation becomes the texture's pool.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Cluster into runs</h4><p>Bursts of the same mark read as machine rhythm.</p></div>
-      <div class="ce-step"><span>glue</span><h4>A rational noise strip</h4><p>The band grounds the expressive fragments with an even texture.</p></div>
+      <p class="section-desc"><code>symbols()</code> fills a strip from a short alphabet of marks.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-markbox" class="ce-canvas"></div></div>
@@ -291,12 +248,7 @@ for (let column = 0; column &lt; 4; column++) {
     <div class="section-header">
       <div class="section-tag">09 &middot; underwood()</div>
       <h2>The typed label</h2>
-      <p class="section-desc">Every collage carries a typed strip: the caption pasted under the image. <code>underwood()</code> types it period-correct - single-stroke letters at a fixed pitch, no bold, no italic. "Bold" is the same key struck twice; the underline is the underscore ladder. And the machine has two voices: capitals shout the word, lowercase writes the note underneath.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>Type the strip</h4><p>Defaults give a period page: fixed pitch, six lines per inch, light wear.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Only period decoration</h4><p><code>underline</code>, <code>bold: true</code> (double-strike), and typed dividers.</p></div>
-      <div class="ce-step"><span>glue</span><h4>One pen line per letter</h4><p>Single-stroke, so it plots exactly as typed.</p></div>
+      <p class="section-desc">A fixed-pitch, single-stroke label under the image.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-label" class="ce-canvas"></div></div>
@@ -322,12 +274,7 @@ plot.underwood("* * * * * * * *", 60, 290);</code></pre>
     <div class="section-header">
       <div class="section-tag">10 &middot; bleed &middot; repeat</div>
       <h2>Glue &amp; ink</h2>
-      <p class="section-desc">Glue, in a collage of words, is commitment: the pass that fixes the new order to the sheet. <code>bleed</code> is that commitment made visible - extra passes that thicken a trace unevenly, ink building up where the sheet was worked longest. It is selective: you decide which words soak.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>One dry strip</h4><p>A plain line is a clean, single pass.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Let it soak</h4><p><code>bleed</code> adds uneven passes; <code>bleedPasses</code> caps how many.</p></div>
-      <div class="ce-step"><span>glue</span><h4>Measured, not guessed</h4><p><code>stats()</code> reports <code>bleedPaths</code> and <code>overdrawRatio</code>, so build-up stays plottable.</p></div>
+      <p class="section-desc">Selected traces receive shifted return passages.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-glue" class="ce-canvas"></div></div>
@@ -356,18 +303,13 @@ plot.line(60, 360, 680, 380, {
     <div class="section-header">
       <div class="section-tag">11 &middot; rub()</div>
       <h2>Wear</h2>
-      <p class="section-desc">A fragment that is handled wears out. <code>rub()</code> is the intent verb for that whole gesture: the word appears legible, returns cut up, and is finally buried under an asemic scribble - three copies, one call, one <code>decay</code> knob to scale the wear.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>One call</h4><p><code>rub()</code> composes <code>text</code>, <code>textCutup</code>, and <code>asemic</code> with strong defaults.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>One knob</h4><p><code>decay</code> scales breathe, drift, dropout, and rubout across every copy at once.</p></div>
-      <div class="ce-step"><span>glue</span><h4>Escape hatches stay</h4><p><code>tail</code>, <code>stages</code>, and <code>tangles</code> replace the recipe when you need to.</p></div>
+      <p class="section-desc">The word returns in three states: legible, cut, buried.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-wear" class="ce-canvas"></div></div>
       <div class="ce-codewrap">
         <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">// the whole gesture, defaults and all
+        <pre><code class="language-javascript">// one word, three states
 plot.rub("COLLAGE", 60, 220, {
   size: 56
 });</code></pre>
@@ -381,12 +323,7 @@ plot.rub("COLLAGE", 60, 220, {
     <div class="section-header">
       <div class="section-tag">12 &middot; asemic()</div>
       <h2>The margin note</h2>
-      <p class="section-desc">In the margin of every collage: handwriting that is not language. <code>asemic()</code> draws a smooth turning walk that drifts back toward its centre - a compact cursive scribble you can feel but not read. Rows of them read as the note the maker left.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>Give it a box</h4><p>The gesture fills the rectangle you hand it, one tangle per cell.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>A centre-seeking walk</h4><p>The path loops and drifts home, so it reads as writing, not as a net.</p></div>
-      <div class="ce-step"><span>glue</span><h4>Script without language</h4><p>A row of tangles becomes a line of unreadable annotation.</p></div>
+      <p class="section-desc"><code>asemic()</code> places script-shaped marks without language.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-note" class="ce-canvas"></div></div>
@@ -409,12 +346,7 @@ for (let r = 0; r &lt; 2; r++) {
     <div class="section-header">
       <div class="section-tag">13 &middot; layer &middot; penMap &middot; export</div>
       <h2>Pens &amp; off the table</h2>
-      <p class="section-desc">The finished collage leaves the table. Give every material its own <code>layer</code>, map layers to physical pens, and the same captured paths go out as SVG for the plotter driver, JSON for data, or HPGL for the classics. Nothing is redrawn: export is the drawing.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>Name the materials</h4><p>Each call carries a <code>layer</code>: frame, word, marks.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Map layers to pens</h4><p><code>penMap</code> assigns each layer a physical pen number.</p></div>
-      <div class="ce-step"><span>glue</span><h4>Ship the sheet</h4><p><code>downloadSVG</code>, <code>downloadJSON</code>, <code>downloadHPGL</code>; <code>stats()</code> predicts the plot.</p></div>
+      <p class="section-desc">Named layers leave as SVG, JSON or HPGL. Page and pen-map details live in <a href="../system.html">System</a>.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-pens" class="ce-canvas"></div></div>
@@ -454,7 +386,7 @@ console.log(plot.stats({ page }));</code></pre>
     <div class="section-header">
       <div class="section-tag">14 &middot; assembly</div>
       <h2>The collage</h2>
-      <p class="section-desc">Stamped, written, turned, overwritten, erased, spattered. The incised table rolls over the sheet twice and lands off register; the typed strip runs left to right and the word answers top to bottom; fields collide instead of stacking; the worn word erases what it crosses, and flecks of ink let chance keep the last word. One seed, every act, no hierarchy.</p>
+      <p class="section-desc">One seed: rules, words, marks, wear.</p>
     </div>
     <div class="ce-poster-stage">
       <div id="m-collage" class="ce-canvas"></div>
@@ -514,12 +446,7 @@ plot.draw();</code></pre>
     <div class="section-header">
       <div class="section-tag">15 &middot; off the page</div>
       <h2>Take it with you</h2>
-      <p class="section-desc">Everything on this page runs on plain script files. Two lines load the system into any page; two more add the permutation and typewriter voices. Your own <code>sketch.js</code> always comes last. The full reference lives in the <a href="../system.html">System</a>.</p>
-    </div>
-    <div class="ce-strip">
-      <div class="ce-step"><span>cut</span><h4>Pick your files</h4><p>The core alone draws and exports; the addons bring permutation and the typed voice.</p></div>
-      <div class="ce-step"><span>arrange</span><h4>Load in order</h4><p>p5 first, then the core, then the addons, then your sketch.</p></div>
-      <div class="ce-step"><span>glue</span><h4>Write</h4><p>The smallest complete sketch is three lines; every act on this page is one call away.</p></div>
+      <p class="section-desc">Load p5, the core, optional addons, then your sketch. Full reference: <a href="../system.html">System</a>.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-leave" class="ce-canvas"></div></div>
@@ -761,13 +688,13 @@ plot.draw();</code></pre>
   // 15 off the page
   makeGysinPreview('m-leave', 0.66, function (p, w, h) {
     const plot = base(p, w, h, 19600319);
-    // the smallest complete sketch, pasted as-is
+    // load order, pasted as-is
     plot.text('CUT UP', w * 0.1, h * 0.55, {
       size: w * 0.17,
       breathe: 1.4,
       repeat: 2
     });
-    plot.underwood('three lines. every act one call away.', w * 0.1, h * 0.8, {
+    plot.underwood('p5 / core / addons / sketch', w * 0.1, h * 0.8, {
       size: w * 0.03,
       wear: 0.4
     });
