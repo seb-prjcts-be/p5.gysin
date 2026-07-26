@@ -1030,6 +1030,9 @@ const manifest = JSON.parse(fs.readFileSync(
 ));
 const showcasePage = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const collagePage = fs.readFileSync(path.join(root, "docs", "collage", "index.html"), "utf8");
+const systemPage = fs.readFileSync(path.join(root, "docs", "system.html"), "utf8");
+const collageComposition = fs.readFileSync(path.join(root, "docs", "collage", "composition.js"), "utf8");
+const collageCuration = fs.readFileSync(path.join(root, "docs", "collage", "curation.js"), "utf8");
 const siteStyle = fs.readFileSync(path.join(root, "docs", "style.css"), "utf8");
 const examplesRedirectPage = fs.readFileSync(path.join(root, "docs", "examples.html"), "utf8");
 const examplesDir = path.join(root, "examples");
@@ -1099,23 +1102,88 @@ assert.match(
 
 const collageChips = collagePage.match(/<li><a href="#[^"]+">\d{2} /g) || [];
 const collageModules = collagePage.match(/<section class="[^"]*ce-module[^"]*" id="[^"]+">/g) || [];
-assert.equal(collageChips.length, 14);
-assert.equal(collageModules.length, 14);
-assert.match(collagePage, /<li><a href="#collage">01 the whole sheet<\/a><\/li>/);
+const collageTheses = collagePage.match(/class="ce-thesis"/g) || [];
+const collageSteps = collagePage.match(/class="ce-step"/g) || [];
+assert.equal(collageChips.length, 19);
+assert.equal(collageModules.length, 19);
+assert.equal(collageTheses.length, 19);
+assert.equal(collageSteps.length, 68);
+assert.match(collagePage, /<li><a href="#overview">00 whole sheet<\/a><\/li>/);
+assert.match(collagePage, /<li><a href="#sheet">01 sheet<\/a><\/li>/);
+assert.match(collagePage, /<li><a href="#layers">02 layers<\/a><\/li>/);
+assert.match(collagePage, /<li><a href="#plot">17 plot<\/a><\/li>/);
+assert.match(collagePage, /<li><a href="#full">18 full poster<\/a><\/li>/);
 assert.ok(
-  collagePage.indexOf('id="collage"') < collagePage.indexOf('id="sheet"'),
+  collagePage.indexOf('id="overview"') < collagePage.indexOf('id="sheet"') &&
+    collagePage.indexOf('id="plot"') < collagePage.indexOf('id="full"'),
   "Collage begins with the complete composition before isolating its gestures"
 );
 assert.doesNotMatch(collagePage, /#leave|id="leave"|m-leave|off the page/i);
-const rememberedSheetStart = collagePage.indexOf("function buildRememberedSheet");
-const rememberedSheetEnd = collagePage.indexOf("// 02 the frames", rememberedSheetStart);
-const rememberedSheet = collagePage.slice(rememberedSheetStart, rememberedSheetEnd);
-for (const verb of ["rect", "path", "line", "letters", "symbols", "circle", "underwood", "asemic", "text", "textCutup", "chant", "rub"]) {
-  assert.match(rememberedSheet, new RegExp(`plot\\.${verb}\\(`), `whole sheet contains ${verb}()`);
+assert.match(collagePage, /id="m-overview" class="ce-canvas" data-step="all"/);
+assert.match(collagePage, /id="m-full" class="ce-canvas" data-step="all"/);
+assert.match(collagePage, /<script src="composition\.js\?v=poster-process"><\/script>\s*<script src="curation\.js\?v=poster-process"><\/script>/);
+assert.match(collagePage, /A4 &middot; 21 &times; 29\.7 cm/);
+assert.match(collagePage, /A3 &middot; 29\.7 &times; 42 cm/);
+assert.match(collagePage, /A2 &middot; 42 &times; 59\.4 cm/);
+assert.match(collagePage, /No opacity, pressure or digital line-width control is promised to a fixed pen\./);
+assert.match(collagePage, /every <code>1 \.\.\.<\/code> layer plots with pen 1; every <code>2 \.\.\.<\/code> layer plots with pen 2/);
+assert.match(collagePage, /href="\.\.\/system\.html#export">Inkscape: plot one pen number at a time/);
+assert.match(systemPage, /<section class="guide-block" id="export">/);
+assert.match(systemPage, /show every layer beginning with <code>1<\/code>, install pen 1 and plot; then hide those layers and repeat for <code>2<\/code>, <code>3<\/code>, and so on/);
+
+for (const verb of ["rect", "line", "letters", "symbols", "circle", "underwood", "asemic", "text", "textCutup", "chant", "weave", "rub", "lattice"]) {
+  assert.match(collageComposition, new RegExp(`plot\\.${verb}\\(`), `whole sheet contains ${verb}()`);
 }
-assert.match(collagePage, /downloadPlotterSVG\("gysin-remembers\.svg", \{/);
-assert.match(collagePage, /penMap: \{ black: 1, red: 2 \}/);
-assert.match(collagePage, /width: 210,[\s\S]*height: 297,[\s\S]*units: "mm"/);
+assert.match(collageComposition, /A4: Object\.freeze\(\{ width: 210, height: 297 \}\)/);
+assert.match(collageComposition, /A3: Object\.freeze\(\{ width: 297, height: 420 \}\)/);
+assert.match(collageComposition, /A2: Object\.freeze\(\{ width: 420, height: 594 \}\)/);
+assert.match(collageComposition, /frame: 1,[\s\S]*rules: 1,[\s\S]*word: 1,[\s\S]*machine: 1,[\s\S]*fields: 1,[\s\S]*return: 2,[\s\S]*hand: 2/);
+assert.match(collageComposition, /const scale = \(sheet\.width - 20\) \/ WIDTH/);
+assert.match(collageComposition, /const verticalMargin = \(sheet\.height - HEIGHT \* scale\) \/ 2/);
+assert.match(collageComposition, /clip: true/);
+assert.doesNotMatch(collageComposition, /\b(?:alpha|pressure|strokeWeight)\s*:/);
+assert.doesNotMatch(collageCuration, /\b(?:alpha|pressure|strokeWeight)\s*:/);
+assert.match(collageCuration, /downloadPlotterSVG\(`gysin-remembers-\$\{state\.format\.toLowerCase\(\)\}\.svg`, \{/);
+assert.match(collageCuration, /tool: "pen",[\s\S]*optimize: true/);
+
+const collageContext = { console };
+collageContext.globalThis = collageContext;
+vm.createContext(collageContext);
+for (const filename of [
+  "p5.gysin.js",
+  "p5.gysin.text.js",
+  "p5.gysin.underwood.js",
+  path.join("docs", "collage", "composition.js")
+]) {
+  vm.runInContext(fs.readFileSync(path.join(root, filename), "utf8"), collageContext, { filename });
+}
+const poster = collageContext.GysinPoster;
+const posterPlot = new collageContext.GysinPlot({
+  seed: poster.seed,
+  width: poster.width,
+  height: poster.height,
+  style: { stroke: poster.ink }
+});
+poster.build(posterPlot);
+const posterPage = poster.pageFor("A4");
+const posterSvg = posterPlot.exportPlotterSVG({
+  page: posterPage,
+  penMap: poster.penMap,
+  tool: "pen",
+  optimize: true
+});
+const posterLayers = Array.from(posterSvg.matchAll(/inkscape:label="([^"]+)"/g), (match) => match[1]);
+assert.deepEqual(posterLayers, [
+  "1 frame",
+  "1 rules",
+  "1 word",
+  "1 fields",
+  "1 machine",
+  "2 return",
+  "2 hand"
+]);
+assert.ok(posterLayers.every((label) => /^[12] /.test(label)));
+assert.doesNotMatch(posterSvg, /\s(?:opacity|stroke-width)="(?!0\.1mm)/);
 assert.match(siteStyle, /body\.chapters #chapter-prev,[\s\S]*bottom: 12px/);
 
 const plotterExportPage = fs.readFileSync(path.join(examplesDir, "plotter_export", "index.html"), "utf8");

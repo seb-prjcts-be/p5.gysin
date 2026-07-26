@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Collage | p5.gysin</title>
-  <link rel="stylesheet" href="../style.css?v=collage-whole-sheet">
+  <link rel="stylesheet" href="../style.css?v=poster-process">
 </head>
 <body class="collage-page">
   <nav id="navbar">
@@ -14,733 +14,578 @@
       <li><a href="index.html" class="active">Collage</a></li>
       <li><a href="../system.html">System</a></li>
       <li><a href="../vision.html">Vision</a></li>
-      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank" rel="noreferrer">GitHub</a></li>
     </ul>
   </nav>
 
   <header class="page-header">
     <div class="section-tag">Montage &middot; v1.0.1</div>
     <h1>Col<span class="accent">lage</span></h1>
-    <p>Begin with the whole sheet. Then enter it one gesture at a time: cut, turn, return, wear, plot.</p>
+    <p>The whole sheet first. Then the making: paper, frame, word, cut, return, plot.</p>
     <ul class="ce-chips">
-      <li><a href="#collage">01 the whole sheet</a></li>
-      <li><a href="#sheet">02 the frames</a></li>
-      <li><a href="#scraps">03 scraps</a></li>
-      <li><a href="#word">04 the word</a></li>
-      <li><a href="#scissors">05 scissors</a></li>
-      <li><a href="#arrange">06 arrange</a></li>
-      <li><a href="#letterbox">07 letter field</a></li>
-      <li><a href="#turn">08 the turn</a></li>
-      <li><a href="#markbox">09 mark field</a></li>
-      <li><a href="#label">10 typed voice</a></li>
-      <li><a href="#glue">11 return &amp; ink</a></li>
-      <li><a href="#wear">12 wear</a></li>
-      <li><a href="#note">13 margin hand</a></li>
-      <li><a href="#pens">14 pens &amp; paper</a></li>
+      <li><a href="#overview">00 whole sheet</a></li>
+      <li><a href="#sheet">01 sheet</a></li>
+      <li><a href="#layers">02 layers</a></li>
+      <li><a href="#frames">03 frames</a></li>
+      <li><a href="#rules">04 rules</a></li>
+      <li><a href="#word">05 word</a></li>
+      <li><a href="#permutation">06 permutation</a></li>
+      <li><a href="#cut">07 cut</a></li>
+      <li><a href="#surface">08 surface</a></li>
+      <li><a href="#letters">09 letters</a></li>
+      <li><a href="#marks">10 marks</a></li>
+      <li><a href="#typed">11 typed voice</a></li>
+      <li><a href="#turn">12 turned sheet</a></li>
+      <li><a href="#return">13 return</a></li>
+      <li><a href="#worn">14 worn word</a></li>
+      <li><a href="#hand">15 hand</a></li>
+      <li><a href="#ink">16 ink</a></li>
+      <li><a href="#plot">17 plot</a></li>
+      <li><a href="#full">18 full poster</a></li>
     </ul>
   </header>
 
-  <!-- 01 THE WHOLE SHEET -->
-  <section class="section ce-module ce-poster-section ce-hero-section" id="collage">
-    <div class="section-header">
-      <div class="section-tag">01 &middot; the whole instrument</div>
-      <h2>Gysin remembers</h2>
-      <p class="section-desc">Black holds the sheet. Red returns through it. Every chapter that follows isolates one gesture already present here.</p>
-    </div>
-    <div class="ce-poster-stage">
-      <div id="m-collage" class="ce-canvas"></div>
-    </div>
-    <div class="ce-strip" aria-label="The three movements of the composition">
-      <div class="ce-step">
-        <span>Cut</span>
-        <h4>Frames and scraps</h4>
-        <p>The page is divided before it is read.</p>
+  <main>
+    <section class="section ce-module ce-poster-section ce-hero-section" id="overview">
+      <div class="section-header">
+        <div class="section-tag">00 &middot; the whole sheet</div>
+        <h2>Gysin remembers</h2>
+        <p class="ce-thesis">A physical page holds the words. Permutation, cut, return and hand alter their relations.</p>
+        <p class="ce-source"><span>Method</span> One sheet. Two pens. Seven plot layers.</p>
+        <p class="section-desc">Everything that follows is already here.</p>
       </div>
-      <div class="ce-step">
-        <span>Return</span>
-        <h4>Word and red ring</h4>
-        <p>One word comes back in another voice.</p>
+      <div class="ce-poster-stage">
+        <div id="m-overview" class="ce-canvas" data-step="all"></div>
       </div>
-      <div class="ce-step">
-        <span>Wear</span>
-        <h4>Ink and passage</h4>
-        <p>Repetition becomes physical on paper.</p>
-      </div>
-    </div>
-  </section>
+      <p class="ce-route" aria-label="Poster route">paper &rarr; frame &rarr; word &rarr; cut &rarr; field &rarr; return &rarr; hand &rarr; plot</p>
+    </section>
 
-  <!-- 02 THE FRAMES -->
-  <section class="section ce-module" id="sheet">
-    <div class="section-header">
-      <div class="section-tag">02 &middot; rect()</div>
-      <h2>The frames</h2>
-      <p class="section-desc">Three open frames hold the word, the return and the field.</p>
-    </div>
-    <div class="ce-demo">
-      <div class="ce-preview"><div id="m-sheet" class="ce-canvas"></div></div>
-      <div class="ce-codewrap">
-        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">// three open frames from the whole sheet
-plot.rect(80, -70, 544, 170, {
-  fray: 0.3,
-  dropout: 0.14
-});
-plot.rect(80, 90, 544, 260, {
-  fray: 0.3,
-  dropout: 0.14
-});
-plot.rect(80, 500, 544, 360, {
-  fray: 0.3,
-  dropout: 0.14
-});</code></pre>
+    <section class="section ce-module" id="sheet">
+      <div class="section-header">
+        <div class="section-tag">01 &middot; page</div>
+        <h2>The sheet</h2>
+        <p class="ce-thesis"><q>Writing is fifty years behind painting.</q> The first decision is the page.</p>
+        <p class="ce-source"><span>Gysin</span> <a href="https://www.centrepompidou.fr/media/document/01/b6/01b6f3030d125773fee07a7557fdabfc/normal.pdf" target="_blank" rel="noreferrer">Cut-Ups Self-Explained</a></p>
+        <p class="section-desc">One portrait composition scales without rearranging to A4, A3 or A2.</p>
       </div>
-    </div>
-  </section>
-
-  <!-- 03 SCRAPS -->
-  <section class="section section-dark ce-module" id="scraps">
-    <div class="section-header">
-      <div class="section-tag">03 &middot; line() &middot; circle() &middot; path()</div>
-      <h2>Scraps</h2>
-      <p class="section-desc">Strips, patches, rings and free clippings: material before language.</p>
-    </div>
-    <div class="ce-demo">
-      <div class="ce-preview"><div id="m-scraps" class="ce-canvas"></div></div>
-      <div class="ce-codewrap">
-        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">// loose material from the same sheet
-plot.line(82, 582, 632, 582, {
-  dropout: 0.2,
-  rubout: 0.18
-});
-plot.circle(256, 337, 450, {
-  stroke: RED,
-  repeat: 3,
-  rubout: 0.2
-});
-plot.path([[80, 500], [256, 474], [624, 500]], {
-  breathe: 1.0
-});</code></pre>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>560 &times; 792 composition units.</p></div>
+        <div class="ce-step"><span>Build</span><p>A-series paper and 10 mm side margins.</p></div>
+        <div class="ce-step"><span>Result</span><p>The same proportions at three sizes.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>The entire bounded sheet.</p></div>
       </div>
-    </div>
-  </section>
-
-  <!-- 04 THE WORD -->
-  <section class="section ce-module" id="word">
-    <div class="section-header">
-      <div class="section-tag">04 &middot; text() &middot; breathe &middot; dropout &middot; rubout</div>
-      <h2>The word</h2>
-      <p class="section-desc">The word is traced as material, then worn.</p>
-    </div>
-    <div class="ce-demo">
-      <div class="ce-preview"><div id="m-word" class="ce-canvas"></div></div>
-      <div class="ce-codewrap">
-        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">plot.text("WRITE", 60, 220, {
-  size: 64,
-  breathe: 0.4
-});
-plot.text("WRITE", 60, 360, {
-  size: 64,
-  breathe: 1.4,
-  dropout: 0.08
-});
-plot.text("WRITE", 60, 420, {
-  size: 64,
-  breathe: 2.2,
-  dropout: 0.2,
-  rubout: 0.2
-});</code></pre>
+      <div class="ce-demo">
+        <div class="ce-preview">
+          <div class="ce-canvas ce-sheet-specimen" aria-label="A-series page">
+            <div class="ce-page-outline">
+              <span>A4</span>
+              <strong>210 &times; 297 mm</strong>
+              <small>10 mm safe side margin</small>
+            </div>
+          </div>
+        </div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">const page = GysinPoster.pageFor("A4");
+// A4 210 × 297 mm
+// A3 297 × 420 mm
+// A2 420 × 594 mm</code></pre>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- 05 SCISSORS -->
-  <section class="section section-dark ce-module" id="scissors">
-    <div class="section-header">
-      <div class="section-tag">05 &middot; textCutup()</div>
-      <h2>Horizontal slices</h2>
-      <p class="section-desc"><code>textCutup()</code> shifts horizontal contour bands. Use it as a rare surface disturbance, not as the cut-up itself.</p>
-    </div>
-    <div class="ce-demo">
-      <div class="ce-preview"><div id="m-scissors" class="ce-canvas"></div></div>
-      <div class="ce-codewrap">
-        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">plot.textCutup("REMEMBERS", 60, 280, {
-  size: 72,
-  slices: 5,
-  sliceOffset: 12
-});</code></pre>
+    <section class="section section-dark ce-module" id="layers">
+      <div class="section-header">
+        <div class="section-tag">02 &middot; layer &middot; penMap</div>
+        <h2>The layers</h2>
+        <p class="ce-thesis">A black scaffold. A red return. Each voice receives its pen before they meet.</p>
+        <p class="ce-source"><span>Curatorial bridge</span> <a href="../vision.html">word, machine and hand</a></p>
+        <p class="section-desc">Layers with the same opening number use the same physical pen: every <code>1 ...</code> layer plots with pen 1; every <code>2 ...</code> layer plots with pen 2.</p>
       </div>
-    </div>
-  </section>
-
-  <!-- 06 ARRANGE -->
-  <section class="section ce-module" id="arrange">
-    <div class="section-header">
-      <div class="section-tag">06 &middot; chant()</div>
-      <h2>Arrange</h2>
-      <p class="section-desc">A phrase changes order. The lines stay clear enough to hear the change.</p>
-    </div>
-    <div class="ce-demo">
-      <div class="ce-preview"><div id="m-arrange" class="ce-canvas"></div></div>
-      <div class="ce-codewrap">
-        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">// the phrase returns through its orders
-plot.chant("CUT TURN RETURN", 60, 90);
-</code></pre>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>One physical page.</p></div>
+        <div class="ce-step"><span>Build</span><p>Five black roles and two red roles.</p></div>
+        <div class="ce-step"><span>Result</span><p>Every layer starts with pen 1 or 2.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>Structure stays black; return stays red.</p></div>
       </div>
-    </div>
-  </section>
-
-  <!-- 07 LETTER FIELD -->
-  <section class="section section-dark ce-module" id="letterbox">
-    <div class="section-header">
-      <div class="section-tag">07 &middot; letters() &middot; glyphJitter</div>
-      <h2>The letter field</h2>
-      <p class="section-desc"><code>letters()</code> returns the sheet’s own phrase as a field.</p>
-    </div>
-    <div class="ce-demo">
-      <div class="ce-preview"><div id="m-letterbox" class="ce-canvas"></div></div>
-      <div class="ce-codewrap">
-        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">plot.letters("REMEMBERS", 60, 60, 680, 520, {
-  size: 16,
-  glyphJitter: 0.7,
-  breathe: 0.5,
-  dropout: 0.05
-});</code></pre>
+      <div class="ce-demo">
+        <div class="ce-preview">
+          <div class="ce-canvas ce-layer-specimen">
+            <ol>
+              <li><b>1</b> frame</li>
+              <li><b>1</b> rules</li>
+              <li><b>1</b> word</li>
+              <li><b>1</b> machine</li>
+              <li><b>1</b> fields</li>
+              <li class="red"><b>2</b> return</li>
+              <li class="red"><b>2</b> hand</li>
+            </ol>
+          </div>
+        </div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">const penMap = {
+  frame: 1, rules: 1, word: 1,
+  machine: 1, fields: 1,
+  return: 2, hand: 2
+};</code></pre>
+        </div>
       </div>
-    </div>
-  </section>
+      <p class="ce-links"><a href="../system.html#export">Inkscape: plot one pen number at a time &rarr;</a></p>
+    </section>
 
-  <!-- 08 THE TURN -->
-  <section class="section ce-module" id="turn">
-    <div class="section-header">
-      <div class="section-tag">08 &middot; direction &middot; the turned sheet</div>
-      <h2>The turn</h2>
-      <p class="section-desc">A line crosses columns. The sheet holds both directions.</p>
-    </div>
-    <div class="ce-demo">
-      <div class="ce-preview"><div id="m-turn" class="ce-canvas"></div></div>
-      <div class="ce-codewrap">
-        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">// the row: a typed line, left to right
-plot.underwood("cut the word / turn the sheet / return", 60, 320, {
-  size: 22
-});
+    <section class="section ce-module" id="frames">
+      <div class="section-header">
+        <div class="section-tag">03 &middot; rect()</div>
+        <h2>The frames</h2>
+        <p class="ce-thesis">The grid is the first authority. Escape matters because the border remains visible.</p>
+        <p class="ce-source"><span>Gysin</span> <a href="https://www.centrepompidou.fr/en/magazine/article/focus-on-the-last-museum-by-brion-gysin" target="_blank" rel="noreferrer">The Last Museum</a></p>
+        <p class="section-desc">Three open frames from the first test hold the page together.</p>
+      </div>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>The blank A-series sheet.</p></div>
+        <div class="ce-step"><span>Build</span><p>Three calls to one primitive.</p></div>
+        <div class="ce-step"><span>Result</span><p>Three unequal fields.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>The black holding structure.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-frames" class="ce-canvas" data-step="frames"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">plot.rect(30, 28, 500, 160, { layer: "frame" });
+plot.rect(30, 210, 500, 245, { layer: "frame" });
+plot.rect(30, 478, 500, 270, { layer: "frame" });</code></pre>
+        </div>
+      </div>
+    </section>
 
-// the turn: the word written downwards, over the row
-const word = "WRITE";
-for (let i = 0; i &lt; word.length; i++) {
-  plot.text(word[i], 620, 80 + i * 68, {
-    size: 44,
-    breathe: 0.9
+    <section class="section section-dark ce-module" id="rules">
+      <div class="section-header">
+        <div class="section-tag">04 &middot; line()</div>
+        <h2>The rules</h2>
+        <p class="ce-thesis">Repetition gives the sheet a measure. A deviation needs something to leave.</p>
+        <p class="ce-source"><span>Gysin</span> <a href="https://www.centrepompidou.fr/en/magazine/article/focus-on-the-last-museum-by-brion-gysin" target="_blank" rel="noreferrer">grid and permutation</a></p>
+        <p class="section-desc">Six ruled lines establish a quiet rhythm in the lower frame.</p>
+      </div>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>Three open frames.</p></div>
+        <div class="ce-step"><span>Build</span><p>One repeated line gesture.</p></div>
+        <div class="ce-step"><span>Result</span><p>A measured lower field.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>Black horizontal rhythm.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-rules" class="ce-canvas" data-step="rules"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">for (let row = 0; row &lt; 6; row++) {
+  plot.line(45, 510 + row * 15, 515, 510 + row * 15, {
+    layer: "rules"
   });
 }</code></pre>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- 09 MARK FIELD -->
-  <section class="section section-dark ce-module" id="markbox">
-    <div class="section-header">
-      <div class="section-tag">09 &middot; symbols()</div>
-      <h2>The mark field</h2>
-      <p class="section-desc"><code>symbols()</code> fills a strip from a short alphabet of marks.</p>
-    </div>
-    <div class="ce-demo">
-      <div class="ce-preview"><div id="m-markbox" class="ce-canvas"></div></div>
-      <div class="ce-codewrap">
-        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">plot.symbols(60, 120, 680, 300, {
+    <section class="section ce-module" id="word">
+      <div class="section-header">
+        <div class="section-tag">05 &middot; text()</div>
+        <h2>The word</h2>
+        <p class="ce-thesis">Keep the word intact long enough to feel what happens to it later.</p>
+        <p class="ce-source"><span>Gysin beforehand</span> writing meets painting</p>
+        <p class="section-desc">WRITE enters as a legible black body.</p>
+      </div>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>Frame and measure.</p></div>
+        <div class="ce-step"><span>Build</span><p>One clean text contour.</p></div>
+        <div class="ce-step"><span>Result</span><p>A word before disturbance.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>The upper black word-body.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-word" class="ce-canvas" data-step="word"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">plot.text("WRITE", 50, 174, {
+  size: 50,
+  layer: "word"
+});</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark ce-module" id="permutation">
+      <div class="section-header">
+        <div class="section-tag">06 &middot; chant()</div>
+        <h2>The permutation</h2>
+        <p class="ce-thesis">The words remain. Their neighbours change.</p>
+        <p class="ce-source"><span>Gysin</span> permutation poems</p>
+        <p class="section-desc">CUT TURN RETURN moves by rule, not decoration.</p>
+      </div>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>One intact word.</p></div>
+        <div class="ce-step"><span>Build</span><p>One phrase through four rotations.</p></div>
+        <div class="ce-step"><span>Result</span><p>Order becomes composition.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>The upper-right word sequence.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-permutation" class="ce-canvas" data-step="permutation"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">plot.chant("CUT TURN RETURN", 290, 72, {
+  lines: 4,
+  order: "rotate",
+  layer: "word"
+});</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section ce-module" id="cut">
+      <div class="section-header">
+        <div class="section-tag">07 &middot; weave()</div>
+        <h2>The cut</h2>
+        <p class="ce-thesis">Cut the sources. Let chance enter. Select what returns.</p>
+        <p class="ce-source"><span>Gysin</span> <a href="https://www.mam.paris.fr/en/node/2213" target="_blank" rel="noreferrer">cut-up method</a></p>
+        <p class="section-desc">Two source lines meet as fragments in one short strip.</p>
+      </div>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>Two named source lines.</p></div>
+        <div class="ce-step"><span>Build</span><p>One weave of clause fragments.</p></div>
+        <div class="ce-step"><span>Result</span><p>A cut-up with provenance.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>The middle-left text strip.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-cut" class="ce-canvas" data-step="cut"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">plot.weave([
+  "I rub out the word.",
+  "Words breathe you IN."
+], 50, 255, {
+  lines: 2,
+  layer: "word"
+});</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark ce-module" id="surface">
+      <div class="section-header">
+        <div class="section-tag">08 &middot; textCutup()</div>
+        <h2>The surface</h2>
+        <p class="ce-thesis">Not the historical cut-up. A late incision through the contour.</p>
+        <p class="ce-source"><span>Contemporary translation</span> horizontal vector slices</p>
+        <p class="section-desc">REMEMBERS receives five small shifts without becoming the whole method.</p>
+      </div>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>A readable word contour.</p></div>
+        <div class="ce-step"><span>Build</span><p>Five shifted slices.</p></div>
+        <div class="ce-step"><span>Result</span><p>A surface cut, clearly named.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>The lower edge of the middle frame.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-surface" class="ce-canvas" data-step="surface"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">plot.textCutup("REMEMBERS", 50, 397, {
+  size: 27,
+  slices: 5,
+  sliceOffset: 7,
+  layer: "word"
+});</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section ce-module" id="letters">
+      <div class="section-header">
+        <div class="section-tag">09 &middot; letters()</div>
+        <h2>The letter field</h2>
+        <p class="ce-thesis">Grammar loosens. Letters remain as matter.</p>
+        <p class="ce-source"><span>Curatorial bridge</span> word becomes visual field</p>
+        <p class="section-desc">Only letters from REMEMBERS enter the lower frame.</p>
+      </div>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>The ruled lower field.</p></div>
+        <div class="ce-step"><span>Build</span><p>One bounded letter field.</p></div>
+        <div class="ce-step"><span>Result</span><p>Language without sentence order.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>The lower-left texture.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-letters" class="ce-canvas" data-step="letters"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">plot.letters("REMEMBERS", 48, 515, 205, 72, {
+  size: 8.2,
+  layer: "fields"
+});</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark ce-module" id="marks">
+      <div class="section-header">
+        <div class="section-tag">10 &middot; symbols()</div>
+        <h2>The mark field</h2>
+        <p class="ce-thesis">Marks stop punctuating and begin to conduct the page.</p>
+        <p class="ce-source"><span>Curatorial bridge</span> sign, division and direction</p>
+        <p class="section-desc">The field uses only marks present in the built-in vector alphabet.</p>
+      </div>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>The field beside the letters.</p></div>
+        <div class="ce-step"><span>Build</span><p>One alphabet of six marks.</p></div>
+        <div class="ce-step"><span>Result</span><p>A band of direction and pause.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>The lower-right texture.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-marks" class="ce-canvas" data-step="marks"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">plot.symbols(295, 515, 215, 72, {
   set: '/"()-:',
   cluster: true,
-  size: 16
+  layer: "fields"
 });</code></pre>
+        </div>
       </div>
-    </div>
-    <p class="ce-note">Marks like <code>+ # &amp;</code> are not in the built-in vector alphabet. Type those with <code>underwood()</code> (its face has them) or pass an outline font.</p>
-  </section>
+    </section>
 
-  <!-- 10 TYPED VOICE -->
-  <section class="section ce-module" id="label">
-    <div class="section-header">
-      <div class="section-tag">10 &middot; underwood()</div>
-      <h2>The typed voice</h2>
-      <p class="section-desc">A fixed-pitch, single-stroke label under the image.</p>
-    </div>
-    <div class="ce-demo">
-      <div class="ce-preview"><div id="m-label" class="ce-canvas"></div></div>
-      <div class="ce-codewrap">
-        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">// needs p5.gysin.underwood.min.js loaded
-plot.underwood("BRION GYSIN", 60, 90, {
-  size: 30,
-  underline: 1
-});
-plot.underwood("OBSERVE / CONTINUE", 60, 170, {
-  bold: true
-});
-plot.underwood("write / cut / turn / return", 60, 230);
-plot.underwood("* * * * * * * *", 60, 290);</code></pre>
+    <section class="section ce-module" id="typed">
+      <div class="section-header">
+        <div class="section-tag">11 &middot; underwood()</div>
+        <h2>The typed voice</h2>
+        <p class="ce-thesis">One face. One pitch. One strike. Constraint is the voice.</p>
+        <p class="ce-source"><span>Gysin beforehand</span> machine voice beside word and hand</p>
+        <p class="section-desc">The source line, name and colophon share one single-stroke typewriter face.</p>
       </div>
-    </div>
-    <p class="ce-links"><a href="../../examples/typewriter/">typewriter example -&gt;</a></p>
-  </section>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>Image fields without provenance.</p></div>
+        <div class="ce-step"><span>Build</span><p>One fixed-pitch source passage.</p></div>
+        <div class="ce-step"><span>Result</span><p>A small mechanical register.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>Top-left source and bottom colophon.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-typed" class="ce-canvas" data-step="typed"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">plot.underwood("I rub out the word.", 50, 58, {
+  size: 8.5,
+  layer: "machine"
+});</code></pre>
+        </div>
+      </div>
+    </section>
 
-  <!-- 11 RETURN & INK -->
-  <section class="section section-dark ce-module" id="glue">
-    <div class="section-header">
-      <div class="section-tag">11 &middot; bleed &middot; repeat</div>
-      <h2>Return &amp; ink</h2>
-      <p class="section-desc">The red ring returns three times. A physical pen decides how dark that becomes.</p>
-    </div>
-    <div class="ce-demo">
-      <div class="ce-preview"><div id="m-glue" class="ce-canvas"></div></div>
-      <div class="ce-codewrap">
-        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">// one red ring, physically repeated
-plot.circle(256, 337, 450, {
+    <section class="section section-dark ce-module" id="turn">
+      <div class="section-header">
+        <div class="section-tag">12 &middot; lattice()</div>
+        <h2>The turned sheet</h2>
+        <p class="ce-thesis">The phrase crosses its own reading direction.</p>
+        <p class="ce-source"><span>Gysin beforehand</span> writing, turning and grid</p>
+        <p class="section-desc">A compact passage writes across the sheet, then across its turn.</p>
+      </div>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>A ruled field with one direction.</p></div>
+        <div class="ce-step"><span>Build</span><p>One two-direction lattice.</p></div>
+        <div class="ce-step"><span>Result</span><p>The reading axis turns.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>The lower-right crossing.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-turn" class="ce-canvas" data-step="turn"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">plot.lattice("CUT TURN RETURN", 270, 608, 235, 82, {
+  size: 5.8,
+  wear: 0.55,
+  layer: "fields"
+});</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section ce-module" id="return">
+      <div class="section-header">
+        <div class="section-tag">13 &middot; circle()</div>
+        <h2>The return</h2>
+        <p class="ce-thesis">A simple mechanism returns. The second state is not the first.</p>
+        <p class="ce-source"><span>Structural reference</span> <a href="https://www.centrepompidou.fr/en/ressources/oeuvre/crgBkGx" target="_blank" rel="noreferrer">Dreamachine</a></p>
+        <p class="section-desc">The red ring is physically drawn three times.</p>
+      </div>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>A black, measured sheet.</p></div>
+        <div class="ce-step"><span>Build</span><p>One circle with three pen passes.</p></div>
+        <div class="ce-step"><span>Result</span><p>Red becomes a returning voice.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>The ring through the middle field.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-return" class="ce-canvas" data-step="return"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">plot.circle(280, 335, 305, {
   stroke: RED,
-  layer: "red",
-  repeat: 3,
-  rubout: 0.2
+  layer: "return",
+  repeat: 3
 });</code></pre>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- 12 WEAR -->
-  <section class="section ce-module" id="wear">
-    <div class="section-header">
-      <div class="section-tag">12 &middot; rub()</div>
-      <h2>Wear</h2>
-      <p class="section-desc">The word returns in three states: legible, weathered, buried.</p>
-    </div>
-    <div class="ce-demo">
-      <div class="ce-preview"><div id="m-wear" class="ce-canvas"></div></div>
-      <div class="ce-codewrap">
-        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">// one word, three states
-plot.rub("WRITE", 60, 220, {
-  size: 56
+    <section class="section section-dark ce-module" id="worn">
+      <div class="section-header">
+        <div class="section-tag">14 &middot; rub()</div>
+        <h2>The worn word</h2>
+        <p class="ce-thesis"><q>I rub out the word.</q> The word remains as the trace of the action.</p>
+        <p class="ce-source"><span>Gysin</span> the word as action and residue</p>
+        <p class="section-desc">WRITE returns below in three increasingly worn states.</p>
+      </div>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>The clean word-body above.</p></div>
+        <div class="ce-step"><span>Build</span><p>One rub gesture on strong defaults.</p></div>
+        <div class="ce-step"><span>Result</span><p>Legible, weathered, buried.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>The lower-left word sequence.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-worn" class="ce-canvas" data-step="worn"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">plot.rub("WRITE", 50, 602, {
+  size: 21
 });</code></pre>
+        </div>
       </div>
-    </div>
-    <p class="ce-links"><a href="../../examples/worn_word/">worn_word example -&gt;</a></p>
-  </section>
+    </section>
 
-  <!-- 13 MARGIN HAND -->
-  <section class="section section-dark ce-module" id="note">
-    <div class="section-header">
-      <div class="section-tag">12 &middot; asemic()</div>
-      <h2>The margin hand</h2>
-      <p class="section-desc"><code>asemic()</code> places script-shaped marks without language.</p>
-    </div>
-    <div class="ce-demo">
-      <div class="ce-preview"><div id="m-note" class="ce-canvas"></div></div>
-      <div class="ce-codewrap">
-        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">// four red gestures return in the lower margin
-for (let i = 0; i &lt; 4; i++) {
-  plot.asemic(160 * i, 690, 150, 210, {
+    <section class="section ce-module" id="hand">
+      <div class="section-header">
+        <div class="section-tag">15 &middot; asemic()</div>
+        <h2>The hand</h2>
+        <p class="ce-thesis">Direction is read before language.</p>
+        <p class="ce-source"><span>Gysin</span> <a href="https://www.mam.paris.fr/en/node/2213" target="_blank" rel="noreferrer">writing, drawing and calligraphic marks</a></p>
+        <p class="section-desc">Four red gestures cross the lower margin without imitating a signature.</p>
+      </div>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>Machine, word and grid.</p></div>
+        <div class="ce-step"><span>Build</span><p>One repeated asemic action.</p></div>
+        <div class="ce-step"><span>Result</span><p>A directional hand-zone.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>Four red lower gestures.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-hand" class="ce-canvas" data-step="hand"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">for (let gesture = 0; gesture &lt; 4; gesture++) {
+  plot.asemic(315 + gesture * 47, 681, 42, 62, {
     stroke: RED,
-    layer: "red",
-    breathe: 1.4
+    layer: "hand"
   });
 }</code></pre>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- 14 PENS & PAPER -->
-  <section class="section ce-module" id="pens">
-    <div class="section-header">
-      <div class="section-tag">14 &middot; layer &middot; penMap &middot; export</div>
-      <h2>Pens &amp; paper</h2>
-      <p class="section-desc">Black is pen 1. Red is pen 2. The SVG leaves as numbered Inkscape layers on A4, A3 or A2.</p>
-    </div>
-    <div class="ce-demo">
-      <div class="ce-preview"><div id="m-pens" class="ce-canvas"></div></div>
-      <div class="ce-codewrap">
-        <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">plot.rect(80, 90, 544, 260, {
-  layer: "black",
-  breathe: 0.9,
-  overshoot: 6,
-  bleed: 0.25
-});
-plot.underwood("REMEMBERS", 82, 360, {
-  size: 50,
-  stroke: RED,
-  layer: "red"
-});
-plot.asemic(120, 380, 240, 120, {
-  stroke: RED,
-  breathe: 1.4,
-  dropout: 0.05,
-  layer: "red"
-});
-
-const page = {
-  width: 210,
-  height: 297,
-  units: "mm",
-  margin: 10,
-  scale: 200 / 720
-};
-plot.downloadPlotterSVG("gysin-remembers.svg", {
-  page,
-  penMap: { black: 1, red: 2 }
-});
-console.log(plot.stats({ page }));</code></pre>
+    <section class="section section-dark ce-module" id="ink">
+      <div class="section-header">
+        <div class="section-tag">16 &middot; bleed</div>
+        <h2>The ink</h2>
+        <p class="ce-thesis">The screen can fake darkness. Paper cannot. The pen must pass again.</p>
+        <p class="ce-source"><span>Physical translation</span> actual repeated centerlines</p>
+        <p class="section-desc">One seam gathers real extra pen passages; the rest of the sheet stays light.</p>
       </div>
-    </div>
-    <p class="ce-links"><a href="../../examples/plotter_export/">plotter_export example -&gt;</a><a href="../../examples/plotter_calibration/">plotter_calibration example -&gt;</a></p>
-  </section>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>A line with one physical pass.</p></div>
+        <div class="ce-step"><span>Build</span><p>Local bleed on that line only.</p></div>
+        <div class="ce-step"><span>Result</span><p>Ink gathers through repeated paths.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>The black seam above the lower frame.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview"><div id="m-ink" class="ce-canvas" data-step="ink"></div></div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">plot.line(45, 444, 515, 444, {
+  layer: "rules",
+  bleed: 0.32,
+  bleedPasses: 2,
+  bleedSpread: 0.8
+});</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section ce-module" id="plot">
+      <div class="section-header">
+        <div class="section-tag">17 &middot; downloadPlotterSVG()</div>
+        <h2>The plot</h2>
+        <p class="ce-thesis">The work leaves the screen as the same paths, divided by physical pen.</p>
+        <p class="ce-source"><span>Contemporary destination</span> centerlines on paper</p>
+        <p class="section-desc">No opacity, pressure or digital line-width control is promised to a fixed pen.</p>
+      </div>
+      <div class="ce-strip ce-strip-four">
+        <div class="ce-step"><span>Start</span><p>One complete vector composition.</p></div>
+        <div class="ce-step"><span>Build</span><p>One plotter-safe SVG export.</p></div>
+        <div class="ce-step"><span>Result</span><p>Clipped, optimized centerlines.</p></div>
+        <div class="ce-step"><span>In the poster</span><p>No new mark: the sheet becomes physical.</p></div>
+      </div>
+      <div class="ce-demo">
+        <div class="ce-preview">
+          <div class="ce-canvas ce-plot-specimen">
+            <strong>SVG</strong>
+            <span>A4 / A3 / A2</span>
+            <span>1 frame &middot; 1 rules &middot; 1 word &middot; 1 machine &middot; 1 fields</span>
+            <span class="red">2 return &middot; 2 hand</span>
+            <small>centerlines &middot; clipping on &middot; route optimized</small>
+          </div>
+        </div>
+        <div class="ce-codewrap">
+          <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-javascript">plot.downloadPlotterSVG("gysin-remembers-a4.svg", {
+  page: GysinPoster.pageFor("A4"),
+  penMap: GysinPoster.penMap,
+  tool: "pen",
+  optimize: true
+});</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section ce-module ce-poster-section ce-final-section" id="full">
+      <div class="section-header">
+        <div class="section-tag">18 &middot; the same sheet</div>
+        <h2>Take it to paper</h2>
+        <p class="ce-thesis">No final flourish. Every mark has already been named.</p>
+        <p class="ce-source"><span>Complete composition</span> the opening sheet, unchanged</p>
+        <p class="section-desc">Choose the physical size, reroll the same roles, or export the numbered pen layers.</p>
+      </div>
+      <div class="ce-poster-stage">
+        <div id="m-full" class="ce-canvas" data-step="all"></div>
+      </div>
+      <div class="ce-output-controls">
+        <label for="poster-format">Paper
+          <select id="poster-format">
+            <option value="A4" selected>A4 &middot; 21 &times; 29.7 cm</option>
+            <option value="A3">A3 &middot; 29.7 &times; 42 cm</option>
+            <option value="A2">A2 &middot; 42 &times; 59.4 cm</option>
+          </select>
+        </label>
+        <button type="button" id="poster-reroll">Reroll</button>
+        <button type="button" id="poster-download" class="primary">Plotter SVG</button>
+      </div>
+      <output id="physical-settings">A4 &middot; 210 &times; 297 mm &middot; 10 mm side margin &middot; pen 1 black &middot; pen 2 red</output>
+    </section>
+  </main>
 
   <footer>
     <p><a href="../../index.html#examples">Examples</a> &nbsp;&middot;&nbsp; <a href="../system.html">System</a></p>
     <p class="footer-sub">p5.gysin v1.0.1</p>
   </footer>
 
+  <button type="button" id="chapter-prev" class="plate-arrow" aria-label="Previous chapter">&larr;</button>
+  <button type="button" id="chapter-next" class="plate-arrow" aria-label="Next chapter">&rarr;</button>
+
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="../../p5.gysin.min.js"></script>
   <script src="../../p5.gysin.text.min.js?v=chant"></script>
   <script src="../../p5.gysin.underwood.min.js"></script>
-  <script>
-  const PAPER = '#f0efe9';
-  const INK = '#17140f';
-  const RED = '#c0392b';
-
-  function copyCode(btn) {
-    const code = btn.parentElement.querySelector('code');
-    navigator.clipboard.writeText(code.innerText).then(function () {
-      const old = btn.textContent;
-      btn.textContent = 'Copied';
-      setTimeout(function () { btn.textContent = old; }, 1200);
-    });
-  }
-
-  function makeGysinPreview(id, ratio, builder) {
-    new p5(function (p) {
-      let plot;
-      function size() {
-        const el = document.getElementById(id);
-        const w = Math.max(280, el.clientWidth);
-        return { w: w, h: Math.round(w * ratio) };
-      }
-      p.setup = function () {
-        const s = size();
-        p.createCanvas(s.w, s.h).parent(id);
-        p.pixelDensity(1);
-        p.noLoop();
-        plot = builder(p, s.w, s.h);
-      };
-      p.draw = function () {
-        p.background(PAPER);
-        if (plot) plot.draw();
-      };
-      p.windowResized = function () {
-        const s = size();
-        p.resizeCanvas(s.w, s.h);
-        plot = builder(p, s.w, s.h);
-        p.redraw();
-      };
-    }, id);
-  }
-
-  function base(p, w, h, seed) {
-    return new GysinPlot({ p: p, seed: seed, width: w, height: h, style: { stroke: INK, strokeWeight: 1.2, alpha: 0.9 } });
-  }
-
-  // One source composition. The chapters below isolate gestures from here.
-  // Black is the holding structure; red is the returning voice.
-  function buildRememberedSheet(plot, w, h) {
-    const black = { layer: 'black' };
-    const red = { layer: 'red', stroke: RED };
-
-    // Three open frames adapted from Seb's saved gysin-remembers test.
-    plot.rect(w * 0.11, h * -0.078, w * 0.756, h * 0.189, {
-      ...black, fray: 0.3, dropout: 0.14
-    });
-    plot.rect(w * 0.11, h * 0.1, w * 0.756, h * 0.289, {
-      ...black, fray: 0.3, dropout: 0.14
-    });
-    plot.rect(w * 0.11, h * 0.556, w * 0.756, h * 0.4, {
-      ...black, fray: 0.3, dropout: 0.14
-    });
-    plot.path([
-      [w * 0.11, h * 0.556],
-      [w * 0.36, h * 0.527],
-      [w * 0.867, h * 0.556]
-    ], { ...black, breathe: 1.0 });
-
-    // The lower frame is ruled, then covered with letter and operator fields.
-    for (let i = 1; i < 13; i++) {
-      const y = h * (0.62 + i * 0.015);
-      plot.line(w * 0.114, y, w * 0.878, y, {
-        ...black, dropout: 0.2, rubout: 0.18
-      });
-    }
-    plot.letters('REMEMBERS', w * 0.1, h * 0.59, w * 0.8, h * 0.12, {
-      ...black, size: w * 0.025, glyphJitter: 0.75, dropout: 0.36
-    });
-    plot.symbols(w * 0.1, h * 0.71, w * 0.8, h * 0.11, {
-      ...black, set: '/"()-:', size: w * 0.024, cluster: true, dropout: 0.26
-    });
-
-    // The ring, the title and the margin hand form one red return.
-    plot.circle(w * 0.356, h * 0.374, w * 0.625, {
-      ...red, repeat: 3, rubout: 0.2
-    });
-    plot.underwood('REMEMBERS', w * 0.114, h * 0.4, {
-      ...red, size: w * 0.068, bold: true, wear: 1.6
-    });
-    for (let i = 0; i < 4; i++) {
-      plot.asemic(w * (0.015 + i * 0.235), h * 0.79, w * 0.2, h * 0.18, {
-        ...red, breathe: 1.4
-      });
-    }
-
-    // The words remain legible while their treatment changes.
-    plot.underwood('BRION GYSIN', w * 0.095, h * 0.098, {
-      ...black, size: w * 0.025
-    });
-    plot.underwood('OBSERVE', w * 0.66, h * 0.098, {
-      ...red, size: w * 0.021, underline: 1
-    });
-    plot.underwood('THE SMALL VOICE.', w * 0.08, h * 0.19, {
-      ...black, size: w * 0.023
-    });
-    plot.text('WRITE', w * 0.08, h * 0.27, {
-      ...black, size: w * 0.09, breathe: 0.4
-    });
-    plot.text('WRITE', w * 0.08, h * 0.43, {
-      ...black, size: w * 0.09, breathe: 1.4, dropout: 0.08
-    });
-    plot.text('WRITE', w * 0.08, h * 0.5, {
-      ...black, size: w * 0.09, breathe: 2.2, dropout: 0.2, rubout: 0.2
-    });
-    plot.textCutup('THE WORD', w * 0.51, h * 0.29, {
-      ...black, size: w * 0.043, slices: 5, sliceOffset: w * 0.012
-    });
-    plot.chant('CUT TURN RETURN', w * 0.52, h * 0.18, {
-      ...black, size: w * 0.018, leading: h * 0.035
-    });
-    const turned = 'WRITE';
-    for (let i = 0; i < turned.length; i++) {
-      plot.text(turned[i], w * 0.89, h * (0.14 + i * 0.07), {
-        ...black, size: w * 0.032, breathe: 0.9
-      });
-    }
-    plot.rub('WRITE', w * 0.1, h * 0.91, {
-      ...black, size: w * 0.052
-    });
-    plot.underwood('CUT / TURN / RETURN / PLOT', w * 0.49, h * 0.955, {
-      ...black, size: w * 0.014, wear: 0.5
-    });
-  }
-
-  // 02 the frames
-  makeGysinPreview('m-sheet', 0.66, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    plot.rect(w * 0.1, h * -0.13, w * 0.76, h * 0.29, {
-      fray: 0.3, dropout: 0.14
-    });
-    plot.rect(w * 0.1, h * 0.14, w * 0.76, h * 0.35, {
-      fray: 0.3, dropout: 0.14
-    });
-    plot.rect(w * 0.1, h * 0.57, w * 0.76, h * 0.42, {
-      fray: 0.3, dropout: 0.14
-    });
-    return plot;
-  });
-
-  // 03 scraps
-  makeGysinPreview('m-scraps', 0.66, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    plot.line(w * 0.08, h * 0.2, w * 0.9, h * 0.22, { dropout: 0.2, rubout: 0.18 });
-    plot.circle(w * 0.36, h * 0.52, w * 0.5, { stroke: RED, repeat: 3, rubout: 0.2 });
-    plot.path([
-      [w * 0.1, h * 0.8], [w * 0.36, h * 0.72], [w * 0.88, h * 0.8]
-    ], { breathe: 1.0 });
-    return plot;
-  });
-
-  // 04 the word
-  makeGysinPreview('m-word', 0.66, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    plot.text('WRITE', w * 0.08, h * 0.24, { size: w * 0.14, breathe: 0.4 });
-    plot.text('WRITE', w * 0.08, h * 0.52, { size: w * 0.14, breathe: 1.4, dropout: 0.08 });
-    plot.text('WRITE', w * 0.08, h * 0.8, { size: w * 0.14, breathe: 2.2, dropout: 0.2, rubout: 0.2 });
-    return plot;
-  });
-
-  // 05 scissors
-  makeGysinPreview('m-scissors', 0.66, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    plot.textCutup('REMEMBERS', w * 0.06, h * 0.55, { size: w * 0.095, slices: 5, sliceOffset: w * 0.02 });
-    return plot;
-  });
-
-  // 06 arrange
-  makeGysinPreview('m-arrange', 0.66, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    plot.chant('CUT TURN RETURN', w * 0.07, h * 0.18, {
-      size: w * 0.052,
-      leading: h * 0.17
-    });
-    return plot;
-  });
-
-  // 07 the letter field
-  makeGysinPreview('m-letterbox', 0.66, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    plot.letters('REMEMBERS', w * 0.08, h * 0.12, w * 0.84, h * 0.74, {
-      size: w * 0.028, glyphJitter: 0.7, breathe: 0.5, dropout: 0.05
-    });
-    return plot;
-  });
-
-  // 08 the turn
-  makeGysinPreview('m-turn', 0.66, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    plot.underwood('cut the word / turn the sheet / return', w * 0.06, h * 0.5, { size: w * 0.03 });
-    plot.underwood('turn the sheet / return / cut the word', w * 0.06, h * 0.74, { size: w * 0.03, wear: 0.5 });
-    const word = 'WRITE';
-    for (let i = 0; i < word.length; i++) {
-      plot.text(word[i], w * 0.82, h * (0.13 + i * 0.14), {
-        size: w * 0.072, breathe: 0.9
-      });
-    }
-    return plot;
-  });
-
-  // 09 the mark field
-  makeGysinPreview('m-markbox', 0.66, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    plot.symbols(w * 0.08, h * 0.24, w * 0.84, h * 0.5, {
-      set: '/"()-:', cluster: true, size: w * 0.032, breathe: 0.5
-    });
-    return plot;
-  });
-
-  // 10 the typed voice
-  makeGysinPreview('m-label', 0.66, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    plot.underwood('BRION GYSIN', w * 0.07, h * 0.28, { size: w * 0.052, underline: 1 });
-    plot.underwood('OBSERVE / CONTINUE', w * 0.07, h * 0.52, { size: w * 0.042, bold: true });
-    plot.underwood('write / cut / turn / return', w * 0.07, h * 0.7, { size: w * 0.034 });
-    plot.underwood('* * * * * * * * * *', w * 0.07, h * 0.86, { size: w * 0.036, wear: 0.6 });
-    return plot;
-  });
-
-  // 11 return & ink
-  makeGysinPreview('m-glue', 0.66, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    plot.circle(w * 0.5, h * 0.5, w * 0.52, {
-      stroke: RED, layer: 'red', repeat: 3, rubout: 0.2
-    });
-    return plot;
-  });
-
-  // 12 wear
-  makeGysinPreview('m-wear', 0.66, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    plot.rub('WRITE', w * 0.08, h * 0.42, { size: w * 0.12 });
-    return plot;
-  });
-
-  // 13 the margin hand
-  makeGysinPreview('m-note', 0.66, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    const gx = w * 0.04, gy = h * 0.18, gw = w * 0.92;
-    const cw = gw / 4;
-    for (let i = 0; i < 4; i++) {
-      plot.asemic(gx + i * cw, gy, cw * 0.9, h * 0.62, {
-        stroke: RED, layer: 'red', breathe: 1.4
-      });
-    }
-    return plot;
-  });
-
-  // 14 pens & paper
-  makeGysinPreview('m-pens', 0.66, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    plot.rect(w * 0.08, h * 0.1, w * 0.84, h * 0.8, {
-      layer: 'black', breathe: 0.9, overshoot: 6, bleed: 0.25
-    });
-    plot.underwood('REMEMBERS', w * 0.14, h * 0.48, {
-      size: w * 0.075, stroke: RED, layer: 'red'
-    });
-    plot.asemic(w * 0.16, h * 0.6, w * 0.34, h * 0.2, {
-      stroke: RED, layer: 'red', breathe: 1.4, dropout: 0.05
-    });
-    return plot;
-  });
-
-  // 01 the whole sheet (portrait)
-  makeGysinPreview('m-collage', 1.36, function (p, w, h) {
-    const plot = base(p, w, h, 19600319);
-    buildRememberedSheet(plot, w, h);
-    return plot;
-  });
-
-  </script>
-  <button type="button" id="chapter-prev" class="plate-arrow" aria-label="Previous chapter">&larr;</button>
-  <button type="button" id="chapter-next" class="plate-arrow" aria-label="Next chapter">&rarr;</button>
-  <script>
-  // Chapter mode: one module at a time; the chips above stay as the index.
-  // Without JavaScript every module stays visible and the chips anchor-jump.
-  (function () {
-    const modules = Array.from(document.querySelectorAll("section.ce-module"));
-    const chips = Array.from(document.querySelectorAll(".ce-chips a"));
-    if (!modules.length || !chips.length) return;
-    document.body.classList.add("chapters");
-    let current = -1;
-
-    function show(index) {
-      current = (index + modules.length) % modules.length;
-      modules.forEach(function (module, i) {
-        module.classList.toggle("chapter-active", i === current);
-      });
-      chips.forEach(function (chip) {
-        chip.classList.toggle("active", chip.getAttribute("href") === "#" + modules[current].id);
-      });
-      history.replaceState(null, "", "#" + modules[current].id);
-      // Let the p5 previews size themselves now that this module is visible.
-      window.dispatchEvent(new Event("resize"));
-      // The page holds its place when a chapter turns: no yank back to the top
-      // on every turn. The reader keeps the height they were reading at.
-    }
-
-    chips.forEach(function (chip) {
-      chip.addEventListener("click", function (event) {
-        const target = document.querySelector(chip.getAttribute("href"));
-        const index = modules.indexOf(target);
-        if (index === -1) return;
-        event.preventDefault();
-        show(index);
-      });
-    });
-
-    document.getElementById("chapter-prev").addEventListener("click", function () { show(current - 1); });
-    document.getElementById("chapter-next").addEventListener("click", function () { show(current + 1); });
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "ArrowLeft") show(current - 1);
-      else if (event.key === "ArrowRight") show(current + 1);
-    });
-
-    let start = 0;
-    try {
-      const fromHash = modules.indexOf(document.querySelector(location.hash));
-      if (fromHash !== -1) start = fromHash;
-    } catch (error) { /* invalid hash: start at the first chapter */ }
-    show(start);
-  })();
-  </script>
+  <script src="composition.js?v=poster-process"></script>
+  <script src="curation.js?v=poster-process"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
 </body>
 </html>
