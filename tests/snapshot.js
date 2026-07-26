@@ -772,6 +772,80 @@ assert.equal(weaveJSON.shapes[0].params.weave.fragments[0].source.length > 0, tr
 assert.match(weavePlotA.plot.exportSVG(), /data-shape-id=/);
 assert.match(weavePlotA.plot.exportHPGL(), /PD/);
 
+function rightmostWeaveInk(shape) {
+  let maxX = shape.bounds ? shape.bounds.maxX : -Infinity;
+  for (const trace of shape.generated) {
+    for (const point of trace.points) maxX = Math.max(maxX, point.x);
+  }
+  return maxX;
+}
+
+const fittedWeave = buildWeave(chantSource, { maxWidth: 260 });
+const fittedWeaveMin = buildWeave(chantMin, { maxWidth: 260 });
+const fittedSizes = fittedWeave.ids.map((id) => fittedWeave.plot.get(id).params.size);
+assert.equal(new Set(fittedSizes).size, 1, "weave maxWidth gives every line one shared size");
+assert.ok(fittedSizes[0] < 25, "weave maxWidth shrinks an oversized group");
+for (const id of fittedWeave.ids) {
+  assert.ok(
+    rightmostWeaveInk(fittedWeave.plot.get(id)) <= 54 + 260,
+    "weave maxWidth keeps every line inside the available width"
+  );
+}
+assert.equal(
+  JSON.stringify(fittedWeave.ids.map((id) => fittedWeave.plot.get(id).generated)),
+  JSON.stringify(fittedWeaveMin.ids.map((id) => fittedWeaveMin.plot.get(id).generated)),
+  "fitted plot.weave min build matches source"
+);
+for (let reroll = 0; reroll < 20; reroll++) {
+  fittedWeave.plot.reroll();
+  for (const id of fittedWeave.ids) {
+    assert.ok(
+      rightmostWeaveInk(fittedWeave.plot.get(id)) <= 54 + 260,
+      "fitted weave stays inside maxWidth after reroll"
+    );
+  }
+}
+
+const roomyWeave = buildWeave(chantSource, { maxWidth: 2000 });
+assert.ok(
+  roomyWeave.ids.every((id) => roomyWeave.plot.get(id).params.size === 25),
+  "weave maxWidth never enlarges text"
+);
+assert.equal(
+  JSON.stringify(roomyWeave.ids.map((id) => roomyWeave.plot.get(id).generated)),
+  JSON.stringify(weavePlotA.ids.map((id) => weavePlotA.plot.get(id).generated)),
+  "a roomy maxWidth leaves the existing weave byte-identical"
+);
+
+const scalableOutlineFont = {
+  textToPoints() { return []; },
+  font: {
+    getPath(value, x, y, size) {
+      return {
+        commands: [
+          { type: "M", x, y },
+          { type: "L", x: x + String(value).length * size * 0.6, y }
+        ]
+      };
+    }
+  }
+};
+const fittedOutlineWeave = buildWeave(chantSource, {
+  maxWidth: 220,
+  font: scalableOutlineFont,
+  breathe: 0,
+  glyphJitter: 0
+});
+assert.equal(
+  new Set(fittedOutlineWeave.ids.map((id) => fittedOutlineWeave.plot.get(id).params.size)).size,
+  1,
+  "weave maxWidth shares one size with an outline font"
+);
+assert.ok(
+  fittedOutlineWeave.ids.every((id) => rightmostWeaveInk(fittedOutlineWeave.plot.get(id)) <= 54 + 220),
+  "weave maxWidth measures the supplied outline vectors"
+);
+
 const frozenWeaveId = weavePlotA.ids[0];
 const movingWeaveId = weavePlotA.ids[1];
 const frozenWeaveBefore = JSON.stringify(weavePlotA.plot.get(frozenWeaveId).generated);
@@ -786,6 +860,7 @@ assert.equal(weavePlotA.plot.get(frozenWeaveId).params.value, frozenWeaveText);
 assert.equal(weavePlotA.plot.get(movingWeaveId).params.value, movingWeaveText);
 assert.throws(() => buildWeave(chantSource, { size: 0 }), /size must be greater than zero/);
 assert.throws(() => buildWeave(chantSource, { leading: 0 }), /leading must be greater than zero/);
+assert.throws(() => buildWeave(chantSource, { maxWidth: 0 }), /maxWidth must be greater than zero/);
 assert.throws(() => chantSource.GysinPlot.prototype.weave.call({}, weaveSources, 0, 0), /needs a GysinPlot/);
 
 // The turned sheet: angle/pivot and the lattice() verb stay deterministic and

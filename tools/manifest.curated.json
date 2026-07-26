@@ -44,7 +44,7 @@
       "name": "GysinText.weave / weave",
       "added_in": "1.0.0",
       "status": "optional-addon",
-      "note": "Seeded text weaving across two through eight sources. The pure helper returns lines with exact source offsets; the plot verb writes those lines and preserves their provenance in JSON."
+      "note": "Seeded text weaving across two through eight sources. The pure helper returns lines with exact source offsets; the plot verb writes those lines, preserves their provenance in JSON, and can shrink the whole group to one shared size within maxWidth."
     }
   ]
 }

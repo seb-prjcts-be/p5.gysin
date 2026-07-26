@@ -17,6 +17,8 @@
   const MAX_WEAVE_LINES = 100;
   const MIN_WEAVE_FRAGMENTS = 2;
   const MAX_WEAVE_FRAGMENTS = 6;
+  const WEAVE_FIT_GUARD = 0.97;
+  const MAX_WEAVE_FIT_PASSES = 8;
 
   class SeededRandom {
     constructor(seed) {
@@ -428,7 +430,8 @@
     "unit",
     "fragments",
     "size",
-    "leading"
+    "leading",
+    "maxWidth"
   ]);
 
   function weavePlot(sources, x, y, options) {
@@ -445,6 +448,9 @@
     const leading = o.leading === undefined
       ? 42
       : requirePositive(o.leading, "weave leading");
+    const maxWidth = o.maxWidth === undefined
+      ? null
+      : requirePositive(o.maxWidth, "weave maxWidth");
     const result = weaveSources(sources, {
       seed,
       lines: o.lines,
@@ -471,7 +477,46 @@
       });
       ids.push(id);
     });
+    if (maxWidth !== null) fitWeaveWidth(this, ids, startX, size, maxWidth);
     return ids;
+  }
+
+  // Fit the group as one typographic voice: the longest line chooses one
+  // shrink-only size for every line. Bounds come from the actual captured
+  // vectors, so bitmap and supplied outline fonts follow the same rule.
+  function fitWeaveWidth(plot, ids, startX, requestedSize, maxWidth) {
+    let fittedSize = requestedSize;
+
+    for (let pass = 0; pass < MAX_WEAVE_FIT_PASSES; pass++) {
+      const extent = weaveGroupExtent(plot, ids, startX);
+      if (extent <= maxWidth) return fittedSize;
+
+      fittedSize *= (maxWidth / extent) * WEAVE_FIT_GUARD;
+      for (const id of ids) plot.update(id, { params: { size: fittedSize } });
+    }
+
+    if (weaveGroupExtent(plot, ids, startX) > maxWidth) {
+      for (const id of ids) plot.remove(id);
+      throw new RangeError("weave() could not fit inside maxWidth with these material options.");
+    }
+    return fittedSize;
+  }
+
+  function weaveGroupExtent(plot, ids, startX) {
+    let maxX = startX;
+
+    for (const id of ids) {
+      const shape = plot.shapeMap && typeof plot.shapeMap.get === "function"
+        ? plot.shapeMap.get(id)
+        : plot.get(id);
+      if (!shape) continue;
+      let shapeMaxX = shape.bounds ? shape.bounds.maxX : startX;
+      for (const trace of shape.generated) {
+        for (const point of trace.points) shapeMaxX = Math.max(shapeMaxX, point.x);
+      }
+      maxX = Math.max(maxX, shapeMaxX + Math.max(0, Number(shape.style.strokeWeight) || 0) / 2);
+    }
+    return Math.max(0, maxX - startX);
   }
 
   function requireFinite(value, label) {

@@ -22,7 +22,14 @@ function sources() {
 function makeCut() {
   try {
     const next = new GysinPlot({ seed: cutSeed, width: W, height: H });
-    ids = next.weave(sources(), 42, 82, { seed: cutSeed, lines: 5, size: 12.5, leading: 94, breathe: 0.4 });
+    ids = next.weave(sources(), 42, 82, {
+      seed: cutSeed,
+      lines: 5,
+      size: 12.5,
+      leading: 94,
+      maxWidth: W - 84,
+      breathe: 0.4
+    });
     plot = next;
     document.getElementById("weave-status").textContent = `${ids.length} lines · seed ${cutSeed} · phrase fragments`;
     redraw();
