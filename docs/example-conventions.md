@@ -153,6 +153,19 @@ verbatim verplaatst). Toets elke nieuwe sectie hieraan: "in welke van de zeven
 lagen zoekt een lezer dit?" - en zet hem daar, ook als het idee jonger is dan
 alles eromheen.
 
+## Regel 10 - Eén site, één menubalk
+
+Interne voorbeelden blijven binnen de gewone sitenavigatie. Enter en Collage
+wisselen bestaande platen of hoofdstukken in de normale documentstroom; zij
+bedekken de hoofdnavigatie niet met een tweede menubalk.
+
+- `target="_blank"` is alleen toegestaan voor externe websites.
+- Een volledig voorbeeld mag zijn zelfstandige URL behouden, maar een interne
+  link ernaartoe opent in hetzelfde tabblad.
+- De Enter-tegels tonen precies één `.plate` en houden de primaire menubalk
+  zichtbaar; links/rechts gebruikt hetzelfde sobere pijlenpatroon als Collage.
+- `tools/check-links.js` bewaakt zowel lokale doelen als dit same-tab-contract.
+
 ## Checklist per voorbeeld
 
 - [ ] On-ramp-kop toegevoegd, met het juiste woord/de juiste maten.
@@ -166,3 +179,5 @@ alles eromheen.
 - [ ] Letterstem klopt: cut-up alleen als concept; kaart in de stem van het
       voorbeeld (Regel 7).
 - [ ] Geen lege toonvlakken; een blok is lijnen/letters/tekens (Regel 8).
+- [ ] Interne links blijven in hetzelfde tabblad en onder de gewone menubalk
+      (Regel 10).
