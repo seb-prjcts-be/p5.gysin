@@ -391,7 +391,9 @@ plot.draw();</code></pre>
       <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
 
 plot.weave(sources, width * 0.055, height * 0.145, {
-  lines: 5,
+  lines: 4,
+  unit: "clause",
+  fragments: 2,
   maxWidth: width * 0.89
 });
 

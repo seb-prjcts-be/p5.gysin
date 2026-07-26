@@ -43,30 +43,31 @@
         <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
 
 plot.weave(sources, width * 0.055, height * 0.145, {
-  lines: 5,
+  lines: 4,
+  unit: "clause",
+  fragments: 2,
   maxWidth: width * 0.89
 });
 
 plot.draw();</code></pre>
         <div class="demo-note"><a href="composition.js">Open the complete composition</a> · the same file draws the Enter plate and this work.</div>
         <div class="source-pair">
-          <label>Window
-            <textarea id="source-a" maxlength="20000">The window keeps the last light of the street. Someone closes the curtains before the rain arrives.</textarea>
+          <label>A · Window
+            <textarea id="source-a" maxlength="20000">Window holds light. The room waits.</textarea>
           </label>
-          <label>Letter
-            <textarea id="source-b" maxlength="20000">Your letter arrived after the room was empty. I left its folded weather beside the door.</textarea>
+          <label>B · Letter
+            <textarea id="source-b" maxlength="20000">A letter came late. Paper remembers.</textarea>
           </label>
         </div>
         <div class="demo-actions" aria-label="Weave actions">
-          <button type="button" id="cut-button">New cut</button>
-          <button type="button" id="ink-button">Reroll ink</button>
+          <button type="button" id="weave-button">Weave again</button>
           <button type="button" id="json-button">Download JSON</button>
           <button type="button" id="svg-button">Download SVG</button>
         </div>
-        <div class="demo-note"><strong>New cut</strong> changes the collision. <strong>Reroll ink</strong> keeps the words and disturbs only their trace.</div>
+        <div class="demo-note"><strong>Weave again</strong> recombines the same two sources. JSON keeps the source address of every clause.</div>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas weave-canvas" id="sketch" role="img" aria-label="Five plotter-drawn lines woven from two editable source texts."></div>
+        <div class="demo-canvas weave-canvas" id="sketch" role="img" aria-label="Four clean plotter-drawn lines woven from two editable source texts."></div>
         <div class="demo-note" id="weave-status" role="status" aria-live="polite">Weaving the two sources…</div>
       </div>
     </div>

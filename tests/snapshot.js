@@ -957,6 +957,15 @@ for (const [name, workName] of sharedCompositions) {
   assert.match(sketch, new RegExp(`GysinWorks\\.${workName}\\.build\\(`));
   assert.match(showcasePage, new RegExp(`src="examples/${name}/composition\\.js"`));
   assert.match(showcasePage, new RegExp(`GysinWorks\\.${workName}\\.build\\(`));
+
+  if (name === "weave") {
+    assert.doesNotMatch(composition, /\b(?:breathe|dropout|repeat|rubout)\b|textCutup|reroll/);
+    assert.match(composition, /lines\s*=\s*o\.lines\s*\|\|\s*4/);
+    assert.match(composition, /unit:\s*"clause"/);
+    assert.match(composition, /fragments:\s*2/);
+    assert.match(page, /id="weave-button">Weave again<\/button>/);
+    assert.doesNotMatch(page, /Reroll ink|id="ink-button"|id="cut-button"/);
+  }
 }
 
 console.log("p5.gysin snapshot ok");

@@ -4,11 +4,11 @@
   const SOURCES = Object.freeze([
     Object.freeze({
       id: "window",
-      text: "The window keeps the last light of the street. Someone closes the curtains before the rain arrives."
+      text: "Window holds light. The room waits."
     }),
     Object.freeze({
       id: "letter",
-      text: "Your letter arrived after the room was empty. I left its folded weather beside the door."
+      text: "A letter came late. Paper remembers."
     })
   ]);
 
@@ -17,7 +17,7 @@
     const width = o.width || 760;
     const height = o.height || 560;
     const seed = o.seed === undefined ? 1960 : o.seed;
-    const lines = o.lines || 5;
+    const lines = o.lines || 4;
     const x = width * 0.055;
     const y = height * 0.145;
     const plot = new global.GysinPlot({
@@ -25,15 +25,15 @@
       seed,
       width,
       height,
-      style: { stroke: "#171717", strokeWeight: 0.82, alpha: 0.88 }
+      style: { stroke: "#171717", strokeWeight: 1.05, alpha: 1 }
     });
     const ids = plot.weave(o.sources || SOURCES, x, y, {
-      seed,
       lines,
-      size: width * 0.02,
+      unit: "clause",
+      fragments: 2,
+      size: width * 0.028,
       leading: lines > 1 ? (height - y * 2) / (lines - 1) : 0,
-      maxWidth: width - x * 2,
-      breathe: 0.4
+      maxWidth: width - x * 2
     });
     return { plot, ids };
   }

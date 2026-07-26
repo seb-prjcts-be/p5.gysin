@@ -2,14 +2,14 @@ const W = 760;
 const H = 560;
 let plot;
 let ids = [];
-let cutSeed = 1960;
+let weaveSeed = 1960;
 
 function setup() {
   createCanvas(W, H).parent("sketch");
   pixelDensity(1);
   noLoop();
   wireActions();
-  makeCut();
+  makeWeave();
 }
 
 function draw() {
@@ -24,18 +24,18 @@ function sources() {
   ];
 }
 
-function makeCut() {
+function makeWeave() {
   try {
     const work = GysinWorks.weave.build({
       width: W,
       height: H,
-      seed: cutSeed,
+      seed: weaveSeed,
       sources: sources()
     });
     plot = work.plot;
     ids = work.ids;
     document.getElementById("weave-status").textContent =
-      `${ids.length} lines · seed ${cutSeed} · phrase fragments`;
+      `${ids.length} woven lines · seed ${weaveSeed} · two clauses per line`;
     redraw();
   } catch (error) {
     document.getElementById("weave-status").textContent = error.message;
@@ -43,8 +43,7 @@ function makeCut() {
 }
 
 function wireActions() {
-  document.getElementById("cut-button").onclick = () => { cutSeed += 1; makeCut(); };
-  document.getElementById("ink-button").onclick = () => { plot.reroll(); redraw(); };
+  document.getElementById("weave-button").onclick = () => { weaveSeed += 1; makeWeave(); };
   document.getElementById("json-button").onclick =
     () => plot.downloadJSON("p5-gysin-weave.json");
   document.getElementById("svg-button").onclick =
