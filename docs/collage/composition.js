@@ -241,6 +241,22 @@
     return plot;
   }
 
+  function createPlot(options) {
+    const settings = options || {};
+    const width = settings.width === undefined ? WIDTH : settings.width;
+    const height = settings.height === undefined ? HEIGHT : settings.height;
+    const plot = new global.GysinPlot({
+      p: settings.p || null,
+      seed: settings.seed === undefined ? SEED : settings.seed,
+      width,
+      height,
+      style: { stroke: INK }
+    });
+    return settings.step
+      ? buildStep(plot, settings.step, { width, height })
+      : build(plot, { width, height });
+  }
+
   function pageFor(name) {
     const formatName = String(name || "A4").toUpperCase();
     const sheet = FORMATS[formatName];
@@ -276,6 +292,7 @@
     ingredients: INGREDIENTS,
     build,
     buildStep,
+    createPlot,
     pageFor
   });
 })(typeof globalThis !== "undefined" ? globalThis : window);

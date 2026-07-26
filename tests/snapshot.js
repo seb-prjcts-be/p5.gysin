@@ -1121,7 +1121,7 @@ assert.ok(
 assert.doesNotMatch(collagePage, /#leave|id="leave"|m-leave|off the page/i);
 assert.match(collagePage, /id="m-overview" class="ce-canvas" data-step="all"/);
 assert.match(collagePage, /id="m-full" class="ce-canvas" data-step="all"/);
-assert.match(collagePage, /<script src="composition\.js\?v=poster-process"><\/script>\s*<script src="curation\.js\?v=poster-process"><\/script>/);
+assert.match(collagePage, /<script src="composition\.js\?v=poster-export-fix"><\/script>\s*<script src="curation\.js\?v=poster-export-fix"><\/script>/);
 assert.match(collagePage, /A4 &middot; 21 &times; 29\.7 cm/);
 assert.match(collagePage, /A3 &middot; 29\.7 &times; 42 cm/);
 assert.match(collagePage, /A2 &middot; 42 &times; 59\.4 cm/);
@@ -1143,7 +1143,10 @@ assert.match(collageComposition, /const verticalMargin = \(sheet\.height - HEIGH
 assert.match(collageComposition, /clip: true/);
 assert.doesNotMatch(collageComposition, /\b(?:alpha|pressure|strokeWeight)\s*:/);
 assert.doesNotMatch(collageCuration, /\b(?:alpha|pressure|strokeWeight)\s*:/);
-assert.match(collageCuration, /downloadPlotterSVG\(`gysin-remembers-\$\{state\.format\.toLowerCase\(\)\}\.svg`, \{/);
+assert.match(collageComposition, /function createPlot\(options\)/);
+assert.match(collageCuration, /const exportPlot = poster\.createPlot\(\{[\s\S]*width: poster\.width,[\s\S]*height: poster\.height[\s\S]*\}\);/);
+assert.match(collageCuration, /exportPlot\.downloadPlotterSVG\(`gysin-remembers-\$\{state\.format\.toLowerCase\(\)\}\.svg`, \{/);
+assert.doesNotMatch(collageCuration, /record\.plot\.downloadPlotterSVG/);
 assert.match(collageCuration, /tool: "pen",[\s\S]*optimize: true/);
 
 const collageContext = { console };
@@ -1158,13 +1161,7 @@ for (const filename of [
   vm.runInContext(fs.readFileSync(path.join(root, filename), "utf8"), collageContext, { filename });
 }
 const poster = collageContext.GysinPoster;
-const posterPlot = new collageContext.GysinPlot({
-  seed: poster.seed,
-  width: poster.width,
-  height: poster.height,
-  style: { stroke: poster.ink }
-});
-poster.build(posterPlot);
+const posterPlot = poster.createPlot({ seed: poster.seed });
 const posterPage = poster.pageFor("A4");
 const posterSvg = posterPlot.exportPlotterSVG({
   page: posterPage,
@@ -1184,6 +1181,29 @@ assert.deepEqual(posterLayers, [
 ]);
 assert.ok(posterLayers.every((label) => /^[12] /.test(label)));
 assert.doesNotMatch(posterSvg, /\s(?:opacity|stroke-width)="(?!0\.1mm)/);
+for (const viewportWidth of [280, 390, 760]) {
+  const viewportHeight = Math.round(viewportWidth * poster.height / poster.width);
+  const previewPlot = poster.createPlot({
+    seed: poster.seed,
+    width: viewportWidth,
+    height: viewportHeight
+  });
+  const previewSvg = previewPlot.exportPlotterSVG({
+    page: posterPage,
+    penMap: poster.penMap,
+    tool: "pen",
+    optimize: true
+  });
+  const canonicalPlot = poster.createPlot({ seed: poster.seed });
+  const canonicalSvg = canonicalPlot.exportPlotterSVG({
+    page: posterPage,
+    penMap: poster.penMap,
+    tool: "pen",
+    optimize: true
+  });
+  assert.notEqual(previewSvg, posterSvg, `a ${viewportWidth}px preview is not a physical export`);
+  assert.equal(canonicalSvg, posterSvg, `physical export ignores a ${viewportWidth}px preview`);
+}
 assert.match(siteStyle, /body\.chapters #chapter-prev,[\s\S]*bottom: 12px/);
 
 const plotterExportPage = fs.readFileSync(path.join(examplesDir, "plotter_export", "index.html"), "utf8");

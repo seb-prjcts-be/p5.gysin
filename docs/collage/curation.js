@@ -18,18 +18,13 @@
 
   function buildPlot(record) {
     const p = record.p;
-    const plot = new GysinPlot({
+    const plot = poster.createPlot({
       p,
       seed: record.step === "all" ? state.seed : poster.seed,
       width: p.width,
       height: p.height,
-      style: { stroke: poster.ink }
+      step: record.step === "all" ? null : record.step
     });
-    if (record.step === "all") {
-      poster.build(plot, { width: p.width, height: p.height });
-    } else {
-      poster.buildStep(plot, record.step, { width: p.width, height: p.height });
-    }
     record.plot = plot;
   }
 
@@ -170,9 +165,12 @@
   });
 
   download.addEventListener("click", function () {
-    const element = document.getElementById("m-full");
-    const record = ensurePreview(element);
-    record.plot.downloadPlotterSVG(`gysin-remembers-${state.format.toLowerCase()}.svg`, {
+    const exportPlot = poster.createPlot({
+      seed: state.seed,
+      width: poster.width,
+      height: poster.height
+    });
+    exportPlot.downloadPlotterSVG(`gysin-remembers-${state.format.toLowerCase()}.svg`, {
       page: poster.pageFor(state.format),
       penMap: poster.penMap,
       tool: "pen",
