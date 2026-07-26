@@ -2,16 +2,16 @@
 
 ## Conclusie
 
-Tekstpermutatie past inhoudelijk sterk bij p5.gysin. De library behandelt tekst
-nu al als grafisch materiaal: `textCutup()` verschuift en verwijdert horizontale
-delen van lettercontouren. Gysins permutation poems voegen daar een tweede laag
-aan toe: ook de **volgorde van de woorden** wordt materiaal.
+Tekstpermutatie past inhoudelijk sterk bij p5.gysin: de **volgorde van de
+woorden** wordt het materiaal. `textCutup()` is daarvan gescheiden; die functie
+verschuift alleen horizontale delen van lettercontouren en geldt sinds de
+herijking van 26 juli 2026 als een zeldzame grafische oppervlaktebewerking.
 
 De twee bewerkingen moeten afzonderlijk blijven:
 
 1. een tekstfunctie ordent woorden opnieuw;
-2. `text()` of `textCutup()` zet elke gekozen regel om in plotbare contouren;
-3. wobble, dropout, repeat, drift en rubout tasten die contouren verder aan.
+2. `text()` zet elke gekozen regel leesbaar om in plotbare contouren;
+3. alleen een expliciete keuze voegt daarna `textCutup()` of andere aantasting toe.
 
 Zo wordt eerst de betekenis gedeconstrueerd en daarna de vorm, terwijl de
 bestaande vector-first exportketen intact blijft.
@@ -64,11 +64,7 @@ De gebruiker kan de regels daarna zelf plaatsen:
 
 ```js
 regels.forEach((regel, index) => {
-  plot.textCutup(regel, 70, 120 + index * 58, {
-    size: 44,
-    wobble: 1.2,
-    rubout: 0.08
-  });
+  plot.text(regel, 70, 120 + index * 58, { size: 44 });
 });
 ```
 
@@ -105,5 +101,5 @@ De zelfstandige bestanden `p5.gysin.text.js` en `p5.gysin.text.min.js` bieden
 nu `GysinText.permute()`, met regressietests voor unieke woorden, herhaalde
 woorden, seed en limiet. Het standalone voorbeeld
 `examples/permutation_poem/` gebruikt `I LOVE YOU` voor een monochrome
-A3-compositie waarin alle permutaties opnieuw door `textCutup()` gaan. Een
-latere versie kan echte cut-ups uit meerdere bronteksten onderzoeken.
+A3-compositie waarin `chant()` de permutaties als leesbare regels tekent.
+`weave()` behandelt intussen fragmenten uit meerdere bronteksten.

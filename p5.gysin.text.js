@@ -365,12 +365,11 @@
   global.GysinText = Object.freeze({ permute, weave: weaveSources });
 
   // chant() is the intent verb for a permutation poem: one call takes a phrase
-  // through its permutations and sends every new order through the scissors,
-  // each line cut a little deeper than the last. It lives in this addon
-  // because it needs permute(); the core stays free of the dependency. Load
-  // the core first, then this file, and the verb appears on every plot.
-  // `descent` scales how much deeper every line is cut (0 = all lines equal);
-  // every other option passes straight through to textCutup().
+  // through its permutations and draws every order as a readable line. Sentence
+  // order is the material; horizontal contour slicing is not the default.
+  // Existing explicit cut controls (`slices`, `sliceOffset`, `sliceDropout`, or
+  // `descent`) deliberately opt into textCutup(), so earlier advanced sketches
+  // keep working without making the decoration the normal route.
   const CHANT_OWN = new Set([
     "lines",
     "order",
@@ -379,11 +378,13 @@
     "leading",
     "descent",
     "slices",
-    "sliceOffset"
+    "sliceOffset",
+    "sliceDropout"
   ]);
+  const CHANT_CUT_KEYS = ["descent", "slices", "sliceOffset", "sliceDropout"];
 
   function chant(text, x, y, options) {
-    if (!this || typeof this.textCutup !== "function") {
+    if (!this || typeof this.text !== "function" || typeof this.textCutup !== "function") {
       throw new TypeError("chant() needs a GysinPlot instance.");
     }
     const o = options || {};
@@ -398,28 +399,34 @@
     const leading = o.leading === undefined
       ? size * 2.65
       : requirePositive(o.leading, "chant leading");
-    const descent = o.descent === undefined
-      ? 1
-      : requireNonNegative(o.descent, "chant descent");
-    const slices = o.slices === undefined
-      ? 5
-      : requirePositive(o.slices, "chant slices");
-    const sliceOffset = o.sliceOffset === undefined
-      ? 2
-      : requireFinite(o.sliceOffset, "chant sliceOffset");
+    const cut = CHANT_CUT_KEYS.some((key) =>
+      Object.prototype.hasOwnProperty.call(o, key)
+    );
+    const descent = cut
+      ? (o.descent === undefined ? 1 : requireNonNegative(o.descent, "chant descent"))
+      : 0;
+    const slices = cut
+      ? (o.slices === undefined ? 5 : requirePositive(o.slices, "chant slices"))
+      : 0;
+    const sliceOffset = cut
+      ? (o.sliceOffset === undefined ? 2 : requireFinite(o.sliceOffset, "chant sliceOffset"))
+      : 0;
 
     const rows = permute(text, { seed, limit: lines, order });
     const ids = [];
     rows.forEach((row, index) => {
-      const opts = {
-        size,
-        slices: Math.max(1, Math.round(slices + index * descent)),
-        sliceOffset: sliceOffset + index * 4 * descent
-      };
+      const opts = { size };
+      if (cut) {
+        opts.slices = Math.max(1, Math.round(slices + index * descent));
+        opts.sliceOffset = sliceOffset + index * 4 * descent;
+        if (o.sliceDropout !== undefined) {
+          opts.sliceDropout = o.sliceDropout;
+        }
+      }
       for (const key of Object.keys(o)) {
         if (!CHANT_OWN.has(key)) opts[key] = o[key];
       }
-      ids.push(this.textCutup(row, x, y + index * leading, opts));
+      ids.push(this[cut ? "textCutup" : "text"](row, x, y + index * leading, opts));
     });
     return ids;
   }

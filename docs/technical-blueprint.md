@@ -308,17 +308,18 @@ er meerdere strategieen:
 
 Tekstaantasting:
 
-- horizontale cut-up slices
+- horizontale contourslices
 - verschoven letterstroken
 - ontbrekende stukken
 - herhaalde contouren
 - versleten drukwerk via dropout/rubout
 - rubout-zones die woorden gedeeltelijk laten verdwijnen
 
-## 6. Brion Gysin modus
+## 6. Optionele horizontale contoursnede
 
-`plot.textCutup(value, x, y, options)` behandelt tekst niet als nette typografie
-maar als materiaal.
+`plot.textCutup(value, x, y, options)` verschuift horizontale banden van een
+lettercontour. Het is een zeldzame oppervlaktebewerking, geen algemene
+“Brion Gysin-modus” en geen reconstructie van de historische cut-up.
 
 Gedrag:
 

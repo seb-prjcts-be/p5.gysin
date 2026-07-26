@@ -18,7 +18,7 @@ async function setup() {
   canvas.parent("sketch");
   describe(
     "One word drawn three times down the sheet, each copy more worn than the " +
-    "last: a solid legible head, a cut-up middle, and an asemic scribble that " +
+    "last: a solid legible head, a weathered middle, and an asemic scribble that " +
     "buries the final, ghostly copy."
   );
   pixelDensity(1);

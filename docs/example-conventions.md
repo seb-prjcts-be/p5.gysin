@@ -91,39 +91,38 @@ Voor een werk dat op Enter én op een zelfstandige pagina verschijnt:
 Doorgevoerd op alle 12 kaarten (juli 2026, Ink Bleed erbij); toets elke
 nieuwe kaart hieraan.
 
-## Regel 6 - Homepage-volgorde: drie studies, dan methodes
+## Regel 6 - Homepage-volgorde: schaal vóór methode
 
-De homepage is een tentoonstelling, geen catalogus. De vaste volgorde:
+De homepage is een tentoonstelling, geen alfabetische API-catalogus. Elke
+bibliotheek toont eerst op welke **schaal** ze werkt:
 
-1. **Drie studies openen de pagina** onder de method-strip: CUT (Cut-Up
-   Typography), PERMUTE (Permutation Poem), FREE (Worn Word). Zij dragen de
-   boog cut -> permute -> free; Worn Word is als FREE-studie naar voren
-   gehaald.
-2. **Methods** groepeert de losse verb-voorbeelden (First Trace, Typewriter,
-   Parameter Lab, Font Outlines, Frequencies).
-3. **Learn & plot** sluit af met de praktische route (p5 Editor, Calibration,
-   Export).
+1. **Word**: `text()` en `rub()` isoleren één woordlichaam. Het krijgt formaat,
+   positie, herhaling en slijtage.
+2. **Surface**: `textCutup()` is een late, zeldzame contoursnede. Deze kaart
+   staat apart van de woord- en zinsbewerkingen.
+3. **Trace & page**: velden, inkt, kalibratie en export behandelen het blad.
+4. **Sentence**: `chant()` en `weave()` laten volgorde, sequentie en bron
+   leesbaar blijven.
+5. **Sentence / page**: `underwood()` geeft langere stem vaste maat, regelval
+   en marge.
 
-Secties wisselen licht/donker af; elke groep heeft een eigen intro-sectie
-(`group-intro`). Een nieuw voorbeeld krijgt een plek in groep 2 of 3;
-de drie studies blijven met z'n drieën.
+De `.work-band`-opmaak maakt dat onderscheid zichtbaar vóór een bezoeker de
+functienamen leest. Een nieuw voorbeeld krijgt eerst een schaal en pas daarna
+een plaats in het bijbehorende bibliotheekblad.
 
-## Regel 7 - Drie letterstemmen in balans; cut-up alleen als concept
+## Regel 7 - Woord, zin en oppervlakte blijven verschillende gebaren
 
-De bibliotheek spreekt drie letterstemmen: het ingebouwde single-stroke-alfabet
-(klein, plotter-veilig), echte outline-fonts (Oswald: koppen en gevulde
-letters) en de `underwood()`-typemachine. Aanleiding (jul 2026): op Enter
-stonden 7 kaarten in het ingebouwde alfabet tegenover 1 typemachine, en
-`textCutup()` sloop in bijna elk voorbeeld.
-
-- **`textCutup()` alleen waar snijden hét concept is** (CUT-studie,
-  permutatie, p5_editor, het cut-up-stadium van first_trace). Elders:
-  `text()` met outline-font, of `underwood()`.
-- **Een galerij-kaart tekent in dezelfde letterstem als zijn volledige
-  voorbeeld.** Laadt het voorbeeld Oswald, dan de kaart ook (helper
-  `makeOutlinePreview` in `index.html`: async font-load, bitmap-fallback).
-- **Houd de verdeling op Enter in het oog** - geen stem laten domineren.
-  Stand jul 2026: 5 outline / 1 typemachine / 3 ingebouwd / 2 zonder type.
+- **Woord:** groot of geïsoleerd; behandel het als één lichaam. `rub()` slijt
+  standaard met `text()` en `asemic()`, zonder horizontale knip.
+- **Zin:** behoud voldoende leesbaarheid om veranderende woordvolgorde,
+  bronbotsing en ritme te kunnen volgen. `chant()` en `weave()` tekenen daarom
+  standaard gewone tekstregels.
+- **Oppervlakte:** `textCutup()` verschuift horizontale contourstroken. Het is
+  geen historische cut-up en geen automatische tussenfase. Alleen een
+  expliciete call of expliciete snij-optie mag het activeren.
+- **Stem:** het ingebouwde single-stroke-alfabet, een outline-font en
+  `underwood()` hebben elk een eigen materiële logica. Een Enter-plaat gebruikt
+  dezelfde stem en compositie als haar volledige voorbeeld.
 
 ## Regel 8 - Geen lege toonvlakken ("tone blocks")
 

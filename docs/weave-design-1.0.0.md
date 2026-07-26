@@ -8,8 +8,7 @@ Definitieve naam: `weave()`
 
 `textCutup()` verandert de contour van één tekst. `GysinText.permute()`
 verandert de volgorde van woorden binnen één korte frase. `chant()` tekent die
-permutaties als steeds verder gesneden regels. `rub()` laat één woord grafisch
-slijten.
+permutaties als leesbare regels. `rub()` laat één woord grafisch slijten.
 
 Het ontbrekende gebaar ligt vóór het tekenen: fragmenten uit verschillende
 bronnen moeten nieuwe buren krijgen. De botsing moet leesbaar blijven; anders
@@ -62,7 +61,8 @@ adresseerbaar en reproduceerbaar.
   het contract twee of meer bronnen ondersteunt.
 
 Besluit op 26 juli 2026: `weave()`, zonder `splice()`-alias. De functie benoemt
-het werk dat uit de snede ontstaat; `textCutup()` blijft de expliciete schaar.
+het werk dat uit de taalsnede ontstaat; `textCutup()` blijft een afzonderlijke,
+zeldzame oppervlaktebewerking.
 
 ## Publieke API
 

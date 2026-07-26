@@ -62,9 +62,9 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">chant() · one phrase · one descent</div>
+      <div class="demo-number">chant() · one phrase · six orders</div>
       <h1>Permutation Poem</h1>
-      <p>One phrase returns six times. Each return meets a deeper cut.</p>
+      <p>The same words return in changing positions. Their order carries the movement.</p>
     </div>
     <div class="demo-layout poster-layout">
       <div class="demo-code">
@@ -75,7 +75,6 @@ plot.chant("I LOVE YOU", width * 0.075, height * 0.12, {
   lines: 6,
   size: width * 0.11,
   leading: height * 0.14,
-  repeat: 2,
   font: outlineFont
 });
 
@@ -83,7 +82,7 @@ plot.draw();</code></pre>
         <div class="demo-note"><a href="composition.js">Open the complete composition</a> · the same file draws the Enter plate and this work.</div>
         <div class="demo-actions" aria-label="Permutation poster actions">
           <input type="text" id="phrase-input" aria-label="Your phrase for permute() - empty or symbol-only input falls back to I LOVE YOU" title="Empty or symbol-only input falls back to I LOVE YOU" placeholder="Your phrase…" maxlength="40">
-          <button type="button" id="reroll-button">New cut</button>
+          <button type="button" id="reroll-button">New order</button>
           <button type="button" id="svg-button">Download A3 SVG</button>
           <button type="button" id="hpgl-button">Download HPGL</button>
         </div>

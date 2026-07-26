@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gysin Demo | p5.gysin examples</title>
+  <title>Sliced Text | p5.gysin examples</title>
   <link rel="stylesheet" href="../../docs/style.css">
 </head>
 <body>
@@ -21,54 +21,35 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">textCutup() + letter field</div>
-      <h1>Gysin Demo</h1>
-      <p>A typographic poster: rubbed titles, ruled band, decaying letter field.</p>
+      <div class="demo-number">textCutup() · rare surface effect</div>
+      <h1>Sliced Text</h1>
+      <p>One word, disturbed once. Horizontal contour bands shift; the language itself does not.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
-        <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">// A clean title.
+        <div class="code-label">The shared composition</div>
+        <pre><code class="language-javascript">// Use once, after the word is already working.
+const outlineFont = await loadFont("../font_outlines/assets/Oswald-Regular.otf");
 const plot = new GysinPlot({ seed: 19600319 });
-plot.text("RUB OUT", 75, 145);   // clean, mechanical text
-plot.draw();
-
-// Two titles, rubbed away letter by letter.
-titleId = plot.text("RUB OUT",  75, 145, { size: 96, rubout: ruboutAt(145), glyphJitter: letterJitter });
-plot.text("THE WORD", 76, 235, { size: 96, rubout: ruboutAt(235), glyphJitter: letterJitter });
-
-// A line sliced and re-offset.
-plot.textCutup("I THINK THEREFORE I AM", 76, 370, { size: 55, slices: 9, sliceOffset: 24 });
-
-// Six rules fan and taper.
-for (let i = 0; i &lt; 6; i++) plot.line(80 + i * 8, 448 + i * 18, 820, 448 + i * 23, { dropout: 0.04 + i * 0.03 });
-
-// A decaying letter field.
-plot.letters("RUB OUT THE WORD", 90, 600, 720, 300, { size: 26, rubout: ruboutAt(700) });
-
-plot.freeze(titleId); // reroll leaves the top title untouched
+plot.textCutup("SURFACE", width * 0.12, height * 0.56, {
+  font: outlineFont,
+  size: Math.min(width * 0.14, height * 0.21),
+  slices: 5,
+  sliceOffset: width * 0.016,
+  sliceDropout: 0.025
+});
 plot.draw();</code></pre>
-        <p class="demo-note" id="code-caption">rubout 0.14 &middot; glyphJitter 0.40</p>
-        <div class="control-grid">
-          <label class="control-row" for="rubout-slider">
-            <span>Rub out the poster <output id="rubout-value">0.14</output></span>
-            <input type="range" id="rubout-slider" min="0" max="0.6" step="0.02" value="0.14">
-          </label>
-          <label class="control-row" for="jitter-slider">
-            <span>Break the letters apart <output id="jitter-value">0.40</output></span>
-            <input type="range" id="jitter-slider" min="0" max="1.2" step="0.05" value="0.4">
-          </label>
-        </div>
+        <p class="demo-note"><a href="composition.js">Open the complete composition</a> &middot; the same file draws the Enter plate and this work.</p>
         <div class="demo-actions" aria-label="Demo actions">
           <button type="button" id="svg-button">Download SVG</button>
           <button type="button" id="json-button">Download JSON</button>
           <button type="button" id="hpgl-button">Download HPGL</button>
           <button type="button" id="reroll-button">New variation</button>
         </div>
-        <p class="demo-note">The sliders change rubout and letter drift. <code>R</code> rerolls the unfrozen traces; <code>S</code>, <code>J</code> and <code>H</code> export SVG, JSON and HPGL.</p>
+        <p class="demo-note"><code>R</code> changes the offset pattern; <code>S</code>, <code>J</code> and <code>H</code> export SVG, JSON and HPGL.</p>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas" id="sketch" role="img" aria-label="A cut-up typographic poster with rubbed-out titles, a ruled band, and a decaying letter field that fills the lower half."></div>
+        <div class="demo-canvas" id="sketch" role="img" aria-label="The word Surface with five horizontal contour bands shifted slightly out of register."></div>
         <p class="demo-note" id="plot-stats">plot cost</p>
       </div>
     </div>
@@ -83,7 +64,8 @@ plot.draw();</code></pre>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
-  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.min.js?v=word-sentence-1"></script>
+  <script src="composition.js"></script>
   <script src="sketch.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
 </body>

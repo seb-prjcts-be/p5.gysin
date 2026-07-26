@@ -20,14 +20,14 @@ const WORDS = ["FIRST TRACE", "SLOW HAND", "LOST WORD", "OPEN MARK", "GONE SOON"
 // thins its stroke (weight), fades (alpha), breaks up (dropout) and gets erased
 // (rubout/fray) - a continuous gradient of legibility, not three separate lines.
 // Only the legible head carries fill:"cross", so it reads solid/ink-heavy while the
-// cut-up and asemic tail stay outline-only and hollow. verb picks the drawing
+// broken and asemic tail stay outline-only and hollow. verb picks the drawing
 // method; extra holds the per-stage disturbance flavour.
 const STAGES = [
   //  name       labelY  y    x    weight  alpha  dropout  rubout  fray   verb          fill      extra
   { name: "legible", labelY: 216, y: 248, x: 46,  weight: 1.1,  alpha: 0.9,  dropout: 0.05, rubout: 0.06, fray: 0.4, verb: "text",      fill: "cross",
     extra: { breathe: 1.2, glyphJitter: 0.5 } },
-  { name: "cut-up",  labelY: 326, y: 360, x: 100, weight: 0.85, alpha: 0.55, dropout: 0.2,  rubout: 0.16, fray: 1.2, verb: "textCutup",
-    extra: { breathe: 1.5, glyphJitter: 1.1, slices: 8, sliceOffset: 22, drift: 3.4, overshoot: 6, repeat: 2 } },
+  { name: "broken",  labelY: 326, y: 360, x: 100, weight: 0.85, alpha: 0.55, dropout: 0.2,  rubout: 0.16, fray: 1.2, verb: "text",
+    extra: { breathe: 1.5, glyphJitter: 1.1, drift: 3.4, overshoot: 6, repeat: 2 } },
   { name: "asemic",  labelY: 424, y: 512, x: 150, weight: 0.6,  alpha: 0.18, dropout: 0.55, rubout: 0.3,  fray: 2.4, verb: "text",
     extra: { breathe: 2.2, glyphJitter: 1.3 } }
 ];
@@ -76,7 +76,7 @@ async function setup() {
   describe(
     "A single mark decaying in labelled stages, read top to bottom along one faint " +
     "backbone line: a cross-hatched origin dot, a firm first stroke, then one word " +
-    "rendered solid and cross-hatch filled, cut up, and finally dissolving into a " +
+    "rendered solid and cross-hatch filled, worn, and finally dissolving into a " +
     "hollow asemic scribble that drifts right and fades out."
   );
   pixelDensity(1);

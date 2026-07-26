@@ -279,6 +279,50 @@ h3 {
   max-width: 1100px;
 }
 
+.work-band {
+  display: grid;
+  grid-template-columns: minmax(130px, 170px) minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  max-width: 1100px;
+}
+
+.work-band + .work-band {
+  margin-top: 24px;
+}
+
+.work-band .contact-sheet {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 220px));
+  max-width: none;
+}
+
+.work-band-head {
+  display: grid;
+  gap: 7px;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+}
+
+.work-band-head strong {
+  font-family: "Oswald", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.work-band-head small {
+  color: var(--muted);
+  font-family: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
+.work-band-surface .work-band-head {
+  border-top-style: dashed;
+}
+
 /* Every tile stands the same height on every sheet: the core sheet has a tile
    whose second line wraps and stretches its row, so the two-plate sheets below
    are held to the same measure instead of sitting a line shorter. */
@@ -1244,6 +1288,15 @@ footer {
 
   .method-strip a {
     min-height: 130px;
+  }
+
+  .work-band {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .work-band .contact-sheet {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

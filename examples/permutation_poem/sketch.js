@@ -11,7 +11,7 @@ async function setup() {
   createCanvas(POSTER_WIDTH, POSTER_HEIGHT).parent("sketch");
   pixelDensity(1);
   noLoop();
-  describe("Six cut-up permutations of one phrase, each return cut deeper than the last.");
+  describe("One phrase written six times, with the same words returning in changing positions.");
 
   try {
     outlineFont = await loadFont(FONT_URL);

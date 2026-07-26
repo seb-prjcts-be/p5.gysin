@@ -595,7 +595,7 @@ const rubMin = buildRub(MinPlot);
 assert.equal(rubA.ids.length, 6, "rub default = 3 stages + 3 tangles");
 assert.equal(
   JSON.stringify(rubA.ids.map((id) => rubA.plot.get(id).type)),
-  JSON.stringify(["text", "textCutup", "text", "path", "path", "path"])
+  JSON.stringify(["text", "text", "text", "path", "path", "path"])
 );
 // deterministic, and identical between source and min build
 const rubJSON = JSON.stringify(rubA.ids.map((id) => rubA.plot.get(id).generated));
@@ -705,21 +705,27 @@ assert.equal(chantDefault.ids.length, 5, "chant draws five lines by default");
 assert.equal(chantDefault.svg, buildChant(chantSource).svg, "chant is deterministic");
 assert.equal(chantDefault.svg, buildChant(chantMin).svg, "chant min build matches source");
 
-// chant() is exactly the manual recipe it replaces
+// chant() keeps sentence order visible: its default is exactly permute + text
 {
   const manual = new chantSource.GysinPlot({ seed: 1919, width: 560, height: 560 });
   const rows = chantSource.GysinText.permute("CUT ARRANGE GLUE", { seed: 1919, limit: 5, order: "walk" });
   rows.forEach((row, i) => {
-    manual.textCutup(row, 60, 90 + i * 90, { size: 34, slices: 5 + i, sliceOffset: 2 + i * 4 });
+    manual.text(row, 60, 90 + i * 90, { size: 34 });
   });
   const verb = buildChant(chantSource, { leading: 90 });
-  assert.equal(verb.svg, manual.exportSVG({ width: 560, height: 560 }), "chant equals the manual permute + textCutup recipe");
+  assert.equal(verb.svg, manual.exportSVG({ width: 560, height: 560 }), "chant equals the manual permute + text recipe");
 }
 
-// descent 0 flattens the escalation; material options pass through
+// Explicit cut controls retain the earlier advanced recipe without making it
+// the default sentence treatment; ordinary material options still pass through.
 const chantFlat = buildChant(chantSource, { descent: 0, breathe: 0.5 });
 assert.equal(chantFlat.ids.length, 5);
-assert.notEqual(chantFlat.svg, chantDefault.svg, "descent and material options change the trace");
+assert.notEqual(chantFlat.svg, chantDefault.svg, "an explicit cut control and material option change the trace");
+{
+  const plot = new chantSource.GysinPlot({ seed: 1919, width: 560, height: 560 });
+  const ids = plot.chant("CUT ARRANGE GLUE", 60, 90, { slices: 5 });
+  assert.ok(ids.every((id) => plot.get(id).type === "textCutup"), "explicit slices opt chant into the rare surface effect");
+}
 assert.throws(() => buildChant(chantSource, { lines: 0 }), /from 1 through 1000/);
 assert.throws(() => buildChant(chantSource, { order: "grammar" }), /order must be one of/);
 assert.throws(() => chantSource.GysinPlot.prototype.chant.call({}, "A B", 0, 0), /needs a GysinPlot/);
@@ -903,10 +909,12 @@ const siteStyle = fs.readFileSync(path.join(root, "docs", "style.css"), "utf8");
 const examplesRedirectPage = fs.readFileSync(path.join(root, "docs", "examples.html"), "utf8");
 const examplesDir = path.join(root, "examples");
 const sharedCompositions = new Map([
+  ["gysin_demo", "slicedText"],
   ["permutation_poem", "permutationPoem"],
   ["weave", "weave"]
 ]);
 const sharedCompositionVerbs = new Map([
+  ["gysin_demo", "textCutup"],
   ["permutation_poem", "chant"],
   ["weave", "weave"]
 ]);
@@ -934,6 +942,9 @@ assert.ok(
   showcasePage.indexOf('id="origin-note"') < showcasePage.indexOf('id="studies"'),
   "the Brion Gysin point of departure appears before the three libraries"
 );
+assert.match(showcasePage, /<strong>Word<\/strong><small>Isolate it\. Enlarge it\. Wear it\.<\/small>/);
+assert.match(showcasePage, /<strong>Sentence<\/strong><small>Order, sequence, source\.<\/small>/);
+assert.match(showcasePage, /<strong>Surface<\/strong><small>A late disturbance, used sparingly\.<\/small>/);
 
 for (const name of manifest.examples) {
   assert.ok(fs.existsSync(path.join(examplesDir, name, "index.html")), `${name} index.html`);
@@ -971,6 +982,10 @@ for (const [name, workName] of sharedCompositions) {
     assert.match(composition, /fragments:\s*2/);
     assert.match(page, /id="weave-button">Weave again<\/button>/);
     assert.doesNotMatch(page, /Reroll ink|id="ink-button"|id="cut-button"/);
+  }
+  if (name === "permutation_poem") {
+    assert.doesNotMatch(composition, /\b(?:descent|slices|sliceOffset|sliceDropout|breathe|dropout|repeat|rubout|drift)\b|textCutup/);
+    assert.match(page, /id="reroll-button">New order<\/button>/);
   }
 }
 

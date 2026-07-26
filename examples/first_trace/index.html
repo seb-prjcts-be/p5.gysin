@@ -21,9 +21,9 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">line() + text() + textCutup() + asemic()</div>
+      <div class="demo-number">line() + text() + asemic()</div>
       <h1>First Trace</h1>
-      <p>One phrase, three states: legible, cut, asemic. Seed and decay remain printed on the sheet.</p>
+      <p>One word-body, three states: legible, worn, almost gone. Seed and decay remain printed on the sheet.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
@@ -42,7 +42,7 @@ const decayed = (o) => ({ ...o,
 for (const stage of STAGES) {
   const opts = decayed({ size: 46, ...stage.extra, rubout: stage.rubout });
   if (font && stage.fill) opts.fill = stage.fill;   // only the head is filled
-  plot[stage.verb](word, stage.x, stage.y, opts);   // text / textCutup / text
+  plot.text(word, stage.x, stage.y, opts);
 }
 
 // An asemic trace crosses the last copy.
@@ -53,7 +53,7 @@ for (const t of TANGLES) {
 plot.draw();</code></pre>
       </div>
       <div class="demo-right">
-        <div class="demo-canvas is-clickable" id="sketch" role="img" aria-label="A mark decaying in stages, top to bottom: a cross-hatched origin dot, a firm first stroke, then the words First Trace rendered legibly, cut up, and as an illegible asemic scribble that drifts right and fades to a thin line."></div>
+        <div class="demo-canvas is-clickable" id="sketch" role="img" aria-label="A mark decaying in stages, top to bottom: a cross-hatched origin dot, a firm first stroke, then the words First Trace rendered legibly, worn, and as an illegible asemic scribble that drifts right and fades to a thin line."></div>
         <div class="demo-actions" aria-label="First Trace actions">
           <button type="button" id="decay-down" aria-label="Less decay">&minus; Decay</button>
           <button type="button" id="decay-up" aria-label="More decay">Decay &plus;</button>

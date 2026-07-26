@@ -129,24 +129,17 @@ plot.text("COLLAGE", 60, 400, {
   <section class="section section-dark ce-module" id="scissors">
     <div class="section-header">
       <div class="section-tag">04 &middot; textCutup()</div>
-      <h2>Scissors</h2>
-      <p class="section-desc"><code>textCutup()</code> slices a line into horizontal bands and shifts them out of register.</p>
+      <h2>Horizontal slices</h2>
+      <p class="section-desc"><code>textCutup()</code> shifts horizontal contour bands. Use it as a rare surface disturbance, not as the cut-up itself.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-scissors" class="ce-canvas"></div></div>
       <div class="ce-codewrap">
         <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">plot.textCutup("COLLAGE", 60, 180, {
+        <pre><code class="language-javascript">plot.textCutup("COLLAGE", 60, 280, {
   size: 72,
-  slices: 6,
-  sliceOffset: 8
-});
-plot.textCutup("COLLAGE", 60, 380, {
-  size: 72,
-  slices: 10,
-  sliceOffset: 24,
-  dropout: 0.08,
-  rubout: 0.1
+  slices: 5,
+  sliceOffset: 12
 });</code></pre>
       </div>
     </div>
@@ -157,13 +150,13 @@ plot.textCutup("COLLAGE", 60, 380, {
     <div class="section-header">
       <div class="section-tag">05 &middot; chant()</div>
       <h2>Arrange</h2>
-      <p class="section-desc">A phrase changes order. Each return meets the scissors.</p>
+      <p class="section-desc">A phrase changes order. The lines stay clear enough to hear the change.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-arrange" class="ce-canvas"></div></div>
       <div class="ce-codewrap">
         <button class="ce-copy" type="button" onclick="copyCode(this)">Copy</button>
-        <pre><code class="language-javascript">// the phrase through its orders, each cut deeper
+        <pre><code class="language-javascript">// the phrase through its orders
 plot.chant("CUT ARRANGE GLUE", 60, 90);
 </code></pre>
       </div>
@@ -303,7 +296,7 @@ plot.line(60, 360, 680, 380, {
     <div class="section-header">
       <div class="section-tag">11 &middot; rub()</div>
       <h2>Wear</h2>
-      <p class="section-desc">The word returns in three states: legible, cut, buried.</p>
+      <p class="section-desc">The word returns in three states: legible, weathered, buried.</p>
     </div>
     <div class="ce-demo">
       <div class="ce-preview"><div id="m-wear" class="ce-canvas"></div></div>
@@ -549,8 +542,7 @@ plot.draw();</code></pre>
   // 04 scissors
   makeGysinPreview('m-scissors', 0.66, function (p, w, h) {
     const plot = base(p, w, h, 1919);
-    plot.textCutup('COLLAGE', w * 0.08, h * 0.34, { size: w * 0.13, slices: 6, sliceOffset: 8 });
-    plot.textCutup('COLLAGE', w * 0.08, h * 0.74, { size: w * 0.13, slices: 10, sliceOffset: 24, dropout: 0.08, rubout: 0.1 });
+    plot.textCutup('COLLAGE', w * 0.08, h * 0.55, { size: w * 0.13, slices: 5, sliceOffset: w * 0.02 });
     return plot;
   });
 
@@ -559,8 +551,7 @@ plot.draw();</code></pre>
     const plot = base(p, w, h, 1919);
     plot.chant('CUT ARRANGE GLUE', w * 0.07, h * 0.18, {
       size: w * 0.052,
-      leading: h * 0.17,
-      breathe: 0.5
+      leading: h * 0.17
     });
     return plot;
   });

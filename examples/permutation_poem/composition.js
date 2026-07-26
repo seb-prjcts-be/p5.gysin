@@ -20,13 +20,6 @@
       lines: 6,
       size: Math.min(width * 0.11, width * 1.55 / Math.max(12, phrase.length)),
       leading: height * 0.14,
-      descent: 1.2,
-      slices: 4,
-      sliceOffset: Math.max(1, width * 0.0018),
-      breathe: Math.max(0.12, width * 0.00025),
-      dropout: 0.012,
-      repeat: 2,
-      drift: width * 0.0007,
       strokeWeight: 1.05,
       alpha: 0.94
     };

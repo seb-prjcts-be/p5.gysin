@@ -55,11 +55,9 @@ function buildHeroTrace(plot) {
     frame: { breathe: 1.5 }
   });
 
-  // ghost behind the title: the phrase, deep cut, muted by the wash
-  plot.textCutup("RUB OUT THE WORD", w * 0.06, h * 0.17, {
+  // one worn word-body behind the typed sentence field
+  plot.text("RUB OUT THE WORD", w * 0.06, h * 0.17, {
     size: Math.max(34, Math.min(64, w * 0.045)),
-    slices: 8,
-    sliceOffset: 16,
     breathe: 1.6,
     dropout: 0.02,
     rubout: 0.15,

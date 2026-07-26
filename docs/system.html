@@ -30,7 +30,7 @@
       <h2>p5.gysin has three library files</h2>
       <ul>
         <li><strong><code>p5.js</code> is the creative-coding foundation.</strong> Load it when you want <code>GysinPlot</code> to draw the generated paths on a canvas.</li>
-        <li><strong><code>p5.gysin.min.js</code> is the core library.</strong> It provides <code>GysinPlot</code>, drawing methods such as <code>textCutup()</code>, and SVG, JSON, and HPGL export.</li>
+        <li><strong><code>p5.gysin.min.js</code> is the core library.</strong> It provides <code>GysinPlot</code>, drawing methods such as <code>text()</code>, and SVG, JSON, and HPGL export.</li>
         <li><strong><code>p5.gysin.text.min.js</code> is the text addon.</strong> It provides <code>GysinText.permute()</code>, <code>GysinText.weave()</code>, <code>plot.chant()</code>, and <code>plot.weave()</code>.</li>
         <li><strong><code>p5.gysin.underwood.min.js</code> is the typewriter addon.</strong> It provides <code>plot.underwood()</code>.</li>
       </ul>
@@ -52,12 +52,10 @@ function setup() {
   createCanvas(800, 800);
   plot = new GysinPlot({ seed: 1960 });
 
-  plot.textCutup("RUB OUT THE WORD", 80, 180, {
+  plot.text("FIRST TRACE", 80, 180, {
     size: 72,
-    breathe: 2,
-    dropout: 0.12,
-    repeat: 2,
-    rubout: 0.25
+    breathe: 1.2,
+    dropout: 0.06
   });
 
   plot.line(80, 260, 720, 280, {
@@ -114,7 +112,7 @@ plot.asemic(60, 220, 160, 120);                     // a cursive, wordless tangl
       <ul>
         <li><code>path</code>: set <code>closed: true</code> for an exact closed contour.</li>
         <li><code>text</code>: <code>size</code>, <code>font</code>, <code>sampleFactor</code>, <code>lineHeight</code>, and <code>letterSpacing</code>.</li>
-        <li><code>textCutup</code>: all text options plus <code>slices</code>, <code>sliceOffset</code>, and <code>sliceDropout</code>.</li>
+        <li><code>textCutup</code>: a rare horizontal contour disturbance; all text options plus <code>slices</code>, <code>sliceOffset</code>, and <code>sliceDropout</code>.</li>
         <li>Style: <code>stroke</code>, positive <code>strokeWeight</code>, and clamped <code>alpha</code>.</li>
         <li>Export per shape: <code>simplify</code>, <code>minSegmentLength</code>, and <code>layer</code>.</li>
       </ul>
@@ -123,6 +121,9 @@ plot.asemic(60, 220, 160, 120);                     // a cursive, wordless tangl
 
     <section class="guide-block">
       <h2>Text</h2>
+      <p><strong>Word:</strong> isolate one word or short name and treat it as a drawn body with <code>text()</code> or <code>rub()</code>. Scale, repetition, wear, and position carry the gesture.</p>
+      <p><strong>Sentence:</strong> preserve enough reading time for order, sequence, and source to matter. <code>chant()</code>, <code>weave()</code>, and <code>underwood()</code> therefore default to readable lines rather than automatic slicing.</p>
+      <p><strong>Surface:</strong> <code>textCutup()</code> shifts horizontal bands of an existing letter contour. It is a graphical after-effect, not a linguistic cut-up operation; use it explicitly and sparingly.</p>
       <p>When the supplied p5 font exposes its outline path, p5.gysin keeps separate glyph contours and counters. Otherwise it uses <code>font.textToPoints()</code>; without a font, it falls back to a simple vector alphabet.</p>
       <p>For p5.js 2.x, load fonts with <code>async setup()</code> and <code>await loadFont(...)</code> before passing the font to <code>plot.text()</code>.</p>
     </section>
@@ -168,7 +169,7 @@ plot.asemic(60, 220, 160, 120);                     // a cursive, wordless tangl
     <section class="guide-block">
       <h2>Composed Methods</h2>
       <p>Composed methods combine existing capture methods and return the ids they create. Their options can replace or adjust the built-in composition.</p>
-      <p><code>plot.rub(text, x, y, options)</code> draws a word worn away in three copies - legible, cut up, then an asemic scribble that buries the last one. It composes <code>text</code>, <code>textCutup</code>, and <code>asemic</code>.</p>
+      <p><code>plot.rub(text, x, y, options)</code> draws a word worn away in three copies - legible, weathered, nearly gone - then lets an asemic scribble bury the last one. Its default composition uses <code>text</code> and <code>asemic</code>; a custom stage may still select <code>textCutup</code> explicitly.</p>
       <div class="code-preview">
         <code>plot.rub("RUB OUT", 46, 248);
 plot.rub("RUB OUT", 46, 248, { decay: 2 });
@@ -223,24 +224,20 @@ const lines = GysinText.permute("I LOVE YOU", {
 });
 
 lines.forEach((line, index) =&gt; {
-  plot.textCutup(line, 40, 65 + index * 55, {
-    size: 28,
-    slices: 12 + index,
-    sliceOffset: 1 + index
-  });
+  plot.text(line, 40, 65 + index * 55, { size: 28 });
 });</code>
       </div>
       <p>Orders: <code>walk</code>, <code>random</code>, <code>lexical</code>, and <code>rotate</code>. The source line stays first, duplicate words produce only unique lines, and <code>limit</code> is capped at 1,000.</p>
-      <p><code>plot.chant(text, x, y, options)</code> sends the result of <code>permute()</code> through <code>textCutup()</code>. It is added to each plot when the addon is loaded.</p>
+      <p><code>plot.chant(text, x, y, options)</code> draws the result of <code>permute()</code> as readable <code>text()</code> lines. The changing word order is the composition. It is added to each plot when the addon is loaded.</p>
       <div class="code-preview">
         <code>plot.chant("CUT ARRANGE GLUE", 60, 90);
-plot.chant("CUT ARRANGE GLUE", 60, 90, { descent: 0 }); // every line cut equally
-plot.chant("CUT ARRANGE GLUE", 60, 90, { order: "rotate", breathe: 1 });</code>
+plot.chant("CUT ARRANGE GLUE", 60, 90, { order: "rotate" });
+plot.chant("CUT ARRANGE GLUE", 60, 90, { slices: 5 }); // explicit surface effect</code>
       </div>
       <ul>
         <li><code>lines</code> (default <code>5</code>): how many permuted lines return; <code>order</code> and <code>seed</code> pass to <code>permute()</code>.</li>
-        <li><code>descent</code> (default <code>1</code>): scales how much deeper each line is cut; <code>0</code> cuts them all equally light.</li>
-        <li><code>size</code>, <code>leading</code>, <code>slices</code>, <code>sliceOffset</code> set the type; every other <code>textCutup()</code> option (breathe, dropout, bleed, layer, ...) passes straight through.</li>
+        <li><code>size</code> and <code>leading</code> set the readable lines; ordinary trace options such as <code>breathe</code>, <code>dropout</code>, <code>bleed</code>, and <code>layer</code> pass to <code>text()</code>.</li>
+        <li>Passing <code>slices</code>, <code>sliceOffset</code>, <code>sliceDropout</code>, or <code>descent</code> explicitly opts the whole chant into <code>textCutup()</code>. Once active, <code>descent</code> defaults to <code>1</code> and deepens the horizontal shift line by line. This compatibility route is intentionally not the default.</li>
       </ul>
       <h3>Weave</h3>
       <div class="code-preview"><code>const sources = [

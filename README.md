@@ -3,7 +3,7 @@
 [Open the public p5.gysin site](https://seb-prjcts-be.github.io/p5.gysin/)
 
 p5.gysin is a vector-first p5.js library for generative, plottable drawings.
-It captures cut-up text, interrupted traces, repeated ink, and composed fields,
+It captures worn words, permuted language, interrupted traces, and composed fields,
 then exports the same work to SVG, JSON, or HPGL.
 
 ## Start
