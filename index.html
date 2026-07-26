@@ -338,8 +338,12 @@ plot.downloadHPGL("calibration.hpgl", {
     </div>
     <div class="ex-preview ex-sheet">
       <div id="ex-export" class="ex-canvas" data-ratio="1"></div>
-      <pre class="ex-code-block"><code class="language-javascript">const page = { width: 210, height: 210, units: "mm", margin: 5, scale: 0.375, clip: true };
-const svg = plot.exportSVG({ page, optimize: true });
+      <pre class="ex-code-block"><code class="language-javascript">const page = {
+  width: 210, height: 297, units: "mm",
+  margin: { top: 48.5, right: 5, bottom: 48.5, left: 5 },
+  scale: 200 / 560, clip: true
+};
+const svg = plot.exportPlotterSVG({ page });
 
 const json = plot.exportJSON({
   includeGenerated: true
@@ -838,7 +842,7 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
 
   // The calibration sheet at sheet scale: a condensed echo of the full page -
   // frame with registration crosses, masthead, ruler, rings, ramp, gradient,
-  // and pen-weight bars, in the layer colors the penMap separates.
+  // and physical pen-pass bars, in the layer colors the penMap separates.
   makePreview("ex-calibration", function(p, canvasW, canvasH) {
     const plot = new GysinPlot({ p: p, seed: 210297, width: canvasW, height: canvasH });
     const m = canvasW * 0.09;
@@ -918,7 +922,7 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
       const y = m + canvasH * 0.75 + index * canvasH * 0.022;
       plot.line(left + innerW * 0.05, y, left + innerW * 0.6, y, {
         breathe: 0.2,
-        strokeWeight: 0.5 + index * 0.55,
+        repeat: index + 1,
         layer: "frame"
       });
       plot.text(String(index + 1), left + innerW * 0.65, y + canvasH * 0.008, {

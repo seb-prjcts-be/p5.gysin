@@ -25,7 +25,7 @@ const ZONES = {
   rings:    { label: 44, center: 88, diskX: 30, asemicX: 139, asemicY: 50 },
   ramp:     { label: 136, top: 142 },
   gradient: { label: 183, center: 199, x0: 27, stride: 34, cap: 217, capDx: -3.5 },
-  weights:  { label: 224, top: 229, bottom: 240, x0: 27, stride: 28, cap: 246, capDx: -3.5 },
+  passes:   { label: 224, top: 229, bottom: 240, x0: 27, stride: 28, cap: 246, capDx: -3.5 },
   verbs:    { label: 252, line: 258, grain: 271, x0: 16, stride: 44, cap: 265, capDx: 0 }
 };
 
@@ -37,7 +37,7 @@ const PEN_OF = {
   frame: 1,
   label: 1,
   ramp: 1,
-  weight: 1,
+  passes: 1,
   texture: 1,
   rings: 2,
   fill: 3
@@ -63,7 +63,7 @@ function setup() {
   const drawH = PAGE.height - 2 * PAGE.margin;
   const canvas = createCanvas(mm(drawW), mm(drawH));
   canvas.parent("sketch");
-  describe("An A4 pen-plotter calibration sheet on three pens: a disturbed single-stroke title with a letters() specimen, a labelled mm ruler, RED centre-crossed rings with a cross-hatched core between a tinted cross-hatched ink mass and a field of asemic marks, a mirrored dropout/breathe ramp whose live-breathe side follows an on-page slider, a hatch-density gradient, a pen-weight ramp and a strip of disturbance verbs above a straight zero line. Buttons and keys: 0 reference, R reroll, S SVG, H HPGL.");
+  describe("An A4 pen-plotter calibration sheet on three pens: a disturbed single-stroke title with a letters() specimen, a labelled mm ruler, RED centre-crossed rings with a cross-hatched core between a tinted cross-hatched ink mass and a field of asemic marks, a mirrored dropout/breathe ramp whose live-breathe side follows an on-page slider, a hatch-density gradient, a pen-pass ramp and a strip of geometric disturbance verbs above a straight zero line. Buttons and keys: 0 reference, R reroll, S SVG, H HPGL.");
   pixelDensity(1);
   noLoop();
   buildPlot(SEED_A4);
@@ -91,11 +91,7 @@ function buildPlot(seed) {
     width,
     height,
     page: PAGE,
-    style: {
-      stroke: INK,
-      strokeWeight: 0.75,
-      alpha: 0.86
-    }
+    style: { stroke: INK }
   });
   // ── frame · border, registration crosses, title masthead ──
   drawFrame();
@@ -112,8 +108,8 @@ function buildPlot(seed) {
   // ── 4 · gradient - hatch density ──────────────────────────
   drawGradient();   // 4 · hatch-density gradient, spacing 0.8->2.4 mm
 
-  // ── 5 · weights - pen-weight bars ─────────────────────────
-  drawWeights();    // 5 · bars with rising strokeWeight
+  // ── 5 · passes - repeated physical pen paths ──────────────
+  drawPasses();     // 5 · bars with one through six physical pen passages
 
   // ── 6 · verbs - disturbance verbs + symbols foot ──────────
   drawVerbs();      // 6 · four disturbance verbs + a symbols() texture foot
@@ -126,7 +122,6 @@ function head(text, x, y) {
   plot.text(text, x, y, {
     size: mm(2.9),
     breathe: 0.15,
-    alpha: 0.8,
     layer: "label",
     stroke: INK
   });
@@ -137,7 +132,6 @@ function label(text, x, y, stroke = INK, layer = "label") {
   plot.text(text, x, y, {
     size: mm(2.5),
     breathe: 0.15,
-    alpha: 0.55,
     layer,
     stroke
   });
@@ -223,11 +217,10 @@ function drawRings() {
     fill: "cross",
     hatchSpacing: mm(0.9),
     hatchAngle: 30,
-    pressure: 0.4,
     layer: "fill",
     stroke: TINT
   });
-  label("fill:cross · pressure 0.4", diskX - mm(11), cy + mm(22), TINT, "fill");
+  label("fill:cross · spacing 0.9 mm", diskX - mm(11), cy + mm(22), TINT, "fill");
 
   const diameters = [16, 34, 58, 82];
   for (const d of diameters) {
@@ -331,20 +324,18 @@ function drawGradient() {
     (s) => s.toFixed(1));
 }
 
-// Zone 5 - bars with rising strokeWeight: reads the line weight the pen lays down.
-function drawWeights() {
-  head("5 : PEN WEIGHT · strokeWeight", mm(16), mm(ZONES.weights.label));
-  const yt = mm(ZONES.weights.top), yb = mm(ZONES.weights.bottom);
-  ramp(ZONES.weights, [0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
-    (w, x) => plot.line(x, yt, x, yb,
+// Zone 5 - one through six real passages: the sheet measures this pen and paper.
+function drawPasses() {
+  head("5 : PEN PASSES · repeat", mm(16), mm(ZONES.passes.label));
+  const yt = mm(ZONES.passes.top), yb = mm(ZONES.passes.bottom);
+  ramp(ZONES.passes, [1, 2, 3, 4, 5, 6],
+    (passes, x) => plot.line(x, yt, x, yb,
       {
-        breathe: 0.2,
-        drift: 0.2,
-        strokeWeight: w,
-        layer: "weight",
+        repeat: passes,
+        layer: "passes",
         stroke: INK
       }),
-    (w) => w.toFixed(1));
+    String);
 }
 
 // Zone 6 - four verbs, each above a straight zero line, then a full-width symbols() foot.
@@ -354,7 +345,7 @@ function drawVerbs() {
   ramp(ZONES.verbs, [
     { text: "hesitate 0.6", opt: { hesitate: 0.6 } },
     { text: "fray 0.5", opt: { fray: 0.5 } },
-    { text: "pressure 0.4", opt: { pressure: 0.4 } },
+    { text: "wobble 1.2", opt: { wobble: 1.2 } },
     { text: "rubout 0.3", opt: { rubout: 0.3 } }
   ],
     (v, x) => {
@@ -366,7 +357,6 @@ function drawVerbs() {
         ...v.opt
       });
       plot.line(x, y + mm(2), x + len, y + mm(2), {
-        strokeWeight: 0.5,
         layer: "texture",
         stroke: INK
       });
@@ -424,8 +414,8 @@ function resetToReference() {
 }
 
 function downloadSVG() {
-  plot.downloadSVG("p5-gysin-calibration.svg", EXPORT);
-  setStatus("SVG exported with A4 page metadata and clipping.");
+  plot.downloadPlotterSVG("p5-gysin-calibration.svg", EXPORT);
+  setStatus("Centerline SVG exported with A4 page metadata and clipping.");
 }
 
 function downloadHPGL() {

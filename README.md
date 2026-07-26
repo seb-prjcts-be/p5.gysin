@@ -33,6 +33,35 @@ The complete API, options, mutation model, and export model are documented in
 [gallery](https://seb-prjcts-be.github.io/p5.gysin/#examples) leads to
 standalone works with their source code.
 
+## Plotter-safe SVG
+
+These methods are marked `next` in the current checkout and are not part of the
+published v1.0.1 CDN build yet.
+
+Use the explicit plotter route for a file that can go to physical tooling:
+
+```js
+plot.downloadPlotterSVG("drawing.svg", {
+  page: {
+    width: 210,
+    height: 297,
+    units: "mm",
+    margin: 10,
+    scale: 0.25
+  },
+  tool: "pen"
+});
+```
+
+It requires a physical page, geometrically clips paths, optimizes travel per
+pen group, and writes those groups at SVG root. A layer with several stroke
+colours is split into separate pen groups automatically. Plotter SVG contains
+centre lines: screen `alpha`, `strokeWeight`, and `pressure` styling is
+discarded, while one uniform `0.1mm` hairline keeps the SVG visible. Physical
+opacity and line width come from the installed pen. Plotter metadata lists
+those screen styles as ignored; they are not plotter settings. Use the older
+`downloadSVG()` when you deliberately need the unchanged screen-SVG contract.
+
 ## Distribution
 
 - `p5.gysin.js` and `p5.gysin.min.js` contain the core.

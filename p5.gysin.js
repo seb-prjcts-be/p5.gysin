@@ -89,6 +89,7 @@
   const RUB_VERBS = new Set(["text", "textCutup"]);
 
   const PAGE_UNITS = new Set(["px", "mm", "cm", "in"]);
+  const PHYSICAL_PAGE_UNITS = new Set(["mm", "cm", "in"]);
   const PAGE_ORIGINS = new Set(["top-left", "bottom-left"]);
   const TOOL_MODES = new Set(["pen", "blade"]);
   const MAX_SAMPLE_POINTS = 100000;
@@ -668,33 +669,71 @@
     exportSVG(options = {}) {
       const page = this._resolvePage(options);
       const tool = normalizeToolMode(options.tool);
+      const plotterMode = options._plotterSVG === true;
       const width = page.width;
       const height = page.height;
       const title = escapeXML(options.title || "p5.gysin export");
       const decimals = options.decimals === undefined ? 2 : boundedInteger(options.decimals, "SVG decimals", 0, MAX_SVG_DECIMALS);
       const lines = [];
       const traces = this._exportTraces(page, options);
+      const warnings = plotterMode ? plotterWarnings(traces) : [];
+      const metadata = { library: "p5.gysin", page: page.metadata, tool };
+      if (plotterMode) {
+        metadata.plotter = {
+          geometricClipping: true,
+          routeOptimized: options.optimize === true,
+          pathModel: "centerline",
+          previewStroke: "0.1mm",
+          physicalStroke: "determined by installed pen",
+          ignoredScreenStyles: ["alpha", "strokeWeight", "pressure"],
+          warnings
+        };
+        emitPlotterWarnings(warnings);
+      }
 
       lines.push(`<?xml version="1.0" encoding="UTF-8"?>`);
       lines.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${round(width, decimals)}${page.units}" height="${round(height, decimals)}${page.units}" viewBox="0 0 ${round(width, decimals)} ${round(height, decimals)}">`);
       lines.push(`  <title>${title}</title>`);
-      lines.push(`  <metadata>${escapeXML(JSON.stringify({ library: "p5.gysin", page: page.metadata, tool }))}</metadata>`);
+      lines.push(`  <metadata>${escapeXML(JSON.stringify(metadata))}</metadata>`);
       if (page.clip) {
         lines.push(`  <clipPath id="p5-gysin-page"><rect x="${round(page.margin.left, decimals)}" y="${round(page.margin.top, decimals)}" width="${round(page.drawableWidth, decimals)}" height="${round(page.drawableHeight, decimals)}" /></clipPath>`);
       }
-      lines.push(`  <g fill="none" stroke-linecap="round" stroke-linejoin="round">`);
-
-      for (const [layer, layerTraces] of tracesByLayer(traces)) {
-        lines.push(`    <g id="layer-${escapeXML(svgId(layer))}" data-layer="${escapeXML(layer)}"${page.clip ? " clip-path=\"url(#p5-gysin-page)\"" : ""}>`);
-        for (const trace of layerTraces) {
-          lines.push(`      <path d="${svgPathD(trace.points, decimals, trace.closed)}" stroke="${escapeXML(trace.style.stroke)}" stroke-width="${round(trace.style.strokeWeight, decimals)}" opacity="${round(trace.style.alpha, decimals)}" data-shape-id="${escapeXML(trace.shapeId)}" data-type="${escapeXML(trace.type)}" data-role="${escapeXML(trace.role)}" data-pass="${trace.pass}" />`);
-        }
-        lines.push(`    </g>`);
+      if (!plotterMode) {
+        lines.push(`  <g fill="none" stroke-linecap="round" stroke-linejoin="round">`);
       }
 
-      lines.push(`  </g>`);
+      const svgGroups = plotterMode
+        ? Array.from(tracesByPlotterLayer(traces).values())
+        : Array.from(tracesByLayer(traces), ([layer, groupTraces]) => ({ layer, stroke: null, traces: groupTraces }));
+      for (const group of svgGroups) {
+        const layer = group.layer;
+        const layerTraces = group.traces;
+        const groupIndent = plotterMode ? "  " : "    ";
+        const pathIndent = plotterMode ? "    " : "      ";
+        const plotterStyle = plotterMode
+          ? " fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"0.1mm\" data-path-model=\"centerline\""
+          : "";
+        const strokeSuffix = group.stroke === null ? "" : `-stroke-${svgId(String(group.stroke).replace(/^#/, ""))}`;
+        const strokeData = group.stroke === null ? "" : ` data-stroke="${escapeXML(group.stroke)}"`;
+        lines.push(`${groupIndent}<g id="layer-${escapeXML(svgId(layer))}${strokeSuffix}" data-layer="${escapeXML(layer)}"${strokeData}${plotterStyle}${page.clip ? " clip-path=\"url(#p5-gysin-page)\"" : ""}>`);
+        for (const trace of layerTraces) {
+          const screenStyle = plotterMode
+            ? ""
+            : ` stroke-width="${round(trace.style.strokeWeight, decimals)}" opacity="${round(trace.style.alpha, decimals)}"`;
+          lines.push(`${pathIndent}<path d="${svgPathD(trace.points, decimals, trace.closed)}" stroke="${escapeXML(trace.style.stroke)}"${screenStyle} data-shape-id="${escapeXML(trace.shapeId)}" data-type="${escapeXML(trace.type)}" data-role="${escapeXML(trace.role)}" data-pass="${trace.pass}" />`);
+        }
+        lines.push(`${groupIndent}</g>`);
+      }
+
+      if (!plotterMode) {
+        lines.push(`  </g>`);
+      }
       lines.push(`</svg>`);
       return lines.join("\n");
+    }
+
+    exportPlotterSVG(options = {}) {
+      return this.exportSVG(this._plotterSVGOptions(options));
     }
 
     exportJSON(options = {}) {
@@ -745,6 +784,10 @@
 
     downloadSVG(filename = "gysin.svg", options = {}) {
       downloadText(filename, this.exportSVG(options), "image/svg+xml");
+    }
+
+    downloadPlotterSVG(filename = "gysin-plotter.svg", options = {}) {
+      downloadText(filename, this.exportPlotterSVG(options), "image/svg+xml");
     }
 
     downloadJSON(filename = "gysin.json", options = {}) {
@@ -903,6 +946,44 @@
       return page;
     }
 
+    _plotterSVGOptions(options = {}) {
+      if (!options || typeof options !== "object" || Array.isArray(options)) {
+        throw new TypeError("Plotter SVG options must be an object.");
+      }
+      if (options.page !== undefined && (!options.page || typeof options.page !== "object" || Array.isArray(options.page))) {
+        throw new TypeError("Plotter SVG page must be an object.");
+      }
+
+      const pageInput = Object.assign({}, this.page, options.page || {});
+      if (options.width !== undefined) pageInput.width = options.width;
+      if (options.height !== undefined) pageInput.height = options.height;
+      const hasExplicitPage = options.page !== undefined || this.page.explicit;
+      const units = pageInput.units === undefined ? "px" : String(pageInput.units).toLowerCase();
+      if (!hasExplicitPage || pageInput.width === null || pageInput.width === undefined ||
+          pageInput.height === null || pageInput.height === undefined || !PHYSICAL_PAGE_UNITS.has(units)) {
+        throw new RangeError("Plotter SVG requires an explicit physical page with width, height, and units mm, cm, or in.");
+      }
+
+      const page = normalizePage(pageInput, true);
+      const prepared = Object.assign({}, options, {
+        page: {
+          width: page.width,
+          height: page.height,
+          units: page.units,
+          margin: page.margin,
+          origin: page.origin,
+          rotation: page.rotation,
+          scale: page.scale,
+          clip: true
+        },
+        optimize: options.optimize !== false,
+        _plotterSVG: true
+      });
+      delete prepared.width;
+      delete prepared.height;
+      return prepared;
+    }
+
     _exportTraces(page, options = {}) {
       const traces = [];
       const tool = normalizeToolMode(options.tool);
@@ -939,10 +1020,18 @@
         }
       }
 
-      if (options.optimize === true && traces.length > MAX_OPTIMIZE_TRACES) {
-        throw new RangeError(`Route optimization supports at most ${MAX_OPTIMIZE_TRACES} traces. Reduce repeat/bleed/dropout/fray or export without optimize.`);
+      if (options.optimize === true) {
+        const routeGroups = options._plotterSVG === true
+          ? Array.from(tracesByPlotterLayer(traces).values())
+          : Array.from(tracesByLayer(traces), ([layer, groupTraces]) => ({ layer, stroke: null, traces: groupTraces }));
+        for (const group of routeGroups) {
+          if (group.traces.length > MAX_OPTIMIZE_TRACES) {
+            const groupName = group.stroke === null ? `Layer "${group.layer}"` : `Layer "${group.layer}" stroke "${group.stroke}"`;
+            throw new RangeError(`Route optimization supports at most ${MAX_OPTIMIZE_TRACES} traces per pen group. ${groupName} has ${group.traces.length}; reduce repeat/bleed/dropout/fray or export without optimize.`);
+          }
+        }
       }
-      return options.optimize === true ? optimizeTraceOrder(traces) : traces;
+      return options.optimize === true ? optimizeTraceOrder(traces, options._plotterSVG === true) : traces;
     }
 
     _ensureGenerated(shape) {
@@ -2360,9 +2449,59 @@
     return layers;
   }
 
-  function optimizeTraceOrder(traces) {
+  function tracesByPlotterLayer(traces) {
+    const strokesByLayer = new Map();
+    for (const trace of traces) {
+      if (!strokesByLayer.has(trace.layer)) strokesByLayer.set(trace.layer, new Set());
+      strokesByLayer.get(trace.layer).add(trace.style.stroke);
+    }
+
+    const groups = new Map();
+    for (const trace of traces) {
+      const splitByStroke = strokesByLayer.get(trace.layer).size > 1;
+      const key = splitByStroke ? `${trace.layer}\u0000${trace.style.stroke}` : `${trace.layer}\u0000`;
+      if (!groups.has(key)) {
+        groups.set(key, {
+          layer: trace.layer,
+          stroke: splitByStroke ? trace.style.stroke : null,
+          traces: []
+        });
+      }
+      groups.get(key).traces.push(trace);
+    }
+    return groups;
+  }
+
+  function plotterWarnings(traces) {
+    const warnings = [];
+    const strokesByLayer = new Map();
+
+    for (const trace of traces) {
+      if (!strokesByLayer.has(trace.layer)) strokesByLayer.set(trace.layer, new Set());
+      strokesByLayer.get(trace.layer).add(trace.style.stroke);
+    }
+
+    for (const [layer, strokes] of strokesByLayer) {
+      if (strokes.size > 1) {
+        warnings.push(`Layer "${layer}" was split into ${strokes.size} stroke groups; assign one physical pen to each.`);
+      }
+    }
+    return warnings;
+  }
+
+  function emitPlotterWarnings(warnings) {
+    if (!global.console || typeof global.console.warn !== "function") return;
+    for (const warning of warnings) {
+      global.console.warn(`[p5.gysin plotter] ${warning}`);
+    }
+  }
+
+  function optimizeTraceOrder(traces, splitByStroke = false) {
     const ordered = [];
-    for (const [, layerTraces] of tracesByLayer(traces)) {
+    const groups = splitByStroke
+      ? Array.from(tracesByPlotterLayer(traces).values(), (group) => group.traces)
+      : Array.from(tracesByLayer(traces).values());
+    for (const layerTraces of groups) {
       const pending = layerTraces.slice();
       let previous = null;
       while (pending.length) {

@@ -32,7 +32,7 @@
     <div class="demo-header">
       <div class="demo-number">page · mm · pens · stats</div>
       <h1>Plotter Calibration</h1>
-      <p>An A4 instrument for three pens: ruler, rings, disturbance ramps, weight and route cost. Its companion is <a href="../plotter_export/">Plotter Export</a>.</p>
+      <p>An A4 instrument for three pens: ruler, rings, geometric disturbance, real pen passes and route cost. Its companion is <a href="../plotter_export/">Plotter Export</a>.</p>
     </div>
     <div class="demo-layout">
       <div class="demo-code">
@@ -50,12 +50,14 @@ plot.line(x, y, x, y - mm(5), { layer: "label" });
 plot.text("50", x, y + mm(6), { size: mm(3), layer: "label" });
 
 // Rings over a cross-hatched ink mass.
-plot.circle(cx, cy, d, { fill: "cross", hatchSpacing: mm(0.9), pressure: 0.4, layer: "fill" });
+plot.circle(cx, cy, d, { fill: "cross", hatchSpacing: mm(0.9), layer: "fill" });
 
 // A built-in single-stroke type specimen.
 plot.letters("P5 GYSIN", x, y, w, h, { glyphJitter: 0.6, layer: "label" });
 
-// …then dropout/breathe, hatch and pen-weight ramps, and disturbance verbs.
+// …then dropout/breathe, hatch, one-to-six pen passes, and geometric verbs.
+
+plot.downloadPlotterSVG("calibration.svg", { page: PAGE });
 
 // Path cost shown up front, before any SVG or HPGL export:
 const s = plot.stats({ page: PAGE, drawSpeed: 20, travelSpeed: 60 });</code></pre>

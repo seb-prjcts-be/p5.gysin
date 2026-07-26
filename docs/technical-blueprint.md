@@ -56,7 +56,7 @@ humanizing-pipeline:
 - `rubout`: maakt uitgewiste zones
 - `fray`: voegt korte rafelige lijntjes toe
 - `hesitate`: voegt kleine haperingen toe
-- `pressure`: varieert stroke weight/alpha in de schermweergave
+- `pressure`: varieert uitsluitend stroke weight/alpha in de schermweergave
 
 De output blijft een lijst van polylines. Geen rasterfilter, geen pixelanalyse.
 
@@ -274,8 +274,9 @@ binnen die zones wegvallen.
 : Voegt korte losse lijntjes toe aan contouren. Houd laag voor plotters.
 
 `pressure`
-: Varieert scherm-stroke weight en alpha. Voor echte penplotters is dit metadata
-of een latere pen/snelheid-strategie.
+: Varieert uitsluitend scherm-stroke weight en alpha. Dit is geen fysieke
+peninstelling; de plotter-SVG-route gooit deze stijl weg en exporteert alleen
+de centerline-geometrie.
 
 `segmentLength`
 : Gewenste afstand tussen gesamplede punten voor `density = 1`.
@@ -434,5 +435,6 @@ Niet in de MVP:
 
 - volledige opentype contourhierarchie
 - boolean path operations
-- echte pen pressure mapping
-- multi-pen kleurplanning
+- geen claim op pen pressure: vaste penhardware krijgt uitsluitend centerlines
+- automatische penkeuze of penwissel; plotter-SVG groepeert kleuren, maar de
+  gebruiker koppelt elke groep zelf aan een werkelijk geïnstalleerde pen

@@ -2,14 +2,15 @@
 // shapesFor() builds the shared trace set; export handlers add page and pen data.
 
 const SEED = 7475;
-const EXPORT_PAGE = {
-  width: 210,
-  height: 210,
-  units: "mm",
-  margin: 5,
-  scale: 0.375,
-  clip: true
-};
+const CANVAS_SIZE = 560;
+const MIN_PAGE_MARGIN = 5;
+const ISO_PAGES = Object.freeze({
+  A4: Object.freeze({ width: 210, height: 297 }),
+  A3: Object.freeze({ width: 297, height: 420 }),
+  A2: Object.freeze({ width: 420, height: 594 })
+});
+let physicalFormat = "A4";
+const EXPORT_PAGE = physicalPage(physicalFormat);
 const STATS_OPTIONS = {
   page: EXPORT_PAGE,
   optimize: true,
@@ -83,9 +84,8 @@ function composition(v) {
 // The composition as data: [layer, method, geometry, perturbation]. buildPlot()
 // iterates this and derives stroke from the pen map, describing the plate once.
 // `comp` carries the per-variation tuning. No filled masses: the pen-3 fields
-// stay airy (alpha 0.3/0.35), so the red type carries the weight of the plate.
+// stay open through sparse geometry, so every visible mark is a real pen path.
 const ARM = {
-  alpha: 0.7,
   breathe: 0.6,
   dropout: 0.02,
   overshoot: 4,
@@ -116,7 +116,6 @@ function shapesFor(comp) {
         dropout: 0.07,
         repeat: 2,
         rubout: 0.1,
-        pressure: 0.25,
         glyphJitter: 0.7
       }],
 
@@ -138,8 +137,7 @@ function shapesFor(comp) {
         breathe: 0.8,
         drift: 1,
         dropout: 0.05,
-        glyphJitter: 0.5,
-        alpha: 0.3
+        glyphJitter: 0.5
       }],
 
     // ── 5 · symbol field ────────────────────────
@@ -155,8 +153,7 @@ function shapesFor(comp) {
         breathe: 0.7,
         drift: 1.2,
         dropout: 0.04,
-        glyphJitter: 0.4,
-        alpha: 0.35
+        glyphJitter: 0.4
       }],
 
     // ── 6 · registration marks ──────────────────
@@ -164,7 +161,6 @@ function shapesFor(comp) {
     // registration, not as dark noise beside the fields.
     ["registration", "circle", [404, 152, 78],
       {
-        alpha: 0.7,
         density: 1.0,
         breathe: 1.3,
         drift: 1.8,
@@ -175,7 +171,6 @@ function shapesFor(comp) {
       }],
     ["registration", "polygon", [[[156, 372], [125, 426], [187, 426]]],
       {
-        alpha: 0.7,
         breathe: 1.3,
         drift: 1.8,
         dropout: 0.08,
@@ -208,7 +203,7 @@ let statusPrefix = "Ready to export";
 let liveStats = null;
 
 function setup() {
-  const canvas = createCanvas(560, 560);
+  const canvas = createCanvas(CANVAS_SIZE, CANVAS_SIZE);
   canvas.parent("sketch");
   describe("A layered plotter composition prepared for SVG, JSON, and HPGL export.");
   pixelDensity(1);
@@ -273,12 +268,7 @@ function buildPlot() {
     seed: SEED,
     width: width,
     height: height,
-    page: EXPORT_PAGE,
-    style: {
-      stroke: PEN_INK[1],
-      strokeWeight: 0.9,
-      alpha: 0.86
-    }
+    page: EXPORT_PAGE
   });
 
   for (const [layer, method, geom, opts] of shapesFor(composition(variation))) {
@@ -295,10 +285,15 @@ function buildPlot() {
 }
 
 function wireButtons() {
+  const sizeInput = document.getElementById("plot-size");
+  sizeInput.addEventListener("change", function() {
+    setPhysicalFormat(sizeInput.value);
+  });
+  updatePhysicalSettings();
+
   onClick("svg-button", function() {
-    plot.downloadSVG("p5-gysin-plotter-export.svg", {
-      page: EXPORT_PAGE,
-      optimize: true
+    plot.downloadPlotterSVG("p5-gysin-plotter-export.svg", {
+      page: EXPORT_PAGE
     });
     report("SVG exported");
   });
@@ -324,6 +319,46 @@ function wireButtons() {
   onClick("reset-button", resetPlate);
 }
 
+function physicalPage(format) {
+  const sheet = ISO_PAGES[format];
+  if (!sheet) throw new RangeError("Physical format must be A4, A3, or A2.");
+  const square = sheet.width - 2 * MIN_PAGE_MARGIN;
+  const verticalMargin = (sheet.height - square) / 2;
+  return {
+    width: sheet.width,
+    height: sheet.height,
+    units: "mm",
+    margin: {
+      top: verticalMargin,
+      right: MIN_PAGE_MARGIN,
+      bottom: verticalMargin,
+      left: MIN_PAGE_MARGIN
+    },
+    scale: square / CANVAS_SIZE,
+    clip: true
+  };
+}
+
+function setPhysicalFormat(value) {
+  physicalFormat = String(value).toUpperCase();
+  Object.assign(EXPORT_PAGE, physicalPage(physicalFormat));
+  statusPrefix = `${physicalFormat} page selected`;
+  updatePhysicalSettings();
+  buildPlot();
+  redraw();
+}
+
+function physicalSizeLabel() {
+  return `${physicalFormat} · ${EXPORT_PAGE.width.toFixed(0)} × ${EXPORT_PAGE.height.toFixed(0)} mm`;
+}
+
+function updatePhysicalSettings() {
+  document.getElementById("plot-size-value").textContent = physicalSizeLabel();
+  document.getElementById("physical-settings").textContent =
+    `${physicalSizeLabel()} · centered · min. margin ${MIN_PAGE_MARGIN} mm · centerlines · ` +
+    "clipping on · route optimized · 3 pens";
+}
+
 function onClick(id, handler) {
   document.getElementById(id).addEventListener("click", handler);
 }
@@ -334,7 +369,7 @@ function onClick(id, handler) {
 function report(prefix) {
   if (prefix !== undefined) statusPrefix = prefix;
   setStatus(
-    `${statusPrefix} · seed ${SEED}/v${variation} · human x${humanScale.toFixed(2)} · ` +
+    `${statusPrefix} · ${physicalSizeLabel()} · seed ${SEED}/v${variation} · human x${humanScale.toFixed(2)} · ` +
     `${liveStats.paths} paths · ${liveStats.drawnLength.toFixed(0)} mm · ` +
     `~${liveStats.estimatedSeconds.toFixed(0)}s plot time`
   );
@@ -406,7 +441,7 @@ function drawLegend(stats) {
 
 // Top caption: export coordinates + live controls, plus a CLEAN..ROUGH meter.
 function drawHint() {
-  label(`SEED ${SEED} · VAR ${variation} · HUMAN x${humanScale.toFixed(2)}`, METER.x, HINT_Y, { size: 11 });
+  label(`${physicalSizeLabel().toUpperCase()} · SEED ${SEED} · VAR ${variation} · HUMAN x${humanScale.toFixed(2)}`, METER.x, HINT_Y, { size: 11 });
   label("R = REROLL · ↑↓ = HUMAN SCALE", width - METER.x, HINT_Y, {
     size: 11,
     align: RIGHT

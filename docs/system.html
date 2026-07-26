@@ -113,7 +113,7 @@ plot.asemic(60, 220, 160, 120);                     // a cursive, wordless tangl
         <li><code>path</code>: set <code>closed: true</code> for an exact closed contour.</li>
         <li><code>text</code>: <code>size</code>, <code>font</code>, <code>sampleFactor</code>, <code>lineHeight</code>, and <code>letterSpacing</code>.</li>
         <li><code>textCutup</code>: a rare horizontal contour disturbance; all text options plus <code>slices</code>, <code>sliceOffset</code>, and <code>sliceDropout</code>.</li>
-        <li>Style: <code>stroke</code>, positive <code>strokeWeight</code>, and clamped <code>alpha</code>.</li>
+        <li>Screen and generic-SVG style: <code>stroke</code>, positive <code>strokeWeight</code>, and clamped <code>alpha</code>. The plotter-SVG route keeps the pen grouping from <code>stroke</code> but discards the two screen-only properties.</li>
         <li>Export per shape: <code>simplify</code>, <code>minSegmentLength</code>, and <code>layer</code>.</li>
       </ul>
       <p>Invalid geometry, duplicate ids, excessive sampling, more than 1,000 repeats, and route optimization above 2,000 traces raise an error before export.</p>
@@ -143,7 +143,7 @@ plot.asemic(60, 220, 160, 120);                     // a cursive, wordless tangl
         <li><code>bleedCluster</code>: positive target length for contiguous selected fragments; default <code>18</code>.</li>
         <li><code>rubout</code>: clamped 0–1 strength of generated erase zones.</li>
         <li><code>fray</code>: non-negative amount of loose edge strokes.</li>
-        <li><code>pressure</code>: clamped 0–1 screen weight and alpha variation.</li>
+        <li><code>pressure</code>: clamped 0–1 screen weight and alpha variation; never a physical pen-pressure setting and discarded by plotter SVG.</li>
         <li><code>overshoot</code>: non-negative extension of open path endpoints.</li>
         <li><code>segmentLength</code>: positive target spacing; default <code>8</code>.</li>
         <li><code>glyphJitter</code>: non-negative per-glyph variation (rotation, shift, scale) so no two rendered letters are identical; default <code>0.35</code>, <code>0</code> is mechanically exact.</li>
@@ -206,7 +206,7 @@ plot.lattice("JUNK IS NO GOOD BABY", 60, 60, 480, 480, {
       <ul>
         <li><code>turns</code> (default <code>[0, 90]</code>): the sheet's angles, one written pass per entry. Near-perpendicular passes write along the field's other axis so their rows still fill it.</li>
         <li><code>wear</code> (default <code>1</code>): one knob that scales breathe/dropout/drift per pass; <code>0</code> writes every pass clean.</li>
-        <li><code>size</code> (default <code>14</code>), <code>lineHeight</code>, <code>letterSpacing</code>, <code>stroke</code>, <code>font</code>, <code>alpha</code>, <code>layer</code> (default <code>"lattice"</code>); <code>extra</code> passes any other trace option to every row.</li>
+        <li><code>size</code> (default <code>14</code>), <code>lineHeight</code>, <code>letterSpacing</code>, <code>stroke</code>, <code>font</code>, screen-only <code>alpha</code>, <code>layer</code> (default <code>"lattice"</code>); <code>extra</code> passes any other trace option to every row.</li>
         <li>Returns the id of every written row, pass by pass. Freeze one pass to keep it unchanged while later passes reroll.</li>
       </ul>
     </section>
@@ -301,12 +301,13 @@ plot.clear();         // empty the sheet: shapes, ids, and selection</code>
       <h2>Public Method Index</h2>
       <p>Core creation and drawing: <code>new GysinPlot()</code>, <code>p.createGysinPlot()</code>, <code>plot.line()</code>, <code>plot.rect()</code>, <code>plot.circle()</code>, <code>plot.polygon()</code>, <code>plot.path()</code>, <code>plot.text()</code>, <code>plot.textCutup()</code>, <code>plot.asemic()</code>, <code>plot.grid()</code>, <code>plot.letters()</code>, <code>plot.symbols()</code>, <code>plot.rub()</code>, <code>plot.lattice()</code>, and <code>plot.draw()</code>.</p>
       <p>Core addressing: <code>plot.get()</code>, <code>plot.select()</code>, <code>plot.freeze()</code>, <code>plot.thaw()</code>, <code>plot.regenerate()</code>, <code>plot.reroll()</code>, <code>plot.remove()</code>, <code>plot.update()</code>, <code>plot.setSeed()</code>, and <code>plot.clear()</code>.</p>
-      <p>Core output: <code>plot.exportSVG()</code>, <code>plot.exportJSON()</code>, <code>plot.exportHPGL()</code>, <code>plot.downloadSVG()</code>, <code>plot.downloadJSON()</code>, <code>plot.downloadHPGL()</code>, and <code>plot.stats()</code>.</p>
+      <p>Core output: <code>plot.exportSVG()</code>, <code>plot.exportPlotterSVG()</code>, <code>plot.exportJSON()</code>, <code>plot.exportHPGL()</code>, <code>plot.downloadSVG()</code>, <code>plot.downloadPlotterSVG()</code>, <code>plot.downloadJSON()</code>, <code>plot.downloadHPGL()</code>, and <code>plot.stats()</code>.</p>
       <p>Text addon: <code>GysinText.permute()</code>, <code>GysinText.weave()</code>, <code>plot.chant()</code>, and <code>plot.weave()</code>. Typewriter addon: <code>plot.underwood()</code>, <code>GysinUnderwood.glyphPolylines()</code>, and <code>GysinUnderwood.render()</code>.</p>
     </section>
 
     <section class="guide-block">
       <h2>Export</h2>
+      <p><strong>Release candidate:</strong> the plotter-safe methods below are marked <code>next</code> in this checkout and are not in the published v1.0.1 CDN build yet.</p>
       <div class="code-preview">
         <code>const page = {
   width: 210,
@@ -317,7 +318,7 @@ plot.clear();         // empty the sheet: shapes, ids, and selection</code>
   clip: true
 };
 
-const svg = plot.exportSVG({ page, optimize: true, tool: "pen" });
+const svg = plot.exportPlotterSVG({ page, tool: "pen" });
 const json = plot.exportJSON();
 const hpgl = plot.exportHPGL({
   page,
@@ -326,12 +327,17 @@ const hpgl = plot.exportHPGL({
 });
 const stats = plot.stats({ page, tool: "pen", drawSpeed: 20, travelSpeed: 60 });
 
-plot.downloadSVG("gysin.svg", { page, optimize: true });
+plot.downloadPlotterSVG("gysin.svg", { page, tool: "pen" });
 plot.downloadJSON("gysin.json");
 plot.downloadHPGL("gysin.hpgl", { page });</code>
       </div>
-      <p>The page model applies units, margins, origin, rotation, scale, and optional clipping to SVG, HPGL, and statistics. Route optimization is opt-in so the original drawing order remains the default.</p>
-      <p><code>tool: "pen"</code> preserves bleed and explicit repeats. <code>tool: "blade"</code> automatically removes every second and later passage, including legacy <code>repeat</code> traces, so a cutter receives only the first physical path.</p>
+      <p><code>exportPlotterSVG()</code> and <code>downloadPlotterSVG()</code> are the safe physical-output route. They require explicit <code>width</code>, <code>height</code>, and <code>mm</code>, <code>cm</code>, or <code>in</code> units; clip actual path geometry to the page; optimize travel inside each physical pen group; and write those groups directly below the SVG root. A semantic layer with several stroke colours is split into separate pen groups automatically; existing single-colour layers keep their names. The generic <code>exportSVG()</code> and <code>downloadSVG()</code> keep their original screen-oriented defaults and byte-compatible group structure.</p>
+      <p>Plotter SVG route optimization is on by default. Pass <code>optimize: false</code> only when physical drawing order matters more than pen-up travel, such as a deliberate wet-ink sequence. Clipping stays mandatory in this route. One pen group may contain at most 2,000 traces during optimization; independent groups no longer share that limit.</p>
+      <p>Plotter SVG is a centre-line file. It omits per-path opacity and varying stroke widths, and uses one uniform <code>0.1mm</code> SVG hairline only to keep paths visible. Physical coverage and width come from the installed pen. Plotter metadata always lists <code>alpha</code>, <code>strokeWeight</code>, and pressure-derived screen styling as ignored; they are not plotter settings. The route warns only about actionable physical mapping, such as splitting one semantic layer into several colour groups.</p>
+      <p>The route never deduplicates geometry: <code>tool: "pen"</code> preserves bleed and explicit repeats, while <code>tool: "blade"</code> removes second and later passages. Repetition is physical geometry, but its ink-darkening effect depends on the actual pen, paper, drying time, and machine.</p>
+      <p>The <a href="../examples/plotter_export/">Plotter Export poster</a> presents the physical basics together: exact ISO A4 (210 × 297 mm), A3 (297 × 420 mm), or A2 (420 × 594 mm), at least 5 mm margin, centre-line model, geometric clipping, optimized travel, and the three-pen mapping. The square work is centred and fitted to the selected portrait sheet; its on-screen composition does not move.</p>
+      <p>The <a href="../examples/plotter_calibration/">Plotter Calibration sheet</a> likewise contains only physical tests: millimetre scale, hatch spacing, geometric disturbance, and one through six real pen passages. It no longer presents alpha, pressure, or SVG stroke width as machine controls.</p>
+      <p>The page model applies units, margins, origin, rotation, scale, and optional clipping to generic SVG, HPGL, and statistics. Generic route optimization remains opt-in so existing drawing order stays unchanged.</p>
       <p>Supported units are <code>px</code>, <code>mm</code>, <code>cm</code>, and <code>in</code>. Origins are <code>top-left</code> and <code>bottom-left</code>. SVG precision accepts <code>decimals</code> from 0 through 12. HPGL additionally accepts <code>scale</code>, <code>penMap</code>, <code>speed</code>, offsets, and <code>maxPointsPerCommand</code>.</p>
     </section>
 

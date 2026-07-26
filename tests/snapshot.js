@@ -3,8 +3,8 @@ const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");
 
-function loadLibrary(filename) {
-  const context = { console };
+function loadLibrary(filename, libraryConsole = console) {
+  const context = { console: libraryConsole };
   context.globalThis = context;
   vm.createContext(context);
   vm.runInContext(fs.readFileSync(filename, "utf8"), context, {
@@ -278,12 +278,109 @@ const pageStats = pagePlot.stats({ page, optimize: true, drawSpeed: 20, travelSp
 assert.match(pageSvg, /width="100mm"/);
 assert.match(pageSvg, /id="layer-red"/);
 assert.match(pageSvg, /clip-path="url\(#p5-gysin-page\)"/);
+assert.match(pageSvg, /\n  <g fill="none" stroke-linecap="round" stroke-linejoin="round">\n    <g id="layer-red"/);
 assert.match(pageHpgl, /SP2;/);
 assert.match(pageHpgl, /SP3;/);
 assert.ok((pageHpgl.match(/PD/g) || []).length > 2);
 assert.equal(pageStats.page.units, "mm");
 assert.ok(pageStats.drawnLength > 0);
 assert.ok(pageStats.estimatedSeconds > 0);
+
+// A plotter SVG is a separate, strong-default route. Generic export stays
+// byte-compatible while this route requires physical dimensions, clips actual
+// geometry, optimizes within each pen group, and exposes groups at SVG root.
+for (const Plot of [SourcePlot, MinPlot]) {
+  const implicit = new Plot({ width: 100, height: 80 });
+  implicit.line(0, 0, 10, 10);
+  assert.throws(() => implicit.exportPlotterSVG(), /explicit physical page/);
+  assert.throws(
+    () => implicit.exportPlotterSVG({ page: { width: 100, height: 80, units: "px" } }),
+    /units mm, cm, or in/
+  );
+  assert.throws(
+    () => implicit.exportPlotterSVG({ page: { width: 100, units: "mm" } }),
+    /explicit physical page/
+  );
+
+  const route = new Plot({ seed: 1 });
+  route.line(-10, 10, 20, 10, { layer: "black", simplify: 0, minSegmentLength: 0 });
+  route.line(900, 10, 920, 10, { layer: "black", simplify: 0, minSegmentLength: 0 });
+  route.line(30, 10, 50, 10, { layer: "black", simplify: 0, minSegmentLength: 0 });
+  const physicalPage = { width: 1000, height: 100, units: "mm", scale: 1 };
+  const safeSvg = route.exportPlotterSVG({ page: physicalPage });
+  assert.match(safeSvg, /width="1000mm"/);
+  assert.match(safeSvg, /&quot;geometricClipping&quot;:true/);
+  assert.match(safeSvg, /&quot;routeOptimized&quot;:true/);
+  assert.match(safeSvg, /&quot;pathModel&quot;:&quot;centerline&quot;/);
+  assert.match(safeSvg, /&quot;ignoredScreenStyles&quot;:\[&quot;alpha&quot;,&quot;strokeWeight&quot;,&quot;pressure&quot;\]/);
+  assert.match(safeSvg, /\n  <g id="layer-black" data-layer="black" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="0\.1mm" data-path-model="centerline" clip-path=/);
+  assert.doesNotMatch(safeSvg, /\n  <g fill="none" stroke-linecap=/);
+  assert.doesNotMatch(safeSvg, /<path[^>]*\s(?:opacity|stroke-width)=/);
+  assert.doesNotMatch(safeSvg, /d="[^"]*-\d/);
+  assert.ok(safeSvg.indexOf('data-shape-id="hp_1"') < safeSvg.indexOf('data-shape-id="hp_3"'));
+  assert.ok(safeSvg.indexOf('data-shape-id="hp_3"') < safeSvg.indexOf('data-shape-id="hp_2"'));
+
+  const preservedSvg = route.exportPlotterSVG({ page: physicalPage, optimize: false });
+  assert.match(preservedSvg, /&quot;routeOptimized&quot;:false/);
+  assert.ok(preservedSvg.indexOf('data-shape-id="hp_1"') < preservedSvg.indexOf('data-shape-id="hp_2"'));
+  assert.ok(preservedSvg.indexOf('data-shape-id="hp_2"') < preservedSvg.indexOf('data-shape-id="hp_3"'));
+
+  const passes = new Plot({ seed: 2 });
+  passes.line(10, 10, 90, 10, {
+    layer: "ink",
+    repeat: 3,
+    simplify: 0,
+    minSegmentLength: 0
+  });
+  const passesSvg = passes.exportPlotterSVG({
+    page: { width: 100, height: 100, units: "mm" },
+    tool: "pen"
+  });
+  assert.match(passesSvg, /data-pass="2"/);
+  assert.match(passesSvg, /data-pass="3"/);
+}
+
+const capturedPlotterWarnings = [];
+const WarningPlot = loadLibrary(path.join(__dirname, "..", "p5.gysin.js"), {
+  warn(message) {
+    capturedPlotterWarnings.push(message);
+  }
+});
+const warningPlot = new WarningPlot();
+warningPlot.line(10, 10, 20, 10, {
+  layer: "mixed",
+  stroke: "#111111",
+  strokeWeight: 1,
+  alpha: 0.5,
+  simplify: 0,
+  minSegmentLength: 0
+});
+warningPlot.line(30, 10, 40, 10, {
+  layer: "mixed",
+  stroke: "#cc0000",
+  strokeWeight: 2,
+  alpha: 1,
+  simplify: 0,
+  minSegmentLength: 0
+});
+const warningSvg = warningPlot.exportPlotterSVG({
+  page: { width: 100, height: 100, units: "mm" }
+});
+assert.match(warningSvg, /&quot;ignoredScreenStyles&quot;:\[&quot;alpha&quot;,&quot;strokeWeight&quot;,&quot;pressure&quot;\]/);
+assert.match(warningSvg, /was split into 2 stroke groups/);
+assert.match(warningSvg, /id="layer-mixed-stroke-111111"/);
+assert.match(warningSvg, /id="layer-mixed-stroke-cc0000"/);
+assert.match(warningSvg, /data-stroke="#111111"/);
+assert.match(warningSvg, /data-stroke="#cc0000"/);
+assert.doesNotMatch(warningSvg, /<path[^>]*\s(?:opacity|stroke-width)=/);
+assert.match(warningSvg, /stroke-width="0\.1mm" data-path-model="centerline"/);
+const warningGenericSvg = warningPlot.exportSVG({
+  page: { width: 100, height: 100, units: "mm" }
+});
+assert.match(warningGenericSvg, /stroke-width="1" opacity="0\.5"/);
+assert.match(warningGenericSvg, /stroke-width="2" opacity="1"/);
+assert.equal(capturedPlotterWarnings.length, 1);
+assert.ok(capturedPlotterWarnings.every((warning) => warning.startsWith("[p5.gysin plotter]")));
 
 for (const layer of ["__proto__", "constructor", "toString"]) {
   const specialLayerPlot = new SourcePlot();
@@ -333,6 +430,12 @@ manyTracesPlot.line(0, 0, 10, 0, { repeat: 1000, simplify: 0, minSegmentLength: 
 manyTracesPlot.line(0, 1, 10, 1, { repeat: 1000, simplify: 0, minSegmentLength: 0 });
 manyTracesPlot.line(0, 2, 10, 2, { repeat: 1, simplify: 0, minSegmentLength: 0 });
 assert.throws(() => manyTracesPlot.exportSVG({ optimize: true }), /at most 2000 traces/);
+
+const manyLayerTracesPlot = new SourcePlot();
+manyLayerTracesPlot.line(0, 0, 10, 0, { layer: "one", repeat: 1000, simplify: 0, minSegmentLength: 0 });
+manyLayerTracesPlot.line(0, 1, 10, 1, { layer: "two", repeat: 1000, simplify: 0, minSegmentLength: 0 });
+manyLayerTracesPlot.line(0, 2, 10, 2, { layer: "two", repeat: 1, simplify: 0, minSegmentLength: 0 });
+assert.doesNotThrow(() => manyLayerTracesPlot.stats({ optimize: true }));
 
 const outlineFont = {
   textToPoints() { return []; },
@@ -945,6 +1048,39 @@ assert.ok(
 assert.match(showcasePage, /<strong>Word<\/strong><small>Isolate it\. Enlarge it\. Wear it\.<\/small>/);
 assert.match(showcasePage, /<strong>Sentence<\/strong><small>Order, sequence, source\.<\/small>/);
 assert.match(showcasePage, /<strong>Surface<\/strong><small>A late disturbance, used sparingly\.<\/small>/);
+
+const plotterExportPage = fs.readFileSync(path.join(examplesDir, "plotter_export", "index.html"), "utf8");
+const plotterExportSketch = fs.readFileSync(path.join(examplesDir, "plotter_export", "sketch.js"), "utf8");
+const plotterExportComposition = plotterExportSketch.split("// --- Canvas chrome")[0];
+assert.match(plotterExportPage, /id="plot-size-value"[^>]*>A4 · 210 × 297 mm<\/output>/);
+assert.match(plotterExportPage, /<select id="plot-size">[\s\S]*value="A4" selected>A4 · 21 × 29\.7 cm[\s\S]*value="A3">A3 · 29\.7 × 42 cm[\s\S]*value="A2">A2 · 42 × 59\.4 cm[\s\S]*<\/select>/);
+assert.match(plotterExportPage, /id="physical-settings">A4 · 210 × 297 mm · centered · min\. margin 5 mm · centerlines · clipping on · route optimized · 3 pens/);
+assert.match(plotterExportPage, /coverage and line width come from the installed pens/);
+assert.match(plotterExportPage, /downloadPlotterSVG\("plate\.svg", \{ page \}\)/);
+assert.match(plotterExportSketch, /A4: Object\.freeze\(\{ width: 210, height: 297 \}\)/);
+assert.match(plotterExportSketch, /A3: Object\.freeze\(\{ width: 297, height: 420 \}\)/);
+assert.match(plotterExportSketch, /A2: Object\.freeze\(\{ width: 420, height: 594 \}\)/);
+assert.match(plotterExportSketch, /const square = sheet\.width - 2 \* MIN_PAGE_MARGIN/);
+assert.match(plotterExportSketch, /const verticalMargin = \(sheet\.height - square\) \/ 2/);
+assert.match(plotterExportSketch, /Object\.assign\(EXPORT_PAGE, physicalPage\(physicalFormat\)\)/);
+assert.match(plotterExportSketch, /statusPrefix = `\$\{physicalFormat\} page selected`/);
+assert.match(plotterExportSketch, /centerlines · .*clipping on · route optimized · 3 pens/s);
+assert.doesNotMatch(plotterExportComposition, /\b(?:alpha|pressure|strokeWeight)\s*:/);
+
+const plotterCalibrationPage = fs.readFileSync(path.join(examplesDir, "plotter_calibration", "index.html"), "utf8");
+const plotterCalibrationSketch = fs.readFileSync(path.join(examplesDir, "plotter_calibration", "sketch.js"), "utf8");
+assert.match(plotterCalibrationPage, /real pen passes/);
+assert.match(plotterCalibrationPage, /downloadPlotterSVG\("calibration\.svg", \{ page: PAGE \}\)/);
+assert.match(plotterCalibrationSketch, /5 : PEN PASSES · repeat/);
+assert.match(plotterCalibrationSketch, /\[1, 2, 3, 4, 5, 6\]/);
+assert.match(plotterCalibrationSketch, /wobble 1\.2/);
+assert.match(plotterCalibrationSketch, /downloadPlotterSVG\("p5-gysin-calibration\.svg", EXPORT\)/);
+assert.doesNotMatch(plotterCalibrationSketch, /\b(?:alpha|pressure|strokeWeight)\s*:/);
+const calibrationPreviewStart = showcasePage.indexOf('makePreview("ex-calibration"');
+const calibrationPreviewEnd = showcasePage.indexOf('makePreview("ex-export"', calibrationPreviewStart);
+const calibrationPreview = showcasePage.slice(calibrationPreviewStart, calibrationPreviewEnd);
+assert.match(calibrationPreview, /repeat: index \+ 1/);
+assert.doesNotMatch(calibrationPreview, /\b(?:alpha|pressure|strokeWeight)\s*:/);
 
 for (const name of manifest.examples) {
   assert.ok(fs.existsSync(path.join(examplesDir, name, "index.html")), `${name} index.html`);
