@@ -514,6 +514,10 @@ body.chapters .ce-module.chapter-active {
   gap: 18px;
 }
 
+.method-strip + .section-header {
+  margin-top: clamp(36px, 6vw, 72px);
+}
+
 .method-strip a {
   display: grid;
   min-height: 180px;
