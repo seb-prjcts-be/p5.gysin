@@ -293,7 +293,8 @@ function wireButtons() {
 
   onClick("svg-button", function() {
     plot.downloadPlotterSVG("p5-gysin-plotter-export.svg", {
-      page: EXPORT_PAGE
+      page: EXPORT_PAGE,
+      penMap: PEN_MAP
     });
     report("SVG exported");
   });

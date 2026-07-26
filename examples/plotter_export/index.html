@@ -49,7 +49,7 @@ const page = {
   margin: { top: 48.5, right: 5, bottom: 48.5, left: 5 },
   scale: 200 / 560, clip: true
 };
-plot.downloadPlotterSVG("plate.svg", { page });
+plot.downloadPlotterSVG("plate.svg", { page, penMap });
 plot.downloadJSON("plate.json", { includeGenerated: true });
 plot.downloadHPGL("plate.hpgl", { page, penMap, speed: 20 });
 
@@ -77,7 +77,7 @@ const stats = plot.stats({ page, drawSpeed: 20, travelSpeed: 60 });
           <button type="button" id="cleaner-button">Cleaner −</button>
           <button type="button" id="reset-button">Reset</button>
         </div>
-        <div class="demo-note">A4, A3 and A2 create exact ISO portrait pages. The square work is centered with at least 5 mm margin; its on-screen composition does not move. Plotter SVG contains centerlines; coverage and line width come from the installed pens. <code>R</code> changes variation; <code>&uarr;</code>/<code>&darr;</code> change roughness; <strong>Reset</strong> returns variation 0 and human &times;1. SVG, JSON and HPGL export the plate shown.</div>
+        <div class="demo-note">A4, A3 and A2 create exact ISO portrait pages. The square work is centered with at least 5 mm margin; its on-screen composition does not move. Plotter SVG contains centerlines and true Inkscape layers named by physical pen: <code>1 frame</code>, <code>2 type</code>, <code>3 field</code>. Coverage and line width come from the installed pens. <code>R</code> changes variation; <code>&uarr;</code>/<code>&darr;</code> change roughness; <strong>Reset</strong> returns variation 0 and human &times;1. SVG, JSON and HPGL export the plate shown.</div>
       </div>
       <div class="demo-right">
         <div class="demo-canvas" id="sketch" role="img" aria-label="A layered plotter composition prepared for SVG, JSON, and HPGL export."></div>

@@ -343,13 +343,14 @@ plot.downloadHPGL("calibration.hpgl", {
   margin: { top: 48.5, right: 5, bottom: 48.5, left: 5 },
   scale: 200 / 560, clip: true
 };
-const svg = plot.exportPlotterSVG({ page });
+const penMap = { frame: 1, type: 2, field: 3 };
+const svg = plot.exportPlotterSVG({ page, penMap });
 
 const json = plot.exportJSON({
   includeGenerated: true
 });
 
-const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });</code></pre>
+const hpgl = plot.exportHPGL({ page, penMap });</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="examples/plotter_export/">-> full example</a>
         <a class="ex-full-link" href="examples/plotter_export/sketch.js">-> source sketch</a>

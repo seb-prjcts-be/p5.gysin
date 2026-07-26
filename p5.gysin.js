@@ -685,6 +685,8 @@
           pathModel: "centerline",
           previewStroke: "0.1mm",
           physicalStroke: "determined by installed pen",
+          inkscapeLayers: true,
+          layerLabelPrefix: "physical pen number",
           ignoredScreenStyles: ["alpha", "strokeWeight", "pressure"],
           warnings
         };
@@ -692,7 +694,7 @@
       }
 
       lines.push(`<?xml version="1.0" encoding="UTF-8"?>`);
-      lines.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${round(width, decimals)}${page.units}" height="${round(height, decimals)}${page.units}" viewBox="0 0 ${round(width, decimals)} ${round(height, decimals)}">`);
+      lines.push(`<svg xmlns="http://www.w3.org/2000/svg"${plotterMode ? " xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"" : ""} width="${round(width, decimals)}${page.units}" height="${round(height, decimals)}${page.units}" viewBox="0 0 ${round(width, decimals)} ${round(height, decimals)}">`);
       lines.push(`  <title>${title}</title>`);
       lines.push(`  <metadata>${escapeXML(JSON.stringify(metadata))}</metadata>`);
       if (page.clip) {
@@ -703,7 +705,10 @@
       }
 
       const svgGroups = plotterMode
-        ? Array.from(tracesByPlotterLayer(traces).values())
+        ? Array.from(tracesByPlotterLayer(traces).values(), (group, index) => Object.assign({}, group, {
+            pen: plotterPenForGroup(group, options.penMap || {}, index + 1),
+            order: index
+          })).sort((a, b) => a.pen - b.pen || a.order - b.order)
         : Array.from(tracesByLayer(traces), ([layer, groupTraces]) => ({ layer, stroke: null, traces: groupTraces }));
       for (const group of svgGroups) {
         const layer = group.layer;
@@ -715,7 +720,11 @@
           : "";
         const strokeSuffix = group.stroke === null ? "" : `-stroke-${svgId(String(group.stroke).replace(/^#/, ""))}`;
         const strokeData = group.stroke === null ? "" : ` data-stroke="${escapeXML(group.stroke)}"`;
-        lines.push(`${groupIndent}<g id="layer-${escapeXML(svgId(layer))}${strokeSuffix}" data-layer="${escapeXML(layer)}"${strokeData}${plotterStyle}${page.clip ? " clip-path=\"url(#p5-gysin-page)\"" : ""}>`);
+        const penPrefix = plotterMode ? `${group.pen}-` : "";
+        const inkscapeData = plotterMode
+          ? ` data-pen="${group.pen}" inkscape:groupmode="layer" inkscape:label="${escapeXML(plotterLayerLabel(group))}"`
+          : "";
+        lines.push(`${groupIndent}<g id="layer-${penPrefix}${escapeXML(svgId(layer))}${strokeSuffix}" data-layer="${escapeXML(layer)}"${strokeData}${inkscapeData}${plotterStyle}${page.clip ? " clip-path=\"url(#p5-gysin-page)\"" : ""}>`);
         for (const trace of layerTraces) {
           const screenStyle = plotterMode
             ? ""
@@ -2470,6 +2479,18 @@
       groups.get(key).traces.push(trace);
     }
     return groups;
+  }
+
+  function plotterPenForGroup(group, penMap, fallbackPen) {
+    const trace = group.traces[0];
+    const hasLayer = Object.prototype.hasOwnProperty.call(penMap, trace.layer);
+    const hasStroke = Object.prototype.hasOwnProperty.call(penMap, trace.style.stroke);
+    return hasLayer || hasStroke ? penForTrace(trace, penMap) : fallbackPen;
+  }
+
+  function plotterLayerLabel(group) {
+    const stroke = group.stroke === null ? "" : ` ${group.stroke}`;
+    return `${group.pen} ${group.layer}${stroke}`;
   }
 
   function plotterWarnings(traces) {

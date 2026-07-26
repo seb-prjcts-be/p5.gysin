@@ -1,8 +1,8 @@
 # Plotter-safe SVG export contract
 
 Datum: 26 juli 2026
-Status: uitgevoerd op branch `codex/plotter-safe-export`; nog niet
-gecommit, gepusht of uitgebracht.
+Status: basis uitgevoerd op `main` in commit `72b7fdc`; genummerde
+Inkscape-lagen zijn de lokale vervolgcorrectie van 26 juli 2026.
 
 ## Aanleiding
 
@@ -54,16 +54,20 @@ De plotterroute:
    `mm`, `cm` of `in`;
 2. forceert geometrische clipping op de paginagrenzen;
 3. sorteert routes standaard binnen iedere fysieke pengroep;
-4. schrijft elke penlaag als rechtstreekse top-level SVG-groep en splitst een
-   laag met meerdere stroke-kleuren automatisch in afzonderlijke pengroepen;
-5. bewaart bij `tool: "pen"` alle bewuste herhalingen en bleed-passes;
-6. schrijft centerlines zonder opacity of variabele stroke-width, met één
+4. schrijft elke penlaag als een echte Inkscape-laag rechtstreeks onder de
+   SVG-root; de zichtbare laagnaam begint met het fysieke nummer uit
+   `penMap`, bijvoorbeeld `1 black`, `2 red`, `3 blue`; zonder map gebruikt
+   de route een deterministische volgorde vanaf 1;
+5. splitst een laag met meerdere stroke-kleuren automatisch in afzonderlijke
+   pengroepen;
+6. bewaart bij `tool: "pen"` alle bewuste herhalingen en bleed-passes;
+7. schrijft centerlines zonder opacity of variabele stroke-width, met één
    uniforme `0.1mm` haarlijn die alleen de SVG-preview zichtbaar houdt;
-7. noemt `alpha`, `strokeWeight` en daarvan afgeleide `pressure`-schermstijl
+8. noemt `alpha`, `strokeWeight` en daarvan afgeleide `pressure`-schermstijl
    permanent als genegeerd in SVG-metadata; alleen een fysiek uitvoerbare actie,
    zoals automatisch gesplitste kleurengroepen, wordt nog als waarschuwing
    gemeld;
-8. weigert optimalisatie duidelijk wanneer één pengroep meer dan 2.000 traces
+9. weigert optimalisatie duidelijk wanneer één pengroep meer dan 2.000 traces
    bevat; het oude totaalmaximum geldt niet meer over onafhankelijke lagen heen.
 
 `optimize: false` blijft een bewuste escape hatch wanneer de fysieke
@@ -82,6 +86,7 @@ plot.downloadPlotterSVG("gysin-remembers.svg", {
     margin: { top: 23.5, right: 5, bottom: 23.5, left: 5 },
     scale: 200 / 720
   },
+  penMap: { [INK]: 1, [RED]: 2 },
   tool: "pen"
 });
 ```
@@ -102,6 +107,9 @@ De automatische tests moeten bewijzen dat:
 - penpasses 2 en 3 in penmodus aanwezig blijven;
 - schermstijl niet als opacity of variabele lijndikte in het plotter-SVG staat;
 - waarschuwingen en top-level penlagen in het echte SVG staan;
+- iedere plotterlaag een echte Inkscape-laag is en de zichtbare namen in
+  fysieke penvolgorde met `1`, `2`, `3` beginnen;
+- de generieke scherm-SVG geen Inkscape-attributen krijgt;
 - meer dan 2.000 traces verdeeld over veilige lagen niet ten onrechte worden
   geweigerd.
 

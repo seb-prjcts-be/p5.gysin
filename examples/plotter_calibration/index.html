@@ -44,6 +44,7 @@ plot.draw();
 
 // The sheet works in millimetres and maps each layer to a pen.
 const mm = (v) =&gt; v * MM;   // millimetres -&gt; canvas pixels
+const PEN_OF = { label: 1, rings: 2, fill: 3 };
 
 // A millimetre ruler.
 plot.line(x, y, x, y - mm(5), { layer: "label" });
@@ -57,7 +58,7 @@ plot.letters("P5 GYSIN", x, y, w, h, { glyphJitter: 0.6, layer: "label" });
 
 // …then dropout/breathe, hatch, one-to-six pen passes, and geometric verbs.
 
-plot.downloadPlotterSVG("calibration.svg", { page: PAGE });
+plot.downloadPlotterSVG("calibration.svg", { page: PAGE, penMap: PEN_OF });
 
 // Path cost shown up front, before any SVG or HPGL export:
 const s = plot.stats({ page: PAGE, drawSpeed: 20, travelSpeed: 60 });</code></pre>

@@ -49,18 +49,22 @@ plot.downloadPlotterSVG("drawing.svg", {
     margin: 10,
     scale: 0.25
   },
+  penMap: { black: 1, red: 2 },
   tool: "pen"
 });
 ```
 
 It requires a physical page, geometrically clips paths, optimizes travel per
-pen group, and writes those groups at SVG root. A layer with several stroke
-colours is split into separate pen groups automatically. Plotter SVG contains
-centre lines: screen `alpha`, `strokeWeight`, and `pressure` styling is
-discarded, while one uniform `0.1mm` hairline keeps the SVG visible. Physical
-opacity and line width come from the installed pen. Plotter metadata lists
-those screen styles as ignored; they are not plotter settings. Use the older
-`downloadSVG()` when you deliberately need the unchanged screen-SVG contract.
+pen group, and writes those groups as true Inkscape layers at SVG root. Their
+visible names start with the physical number from `penMap`, such as `1 black`
+and `2 red`; without a map they receive a deterministic one-based order. A
+layer with several stroke colours is split into separate pen groups
+automatically. Plotter SVG contains centre lines: screen `alpha`,
+`strokeWeight`, and `pressure` styling is discarded, while one uniform
+`0.1mm` hairline keeps the SVG visible. Physical opacity and line width come
+from the installed pen. Plotter metadata lists those screen styles as ignored;
+they are not plotter settings. Use the older `downloadSVG()` when you
+deliberately need the unchanged screen-SVG contract.
 
 ## Distribution
 

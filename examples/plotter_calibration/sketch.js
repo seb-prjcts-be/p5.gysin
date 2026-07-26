@@ -51,7 +51,8 @@ const PENS = [
 const SEED_A4 = 210297;                       // reproducible reference-sheet seed
 const EXPORT = {
   page: PAGE,
-  optimize: true
+  optimize: true,
+  penMap: PEN_OF
 }; // shared by SVG, HPGL and stats
 
 let plot;

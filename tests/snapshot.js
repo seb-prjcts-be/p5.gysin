@@ -288,7 +288,8 @@ assert.ok(pageStats.estimatedSeconds > 0);
 
 // A plotter SVG is a separate, strong-default route. Generic export stays
 // byte-compatible while this route requires physical dimensions, clips actual
-// geometry, optimizes within each pen group, and exposes groups at SVG root.
+// geometry, optimizes within each pen group, and exposes true, numbered
+// Inkscape layers at SVG root.
 for (const Plot of [SourcePlot, MinPlot]) {
   const implicit = new Plot({ width: 100, height: 80 });
   implicit.line(0, 0, 10, 10);
@@ -312,11 +313,14 @@ for (const Plot of [SourcePlot, MinPlot]) {
   assert.match(safeSvg, /&quot;geometricClipping&quot;:true/);
   assert.match(safeSvg, /&quot;routeOptimized&quot;:true/);
   assert.match(safeSvg, /&quot;pathModel&quot;:&quot;centerline&quot;/);
+  assert.match(safeSvg, /&quot;inkscapeLayers&quot;:true/);
+  assert.match(safeSvg, /&quot;layerLabelPrefix&quot;:&quot;physical pen number&quot;/);
   assert.match(safeSvg, /&quot;ignoredScreenStyles&quot;:\[&quot;alpha&quot;,&quot;strokeWeight&quot;,&quot;pressure&quot;\]/);
-  assert.match(safeSvg, /\n  <g id="layer-black" data-layer="black" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="0\.1mm" data-path-model="centerline" clip-path=/);
+  assert.match(safeSvg, /xmlns:inkscape="http:\/\/www\.inkscape\.org\/namespaces\/inkscape"/);
+  assert.match(safeSvg, /\n  <g id="layer-1-black" data-layer="black" data-pen="1" inkscape:groupmode="layer" inkscape:label="1 black" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="0\.1mm" data-path-model="centerline" clip-path=/);
   assert.doesNotMatch(safeSvg, /\n  <g fill="none" stroke-linecap=/);
   assert.doesNotMatch(safeSvg, /<path[^>]*\s(?:opacity|stroke-width)=/);
-  assert.doesNotMatch(safeSvg, /d="[^"]*-\d/);
+  assert.doesNotMatch(safeSvg, /<path d="[^"]*-\d/);
   assert.ok(safeSvg.indexOf('data-shape-id="hp_1"') < safeSvg.indexOf('data-shape-id="hp_3"'));
   assert.ok(safeSvg.indexOf('data-shape-id="hp_3"') < safeSvg.indexOf('data-shape-id="hp_2"'));
 
@@ -338,6 +342,20 @@ for (const Plot of [SourcePlot, MinPlot]) {
   });
   assert.match(passesSvg, /data-pass="2"/);
   assert.match(passesSvg, /data-pass="3"/);
+
+  const numbered = new Plot({ seed: 3 });
+  numbered.line(10, 10, 20, 10, { layer: "red", stroke: "#b5362b" });
+  numbered.line(10, 20, 20, 20, { layer: "blue", stroke: "#244f73" });
+  numbered.line(10, 30, 20, 30, { layer: "black", stroke: "#151515" });
+  const numberedSvg = numbered.exportPlotterSVG({
+    page: { width: 100, height: 100, units: "mm" },
+    penMap: { black: 1, red: 2, blue: 3 }
+  });
+  assert.match(numberedSvg, /inkscape:label="1 black"/);
+  assert.match(numberedSvg, /inkscape:label="2 red"/);
+  assert.match(numberedSvg, /inkscape:label="3 blue"/);
+  assert.ok(numberedSvg.indexOf('inkscape:label="1 black"') < numberedSvg.indexOf('inkscape:label="2 red"'));
+  assert.ok(numberedSvg.indexOf('inkscape:label="2 red"') < numberedSvg.indexOf('inkscape:label="3 blue"'));
 }
 
 const capturedPlotterWarnings = [];
@@ -368,8 +386,10 @@ const warningSvg = warningPlot.exportPlotterSVG({
 });
 assert.match(warningSvg, /&quot;ignoredScreenStyles&quot;:\[&quot;alpha&quot;,&quot;strokeWeight&quot;,&quot;pressure&quot;\]/);
 assert.match(warningSvg, /was split into 2 stroke groups/);
-assert.match(warningSvg, /id="layer-mixed-stroke-111111"/);
-assert.match(warningSvg, /id="layer-mixed-stroke-cc0000"/);
+assert.match(warningSvg, /id="layer-1-mixed-stroke-111111"/);
+assert.match(warningSvg, /id="layer-2-mixed-stroke-cc0000"/);
+assert.match(warningSvg, /inkscape:label="1 mixed #111111"/);
+assert.match(warningSvg, /inkscape:label="2 mixed #cc0000"/);
 assert.match(warningSvg, /data-stroke="#111111"/);
 assert.match(warningSvg, /data-stroke="#cc0000"/);
 assert.doesNotMatch(warningSvg, /<path[^>]*\s(?:opacity|stroke-width)=/);
@@ -379,6 +399,7 @@ const warningGenericSvg = warningPlot.exportSVG({
 });
 assert.match(warningGenericSvg, /stroke-width="1" opacity="0\.5"/);
 assert.match(warningGenericSvg, /stroke-width="2" opacity="1"/);
+assert.doesNotMatch(warningGenericSvg, /xmlns:inkscape|inkscape:groupmode|inkscape:label|data-pen=/);
 assert.equal(capturedPlotterWarnings.length, 1);
 assert.ok(capturedPlotterWarnings.every((warning) => warning.startsWith("[p5.gysin plotter]")));
 
@@ -1008,6 +1029,7 @@ const manifest = JSON.parse(fs.readFileSync(
   "utf8"
 ));
 const showcasePage = fs.readFileSync(path.join(root, "index.html"), "utf8");
+const collagePage = fs.readFileSync(path.join(root, "docs", "collage", "index.html"), "utf8");
 const siteStyle = fs.readFileSync(path.join(root, "docs", "style.css"), "utf8");
 const examplesRedirectPage = fs.readFileSync(path.join(root, "docs", "examples.html"), "utf8");
 const examplesDir = path.join(root, "examples");
@@ -1049,14 +1071,35 @@ assert.match(showcasePage, /<strong>Word<\/strong><small>Isolate it\. Enlarge it
 assert.match(showcasePage, /<strong>Sentence<\/strong><small>Order, sequence, source\.<\/small>/);
 assert.match(showcasePage, /<strong>Surface<\/strong><small>A late disturbance, used sparingly\.<\/small>/);
 
+const collageChips = collagePage.match(/<li><a href="#[^"]+">\d{2} /g) || [];
+const collageModules = collagePage.match(/<section class="[^"]*ce-module[^"]*" id="[^"]+">/g) || [];
+assert.equal(collageChips.length, 14);
+assert.equal(collageModules.length, 14);
+assert.match(collagePage, /<li><a href="#collage">01 the whole sheet<\/a><\/li>/);
+assert.ok(
+  collagePage.indexOf('id="collage"') < collagePage.indexOf('id="sheet"'),
+  "Collage begins with the complete composition before isolating its gestures"
+);
+assert.doesNotMatch(collagePage, /#leave|id="leave"|m-leave|off the page/i);
+const rememberedSheetStart = collagePage.indexOf("function buildRememberedSheet");
+const rememberedSheetEnd = collagePage.indexOf("// 02 the frames", rememberedSheetStart);
+const rememberedSheet = collagePage.slice(rememberedSheetStart, rememberedSheetEnd);
+for (const verb of ["rect", "path", "line", "letters", "symbols", "circle", "underwood", "asemic", "text", "textCutup", "chant", "rub"]) {
+  assert.match(rememberedSheet, new RegExp(`plot\\.${verb}\\(`), `whole sheet contains ${verb}()`);
+}
+assert.match(collagePage, /downloadPlotterSVG\("gysin-remembers\.svg", \{/);
+assert.match(collagePage, /penMap: \{ black: 1, red: 2 \}/);
+assert.match(collagePage, /width: 210,[\s\S]*height: 297,[\s\S]*units: "mm"/);
+assert.match(siteStyle, /body\.chapters #chapter-prev,[\s\S]*bottom: 12px/);
+
 const plotterExportPage = fs.readFileSync(path.join(examplesDir, "plotter_export", "index.html"), "utf8");
 const plotterExportSketch = fs.readFileSync(path.join(examplesDir, "plotter_export", "sketch.js"), "utf8");
 const plotterExportComposition = plotterExportSketch.split("// --- Canvas chrome")[0];
 assert.match(plotterExportPage, /id="plot-size-value"[^>]*>A4 · 210 × 297 mm<\/output>/);
 assert.match(plotterExportPage, /<select id="plot-size">[\s\S]*value="A4" selected>A4 · 21 × 29\.7 cm[\s\S]*value="A3">A3 · 29\.7 × 42 cm[\s\S]*value="A2">A2 · 42 × 59\.4 cm[\s\S]*<\/select>/);
 assert.match(plotterExportPage, /id="physical-settings">A4 · 210 × 297 mm · centered · min\. margin 5 mm · centerlines · clipping on · route optimized · 3 pens/);
-assert.match(plotterExportPage, /coverage and line width come from the installed pens/);
-assert.match(plotterExportPage, /downloadPlotterSVG\("plate\.svg", \{ page \}\)/);
+assert.match(plotterExportPage, /coverage and line width come from the installed pens/i);
+assert.match(plotterExportPage, /downloadPlotterSVG\("plate\.svg", \{ page, penMap \}\)/);
 assert.match(plotterExportSketch, /A4: Object\.freeze\(\{ width: 210, height: 297 \}\)/);
 assert.match(plotterExportSketch, /A3: Object\.freeze\(\{ width: 297, height: 420 \}\)/);
 assert.match(plotterExportSketch, /A2: Object\.freeze\(\{ width: 420, height: 594 \}\)/);
@@ -1064,16 +1107,18 @@ assert.match(plotterExportSketch, /const square = sheet\.width - 2 \* MIN_PAGE_M
 assert.match(plotterExportSketch, /const verticalMargin = \(sheet\.height - square\) \/ 2/);
 assert.match(plotterExportSketch, /Object\.assign\(EXPORT_PAGE, physicalPage\(physicalFormat\)\)/);
 assert.match(plotterExportSketch, /statusPrefix = `\$\{physicalFormat\} page selected`/);
+assert.match(plotterExportSketch, /downloadPlotterSVG\("p5-gysin-plotter-export\.svg", \{[\s\S]*page: EXPORT_PAGE,[\s\S]*penMap: PEN_MAP/);
 assert.match(plotterExportSketch, /centerlines · .*clipping on · route optimized · 3 pens/s);
 assert.doesNotMatch(plotterExportComposition, /\b(?:alpha|pressure|strokeWeight)\s*:/);
 
 const plotterCalibrationPage = fs.readFileSync(path.join(examplesDir, "plotter_calibration", "index.html"), "utf8");
 const plotterCalibrationSketch = fs.readFileSync(path.join(examplesDir, "plotter_calibration", "sketch.js"), "utf8");
 assert.match(plotterCalibrationPage, /real pen passes/);
-assert.match(plotterCalibrationPage, /downloadPlotterSVG\("calibration\.svg", \{ page: PAGE \}\)/);
+assert.match(plotterCalibrationPage, /downloadPlotterSVG\("calibration\.svg", \{ page: PAGE, penMap: PEN_OF \}\)/);
 assert.match(plotterCalibrationSketch, /5 : PEN PASSES · repeat/);
 assert.match(plotterCalibrationSketch, /\[1, 2, 3, 4, 5, 6\]/);
 assert.match(plotterCalibrationSketch, /wobble 1\.2/);
+assert.match(plotterCalibrationSketch, /penMap: PEN_OF/);
 assert.match(plotterCalibrationSketch, /downloadPlotterSVG\("p5-gysin-calibration\.svg", EXPORT\)/);
 assert.doesNotMatch(plotterCalibrationSketch, /\b(?:alpha|pressure|strokeWeight)\s*:/);
 const calibrationPreviewStart = showcasePage.indexOf('makePreview("ex-calibration"');

@@ -50,7 +50,7 @@
       "name": "GysinPlot.exportPlotterSVG / downloadPlotterSVG",
       "added_in": "next",
       "status": "release-candidate",
-      "note": "Intent route for physical SVG output: requires a physical page, clips geometry, optimizes per physical pen group by default, splits mixed-colour layers, emits top-level pen groups, preserves pen passes, and writes centre lines while discarding alpha, strokeWeight, and pressure-derived screen styling."
+      "note": "Intent route for physical SVG output: requires a physical page, clips geometry, optimizes per physical pen group by default, splits mixed-colour layers, emits true top-level Inkscape layers whose visible names start with the physical pen number, preserves pen passes, and writes centre lines while discarding alpha, strokeWeight, and pressure-derived screen styling."
     }
   ]
 }
