@@ -352,16 +352,25 @@ h3 {
 }
 
 .cs-tile:hover,
-.cs-tile:focus-visible,
-.cs-tile.active {
+.cs-tile:focus-visible {
   background: var(--ink);
   color: var(--white);
 }
 
 .cs-tile:hover small,
-.cs-tile:focus-visible small,
-.cs-tile.active small {
+.cs-tile:focus-visible small {
   color: var(--text-on-dark);
+}
+
+.cs-tile.active {
+  padding: 11px 13px;
+  border: 2px solid var(--ink);
+  background: rgba(251, 250, 245, 0.56);
+  color: var(--ink);
+}
+
+.cs-tile.active small {
+  color: var(--muted);
 }
 
 /* With the chapter turner available, only the selected plate enters the normal

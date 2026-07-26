@@ -1070,6 +1070,21 @@ assert.ok(
 assert.match(showcasePage, /<strong>Word<\/strong><small>Isolate it\. Enlarge it\. Wear it\.<\/small>/);
 assert.match(showcasePage, /<strong>Sentence<\/strong><small>Order, sequence, source\.<\/small>/);
 assert.match(showcasePage, /<strong>Surface<\/strong><small>A late disturbance, used sparingly\.<\/small>/);
+const coreSheetStart = showcasePage.indexOf('id="lib-core"');
+const coreSheetEnd = showcasePage.indexOf('id="plate-first-trace"', coreSheetStart);
+const coreSheet = showcasePage.slice(coreSheetStart, coreSheetEnd);
+assert.ok(
+  coreSheet.indexOf("<strong>Word</strong>") <
+    coreSheet.indexOf("<strong>Trace &amp; page</strong>") &&
+    coreSheet.indexOf("<strong>Trace &amp; page</strong>") <
+      coreSheet.indexOf("<strong>Surface</strong>"),
+  "the late Surface gesture follows Trace & page"
+);
+assert.match(
+  siteStyle,
+  /\.cs-tile\.active\s*\{[^}]*border:\s*2px solid var\(--ink\);[^}]*background:\s*rgba\(251, 250, 245, 0\.56\);/s,
+  "the active work remains a framed paper tile"
+);
 
 const collageChips = collagePage.match(/<li><a href="#[^"]+">\d{2} /g) || [];
 const collageModules = collagePage.match(/<section class="[^"]*ce-module[^"]*" id="[^"]+">/g) || [];

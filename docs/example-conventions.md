@@ -98,9 +98,9 @@ bibliotheek toont eerst op welke **schaal** ze werkt:
 
 1. **Word**: `text()` en `rub()` isoleren één woordlichaam. Het krijgt formaat,
    positie, herhaling en slijtage.
-2. **Surface**: `textCutup()` is een late, zeldzame contoursnede. Deze kaart
+2. **Trace & page**: velden, inkt, kalibratie en export behandelen het blad.
+3. **Surface**: `textCutup()` is een late, zeldzame contoursnede. Deze kaart
    staat apart van de woord- en zinsbewerkingen.
-3. **Trace & page**: velden, inkt, kalibratie en export behandelen het blad.
 4. **Sentence**: `chant()` en `weave()` laten volgorde, sequentie en bron
    leesbaar blijven.
 5. **Sentence / page**: `underwood()` geeft langere stem vaste maat, regelval
