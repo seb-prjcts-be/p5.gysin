@@ -319,6 +319,14 @@ h3 {
   line-height: 1.5;
 }
 
+.work-band-word .work-band-head {
+  border-top: 0;
+}
+
+.work-band-word .work-band-head strong {
+  color: var(--red);
+}
+
 .work-band-surface .work-band-head {
   border-top-style: dashed;
 }

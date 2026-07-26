@@ -1070,6 +1070,17 @@ assert.ok(
 assert.match(showcasePage, /<strong>Word<\/strong><small>Isolate it\. Enlarge it\. Wear it\.<\/small>/);
 assert.match(showcasePage, /<strong>Sentence<\/strong><small>Order, sequence, source\.<\/small>/);
 assert.match(showcasePage, /<strong>Surface<\/strong><small>A late disturbance, used sparingly\.<\/small>/);
+assert.match(showcasePage, /<div class="work-band work-band-word">/);
+assert.match(
+  siteStyle,
+  /\.work-band-word \.work-band-head\s*\{[^}]*border-top:\s*0;/s,
+  "the Word heading has no top rule"
+);
+assert.match(
+  siteStyle,
+  /\.work-band-word \.work-band-head strong\s*\{[^}]*color:\s*var\(--red\);/s,
+  "the Word heading reuses the title red"
+);
 const coreSheetStart = showcasePage.indexOf('id="lib-core"');
 const coreSheetEnd = showcasePage.indexOf('id="plate-first-trace"', coreSheetStart);
 const coreSheet = showcasePage.slice(coreSheetStart, coreSheetEnd);
