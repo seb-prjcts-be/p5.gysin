@@ -55,25 +55,33 @@ Dus: alleen commentaar en kop toevoegen; parameters, waarden en call-volgorde
 blijven byte-voor-byte hetzelfde. Zo blijft de output identiek en blijven de
 snapshot-tests groen.
 
-## Regel 4 - "Core snippet" op de pagina opent met het minimum
+## Regel 4 - De korte code wijst meteen naar de volledige compositie
 
-Elke `examples/<naam>/index.html` heeft een handgeschreven `<pre><code>` "Core
-snippet". Die moet **openen met het complete 3-regel-minimum** ("dit alleen is
-al een volledige sketch"), en pas daarna de elaboratie tonen. Dit is wat een
-bezoeker op de site als eerste leest.
+Een `examples/<naam>/index.html` opent met de kleinste uitvoerbare artistieke
+aanroep uit de compositie. Toon het echte librarywerkwoord, niet de interne
+`GysinWorks`-bedrading. Als het werk een gedeelde `composition.js` heeft, staat
+de directe link **Complete composition** er onmiddellijk naast. Kopieer de
+volledige compositie niet naar HTML: één bron moet de waarheid blijven.
 
-## Regel 5 - Showcase-kaarten: één concept, de snippet vertelt de waarheid
+Voor oudere voorbeelden zonder gedeelde compositie blijft het complete
+3-regel-minimum gelden tot ze gemigreerd zijn.
 
-Voor de galerij-kaarten op de homepage (preview + korte snippet):
+## Regel 5 - Eén werk, één canonieke compositie
 
-- **De preview tekent alleen wat de snippet beschrijft.** Elk element dat in de
-  preview zichtbaar is, staat ook in de snippet - geen verborgen extra lagen,
-  lussen of calls.
-- **Liever variaties binnen één concept dan losse elementen.** Wil een kaart
-  meer tonen dan één call, herhaal dan dezelfde call in oplopende staten
-  (bv. hetzelfde woord op drie decay-niveaus, dezelfde cut-up op drie
-  sliderstanden). Dat verbeeldt het concept; heterogene elementen verwateren
-  het.
+Voor een werk dat op Enter én op een zelfstandige pagina verschijnt:
+
+- Enter en `examples/<naam>/sketch.js` laden dezelfde
+  `examples/<naam>/composition.js`.
+- `composition.js` bevat alleen het werk: geen p5-lifecycle, DOM-controls,
+  downloadknoppen, statuscopy of schermdecoratie.
+- De twee contexten mogen schalen via `width` en `height`, maar gebruiken
+  dezelfde tekst, seed, tekenvolgorde en grafische structuur.
+- De Enter-plaat is één grafische gedachte. Bouw geen handmatige ladder van
+  drie parameterstanden, tenzij die opeenvolging het eigenlijke werk is.
+- Een methode als `chant()` of `weave()` mag meerdere regels opleveren: dat is
+  één systeem en één call, geen verzameling losse demonstraties.
+- Ongeveer 10 librarycalls of 40 compositieregels is een stopsignaal: verbeter
+  dan eerst de abstractie in plaats van de orkestratie te verbergen.
 - **Uitzondering:** meerdere elementen mogen wanneer ze sámen het concept zijn
   én de snippet ze allemaal benoemt (Plotter Calibration: frame + cirkels +
   arcering, alle drie in de `penMap`).
@@ -171,11 +179,13 @@ bedekken de hoofdnavigatie niet met een tweede menubalk.
 - [ ] On-ramp-kop toegevoegd, met het juiste woord/de juiste maten.
 - [ ] Genummerde banners voor elk teken-blok.
 - [ ] Teken-volgorde, parameters en waarden ongewijzigd.
-- [ ] "Core snippet" in `index.html` opent met het 3-regel-minimum.
+- [ ] Het codeblok toont de kleinste aanroep en verwijst direct naar de
+      canonieke compositie; zonder `composition.js` opent het met het
+      3-regel-minimum (Regel 4).
 - [ ] Sketch rendert nog identiek in de browser (`http://localhost/...`).
 - [ ] `npm test` groen.
-- [ ] Galerij-kaart (indien aanwezig): preview = snippet, variaties binnen één
-      concept (Regel 5).
+- [ ] Galerij en zelfstandige pagina laden dezelfde `composition.js`; p5/DOM en
+      export blijven in `sketch.js` (Regel 5).
 - [ ] Letterstem klopt: cut-up alleen als concept; kaart in de stem van het
       voorbeeld (Regel 7).
 - [ ] Geen lege toonvlakken; een blok is lijnen/letters/tekens (Regel 8).

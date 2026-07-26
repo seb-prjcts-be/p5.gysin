@@ -899,8 +899,17 @@ const manifest = JSON.parse(fs.readFileSync(
   "utf8"
 ));
 const showcasePage = fs.readFileSync(path.join(root, "index.html"), "utf8");
+const siteStyle = fs.readFileSync(path.join(root, "docs", "style.css"), "utf8");
 const examplesRedirectPage = fs.readFileSync(path.join(root, "docs", "examples.html"), "utf8");
 const examplesDir = path.join(root, "examples");
+const sharedCompositions = new Map([
+  ["permutation_poem", "permutationPoem"],
+  ["weave", "weave"]
+]);
+const sharedCompositionVerbs = new Map([
+  ["permutation_poem", "chant"],
+  ["weave", "weave"]
+]);
 const exampleDirs = fs.readdirSync(examplesDir, { withFileTypes: true })
   .filter(function(entry) {
     return entry.isDirectory();
@@ -913,12 +922,41 @@ const exampleDirs = fs.readdirSync(examplesDir, { withFileTypes: true })
 assert.deepEqual(manifest.examples, exampleDirs);
 assert.match(examplesRedirectPage, /href="\.\.\/index\.html#examples"/);
 assert.match(examplesRedirectPage, /location\.replace\("\.\.\/index\.html#examples"\)/);
+assert.match(showcasePage, /Writing is fifty years behind painting/);
+assert.doesNotMatch(siteStyle, /\.pull-quote\s*\{[^}]*border-left/s);
+assert.ok(
+  showcasePage.indexOf('id="origin-note"') < showcasePage.indexOf('id="studies"'),
+  "the Brion Gysin point of departure appears before the three libraries"
+);
 
 for (const name of manifest.examples) {
   assert.ok(fs.existsSync(path.join(examplesDir, name, "index.html")), `${name} index.html`);
   assert.ok(fs.existsSync(path.join(examplesDir, name, "sketch.js")), `${name} sketch.js`);
   assert.match(showcasePage, new RegExp(`href="examples/${name}/"`));
-  assert.match(showcasePage, new RegExp(`href="examples/${name}/sketch\\.js"`));
+  const sourceFile = sharedCompositions.has(name) ? "composition.js" : "sketch.js";
+  assert.match(showcasePage, new RegExp(`href="examples/${name}/${sourceFile.replace(".", "\\.")}"`));
+}
+
+for (const [name, workName] of sharedCompositions) {
+  const directory = path.join(examplesDir, name);
+  const composition = fs.readFileSync(path.join(directory, "composition.js"), "utf8");
+  const sketch = fs.readFileSync(path.join(directory, "sketch.js"), "utf8");
+  const page = fs.readFileSync(path.join(directory, "index.html"), "utf8");
+  const nonBlankLines = composition.split(/\r?\n/).filter((line) => line.trim()).length;
+  const verb = sharedCompositionVerbs.get(name);
+
+  assert.ok(nonBlankLines <= 40, `${name} composition stays at or below 40 nonblank lines`);
+  assert.equal(
+    (composition.match(new RegExp(`plot\\.${verb}\\(`, "g")) || []).length,
+    1,
+    `${name} composition has one ${verb}() gesture`
+  );
+  assert.doesNotMatch(composition, /\bdocument\b|download[A-Z]|createCanvas|function\s+(?:setup|draw)\b/);
+  assert.doesNotMatch(sketch, new RegExp(`plot\\.${verb}\\(`));
+  assert.match(page, /<script src="composition\.js"><\/script>\s*<script src="sketch\.js"><\/script>/);
+  assert.match(sketch, new RegExp(`GysinWorks\\.${workName}\\.build\\(`));
+  assert.match(showcasePage, new RegExp(`src="examples/${name}/composition\\.js"`));
+  assert.match(showcasePage, new RegExp(`GysinWorks\\.${workName}\\.build\\(`));
 }
 
 console.log("p5.gysin snapshot ok");

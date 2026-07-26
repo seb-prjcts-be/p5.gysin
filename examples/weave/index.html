@@ -39,19 +39,16 @@
     </div>
     <div class="demo-layout weave-layout">
       <div class="demo-code">
-        <div class="code-label">The gesture</div>
-        <pre><code class="language-javascript">const sources = [
-  { id: "window", text: "The window keeps..." },
-  { id: "letter", text: "Your letter arrived..." }
-];
+        <div class="code-label">The shared composition</div>
+        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
 
-const ids = plot.weave(sources, 48, 82, {
-  seed: 1960,
+plot.weave(sources, width * 0.055, height * 0.145, {
   lines: 5,
-  maxWidth: 664
+  maxWidth: width * 0.89
 });
 
 plot.draw();</code></pre>
+        <div class="demo-note"><a href="composition.js">Open the complete composition</a> · the same file draws the Enter plate and this work.</div>
         <div class="source-pair">
           <label>Window
             <textarea id="source-a" maxlength="20000">The window keeps the last light of the street. Someone closes the curtains before the rain arrives.</textarea>
@@ -83,6 +80,7 @@ plot.draw();</code></pre>
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="../../p5.gysin.min.js"></script>
   <script src="../../p5.gysin.text.min.js"></script>
+  <script src="composition.js"></script>
   <script src="sketch.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
 </body>

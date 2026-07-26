@@ -9,7 +9,7 @@
   <meta property="og:description" content="Vector-first traces for cut-up text, rubout gaps, dropout lines, repeats, breathe, SVG, JSON, and HPGL export.">
   <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="docs/style.css?v=v1-navigation">
+  <link rel="stylesheet" href="docs/style.css?v=v1-origin-2">
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="p5.gysin.min.js"></script>
 </head>
@@ -34,6 +34,19 @@
         <p class="hero-sub">Vector-first traces for cut-up text, rubout gaps, uncertain contours, and plotter-friendly export.</p>
         <a href="#studies" class="cta-btn">Enter the three libraries</a>
       </div>
+    </div>
+  </section>
+
+
+  <section class="section origin-note" id="origin-note" aria-labelledby="origin-quote">
+    <div class="section-header">
+      <div class="section-tag">A point of departure</div>
+      <blockquote class="pull-quote">
+        <p id="origin-quote">&ldquo;Writing is fifty years behind painting.&rdquo;</p>
+        <cite>Brion Gysin &middot; &ldquo;Cut-Ups Self-Explained&rdquo;</cite>
+      </blockquote>
+      <p class="section-desc">The library begins there&mdash;not with imitation, but with writing treated as drawing material: cut, permuted, worn, and returned to paper by a pen.</p>
+      <a class="ex-full-link" href="docs/vision.html">-&gt; origin, distance, sources</a>
     </div>
   </section>
 
@@ -341,22 +354,27 @@ const hpgl = plot.exportHPGL({ page, penMap: { frame: 1, type: 2, field: 3 } });
 
   <section class="section section-dark plate" id="study-permute">
     <div class="section-header">
-      <div class="section-tag">chant() &middot; permute</div>
+      <div class="section-tag">chant() &middot; one phrase &middot; one descent</div>
       <h2>Coincidence is a <span class="accent">method</span></h2>
-      <p class="section-desc">One phrase changes order. Each return meets a deeper cut.</p>
+      <p class="section-desc">One phrase returns six times. Each return meets a deeper cut.</p>
       <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js</p>
     </div>
-    <div class="ex-preview">
-      <div id="ex-permutation" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">// one phrase through its orders;
-// each line cut a little deeper
-plot.chant("I LOVE YOU", 48, 90, {
+    <div class="ex-preview ex-sheet">
+      <div id="ex-permutation" class="ex-canvas" data-ratio="1.4142857"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+
+plot.chant("I LOVE YOU", width * 0.075, height * 0.12, {
   lines: 6,
+  size: width * 0.11,
+  leading: height * 0.14,
+  repeat: 2,
   font: outlineFont
-});</code></pre>
+});
+
+plot.draw();</code></pre>
       <div class="ex-links">
-        <a class="ex-full-link" href="examples/permutation_poem/">-&gt; full poster</a>
-        <a class="ex-full-link" href="examples/permutation_poem/sketch.js">-&gt; source sketch</a>
+        <a class="ex-full-link" href="examples/permutation_poem/">-&gt; open work</a>
+        <a class="ex-full-link" href="examples/permutation_poem/composition.js">-&gt; complete composition</a>
       </div>
     </div>
   </section>
@@ -369,16 +387,18 @@ plot.chant("I LOVE YOU", 48, 90, {
       <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js</p>
     </div>
     <div class="ex-preview">
-      <div id="ex-weave" class="ex-canvas"></div>
-      <pre class="ex-code-block"><code class="language-javascript">const sources = [
-  { id: "window", text: "The window keeps the last light." },
-  { id: "letter", text: "Your letter arrived after the room was empty." }
-];
+      <div id="ex-weave" class="ex-canvas" data-ratio="0.7368421"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
 
-plot.weave(sources, 34, 56, { lines: 4 });</code></pre>
+plot.weave(sources, width * 0.055, height * 0.145, {
+  lines: 5,
+  maxWidth: width * 0.89
+});
+
+plot.draw();</code></pre>
       <div class="ex-links">
-        <a class="ex-full-link" href="examples/weave/">-&gt; full work</a>
-        <a class="ex-full-link" href="examples/weave/sketch.js">-&gt; source sketch</a>
+        <a class="ex-full-link" href="examples/weave/">-&gt; open work</a>
+        <a class="ex-full-link" href="examples/weave/composition.js">-&gt; complete composition</a>
       </div>
     </div>
   </section>
@@ -479,6 +499,8 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
 
   <script src="p5.gysin.text.min.js?v=chant"></script>
   <script src="p5.gysin.underwood.min.js"></script>
+  <script src="examples/permutation_poem/composition.js"></script>
+  <script src="examples/weave/composition.js"></script>
   <script>
   function previewSize(id) {
     const element = document.getElementById(id);
@@ -490,7 +512,8 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
     };
   }
 
-  function makePreview(id, builder) {
+  function makePreview(id, builder, previewOptions) {
+    const options = previewOptions || {};
     new p5(function(p) {
       let plot;
 
@@ -504,7 +527,7 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
 
       p.draw = function() {
         p.background("#f0efe9");
-        drawPreviewPaper(p);
+        if (options.paper !== false) drawPreviewPaper(p);
         plot.draw();
       };
 
@@ -529,7 +552,8 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
 
   // Async twin of makePreview: loads the Oswald outline face first and hands it
   // to the builder (null when the load fails, so builders fall back cleanly).
-  function makeOutlinePreview(id, builder) {
+  function makeOutlinePreview(id, builder, previewOptions) {
+    const options = previewOptions || {};
     new p5(function(p) {
       let plot;
       let loadedFont = null;
@@ -550,7 +574,7 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
 
       p.draw = function() {
         p.background("#f0efe9");
-        drawPreviewPaper(p);
+        if (options.paper !== false) drawPreviewPaper(p);
         if (plot) plot.draw();
       };
 
@@ -737,49 +761,25 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
   });
 
   makeOutlinePreview("ex-permutation", function(p, canvasW, canvasH, outlineFont) {
-    const plot = new GysinPlot({
-      p: p,
-      seed: 1960,
+    return GysinWorks.permutationPoem.build({
+      p,
       width: canvasW,
       height: canvasH,
-      style: { stroke: "#171717", strokeWeight: 0.82, alpha: 0.88 }
-    });
-    // chant() permutes and cuts every line through outline letterforms.
-    const options = {
-      lines: 6,
-      size: canvasW * (outlineFont ? 0.062 : 0.041),
-      leading: (canvasH - 66) / 6,
-      slices: 4,
-      sliceOffset: 1,
-      breathe: 0.12,
-      dropout: 0.01,
-      strokeWeight: 1.05,
-      alpha: 0.95
-    };
-    if (outlineFont) options.font = outlineFont;
-    plot.chant("I LOVE YOU", 30, 44, options);
-    return plot;
-  });
+      seed: 1960,
+      phrase: "I LOVE YOU",
+      font: outlineFont
+    }).plot;
+  }, { paper: false });
 
   makePreview("ex-weave", function(p, canvasW, canvasH) {
-    const plot = new GysinPlot({
-      p: p,
-      seed: 1960,
+    return GysinWorks.weave.build({
+      p,
       width: canvasW,
       height: canvasH,
-      style: { stroke: "#171717", strokeWeight: 0.82, alpha: 0.88 }
-    });
-    plot.weave([
-      { id: "window", text: "The window keeps the last light of the street." },
-      { id: "letter", text: "Your letter arrived after the room was empty." }
-    ], 30, 54, {
-      lines: 4,
-      size: Math.max(13, canvasW * 0.033),
-      leading: (canvasH - 72) / 4,
-      breathe: 0.3
-    });
-    return plot;
-  });
+      seed: 1960,
+      sources: GysinWorks.weave.sources
+    }).plot;
+  }, { paper: false });
 
   makePreview("ex-parameter", function(p, canvasW, canvasH) {
     const plot = new GysinPlot({
