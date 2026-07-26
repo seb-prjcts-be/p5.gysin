@@ -100,8 +100,34 @@ p code,
   padding-bottom: 70px;
 }
 
+.origin-note-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 920px) minmax(140px, 180px);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+  max-width: 1170px;
+}
+
 .origin-note .section-header {
   margin-bottom: 0;
+}
+
+.origin-sheet {
+  width: 100%;
+  margin: 0;
+}
+
+.origin-sheet img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.origin-sheet figcaption {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 a:focus-visible,
@@ -1200,6 +1226,14 @@ footer {
   .hero-overlay {
     padding: 80px 24px;
     background: rgba(245, 245, 245, 0.82);
+  }
+
+  .origin-note-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .origin-sheet {
+    width: 150px;
   }
 
   .feature-grid,

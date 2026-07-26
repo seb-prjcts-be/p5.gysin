@@ -924,6 +924,12 @@ assert.match(examplesRedirectPage, /href="\.\.\/index\.html#examples"/);
 assert.match(examplesRedirectPage, /location\.replace\("\.\.\/index\.html#examples"\)/);
 assert.match(showcasePage, /Writing is fifty years behind painting/);
 assert.doesNotMatch(siteStyle, /\.pull-quote\s*\{[^}]*border-left/s);
+assert.match(showcasePage, /<figure class="origin-sheet">/);
+assert.match(showcasePage, /src="docs\/assets\/plotted-sheet-love-you\.jpg"/);
+assert.ok(
+  fs.statSync(path.join(root, "docs", "assets", "plotted-sheet-love-you.jpg")).size < 100000,
+  "the small origin photograph stays below 100 kB"
+);
 assert.ok(
   showcasePage.indexOf('id="origin-note"') < showcasePage.indexOf('id="studies"'),
   "the Brion Gysin point of departure appears before the three libraries"
