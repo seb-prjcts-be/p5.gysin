@@ -35,26 +35,25 @@ standalone works with their source code.
 
 ## Plotter-safe SVG
 
-These methods are part of the v1.1.0 core build.
+The plotter-safe methods were introduced in v1.1.0. The ISO page presets below
+are part of the current source and are not present in the tagged v1.1.0 build.
 
 Use the explicit plotter route for a file that can go to physical tooling:
 
 ```js
 plot.downloadPlotterSVG("drawing.svg", {
-  page: {
-    width: 210,
-    height: 297,
-    units: "mm",
-    margin: 10,
-    scale: 0.25
-  },
+  page: "A3",
   penMap: { black: 1, red: 2 },
   tool: "pen"
 });
 ```
 
-It requires a physical page, geometrically clips paths, optimizes travel per
-pen group, and writes those groups as true Inkscape layers at SVG root. Their
+The built-in presets are `"A5"`, `"A4"`, `"A3"`, and `"A2"`. Each uses its
+exact ISO millimetre dimensions, a 10 mm margin, and a width-fitting scale
+derived from the canvas. A custom physical page object remains available for
+advanced layouts such as a centred square or a millimetre calibration sheet.
+The route geometrically clips paths,
+optimizes travel per pen group, and writes those groups as true Inkscape layers at SVG root. Their
 visible names start with the physical number from `penMap`, such as `1 black`
 and `2 red`; without a map they receive a deterministic one-based order. A
 layer with several stroke colours is split into separate pen groups

@@ -258,6 +258,8 @@
   }
 
   function pageFor(name) {
+    // Advanced exception: preserve this poster's exact vertical centring.
+    // The normal A5-A2 presets deliberately use top-left width fitting.
     const formatName = String(name || "A4").toUpperCase();
     const sheet = FORMATS[formatName];
     if (!sheet) throw new RangeError("Poster format must be A4, A3 or A2.");

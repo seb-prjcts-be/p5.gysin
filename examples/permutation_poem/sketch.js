@@ -57,23 +57,12 @@ function wireActions() {
     buildPoster();
   };
   document.getElementById("svg-button").onclick =
-    () => plot.downloadSVG("p5-gysin-permutation-poem-a3.svg", { page: a3Page() });
+    () => plot.downloadSVG("p5-gysin-permutation-poem-a3.svg", { page: "A3" });
   document.getElementById("hpgl-button").onclick =
     () => plot.downloadHPGL("p5-gysin-permutation-poem-a3.hpgl", {
-      page: a3Page(),
+      page: "A3",
       speed: 18
     });
-}
-
-function a3Page() {
-  return {
-    width: 297,
-    height: 420,
-    units: "mm",
-    margin: 10,
-    scale: 277 / POSTER_WIDTH,
-    clip: true
-  };
 }
 
 function setStatus(message) {

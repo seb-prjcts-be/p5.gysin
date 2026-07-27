@@ -303,6 +303,50 @@ for (const Plot of [SourcePlot, MinPlot]) {
     /explicit physical page/
   );
 
+  for (const [preset, pageWidth, pageHeight] of [
+    ["A5", 148, 210],
+    ["A4", 210, 297],
+    ["A3", 297, 420],
+    ["A2", 420, 594]
+  ]) {
+    const isoPlot = new Plot({ seed: 1, width: 720, height: 1018, page: preset });
+    isoPlot.line(0, 0, 720, 0, { simplify: 0, minSegmentLength: 0 });
+    const isoSvg = isoPlot.exportPlotterSVG();
+    assert.match(isoSvg, new RegExp(`width="${pageWidth}mm" height="${pageHeight}mm"`));
+    assert.match(
+      isoSvg,
+      new RegExp(`<clipPath id="p5-gysin-page"><rect x="10" y="10" width="${pageWidth - 20}" height="${pageHeight - 20}"`)
+    );
+    assert.equal(isoPlot.stats().page.scale, (pageWidth - 20) / 720);
+  }
+
+  const presetPlot = new Plot({ seed: 1, width: 720, height: 1018, page: "A3" });
+  presetPlot.line(0, 0, 720, 0, { simplify: 0, minSegmentLength: 0 });
+  const presetSvg = presetPlot.exportPlotterSVG();
+  assert.match(presetSvg, /width="297mm" height="420mm"/);
+  assert.match(presetSvg, /<clipPath id="p5-gysin-page"><rect x="10" y="10" width="277" height="400"/);
+  assert.match(presetSvg, /<path d="M 10 10[^"]*L 287 10"/);
+
+  const explicitPlot = new Plot({
+    seed: 1,
+    width: 720,
+    height: 1018,
+    page: {
+      width: 297,
+      height: 420,
+      units: "mm",
+      margin: 10,
+      scale: 277 / 720
+    }
+  });
+  explicitPlot.line(0, 0, 720, 0, { simplify: 0, minSegmentLength: 0 });
+  assert.equal(presetSvg, explicitPlot.exportPlotterSVG());
+
+  const exportPresetPlot = new Plot({ seed: 1, width: 720, height: 1018 });
+  exportPresetPlot.line(0, 0, 720, 0, { simplify: 0, minSegmentLength: 0 });
+  assert.equal(presetSvg, exportPresetPlot.exportPlotterSVG({ page: "a3" }));
+  assert.throws(() => exportPresetPlot.exportPlotterSVG({ page: "A0" }), /Unsupported page preset/);
+
   const route = new Plot({ seed: 1 });
   route.line(-10, 10, 20, 10, { layer: "black", simplify: 0, minSegmentLength: 0 });
   route.line(900, 10, 920, 10, { layer: "black", simplify: 0, minSegmentLength: 0 });
@@ -1029,8 +1073,11 @@ const manifest = JSON.parse(fs.readFileSync(
   "utf8"
 ));
 const showcasePage = fs.readFileSync(path.join(root, "index.html"), "utf8");
+const readmePage = fs.readFileSync(path.join(root, "README.md"), "utf8");
 const collagePage = fs.readFileSync(path.join(root, "docs", "collage", "index.html"), "utf8");
 const systemPage = fs.readFileSync(path.join(root, "docs", "system.html"), "utf8");
+const plotterContract = fs.readFileSync(path.join(root, "docs", "plotter-export-contract.md"), "utf8");
+const releaseNotes110 = fs.readFileSync(path.join(root, "docs", "release-notes-1.1.0.md"), "utf8");
 const collageComposition = fs.readFileSync(path.join(root, "docs", "collage", "composition.js"), "utf8");
 const collageCuration = fs.readFileSync(path.join(root, "docs", "collage", "curation.js"), "utf8");
 const siteStyle = fs.readFileSync(path.join(root, "docs", "style.css"), "utf8");
@@ -1056,6 +1103,11 @@ const exampleDirs = fs.readdirSync(examplesDir, { withFileTypes: true })
   .sort();
 
 assert.deepEqual(manifest.examples, exampleDirs);
+assert.match(readmePage, /built-in presets are `"A5"`, `"A4"`, `"A3"`, and `"A2"`/i);
+assert.match(systemPage, /Built-in pages[\s\S]*<code>"A5"<\/code>[\s\S]*<code>"A2"<\/code>/);
+assert.match(plotterContract, /## Normale ISO-paginaroute[\s\S]*page: "A3"/);
+assert.match(releaseNotes110, /requires an explicit page in `mm`, `cm`, or `in`/);
+assert.doesNotMatch(releaseNotes110, /A5-A2|page presets/i);
 assert.match(examplesRedirectPage, /href="\.\.\/index\.html#examples"/);
 assert.match(examplesRedirectPage, /location\.replace\("\.\.\/index\.html#examples"\)/);
 assert.match(showcasePage, /Writing is fifty years behind painting/);
@@ -1281,6 +1333,8 @@ for (const [name, workName] of sharedCompositions) {
   if (name === "permutation_poem") {
     assert.doesNotMatch(composition, /\b(?:descent|slices|sliceOffset|sliceDropout|breathe|dropout|repeat|rubout|drift)\b|textCutup/);
     assert.match(page, /id="reroll-button">New order<\/button>/);
+    assert.match(sketch, /page:\s*"A3"/);
+    assert.doesNotMatch(sketch, /function\s+a3Page|width:\s*297|scale:\s*277\s*\/\s*POSTER_WIDTH/);
   }
 }
 

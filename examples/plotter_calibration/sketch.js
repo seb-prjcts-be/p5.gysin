@@ -9,6 +9,8 @@ const mm = (v) => v * MM;     // millimetres -> canvas pixels
 const spread = (count, x0, stride) =>
   Array.from({ length: count }, (_, i) => mm(x0 + i * stride));
 
+// Advanced exception: the canvas itself is a millimetre measuring grid, so
+// this physical mapping must stay explicit instead of fitting by page width.
 const PAGE = {
   width: 210,
   height: 297,

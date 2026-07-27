@@ -321,6 +321,8 @@ function wireButtons() {
 }
 
 function physicalPage(format) {
+  // Advanced exception: this work centres a square instead of using the
+  // normal top-left, width-fitting A5-A2 preset.
   const sheet = ISO_PAGES[format];
   if (!sheet) throw new RangeError("Physical format must be A4, A3, or A2.");
   const square = sheet.width - 2 * MIN_PAGE_MARGIN;

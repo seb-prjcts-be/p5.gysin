@@ -91,6 +91,42 @@
   const PAGE_UNITS = new Set(["px", "mm", "cm", "in"]);
   const PHYSICAL_PAGE_UNITS = new Set(["mm", "cm", "in"]);
   const PAGE_ORIGINS = new Set(["top-left", "bottom-left"]);
+  // Normal sketches choose only the ISO name. Dimensions, millimetres,
+  // margin, placement, and width-fitting scale are library knowledge.
+  const PAGE_PRESETS = Object.freeze({
+    A5: Object.freeze({
+      width: 148,
+      height: 210,
+      units: "mm",
+      margin: 10,
+      origin: "top-left",
+      _scaleToWidth: true
+    }),
+    A4: Object.freeze({
+      width: 210,
+      height: 297,
+      units: "mm",
+      margin: 10,
+      origin: "top-left",
+      _scaleToWidth: true
+    }),
+    A3: Object.freeze({
+      width: 297,
+      height: 420,
+      units: "mm",
+      margin: 10,
+      origin: "top-left",
+      _scaleToWidth: true
+    }),
+    A2: Object.freeze({
+      width: 420,
+      height: 594,
+      units: "mm",
+      margin: 10,
+      origin: "top-left",
+      _scaleToWidth: true
+    })
+  });
   const TOOL_MODES = new Set(["pen", "blade"]);
   const MAX_SAMPLE_POINTS = 100000;
   const MAX_REPEAT = 1000;
@@ -187,7 +223,7 @@
       this.defaultExport = Object.assign({}, DEFAULT_EXPORT, options.export || {});
       this.width = optionalPositiveNumber(options.width, "width");
       this.height = optionalPositiveNumber(options.height, "height");
-      this.page = normalizePage(options.page || {});
+      this.page = normalizePage(options.page === undefined ? {} : options.page);
       this.shapes = [];
       this.shapeMap = new Map();
       this.nextId = 1;
@@ -924,7 +960,7 @@
     }
 
     _resolvePage(options = {}) {
-      const pageOptions = Object.assign({}, this.page, options.page || {});
+      const pageOptions = mergePageInput(this.page, options.page);
       if (options.width !== undefined) pageOptions.width = options.width;
       if (options.height !== undefined) pageOptions.height = options.height;
       const page = normalizePage(pageOptions, Boolean(options.page || this.page.explicit));
@@ -943,6 +979,9 @@
       }
       page.drawableWidth = page.width - page.margin.left - page.margin.right;
       page.drawableHeight = page.height - page.margin.top - page.margin.bottom;
+      if (page._scaleToWidth) {
+        page.scale = page.drawableWidth / (fallbackWidth === null ? 800 : fallbackWidth);
+      }
       page.metadata = {
         width: page.width,
         height: page.height,
@@ -959,21 +998,23 @@
       if (!options || typeof options !== "object" || Array.isArray(options)) {
         throw new TypeError("Plotter SVG options must be an object.");
       }
-      if (options.page !== undefined && (!options.page || typeof options.page !== "object" || Array.isArray(options.page))) {
-        throw new TypeError("Plotter SVG page must be an object.");
+      if (options.page !== undefined &&
+          typeof options.page !== "string" &&
+          (!options.page || typeof options.page !== "object" || Array.isArray(options.page))) {
+        throw new TypeError("Plotter SVG page must be a preset name or an object.");
       }
 
-      const pageInput = Object.assign({}, this.page, options.page || {});
+      const pageInput = mergePageInput(this.page, options.page);
       if (options.width !== undefined) pageInput.width = options.width;
       if (options.height !== undefined) pageInput.height = options.height;
       const hasExplicitPage = options.page !== undefined || this.page.explicit;
       const units = pageInput.units === undefined ? "px" : String(pageInput.units).toLowerCase();
       if (!hasExplicitPage || pageInput.width === null || pageInput.width === undefined ||
           pageInput.height === null || pageInput.height === undefined || !PHYSICAL_PAGE_UNITS.has(units)) {
-        throw new RangeError("Plotter SVG requires an explicit physical page with width, height, and units mm, cm, or in.");
+        throw new RangeError("Plotter SVG requires page A5, A4, A3, or A2, or an explicit physical page with width, height, and units mm, cm, or in.");
       }
 
-      const page = normalizePage(pageInput, true);
+      const page = this._resolvePage(options);
       const prepared = Object.assign({}, options, {
         page: {
           width: page.width,
@@ -1731,8 +1772,24 @@
     };
   }
 
+  function resolvePageInput(input) {
+    if (typeof input !== "string") return input;
+    const presetName = input.trim().toUpperCase();
+    const preset = PAGE_PRESETS[presetName];
+    if (!preset) throw new RangeError(`Unsupported page preset: ${input}. Use A5, A4, A3, or A2.`);
+    return Object.assign({ explicit: true }, preset);
+  }
+
+  function mergePageInput(base, override) {
+    if (override === undefined) return Object.assign({}, base);
+    const resolvedOverride = resolvePageInput(override);
+    if (typeof override === "string") return Object.assign({}, resolvedOverride);
+    return Object.assign({}, base, resolvedOverride || {});
+  }
+
   function normalizePage(input, defaultClip) {
-    const page = input && typeof input === "object" ? input : {};
+    const resolvedInput = resolvePageInput(input);
+    const page = resolvedInput && typeof resolvedInput === "object" ? resolvedInput : {};
     const units = page.units === undefined ? "px" : String(page.units).toLowerCase();
     if (!PAGE_UNITS.has(units)) throw new RangeError(`Unsupported page units: ${units}.`);
     const origin = page.origin === undefined ? "top-left" : String(page.origin);
@@ -1745,7 +1802,8 @@
       margin: normalizeMargin(page.margin),
       origin,
       rotation: page.rotation === undefined ? 0 : finiteNumber(page.rotation, "page rotation"),
-      scale: page.scale === undefined ? 1 : positiveNumber(page.scale, "page scale"),
+      scale: page._scaleToWidth ? null : (page.scale === undefined ? 1 : positiveNumber(page.scale, "page scale")),
+      _scaleToWidth: Boolean(page._scaleToWidth),
       clip: page.clip === undefined ? Boolean(defaultClip) : Boolean(page.clip)
     };
   }

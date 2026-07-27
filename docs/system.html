@@ -307,16 +307,9 @@ plot.clear();         // empty the sheet: shapes, ids, and selection</code>
 
     <section class="guide-block" id="export">
       <h2>Export</h2>
-      <p><strong>Plotter-safe SVG:</strong> the methods below are part of the v1.1.0 core build.</p>
+      <p><strong>Plotter-safe SVG:</strong> the methods were introduced in v1.1.0. The ISO page presets below belong to the current source and are not present in the tagged v1.1.0 build.</p>
       <div class="code-preview">
-        <code>const page = {
-  width: 210,
-  height: 297,
-  units: "mm",
-  margin: 10,
-  scale: 0.25,
-  clip: true
-};
+        <code>const page = "A3";
 const penMap = { frame: 1, type: 2 };
 
 const svg = plot.exportPlotterSVG({ page, penMap, tool: "pen" });
@@ -332,7 +325,8 @@ plot.downloadPlotterSVG("gysin.svg", { page, penMap, tool: "pen" });
 plot.downloadJSON("gysin.json");
 plot.downloadHPGL("gysin.hpgl", { page });</code>
       </div>
-      <p><code>exportPlotterSVG()</code> and <code>downloadPlotterSVG()</code> are the safe physical-output route. They require explicit <code>width</code>, <code>height</code>, and <code>mm</code>, <code>cm</code>, or <code>in</code> units; clip actual path geometry to the page; optimize travel inside each physical pen group; and write those groups directly below the SVG root as true Inkscape layers. Each visible layer name starts with its physical number from <code>penMap</code>, for example <code>1 frame</code>, <code>2 type</code>; without a map the groups receive a deterministic one-based order. Layers with the same opening number use the same physical pen. In Inkscape, show every layer beginning with <code>1</code>, install pen 1 and plot; then hide those layers and repeat for <code>2</code>, <code>3</code>, and so on. A semantic layer with several stroke colours is split into separate pen groups automatically. The generic <code>exportSVG()</code> and <code>downloadSVG()</code> keep their original screen-oriented defaults and byte-compatible group structure.</p>
+      <p><code>exportPlotterSVG()</code> and <code>downloadPlotterSVG()</code> are the safe physical-output route. Built-in pages <code>"A5"</code>, <code>"A4"</code>, <code>"A3"</code>, and <code>"A2"</code> use their exact ISO millimetre dimensions, a 10 mm margin, top-left placement, and a width-fitting scale derived from the canvas. A custom page object with explicit <code>width</code>, <code>height</code>, and <code>mm</code>, <code>cm</code>, or <code>in</code> units remains available for advanced output. The route clips actual path geometry to the page; optimizes travel inside each physical pen group; and writes those groups directly below the SVG root as true Inkscape layers. Each visible layer name starts with its physical number from <code>penMap</code>, for example <code>1 frame</code>, <code>2 type</code>; without a map the groups receive a deterministic one-based order. Layers with the same opening number use the same physical pen. In Inkscape, show every layer beginning with <code>1</code>, install pen 1 and plot; then hide those layers and repeat for <code>2</code>, <code>3</code>, and so on. A semantic layer with several stroke colours is split into separate pen groups automatically. The generic <code>exportSVG()</code> and <code>downloadSVG()</code> keep their original screen-oriented defaults and byte-compatible group structure.</p>
+      <p>The Plotter Export poster keeps a custom page because it centres a square work; Plotter Calibration keeps one because its canvas is a millimetre measuring instrument. Those are advanced composition-specific mappings, not settings every sketch should copy.</p>
       <p>Plotter SVG route optimization is on by default. Pass <code>optimize: false</code> only when physical drawing order matters more than pen-up travel, such as a deliberate wet-ink sequence. Clipping stays mandatory in this route. One pen group may contain at most 2,000 traces during optimization; independent groups no longer share that limit.</p>
       <p>Plotter SVG is a centre-line file. It omits per-path opacity and varying stroke widths, and uses one uniform <code>0.1mm</code> SVG hairline only to keep paths visible. Physical coverage and width come from the installed pen. Plotter metadata always lists <code>alpha</code>, <code>strokeWeight</code>, and pressure-derived screen styling as ignored; they are not plotter settings. The route warns only about actionable physical mapping, such as splitting one semantic layer into several colour groups.</p>
       <p>The route never deduplicates geometry: <code>tool: "pen"</code> preserves bleed and explicit repeats, while <code>tool: "blade"</code> removes second and later passages. Repetition is physical geometry, but its ink-darkening effect depends on the actual pen, paper, drying time, and machine.</p>

@@ -2,7 +2,9 @@
 
 Datum: 26 juli 2026
 Status: basis uitgevoerd op `main` in commit `72b7fdc`; genummerde
-Inkscape-lagen zijn de lokale vervolgcorrectie van 26 juli 2026.
+Inkscape-lagen zijn de vervolgcorrectie van 26 juli 2026. De ingebouwde
+A5-A2-paginapresets zijn een lokale, nog niet gepubliceerde uitbreiding op
+branch `codex/internal-a3-page`.
 
 ## Aanleiding
 
@@ -50,8 +52,9 @@ bestaande SVG-contract te breken.
 
 De plotterroute:
 
-1. vereist een expliciete pagina met `width`, `height` en fysieke units
-   `mm`, `cm` of `in`;
+1. aanvaardt voor normaal gebruik `A5`, `A4`, `A3` of `A2`; een aangepaste
+   pagina met expliciete `width`, `height` en fysieke units `mm`, `cm` of `in`
+   blijft beschikbaar als geavanceerde uitweg;
 2. forceert geometrische clipping op de paginagrenzen;
 3. sorteert routes standaard binnen iedere fysieke pengroep;
 4. schrijft elke penlaag als een echte Inkscape-laag rechtstreeks onder de
@@ -75,7 +78,29 @@ tekenvolgorde belangrijker is dan reistijd, bijvoorbeeld bij natte inkt.
 Clipping kan in de plotterroute niet worden uitgezet; daarvoor blijft de
 generieke `exportSVG()` bestaan.
 
-## Voor het onderzochte 720 x 900-bestand
+## Normale ISO-paginaroute
+
+```js
+plot.downloadPlotterSVG("gysin-remembers.svg", {
+  page: "A3",
+  penMap: { black: 1, red: 2 },
+  tool: "pen"
+});
+```
+
+De namen zijn hoofdletterongevoelig. p5.gysin kent intern:
+
+- A5: 148 × 210 mm;
+- A4: 210 × 297 mm;
+- A3: 297 × 420 mm;
+- A2: 420 × 594 mm.
+
+Elke preset gebruikt 10 mm marge, een oorsprong linksboven en een
+breedteschaal van `(pageWidth - 20) / canvasWidth`. Daardoor blijft het vroegere
+A3-object voor een canvasbreedte van 720 exact `277 / 720` opleveren zonder dat
+een gebruiker die berekening hoeft te kennen.
+
+## Geavanceerde aangepaste pagina voor het onderzochte 720 x 900-bestand
 
 ```js
 plot.downloadPlotterSVG("gysin-remembers.svg", {
@@ -91,7 +116,8 @@ plot.downloadPlotterSVG("gysin-remembers.svg", {
 });
 ```
 
-Deze correctie verplaatst of hertekent geen enkel compositie-element. De vorm
+Dit aangepaste object centreert een specifieke compositie anders dan de gewone
+ISO-preset. De correctie verplaatst of hertekent geen enkel compositie-element. De vorm
 die bewust boven de canvasrand staat, blijft in de sketch staan en wordt alleen
 in het fysieke exportbestand op de pagina afgesneden.
 
@@ -119,8 +145,10 @@ drivergedrag niet simuleren.
 
 ## Publieke basisinstellingen
 
-Het bestaande Plotter Export-postervoorbeeld is de zichtbare instap voor het
-contract. De vrije vierkante maatregelaar is verwijderd. De enige keuzes zijn
+README en System tonen de normale presetroute. Het bestaande Plotter
+Export-postervoorbeeld toont daarnaast bewust de geavanceerde route: zijn
+vierkante compositie wordt met minstens 5 mm marge gecentreerd. De vrije
+vierkante maatregelaar is verwijderd. De keuzes in dat gespecialiseerde voorbeeld zijn
 exacte staande ISO-formaten A4 (210 × 297 mm), A3 (297 × 420 mm) en A2
 (420 × 594 mm), met centerlines, geometrische clipping, route-optimalisatie en
 drie fysieke pennen. Het vierkante werk wordt met minstens 5 mm marge
