@@ -1368,6 +1368,11 @@ body.chapters .ce-module.chapter-active {
   color: var(--ink);
 }
 
+.ce-layer-specimen.ce-colour-specimen li {
+  grid-template-columns: 78px minmax(0, 1fr);
+  column-gap: 12px;
+}
+
 .ce-layer-specimen li.red,
 .ce-layer-specimen li.red b,
 .ce-plot-specimen .red {

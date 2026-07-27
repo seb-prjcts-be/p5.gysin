@@ -1184,6 +1184,8 @@ assert.match(collagePage, /A hex colour changes the screen image\. It does not c
 assert.match(collagePage, /There is no <code>A4\(\)<\/code> drawing function/);
 assert.match(collagePage, /black layer &rarr; pen 1 &middot; red layer &rarr; pen 2/);
 assert.match(collagePage, /The installed pens determine the real colour and line width on paper\./);
+assert.match(collagePage, /class="ce-preview ce-layer-specimen ce-colour-specimen"/);
+assert.match(siteStyle, /\.ce-layer-specimen\.ce-colour-specimen li\s*\{[^}]*grid-template-columns:\s*78px minmax\(0, 1fr\);[^}]*column-gap:\s*12px;/s);
 assert.match(systemPage, /<section class="guide-block" id="export">/);
 assert.match(systemPage, /show every layer beginning with <code>1<\/code>, install pen 1 and plot; then hide those layers and repeat for <code>2<\/code>, <code>3<\/code>, and so on/);
 
