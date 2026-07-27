@@ -1156,105 +1156,82 @@ const collageChips = collagePage.match(/<li><a href="#[^"]+">\d{2} /g) || [];
 const collageModules = collagePage.match(/<section class="[^"]*ce-module[^"]*" id="[^"]+">/g) || [];
 const collageTheses = collagePage.match(/class="ce-thesis"/g) || [];
 const collageSteps = collagePage.match(/class="ce-step"/g) || [];
-assert.equal(collageChips.length, 19);
-assert.equal(collageModules.length, 19);
-assert.equal(collageTheses.length, 19);
-assert.equal(collageSteps.length, 68);
-assert.match(collagePage, /<li><a href="#overview">00 whole sheet<\/a><\/li>/);
-assert.match(collagePage, /<li><a href="#sheet">01 sheet<\/a><\/li>/);
+assert.equal(collageChips.length, 12);
+assert.equal(collageModules.length, 12);
+assert.equal(collageTheses.length, 12);
+assert.equal(collageSteps.length, 48);
+assert.match(collagePage, /<li><a href="#overview">00 whole poster<\/a><\/li>/);
+assert.match(collagePage, /<li><a href="#canvas">01 canvas<\/a><\/li>/);
 assert.match(collagePage, /<li><a href="#layers">02 layers<\/a><\/li>/);
-assert.match(collagePage, /<li><a href="#plot">17 plot<\/a><\/li>/);
-assert.match(collagePage, /<li><a href="#full">18 full poster<\/a><\/li>/);
+assert.match(collagePage, /<li><a href="#paper">10 paper<\/a><\/li>/);
+assert.match(collagePage, /<li><a href="#full">11 export<\/a><\/li>/);
 assert.ok(
-  collagePage.indexOf('id="overview"') < collagePage.indexOf('id="sheet"') &&
-    collagePage.indexOf('id="plot"') < collagePage.indexOf('id="full"'),
-  "Collage begins with the complete composition before isolating its gestures"
+  collagePage.indexOf('id="overview"') < collagePage.indexOf('id="canvas"') &&
+    collagePage.indexOf('id="paper"') < collagePage.indexOf('id="full"'),
+  "Collage begins with the canonical composition and ends with physical export"
 );
-assert.doesNotMatch(collagePage, /#leave|id="leave"|m-leave|off the page/i);
 assert.match(collagePage, /id="m-overview" class="ce-canvas" data-step="all"/);
 assert.match(collagePage, /id="m-full" class="ce-canvas" data-step="all"/);
-assert.match(collagePage, /<script src="composition\.js\?v=poster-export-fix"><\/script>\s*<script src="curation\.js\?v=poster-export-fix"><\/script>/);
-assert.match(collagePage, /A4 &middot; 21 &times; 29\.7 cm/);
-assert.match(collagePage, /A3 &middot; 29\.7 &times; 42 cm/);
-assert.match(collagePage, /A2 &middot; 42 &times; 59\.4 cm/);
-assert.match(collagePage, /No opacity, pressure or digital line-width control is promised to a fixed pen\./);
-assert.match(collagePage, /every <code>1 \.\.\.<\/code> layer plots with pen 1; every <code>2 \.\.\.<\/code> layer plots with pen 2/);
-assert.match(collagePage, /href="\.\.\/system\.html#export">Inkscape: plot one pen number at a time/);
+assert.match(
+  collagePage,
+  /<script src="\.\.\/\.\.\/examples\/plotter_export\/composition\.js\?v=collage-layered-poster"><\/script>\s*<script src="composition\.js\?v=collage-layered-poster"><\/script>\s*<script src="curation\.js\?v=collage-layered-poster"><\/script>/
+);
+assert.match(collagePage, /A5 &middot; 148 &times; 210 mm/);
+assert.match(collagePage, /A4 &middot; 210 &times; 297 mm/);
+assert.match(collagePage, /A3 &middot; 297 &times; 420 mm/);
+assert.match(collagePage, /A2 &middot; 420 &times; 594 mm/);
+assert.match(collagePage, /A hex colour changes the screen image\. It does not create an SVG layer or choose a physical pen\./);
+assert.match(collagePage, /There is no <code>A4\(\)<\/code> drawing function/);
+assert.match(collagePage, /black layer &rarr; pen 1 &middot; red layer &rarr; pen 2/);
+assert.match(collagePage, /The installed pens determine the real colour and line width on paper\./);
 assert.match(systemPage, /<section class="guide-block" id="export">/);
 assert.match(systemPage, /show every layer beginning with <code>1<\/code>, install pen 1 and plot; then hide those layers and repeat for <code>2<\/code>, <code>3<\/code>, and so on/);
 
-for (const verb of ["rect", "line", "letters", "symbols", "circle", "underwood", "asemic", "text", "textCutup", "chant", "weave", "rub", "lattice"]) {
-  assert.match(collageComposition, new RegExp(`plot\\.${verb}\\(`), `whole sheet contains ${verb}()`);
+const canonicalPosterSource = fs.readFileSync(
+  path.join(root, "examples", "plotter_export", "composition.js"),
+  "utf8"
+);
+for (const verb of ["rect", "line", "symbols", "circle", "underwood", "asemic", "text"]) {
+  assert.match(canonicalPosterSource, new RegExp(`plot\\.${verb}\\(`), `whole sheet contains ${verb}()`);
 }
-assert.match(collageComposition, /A4: Object\.freeze\(\{ width: 210, height: 297 \}\)/);
-assert.match(collageComposition, /A3: Object\.freeze\(\{ width: 297, height: 420 \}\)/);
-assert.match(collageComposition, /A2: Object\.freeze\(\{ width: 420, height: 594 \}\)/);
-assert.match(collageComposition, /frame: 1,[\s\S]*rules: 1,[\s\S]*word: 1,[\s\S]*machine: 1,[\s\S]*fields: 1,[\s\S]*return: 2,[\s\S]*hand: 2/);
-assert.match(collageComposition, /const scale = \(sheet\.width - 20\) \/ WIDTH/);
-assert.match(collageComposition, /const verticalMargin = \(sheet\.height - HEIGHT \* scale\) \/ 2/);
-assert.match(collageComposition, /clip: true/);
-assert.doesNotMatch(collageComposition, /\b(?:alpha|pressure|strokeWeight)\s*:/);
-assert.doesNotMatch(collageCuration, /\b(?:alpha|pressure|strokeWeight)\s*:/);
-assert.match(collageComposition, /function createPlot\(options\)/);
-assert.match(collageCuration, /const exportPlot = poster\.createPlot\(\{[\s\S]*width: poster\.width,[\s\S]*height: poster\.height[\s\S]*\}\);/);
-assert.match(collageCuration, /exportPlot\.downloadPlotterSVG\(`gysin-remembers-\$\{state\.format\.toLowerCase\(\)\}\.svg`, \{/);
-assert.doesNotMatch(collageCuration, /record\.plot\.downloadPlotterSVG/);
-assert.match(collageCuration, /tool: "pen",[\s\S]*optimize: true/);
+assert.match(canonicalPosterSource, /const WIDTH = 720;/);
+assert.match(canonicalPosterSource, /const HEIGHT = 900;/);
+assert.match(canonicalPosterSource, /const PEN_MAP = \{ black: 1, red: 2 \}/);
+assert.match(canonicalPosterSource, /frames: addFrames,[\s\S]*rules: addRules,[\s\S]*symbols: addSymbols,[\s\S]*ring: addRing,[\s\S]*hand: addHand,[\s\S]*words: addWords,[\s\S]*write: addWrite/);
+assert.match(collageComposition, /global\.GysinPoster = global\.GysinWorks\.plotterPoster/);
+assert.doesNotMatch(collageComposition, /plot\.(?:rect|line|symbols|circle|underwood|asemic|text)\(/);
+assert.match(collageCuration, /record\.work = poster\.build\(\{/);
+assert.match(collageCuration, /record\.p\.scale\(record\.p\.width \/ poster\.width\)/);
+assert.match(collageCuration, /const work = poster\.build\(\{ seed: poster\.seed \}\);/);
+assert.match(collageCuration, /work\.plot\.downloadPlotterSVG\(`gysin-remembers-\$\{state\.format\.toLowerCase\(\)\}\.svg`, \{/);
+assert.match(collageCuration, /page: state\.format,[\s\S]*penMap: poster\.penMap/);
+assert.doesNotMatch(collageCuration, /record\.work\.plot\.downloadPlotterSVG/);
 
 const collageContext = { console };
 collageContext.globalThis = collageContext;
 vm.createContext(collageContext);
 for (const filename of [
   "p5.gysin.js",
-  "p5.gysin.text.js",
   "p5.gysin.underwood.js",
+  path.join("examples", "plotter_export", "composition.js"),
   path.join("docs", "collage", "composition.js")
 ]) {
   vm.runInContext(fs.readFileSync(path.join(root, filename), "utf8"), collageContext, { filename });
 }
 const poster = collageContext.GysinPoster;
-const posterPlot = poster.createPlot({ seed: poster.seed });
-const posterPage = poster.pageFor("A4");
-const posterSvg = posterPlot.exportPlotterSVG({
-  page: posterPage,
-  penMap: poster.penMap,
-  tool: "pen",
-  optimize: true
+assert.equal(poster, collageContext.GysinWorks.plotterPoster);
+const posterWork = poster.build({ seed: poster.seed });
+const posterSvg = posterWork.plot.exportPlotterSVG({
+  page: "A4",
+  penMap: poster.penMap
 });
 const posterLayers = Array.from(posterSvg.matchAll(/inkscape:label="([^"]+)"/g), (match) => match[1]);
-assert.deepEqual(posterLayers, [
-  "1 frame",
-  "1 rules",
-  "1 word",
-  "1 fields",
-  "1 machine",
-  "2 return",
-  "2 hand"
-]);
+assert.deepEqual(posterLayers, ["1 black", "2 red"]);
 assert.ok(posterLayers.every((label) => /^[12] /.test(label)));
 assert.doesNotMatch(posterSvg, /\s(?:opacity|stroke-width)="(?!0\.1mm)/);
-for (const viewportWidth of [280, 390, 760]) {
-  const viewportHeight = Math.round(viewportWidth * poster.height / poster.width);
-  const previewPlot = poster.createPlot({
-    seed: poster.seed,
-    width: viewportWidth,
-    height: viewportHeight
-  });
-  const previewSvg = previewPlot.exportPlotterSVG({
-    page: posterPage,
-    penMap: poster.penMap,
-    tool: "pen",
-    optimize: true
-  });
-  const canonicalPlot = poster.createPlot({ seed: poster.seed });
-  const canonicalSvg = canonicalPlot.exportPlotterSVG({
-    page: posterPage,
-    penMap: poster.penMap,
-    tool: "pen",
-    optimize: true
-  });
-  assert.notEqual(previewSvg, posterSvg, `a ${viewportWidth}px preview is not a physical export`);
-  assert.equal(canonicalSvg, posterSvg, `physical export ignores a ${viewportWidth}px preview`);
+assert.equal(posterWork.plot.shapes.length, 285);
+for (const step of poster.steps) {
+  assert.ok(poster.build({ step }).plot.shapes.length > 0, `${step} builds an isolated poster step`);
 }
 assert.match(siteStyle, /body\.chapters #chapter-prev,[\s\S]*bottom: 12px/);
 
