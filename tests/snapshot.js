@@ -1077,6 +1077,7 @@ const showcasePage = fs.readFileSync(path.join(root, "openings.html"), "utf8");
 const readmePage = fs.readFileSync(path.join(root, "README.md"), "utf8");
 const collagePage = fs.readFileSync(path.join(root, "docs", "collage", "index.html"), "utf8");
 const systemPage = fs.readFileSync(path.join(root, "docs", "system.html"), "utf8");
+const visionPage = fs.readFileSync(path.join(root, "docs", "vision.html"), "utf8");
 const plotterContract = fs.readFileSync(path.join(root, "docs", "plotter-export-contract.md"), "utf8");
 const releaseNotes110 = fs.readFileSync(path.join(root, "docs", "release-notes-1.1.0.md"), "utf8");
 const collageComposition = fs.readFileSync(path.join(root, "docs", "collage", "composition.js"), "utf8");
@@ -1122,18 +1123,11 @@ assert.doesNotMatch(enterPage, /examples\/(?:gysin_demo|permutation_poem|weave|p
 assert.match(showcasePage, /<title>Openings \| p5\.gysin<\/title>/);
 assert.match(showcasePage, /<a href="openings\.html" class="active">Openings<\/a>/);
 assert.doesNotMatch(showcasePage, /<section id="hero">|docs\/sketch\.js/);
-assert.match(showcasePage, /Writing is fifty years behind painting/);
-assert.doesNotMatch(siteStyle, /\.pull-quote\s*\{[^}]*border-left/s);
-assert.match(showcasePage, /<figure class="origin-sheet">/);
-assert.match(showcasePage, /src="docs\/assets\/plotted-sheet-love-you\.jpg"/);
-assert.ok(
-  fs.statSync(path.join(root, "docs", "assets", "plotted-sheet-love-you.jpg")).size < 100000,
-  "the small origin photograph stays below 100 kB"
-);
-assert.ok(
-  showcasePage.indexOf('id="origin-note"') < showcasePage.indexOf('id="studies"'),
-  "the Brion Gysin point of departure appears before the three libraries"
-);
+assert.match(showcasePage, /<\/nav>\s*<section id="studies"/);
+assert.doesNotMatch(showcasePage, /origin-note|origin-sheet|pull-quote|Writing is fifty years behind painting/);
+assert.doesNotMatch(siteStyle, /\.(?:origin-note|origin-sheet|pull-quote)\b/);
+assert.match(visionPage, /Gysin&rsquo;s sentence &ldquo;Writing is fifty years behind painting&rdquo;/);
+assert.doesNotMatch(visionPage, /quotation on Enter/);
 assert.match(showcasePage, /<strong>Word<\/strong><small>Isolate it\. Enlarge it\. Wear it\.<\/small>/);
 assert.match(showcasePage, /<strong>Sentence<\/strong><small>Order, sequence, source\.<\/small>/);
 assert.match(showcasePage, /<strong>Surface<\/strong><small>A late disturbance, used sparingly\.<\/small>/);
