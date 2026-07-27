@@ -1,6 +1,6 @@
 # p5.gysin
 
-[Open the public p5.gysin site](https://seb-prjcts-be.github.io/p5.gysin/)
+Public site on GitHub Pages: [p5.gysin](https://seb-prjcts-be.github.io/p5.gysin/)
 
 p5.gysin is a vector-first p5.js library for generative, plottable drawings.
 It captures worn words, permuted language, interrupted traces, and composed fields,

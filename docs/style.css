@@ -34,6 +34,12 @@ html {
   scroll-padding-top: 80px;
 }
 
+/* The former long homepage always reserved a scrollbar. Keep that same
+   viewport width now that Enter ends after its hero. */
+html.enter-page {
+  overflow-y: scroll;
+}
+
 body {
   margin: 0;
   background: var(--paper);

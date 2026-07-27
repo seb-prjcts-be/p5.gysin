@@ -1072,7 +1072,8 @@ const manifest = JSON.parse(fs.readFileSync(
   path.join(root, "docs", "p5.gysin.manifest.json"),
   "utf8"
 ));
-const showcasePage = fs.readFileSync(path.join(root, "index.html"), "utf8");
+const enterPage = fs.readFileSync(path.join(root, "index.html"), "utf8");
+const showcasePage = fs.readFileSync(path.join(root, "openings.html"), "utf8");
 const readmePage = fs.readFileSync(path.join(root, "README.md"), "utf8");
 const collagePage = fs.readFileSync(path.join(root, "docs", "collage", "index.html"), "utf8");
 const systemPage = fs.readFileSync(path.join(root, "docs", "system.html"), "utf8");
@@ -1108,8 +1109,19 @@ assert.match(systemPage, /Built-in pages[\s\S]*<code>"A5"<\/code>[\s\S]*<code>"A
 assert.match(plotterContract, /## Normale ISO-paginaroute[\s\S]*page: "A3"/);
 assert.match(releaseNotes110, /requires an explicit page in `mm`, `cm`, or `in`/);
 assert.doesNotMatch(releaseNotes110, /A5-A2|page presets/i);
-assert.match(examplesRedirectPage, /href="\.\.\/index\.html#examples"/);
-assert.match(examplesRedirectPage, /location\.replace\("\.\.\/index\.html#examples"\)/);
+assert.match(examplesRedirectPage, /href="\.\.\/openings\.html#examples"/);
+assert.match(examplesRedirectPage, /location\.replace\("\.\.\/openings\.html#examples"\)/);
+assert.match(enterPage, /<section id="hero">/);
+assert.match(enterPage, /<html lang="en" class="enter-page">/);
+assert.match(siteStyle, /html\.enter-page\s*\{[^}]*overflow-y:\s*scroll;/s);
+assert.match(enterPage, /href="openings\.html#studies" class="cta-btn">Enter the three libraries<\/a>/);
+assert.match(enterPage, /location\.replace\("openings\.html" \+ location\.hash\)/);
+assert.match(enterPage, /<script src="docs\/sketch\.js\?v=word-sentence-1"><\/script>/);
+assert.doesNotMatch(enterPage, /id="(?:origin-note|studies|examples|lib-core|lib-text|lib-underwood)"/);
+assert.doesNotMatch(enterPage, /examples\/(?:gysin_demo|permutation_poem|weave|plotter_export)\/composition\.js/);
+assert.match(showcasePage, /<title>Openings \| p5\.gysin<\/title>/);
+assert.match(showcasePage, /<a href="openings\.html" class="active">Openings<\/a>/);
+assert.doesNotMatch(showcasePage, /<section id="hero">|docs\/sketch\.js/);
 assert.match(showcasePage, /Writing is fifty years behind painting/);
 assert.doesNotMatch(siteStyle, /\.pull-quote\s*\{[^}]*border-left/s);
 assert.match(showcasePage, /<figure class="origin-sheet">/);
