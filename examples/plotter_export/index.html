@@ -21,67 +21,95 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">SVG · JSON · HPGL</div>
+      <div class="demo-number">Canvas → layers → A5–A2 → plotter SVG</div>
       <h1>Plotter Export</h1>
-      <p>One plate, three files. Canvas colour follows the physical pen map. For margins, pens and route, open <a href="../plotter_calibration/">Plotter Calibration</a>.</p>
+      <p>Build the poster once. Then describe which marks belong together and choose the physical paper only when you export.</p>
     </div>
+
     <div class="demo-layout">
       <div class="demo-code">
-        <div class="code-label">Core snippet</div>
-        <pre><code class="language-javascript">// One clean mark.
-const plot = new GysinPlot({ seed: 7475 });
-plot.text("PLOT", 118, 188);   // clean, mechanical text
-plot.draw();
+        <section class="demo-step">
+          <div class="code-label">1 · Canvas style</div>
+          <p><code>PAPER</code>, <code>INK</code>, and <code>RED</code> are JavaScript colour values. They control what you see on the canvas. A colour does not create an SVG layer.</p>
+          <pre><code class="language-javascript">const PAPER = "#f0efe9";
+const INK = "#151515";
+const RED = "#c0392b";
 
-// Layer names drive the pen map.
-const penMap = { frame: 1, type: 2, field: 3, registration: 1 };
-const ink = { 1: "#151515", 2: "#b5362b", 3: "#244f73" };
+const plot = new GysinPlot({
+  seed: 19600319,
+  width: 720,
+  height: 900,
+  style: { stroke: INK },
+  export: { layer: "black" }
+});
 
-// Composition data carries layer, method, geometry and disturbance.
-for (const [layer, method, geom, opts] of shapesFor(composition(variation))) {
-  plot[method](...geom, { layer, stroke: ink[penMap[layer]], ...humanize(opts) });
-}
-plot.draw();
+function draw() {
+  background(PAPER); // canvas only; not a plotted path
+  plot.draw();
+}</code></pre>
+        </section>
 
-// Advanced custom page: centre this square composition on A4.
-const page = {
-  width: 210, height: 297, units: "mm",
-  margin: { top: 48.5, right: 5, bottom: 48.5, left: 5 },
-  scale: 200 / 560, clip: true
-};
-plot.downloadPlotterSVG("plate.svg", { page, penMap });
-plot.downloadJSON("plate.json", { includeGenerated: true });
-plot.downloadHPGL("plate.hpgl", { page, penMap, speed: 20 });
+        <section class="demo-step">
+          <div class="code-label">2 · SVG layers</div>
+          <p>The constructor puts every mark in the <code>black</code> layer. A red mark needs two explicit choices: <code>stroke</code> for its visible colour and <code>layer</code> for its SVG group.</p>
+          <pre><code class="language-javascript">// Uses the black canvas ink and black SVG layer.
+plot.rect(80, 90, 544, 260);
 
-// Report path cost before plotting.
-const stats = plot.stats({ page, drawSpeed: 20, travelSpeed: 60 });
-// per pen: stats.layers.type.drawnLength / drawSpeed
-// whole plate: stats.estimatedSeconds -> total plot time</code></pre>
-        <div class="control-grid" aria-label="Physical plot settings">
-          <label class="control-row" for="plot-size">
-            <span>Physical plot size <output id="plot-size-value" for="plot-size">A4 · 210 × 297 mm</output></span>
-            <select id="plot-size">
-              <option value="A4" selected>A4 · 21 × 29.7 cm</option>
-              <option value="A3">A3 · 29.7 × 42 cm</option>
-              <option value="A2">A2 · 42 × 59.4 cm</option>
-            </select>
-          </label>
+// Visible in red; grouped in the red SVG layer.
+plot.circle(256, 337, 450, {
+  stroke: RED,
+  layer: "red",
+  repeat: 3,
+  rubout: 0.2,
+  alpha: 0.7
+});</code></pre>
+          <p><code>alpha</code> and <code>strokeWeight</code> can shape the canvas preview. Plotter-safe SVG uses centre lines: the installed pen determines the physical colour and line width.</p>
+        </section>
+
+        <section class="demo-step">
+          <div class="code-label">3 · Physical pens</div>
+          <p><code>penMap</code> assigns each SVG layer to a pen number. It does not recolour the canvas and it does not install a pen for you.</p>
+          <pre><code class="language-javascript">const penMap = {
+  black: 1,
+  red: 2
+};</code></pre>
+        </section>
+
+        <section class="demo-step">
+          <div class="code-label">4 · A5, A4, A3, or A2</div>
+          <p>There is no separate <code>A4()</code> function. <code>page: "A4"</code> selects a built-in ISO export preset: exact millimetres, a 10 mm margin, top-left placement, clipping, and width-fitting scale. It changes the SVG page, not the 720 × 900 canvas composition.</p>
+          <pre><code class="language-javascript">plot.downloadPlotterSVG("poster.svg", {
+  page: "A4",
+  penMap
+});</code></pre>
+
+          <div class="control-grid" aria-label="Physical plot settings">
+            <label class="control-row" for="plot-size">
+              <span>SVG paper <output for="plot-size">canvas stays 720 × 900</output></span>
+              <select id="plot-size">
+                <option value="A5">A5 · 148 × 210 mm</option>
+                <option value="A4" selected>A4 · 210 × 297 mm</option>
+                <option value="A3">A3 · 297 × 420 mm</option>
+                <option value="A2">A2 · 420 × 594 mm</option>
+              </select>
+            </label>
+          </div>
+          <div class="demo-actions" aria-label="Export action">
+            <button type="button" id="svg-button">Download plotter SVG</button>
+          </div>
+        </section>
+
+        <div class="demo-note demo-source-note">
+          The snippets show the export logic without hiding the artwork.
+          <a href="composition.js">Open the complete poster composition</a>;
+          <a href="sketch.js">open the canvas and download code</a>.
         </div>
-        <div class="demo-stats" id="physical-settings">A4 · 210 × 297 mm · centered · min. margin 5 mm · centerlines · clipping on · route optimized · 3 pens</div>
-        <div class="demo-actions" aria-label="Export actions">
-          <button type="button" id="svg-button">Download SVG</button>
-          <button type="button" id="json-button">Download JSON</button>
-          <button type="button" id="hpgl-button">Download HPGL</button>
-          <button type="button" id="reroll-button">New variation</button>
-          <button type="button" id="rougher-button">Rougher +</button>
-          <button type="button" id="cleaner-button">Cleaner −</button>
-          <button type="button" id="reset-button">Reset</button>
-        </div>
-        <div class="demo-note">A4, A3 and A2 create exact ISO portrait pages. The square work is centered with at least 5 mm margin; its on-screen composition does not move. Plotter SVG contains centerlines and true Inkscape layers named by physical pen: <code>1 frame</code>, <code>2 type</code>, <code>3 field</code>. Coverage and line width come from the installed pens. <code>R</code> changes variation; <code>&uarr;</code>/<code>&darr;</code> change roughness; <strong>Reset</strong> returns variation 0 and human &times;1. SVG, JSON and HPGL export the plate shown.</div>
       </div>
+
       <div class="demo-right">
-        <div class="demo-canvas" id="sketch" role="img" aria-label="A layered plotter composition prepared for SVG, JSON, and HPGL export."></div>
-        <div class="demo-note" id="export-status" role="status" aria-live="polite">Building composition…</div>
+        <div class="demo-canvas" id="sketch" role="img" aria-label="A black and red typographic poster prepared as a two-pen SVG."></div>
+        <div class="demo-note" id="export-status" role="status" aria-live="polite">Building poster…</div>
+        <div class="demo-note">Open the SVG in Inkscape: plot every layer beginning with <code>1</code> using the black pen, then every layer beginning with <code>2</code> using the red pen.</div>
       </div>
     </div>
   </main>
@@ -97,6 +125,7 @@ const stats = plot.stats({ page, drawSpeed: 20, travelSpeed: 60 });
   <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
   <script src="../../p5.gysin.min.js"></script>
   <script src="../../p5.gysin.underwood.min.js"></script>
+  <script src="composition.js"></script>
   <script src="sketch.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
 </body>

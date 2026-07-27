@@ -1260,22 +1260,58 @@ assert.match(siteStyle, /body\.chapters #chapter-prev,[\s\S]*bottom: 12px/);
 
 const plotterExportPage = fs.readFileSync(path.join(examplesDir, "plotter_export", "index.html"), "utf8");
 const plotterExportSketch = fs.readFileSync(path.join(examplesDir, "plotter_export", "sketch.js"), "utf8");
-const plotterExportComposition = plotterExportSketch.split("// --- Canvas chrome")[0];
-assert.match(plotterExportPage, /id="plot-size-value"[^>]*>A4 · 210 × 297 mm<\/output>/);
-assert.match(plotterExportPage, /<select id="plot-size">[\s\S]*value="A4" selected>A4 · 21 × 29\.7 cm[\s\S]*value="A3">A3 · 29\.7 × 42 cm[\s\S]*value="A2">A2 · 42 × 59\.4 cm[\s\S]*<\/select>/);
-assert.match(plotterExportPage, /id="physical-settings">A4 · 210 × 297 mm · centered · min\. margin 5 mm · centerlines · clipping on · route optimized · 3 pens/);
-assert.match(plotterExportPage, /coverage and line width come from the installed pens/i);
-assert.match(plotterExportPage, /downloadPlotterSVG\("plate\.svg", \{ page, penMap \}\)/);
-assert.match(plotterExportSketch, /A4: Object\.freeze\(\{ width: 210, height: 297 \}\)/);
-assert.match(plotterExportSketch, /A3: Object\.freeze\(\{ width: 297, height: 420 \}\)/);
-assert.match(plotterExportSketch, /A2: Object\.freeze\(\{ width: 420, height: 594 \}\)/);
-assert.match(plotterExportSketch, /const square = sheet\.width - 2 \* MIN_PAGE_MARGIN/);
-assert.match(plotterExportSketch, /const verticalMargin = \(sheet\.height - square\) \/ 2/);
-assert.match(plotterExportSketch, /Object\.assign\(EXPORT_PAGE, physicalPage\(physicalFormat\)\)/);
-assert.match(plotterExportSketch, /statusPrefix = `\$\{physicalFormat\} page selected`/);
-assert.match(plotterExportSketch, /downloadPlotterSVG\("p5-gysin-plotter-export\.svg", \{[\s\S]*page: EXPORT_PAGE,[\s\S]*penMap: PEN_MAP/);
-assert.match(plotterExportSketch, /centerlines · .*clipping on · route optimized · 3 pens/s);
-assert.doesNotMatch(plotterExportComposition, /\b(?:alpha|pressure|strokeWeight)\s*:/);
+const plotterExportComposition = fs.readFileSync(
+  path.join(examplesDir, "plotter_export", "composition.js"),
+  "utf8"
+);
+assert.match(plotterExportPage, /1 · Canvas style[\s\S]*2 · SVG layers[\s\S]*3 · Physical pens[\s\S]*4 · A5, A4, A3, or A2/);
+assert.match(plotterExportPage, /A colour does not create an SVG layer/);
+assert.match(plotterExportPage, /There is no separate <code>A4\(\)<\/code> function/);
+assert.match(plotterExportPage, /It changes the SVG page, not the 720 × 900 canvas composition/);
+assert.match(plotterExportPage, /<select id="plot-size">[\s\S]*value="A5">A5 · 148 × 210 mm[\s\S]*value="A4" selected>A4 · 210 × 297 mm[\s\S]*value="A3">A3 · 297 × 420 mm[\s\S]*value="A2">A2 · 420 × 594 mm[\s\S]*<\/select>/);
+assert.match(plotterExportPage, /<script src="composition\.js"><\/script>\s*<script src="sketch\.js"><\/script>/);
+assert.match(plotterExportComposition, /width: WIDTH,[\s\S]*height: HEIGHT,[\s\S]*style: \{ stroke: INK \},[\s\S]*export: \{ layer: "black" \}/);
+assert.match(plotterExportComposition, /plot\.circle\(256, 337, 450, \{[\s\S]*stroke: RED,[\s\S]*layer: "red"/);
+assert.match(plotterExportComposition, /plot\.underwood\("REMEMBERS", 82, 360, \{[\s\S]*stroke: RED,[\s\S]*layer: "red"/);
+assert.match(plotterExportComposition, /const PEN_MAP = \{ black: 1, red: 2 \}/);
+assert.match(plotterExportSketch, /downloadPlotterSVG\([\s\S]*page: format,[\s\S]*penMap: poster\.penMap/);
+assert.doesNotMatch(plotterExportSketch, /\b(?:ISO_PAGES|physicalPage|downloadJSON|downloadHPGL|optimize|tool)\b/);
+assert.match(showcasePage, /<script src="examples\/plotter_export\/composition\.js"><\/script>/);
+assert.match(showcasePage, /GysinWorks\.plotterPoster\.build\(\{ p \}\)/);
+assert.match(showcasePage, /data-ratio="1\.25"/);
+
+const plotterPosterContext = { console };
+plotterPosterContext.globalThis = plotterPosterContext;
+vm.createContext(plotterPosterContext);
+for (const filename of [
+  "p5.gysin.js",
+  "p5.gysin.underwood.js",
+  path.join("examples", "plotter_export", "composition.js")
+]) {
+  vm.runInContext(
+    fs.readFileSync(path.join(root, filename), "utf8"),
+    plotterPosterContext,
+    { filename }
+  );
+}
+const plotterPoster = plotterPosterContext.GysinWorks.plotterPoster.build();
+for (const [format, width, height] of [
+  ["A5", 148, 210],
+  ["A4", 210, 297],
+  ["A3", 297, 420],
+  ["A2", 420, 594]
+]) {
+  const svg = plotterPoster.plot.exportPlotterSVG({
+    page: format,
+    penMap: plotterPoster.penMap
+  });
+  assert.match(svg, new RegExp(`width="${width}mm" height="${height}mm"`));
+  assert.deepEqual(
+    Array.from(svg.matchAll(/inkscape:label="([^"]+)"/g), (match) => match[1]),
+    ["1 black", "2 red"]
+  );
+  assert.doesNotMatch(svg, /#f0efe9/i, "canvas paper is not a plotted SVG path");
+}
 
 const plotterCalibrationPage = fs.readFileSync(path.join(examplesDir, "plotter_calibration", "index.html"), "utf8");
 const plotterCalibrationSketch = fs.readFileSync(path.join(examplesDir, "plotter_calibration", "sketch.js"), "utf8");
