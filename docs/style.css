@@ -1040,10 +1040,6 @@ body.chapters .ce-module.chapter-active {
   border-top: none;
 }
 
-.ce-module .section-tag {
-  color: var(--red);
-}
-
 .ce-module h2 {
   font-size: clamp(28px, 4vw, 44px);
   margin-top: 6px;
@@ -1053,90 +1049,6 @@ body.chapters .ce-module.chapter-active {
   max-width: 680px;
   color: var(--muted);
   margin-top: 10px;
-}
-
-.ce-thesis {
-  max-width: 820px;
-  margin: 14px 0 0;
-  font-family: "Oswald", sans-serif;
-  font-size: clamp(19px, 2.4vw, 28px);
-  line-height: 1.25;
-  color: var(--ink);
-}
-
-.ce-thesis q {
-  color: var(--red);
-  quotes: "“" "”";
-}
-
-.ce-source {
-  margin: 8px 0 0;
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  color: var(--muted);
-}
-
-.ce-source span {
-  margin-right: 7px;
-  font-weight: 800;
-  text-transform: uppercase;
-  color: var(--red);
-}
-
-.ce-source a {
-  color: inherit;
-  text-underline-offset: 3px;
-}
-
-.ce-strip {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin: 26px 0;
-}
-
-.ce-strip-four {
-  grid-template-columns: repeat(4, 1fr);
-}
-
-.ce-step {
-  border: 1px solid var(--rule);
-  background: var(--white);
-  padding: 14px 16px;
-}
-
-.ce-step span {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--red);
-}
-
-.ce-step h4 {
-  font-family: "Oswald", sans-serif;
-  font-weight: 600;
-  margin: 6px 0 4px;
-  font-size: 17px;
-}
-
-/* Alegreya sits smaller than mono at the same size - one step back up so the
-   step text keeps the weight it had in the machine voice. */
-.ce-step p {
-  margin: 0;
-  font-size: 15px;
-  color: var(--muted);
-}
-
-.ce-step span + p {
-  margin-top: 7px;
-}
-
-.ce-demo {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-  align-items: start;
 }
 
 .ce-preview,
@@ -1157,15 +1069,6 @@ body.chapters .ce-module.chapter-active {
 
 .ce-codewrap {
   position: relative;
-}
-
-.ce-codewrap pre {
-  margin: 0;
-  background: #14140f;
-  color: #eee9dc;
-  padding: 18px;
-  overflow-x: auto;
-  border: 1px solid var(--ink);
 }
 
 .ce-codewrap code {
@@ -1195,58 +1098,6 @@ body.chapters .ce-module.chapter-active {
   background: #fff;
 }
 
-.ce-note {
-  font-size: 13px;
-  color: var(--muted);
-  margin-top: 10px;
-}
-
-.ce-links {
-  margin-top: 12px;
-  font-size: 13px;
-}
-
-.ce-links a {
-  color: var(--red);
-  font-weight: 700;
-  text-decoration: none;
-  margin-right: 16px;
-}
-
-/* The module rules above appear after the generic dark-section rules,
-   so dark modules would fall back to muted. Reassert the light palette. */
-.ce-module.section-dark .section-tag {
-  color: var(--red-on-dark);
-}
-
-.ce-module.section-dark .section-desc {
-  color: var(--text-on-dark);
-}
-
-.ce-module.section-dark .ce-thesis {
-  color: var(--white);
-}
-
-.ce-module.section-dark .ce-source {
-  color: var(--text-on-dark);
-}
-
-.ce-module.section-dark .ce-source span {
-  color: var(--red-on-dark);
-}
-
-.ce-module.section-dark .ce-note {
-  color: var(--text-on-dark);
-}
-
-.ce-module.section-dark .ce-links a {
-  color: var(--red-on-dark);
-}
-
-.ce-poster-section {
-  border-top: 2px solid var(--ink);
-}
-
 .ce-poster-stage {
   max-width: 760px;
   margin: 26px auto 0;
@@ -1254,38 +1105,18 @@ body.chapters .ce-module.chapter-active {
 
 .ce-poster-stage .ce-canvas {
   min-height: 420px;
-  border: 2px solid var(--ink);
+  border: 1px solid var(--rule);
   box-shadow: none;
-}
-
-.ce-hero-section .section-header {
-  max-width: 760px;
-  margin-inline: auto;
-  text-align: center;
-}
-
-.ce-hero-section .section-desc {
-  margin-inline: auto;
-}
-
-.ce-hero-section .ce-strip {
-  max-width: 760px;
-  margin-inline: auto;
 }
 
 .ce-route {
   max-width: 760px;
   margin: 22px auto 0;
-  font-family: Consolas, "Courier New", monospace;
-  font-size: 13px;
   text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 
 .ce-sheet-specimen,
-.ce-layer-specimen,
-.ce-plot-specimen {
+.ce-layer-specimen {
   display: grid;
   min-height: 420px;
   padding: 28px;
@@ -1342,40 +1173,8 @@ body.chapters .ce-module.chapter-active {
 }
 
 .ce-layer-specimen li.red,
-.ce-layer-specimen li.red b,
-.ce-plot-specimen .red {
+.ce-layer-specimen li.red b {
   color: var(--red);
-}
-
-.ce-plot-specimen {
-  align-content: center;
-  justify-items: start;
-  gap: 10px;
-  color: var(--ink);
-  font-family: Consolas, "Courier New", monospace;
-}
-
-.ce-plot-specimen strong {
-  font-family: "Oswald", sans-serif;
-  font-size: 72px;
-  line-height: 1;
-}
-
-.ce-plot-specimen span,
-.ce-plot-specimen small {
-  max-width: 520px;
-}
-
-.ce-final-section .section-header {
-  max-width: 760px;
-  margin-inline: auto;
-  text-align: center;
-}
-
-.ce-final-section .ce-thesis,
-.ce-final-section .ce-source,
-.ce-final-section .section-desc {
-  margin-inline: auto;
 }
 
 .ce-output-controls {
@@ -1413,12 +1212,6 @@ body.chapters .ce-module.chapter-active {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-}
-
-.ce-output-controls button.primary {
-  color: var(--white);
-  background: var(--red);
-  border-color: var(--red);
 }
 
 #physical-settings {
@@ -1558,14 +1351,6 @@ footer {
     top: auto;
     bottom: 12px;
     transform: none;
-  }
-
-  .ce-strip {
-    grid-template-columns: 1fr;
-  }
-
-  .ce-demo {
-    grid-template-columns: 1fr;
   }
 
   .ce-output-controls {
