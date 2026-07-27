@@ -1180,12 +1180,12 @@ assert.match(collagePage, /A5 &middot; 148 &times; 210 mm/);
 assert.match(collagePage, /A4 &middot; 210 &times; 297 mm/);
 assert.match(collagePage, /A3 &middot; 297 &times; 420 mm/);
 assert.match(collagePage, /A2 &middot; 420 &times; 594 mm/);
-assert.match(collagePage, /A hex colour changes the screen image\. It does not create an SVG layer or choose a physical pen\./);
-assert.match(collagePage, /There is no <code>A4\(\)<\/code> drawing function/);
+assert.match(collagePage, /A hex colour belongs to the screen\. It makes no SVG layer and chooses no pen\./);
+assert.match(collagePage, /<code>page: "A4"<\/code> is a physical export preset, not a drawing function/);
 assert.match(collagePage, /black layer &rarr; pen 1 &middot; red layer &rarr; pen 2/);
 assert.match(collagePage, /The installed pens determine the real colour and line width on paper\./);
-assert.match(collagePage, /class="ce-preview ce-layer-specimen ce-colour-specimen"/);
-assert.match(siteStyle, /\.ce-layer-specimen\.ce-colour-specimen li\s*\{[^}]*grid-template-columns:\s*78px minmax\(0, 1fr\);[^}]*column-gap:\s*12px;/s);
+assert.match(collagePage, /class="ce-canvas ce-plot-specimen"/);
+assert.doesNotMatch(siteStyle, /\.ce-colour-specimen/);
 assert.match(systemPage, /<section class="guide-block" id="export">/);
 assert.match(systemPage, /show every layer beginning with <code>1<\/code>, install pen 1 and plot; then hide those layers and repeat for <code>2<\/code>, <code>3<\/code>, and so on/);
 
@@ -1244,9 +1244,13 @@ const plotterExportComposition = fs.readFileSync(
   "utf8"
 );
 assert.match(plotterExportPage, /1 · Canvas style[\s\S]*2 · SVG layers[\s\S]*3 · Physical pens[\s\S]*4 · A5, A4, A3, or A2/);
-assert.match(plotterExportPage, /A colour does not create an SVG layer/);
-assert.match(plotterExportPage, /There is no separate <code>A4\(\)<\/code> function/);
-assert.match(plotterExportPage, /It changes the SVG page, not the 720 × 900 canvas composition/);
+assert.equal((plotterExportPage.match(/<section class="guide-block">/g) || []).length, 4);
+assert.match(plotterExportPage, /<div class="guide-layout">[\s\S]*<section class="guide-block">/);
+assert.match(plotterExportPage, /<p><code>PAPER<\/code>/);
+assert.match(plotterExportPage, /Colour alone makes no SVG layer/);
+assert.match(plotterExportPage, /<code>page: "A4"<\/code> sets the SVG paper, margin and fit/);
+assert.match(plotterExportPage, /The 720 × 900 composition stays where it is/);
+assert.doesNotMatch(plotterExportPage, /class="demo-step"|demo-source-note|class="demo-code"/);
 assert.match(plotterExportPage, /<select id="plot-size">[\s\S]*value="A5">A5 · 148 × 210 mm[\s\S]*value="A4" selected>A4 · 210 × 297 mm[\s\S]*value="A3">A3 · 297 × 420 mm[\s\S]*value="A2">A2 · 420 × 594 mm[\s\S]*<\/select>/);
 assert.match(plotterExportPage, /<script src="composition\.js"><\/script>\s*<script src="sketch\.js"><\/script>/);
 assert.match(plotterExportComposition, /width: WIDTH,[\s\S]*height: HEIGHT,[\s\S]*style: \{ stroke: INK \},[\s\S]*export: \{ layer: "black" \}/);

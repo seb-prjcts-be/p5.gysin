@@ -852,33 +852,6 @@ body.chapters .ce-module.chapter-active {
   border-bottom: 1px solid var(--rule);
 }
 
-.demo-step + .demo-step {
-  border-top: 1px solid var(--rule);
-}
-
-.demo-step > p {
-  margin: 0;
-  padding: 16px 18px;
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.55;
-}
-
-.demo-step > p + pre {
-  border-top: 1px solid var(--rule);
-}
-
-.demo-step > pre + p {
-  border-top: 1px solid var(--rule);
-}
-
-.demo-source-note {
-  margin: 0;
-  padding: 16px 18px;
-  border-top: 1px solid var(--rule);
-  line-height: 1.55;
-}
-
 .demo-code pre {
   overflow: auto;
   margin: 0;
@@ -1366,11 +1339,6 @@ body.chapters .ce-module.chapter-active {
 
 .ce-layer-specimen li b {
   color: var(--ink);
-}
-
-.ce-layer-specimen.ce-colour-specimen li {
-  grid-template-columns: 78px minmax(0, 1fr);
-  column-gap: 12px;
 }
 
 .ce-layer-specimen li.red,
