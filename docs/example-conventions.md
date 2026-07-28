@@ -106,8 +106,9 @@ bibliotheek groepeert voorbeelden eerst volgens een **praktisch werkmoment**:
    staat apart van de woord- en zinsbewerkingen.
 6. **Sentence**: `chant()` en `weave()` laten volgorde, sequentie en bron
    leesbaar blijven.
-7. **Sentence / page**: `underwood()` geeft langere stem vaste maat, regelval
-   en marge.
+7. **Typewriter**: `underwood()` geeft tekst vaste tekenafstand en regelhoogte,
+   met onderstrepen en dubbel aanslaan als mechanische ingrepen. Pagina,
+   marges en compositie blijven de verantwoordelijkheid van de sketch.
 
 De `.work-band`-opmaak maakt dat onderscheid zichtbaar vóór een bezoeker de
 functienamen leest. Een nieuw voorbeeld krijgt eerst één concreet werkmoment en

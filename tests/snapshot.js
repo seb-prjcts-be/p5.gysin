@@ -1133,7 +1133,9 @@ assert.match(showcasePage, /<strong>Trace<\/strong><small>Parameters, contours, 
 assert.match(showcasePage, /<strong>Ink<\/strong><small>Additive return passages\.<\/small>/);
 assert.match(showcasePage, /<strong>Page<\/strong><small>Millimetres, pens, layers, export\.<\/small>/);
 assert.match(showcasePage, /<strong>Sentence<\/strong><small>Order, sequence, source\.<\/small>/);
+assert.match(showcasePage, /<strong>Typewriter<\/strong><small>Fixed pitch, line height, double strike\.<\/small>/);
 assert.match(showcasePage, /<strong>Surface<\/strong><small>A late disturbance, used sparingly\.<\/small>/);
+assert.doesNotMatch(showcasePage, /Sentence \/ page|Voice needs measure and margin/);
 assert.match(showcasePage, /<div class="work-band work-band-word">/);
 assert.match(
   siteStyle,
