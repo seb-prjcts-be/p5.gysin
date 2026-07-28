@@ -1129,6 +1129,9 @@ assert.doesNotMatch(siteStyle, /\.(?:origin-note|origin-sheet|pull-quote)\b/);
 assert.match(visionPage, /Gysin&rsquo;s sentence &ldquo;Writing is fifty years behind painting&rdquo;/);
 assert.doesNotMatch(visionPage, /quotation on Enter/);
 assert.match(showcasePage, /<strong>Word<\/strong><small>Isolate it\. Enlarge it\. Wear it\.<\/small>/);
+assert.match(showcasePage, /<strong>Trace<\/strong><small>Parameters, contours, paths\.<\/small>/);
+assert.match(showcasePage, /<strong>Ink<\/strong><small>Additive return passages\.<\/small>/);
+assert.match(showcasePage, /<strong>Page<\/strong><small>Millimetres, pens, layers, export\.<\/small>/);
 assert.match(showcasePage, /<strong>Sentence<\/strong><small>Order, sequence, source\.<\/small>/);
 assert.match(showcasePage, /<strong>Surface<\/strong><small>A late disturbance, used sparingly\.<\/small>/);
 assert.match(showcasePage, /<div class="work-band work-band-word">/);
@@ -1139,18 +1142,22 @@ assert.match(
 );
 assert.match(
   siteStyle,
-  /\.work-band-word \.work-band-head strong\s*\{[^}]*color:\s*var\(--red\);/s,
-  "the Word heading reuses the title red"
+  /\.work-band-head strong\s*\{[^}]*color:\s*var\(--red\);/s,
+  "every example category heading reuses the title red"
 );
 const coreSheetStart = showcasePage.indexOf('id="lib-core"');
 const coreSheetEnd = showcasePage.indexOf('id="plate-first-trace"', coreSheetStart);
 const coreSheet = showcasePage.slice(coreSheetStart, coreSheetEnd);
 assert.ok(
   coreSheet.indexOf("<strong>Word</strong>") <
-    coreSheet.indexOf("<strong>Trace &amp; page</strong>") &&
-    coreSheet.indexOf("<strong>Trace &amp; page</strong>") <
+    coreSheet.indexOf("<strong>Trace</strong>") &&
+    coreSheet.indexOf("<strong>Trace</strong>") <
+      coreSheet.indexOf("<strong>Ink</strong>") &&
+    coreSheet.indexOf("<strong>Ink</strong>") <
+      coreSheet.indexOf("<strong>Page</strong>") &&
+    coreSheet.indexOf("<strong>Page</strong>") <
       coreSheet.indexOf("<strong>Surface</strong>"),
-  "the late Surface gesture follows Trace & page"
+  "the core examples progress from word through trace, ink and page to the late surface gesture"
 );
 assert.match(
   siteStyle,

@@ -91,24 +91,29 @@ Voor een werk dat op Enter én op een zelfstandige pagina verschijnt:
 Doorgevoerd op alle 12 kaarten (juli 2026, Ink Bleed erbij); toets elke
 nieuwe kaart hieraan.
 
-## Regel 6 - Homepage-volgorde: schaal vóór methode
+## Regel 6 - Homepage-volgorde: praktisch thema vóór methode
 
 De homepage is een tentoonstelling, geen alfabetische API-catalogus. Elke
-bibliotheek toont eerst op welke **schaal** ze werkt:
+bibliotheek groepeert voorbeelden eerst volgens een **praktisch werkmoment**:
 
 1. **Word**: `text()` en `rub()` isoleren één woordlichaam. Het krijgt formaat,
    positie, herhaling en slijtage.
-2. **Trace & page**: velden, inkt, kalibratie en export behandelen het blad.
-3. **Surface**: `textCutup()` is een late, zeldzame contoursnede. Deze kaart
+2. **Trace**: parameters, fontcontouren en vrije paden bepalen het spoor.
+3. **Ink**: additieve passages bepalen hoe inkt zich ophoopt.
+4. **Page**: kalibratie en export vertalen het werk naar millimeters, lagen en
+   fysieke pennen.
+5. **Surface**: `textCutup()` is een late, zeldzame contoursnede. Deze kaart
    staat apart van de woord- en zinsbewerkingen.
-4. **Sentence**: `chant()` en `weave()` laten volgorde, sequentie en bron
+6. **Sentence**: `chant()` en `weave()` laten volgorde, sequentie en bron
    leesbaar blijven.
-5. **Sentence / page**: `underwood()` geeft langere stem vaste maat, regelval
+7. **Sentence / page**: `underwood()` geeft langere stem vaste maat, regelval
    en marge.
 
 De `.work-band`-opmaak maakt dat onderscheid zichtbaar vóór een bezoeker de
-functienamen leest. Een nieuw voorbeeld krijgt eerst een schaal en pas daarna
-een plaats in het bijbehorende bibliotheekblad.
+functienamen leest. Een nieuw voorbeeld krijgt eerst één concreet werkmoment en
+pas daarna een plaats in het bijbehorende bibliotheekblad. Vermijd samengestelde
+restcategorieën wanneer tekenen, materiaal en fysieke uitvoer elk een eigen
+handeling zijn.
 
 ## Regel 7 - Woord, zin en oppervlakte blijven verschillende gebaren
 
