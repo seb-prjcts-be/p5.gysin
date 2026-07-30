@@ -51,6 +51,12 @@
       "added_in": "1.1.0",
       "status": "stable",
       "note": "Intent route for physical SVG output: requires a physical page, clips geometry, optimizes per physical pen group by default, splits mixed-colour layers, emits true top-level Inkscape layers whose visible names start with the physical pen number, preserves pen passes, and writes centre lines while discarding alpha, strokeWeight, and pressure-derived screen styling."
+    },
+    {
+      "name": "page: A5|A4|A3|A2",
+      "added_in": "1.2.0",
+      "status": "stable",
+      "note": "Built-in physical ISO page presets for SVG, plotter-SVG, HPGL, and statistics: exact millimetre dimensions, 10 mm margins, top-left origin, geometric clipping, and width-fitting scale derived from the canvas."
     }
   ]
 }

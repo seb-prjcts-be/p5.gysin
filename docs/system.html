@@ -37,9 +37,9 @@
       </ul>
       <p>Load what you need, in this order - with <code>p5.js</code> first when you draw to a canvas:</p>
       <div class="code-preview">
-        <code>&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.1.0/p5.gysin.min.js"&gt;&lt;/script&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.1.0/p5.gysin.text.min.js"&gt;&lt;/script&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.1.0/p5.gysin.underwood.min.js"&gt;&lt;/script&gt;</code>
+        <code>&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.2.0/p5.gysin.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.2.0/p5.gysin.text.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.2.0/p5.gysin.underwood.min.js"&gt;&lt;/script&gt;</code>
       </div>
       <p>The addons are optional. The pure <code>GysinText</code> operations run without p5.js or <code>GysinPlot</code>; the <code>plot.*</code> methods attach when the core is present.</p>
     </section>
@@ -216,7 +216,7 @@ plot.lattice("JUNK IS NO GOOD BABY", 60, 60, 480, 480, {
       <h2>Optional Text Operations</h2>
       <p><code>p5.gysin.text.min.js</code> provides pure text operations and two matching plot methods.</p>
       <div class="code-preview">
-        <code>&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.1.0/p5.gysin.text.min.js"&gt;&lt;/script&gt;
+        <code>&lt;script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.2.0/p5.gysin.text.min.js"&gt;&lt;/script&gt;
 
 const lines = GysinText.permute("I LOVE YOU", {
   seed: 1960,
@@ -309,7 +309,7 @@ plot.clear();         // empty the sheet: shapes, ids, and selection</code>
     <section class="guide-block" id="export">
       <h2>Export</h2>
       <h3>Plotter-safe SVG</h3>
-      <p>The methods were introduced in v1.1.0. The ISO page presets below belong to the current source and are not present in the tagged v1.1.0 build.</p>
+      <p>The methods were introduced in v1.1.0. Version 1.2.0 adds the ISO page presets used below.</p>
       <div class="code-preview">
         <code>const page = "A3";
 const penMap = { frame: 1, type: 2 };
@@ -333,7 +333,7 @@ plot.downloadJSON("gysin.json");</code>
       <p><code>plot.exportHPGL(options)</code> returns the current traces as an HPGL string. <code>plot.downloadHPGL(filename, options)</code> passes the same options to that exporter and downloads the result as a <code>.hpgl</code> file. Both methods are part of the core library; no text or typewriter addon is required.</p>
       <div class="code-preview">
         <code>const hpglOptions = {
-  page: "A4",                  // current source: physical page + 10 mm margin
+  page: "A4",                  // physical page + 10 mm margin
   optimize: true,              // reduce pen-up travel per semantic layer
   penMap: { black: 1, red: 2 },
   speed: 20
@@ -342,7 +342,7 @@ plot.downloadJSON("gysin.json");</code>
 const hpgl = plot.exportHPGL(hpglOptions);          // HPGL text
 plot.downloadHPGL("drawing.hpgl", hpglOptions);     // browser download</code>
       </div>
-      <p><strong>For physical output, pass both an explicit physical page and <code>optimize: true</code>.</strong> HPGL uses the generic export route: without <code>page</code> it falls back to the plot or canvas dimensions, and without <code>optimize: true</code> it preserves drawing order. A current-source preset such as <code>page: "A4"</code> supplies exact millimetres, a 10 mm margin, width-fitting scale, top-left origin, and geometric clipping. Unlike <code>exportPlotterSVG()</code>, HPGL does not require those safeguards or switch optimization on automatically.</p>
+      <p><strong>For physical output, pass both an explicit physical page and <code>optimize: true</code>.</strong> HPGL uses the generic export route: without <code>page</code> it falls back to the plot or canvas dimensions, and without <code>optimize: true</code> it preserves drawing order. A preset such as <code>page: "A4"</code> supplies exact millimetres, a 10 mm margin, width-fitting scale, top-left origin, and geometric clipping. Unlike <code>exportPlotterSVG()</code>, HPGL does not require those safeguards or switch optimization on automatically.</p>
       <p><code>penMap</code> maps a semantic layer name or an exact stroke colour to a positive physical pen number. A layer match wins over a colour match; an unmapped trace uses pen 1. The exporter writes <code>SP</code> commands when that number changes. It does not preserve SVG layer names.</p>
       <ul>
         <li><code>page</code>: <code>"A5"</code>, <code>"A4"</code>, <code>"A3"</code>, <code>"A2"</code>, or a custom page object with dimensions, units, margins, origin, rotation, scale, and optional clipping.</li>
@@ -364,7 +364,7 @@ plot.downloadHPGL("drawing.hpgl", hpglOptions);     // browser download</code>
 
     <section class="guide-block">
       <h2>Compatibility</h2>
-      <p>Version 1.1.0 targets p5.js 2.x in global and instance mode. The vector and export core is framework-independent, but p5.js 1.x is not part of the tested support contract.</p>
+      <p>Version 1.2.0 targets p5.js 2.x in global and instance mode. The vector and export core is framework-independent, but p5.js 1.x is not part of the tested support contract.</p>
     </section>
 
     <section class="guide-block">
@@ -375,7 +375,7 @@ plot.downloadHPGL("drawing.hpgl", hpglOptions);     // browser download</code>
 
   <footer>
     <p><a href="../openings.html#examples">Openings</a> &nbsp;&middot;&nbsp; <a href="../index.html">Enter</a> &nbsp;&middot;&nbsp; <a href="../examples/plotter_calibration/">Transmission</a></p>
-    <p class="footer-sub">p5.gysin v1.1.0</p>
+    <p class="footer-sub">p5.gysin v1.2.0</p>
   </footer>
 </body>
 </html>

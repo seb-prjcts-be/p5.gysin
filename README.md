@@ -12,7 +12,7 @@ Load p5.js, then the core library:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/p5@2.3.1/lib/p5.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.1.0/p5.gysin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.2.0/p5.gysin.min.js"></script>
 ```
 
 ```js
@@ -35,8 +35,8 @@ standalone works with their source code.
 
 ## Plotter-safe SVG
 
-The plotter-safe methods were introduced in v1.1.0. The ISO page presets below
-are part of the current source and are not present in the tagged v1.1.0 build.
+The plotter-safe methods were introduced in v1.1.0. Version 1.2.0 adds the ISO
+page presets used below.
 
 Use the explicit plotter route for a file that can go to physical tooling:
 
@@ -80,8 +80,8 @@ kept readable and must remain behaviourally identical to their sources.
 Load either addon after the core and before your sketch:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.1.0/p5.gysin.text.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.1.0/p5.gysin.underwood.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.2.0/p5.gysin.text.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/seb-prjcts-be/p5.gysin@v1.2.0/p5.gysin.underwood.min.js"></script>
 ```
 
 The pure `GysinText.permute()` and `GysinText.weave()` functions can also run
@@ -89,7 +89,7 @@ from the text addon without p5.js or the core.
 
 ## Compatibility
 
-Version 1.1.0 supports p5.js 2.x in global and instance mode. In instance mode,
+Version 1.2.0 supports p5.js 2.x in global and instance mode. In instance mode,
 create a linked plot after `p.createCanvas()` with
 `p.createGysinPlot(options)`. The vector and export core needs no p5 runtime.
 p5.js 1.x is not part of the tested support matrix.

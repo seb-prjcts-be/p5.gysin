@@ -1080,6 +1080,7 @@ const systemPage = fs.readFileSync(path.join(root, "docs", "system.html"), "utf8
 const visionPage = fs.readFileSync(path.join(root, "docs", "vision.html"), "utf8");
 const plotterContract = fs.readFileSync(path.join(root, "docs", "plotter-export-contract.md"), "utf8");
 const releaseNotes110 = fs.readFileSync(path.join(root, "docs", "release-notes-1.1.0.md"), "utf8");
+const releaseNotes120 = fs.readFileSync(path.join(root, "docs", "release-notes-1.2.0.md"), "utf8");
 const collageComposition = fs.readFileSync(path.join(root, "docs", "collage", "composition.js"), "utf8");
 const collageCuration = fs.readFileSync(path.join(root, "docs", "collage", "curation.js"), "utf8");
 const siteStyle = fs.readFileSync(path.join(root, "docs", "style.css"), "utf8");
@@ -1110,6 +1111,15 @@ assert.match(systemPage, /Built-in pages[\s\S]*<code>"A5"<\/code>[\s\S]*<code>"A
 assert.match(plotterContract, /## Normale ISO-paginaroute[\s\S]*page: "A3"/);
 assert.match(releaseNotes110, /requires an explicit page in `mm`, `cm`, or `in`/);
 assert.doesNotMatch(releaseNotes110, /A5-A2|page presets/i);
+assert.equal(manifest.version, "1.2.0");
+assert.match(releaseNotes120, /`page: "A5"`[\s\S]*`page: "A2"`/);
+assert.match(releaseNotes120, /exportPlotterSVG\(\)[\s\S]*exportHPGL\(\)[\s\S]*stats\(\)/);
+assert.match(releaseNotes120, /p5\.gysin@v1\.2\.0\/p5\.gysin\.min\.js/);
+assert.ok(manifest.added_apis.some((entry) =>
+  entry.name === "page: A5|A4|A3|A2" &&
+  entry.added_in === "1.2.0" &&
+  entry.status === "stable"
+));
 assert.match(examplesRedirectPage, /href="\.\.\/openings\.html#examples"/);
 assert.match(examplesRedirectPage, /location\.replace\("\.\.\/openings\.html#examples"\)/);
 assert.match(enterPage, /<section id="hero">/);
