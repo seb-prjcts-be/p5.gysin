@@ -308,23 +308,18 @@ plot.clear();         // empty the sheet: shapes, ids, and selection</code>
 
     <section class="guide-block" id="export">
       <h2>Export</h2>
-      <p><strong>Plotter-safe SVG:</strong> the methods were introduced in v1.1.0. The ISO page presets below belong to the current source and are not present in the tagged v1.1.0 build.</p>
+      <h3>Plotter-safe SVG</h3>
+      <p>The methods were introduced in v1.1.0. The ISO page presets below belong to the current source and are not present in the tagged v1.1.0 build.</p>
       <div class="code-preview">
         <code>const page = "A3";
 const penMap = { frame: 1, type: 2 };
 
 const svg = plot.exportPlotterSVG({ page, penMap });
 const json = plot.exportJSON();
-const hpgl = plot.exportHPGL({
-  page,
-  penMap,
-  speed: 20
-});
 const stats = plot.stats({ page, drawSpeed: 20, travelSpeed: 60 });
 
 plot.downloadPlotterSVG("gysin.svg", { page, penMap });
-plot.downloadJSON("gysin.json");
-plot.downloadHPGL("gysin.hpgl", { page });</code>
+plot.downloadJSON("gysin.json");</code>
       </div>
       <p><code>exportPlotterSVG()</code> and <code>downloadPlotterSVG()</code> are the safe physical-output route. Built-in pages <code>"A5"</code>, <code>"A4"</code>, <code>"A3"</code>, and <code>"A2"</code> use their exact ISO millimetre dimensions, a 10 mm margin, top-left placement, and a width-fitting scale derived from the canvas. A custom page object with explicit <code>width</code>, <code>height</code>, and <code>mm</code>, <code>cm</code>, or <code>in</code> units remains available for advanced output. The route clips actual path geometry to the page; optimizes travel inside each physical pen group; and writes those groups directly below the SVG root as true Inkscape layers. Each visible layer name starts with its physical number from <code>penMap</code>, for example <code>1 frame</code>, <code>2 type</code>; without a map the groups receive a deterministic one-based order. Layers with the same opening number use the same physical pen. In Inkscape, show every layer beginning with <code>1</code>, install pen 1 and plot; then hide those layers and repeat for <code>2</code>, <code>3</code>, and so on. A semantic layer with several stroke colours is split into separate pen groups automatically. The generic <code>exportSVG()</code> and <code>downloadSVG()</code> keep their original screen-oriented defaults and byte-compatible group structure.</p>
       <p><code>page: "A4"</code> is an export option, not a separate <code>A4()</code> drawing function. It leaves the canvas composition unchanged and maps its traces onto the selected physical sheet. Only Plotter Calibration keeps a custom page object because its canvas is a millimetre measuring instrument.</p>
@@ -333,8 +328,38 @@ plot.downloadHPGL("gysin.hpgl", { page });</code>
       <p>The route never deduplicates geometry: <code>tool: "pen"</code> preserves bleed and explicit repeats, while <code>tool: "blade"</code> removes second and later passages. Repetition is physical geometry, but its ink-darkening effect depends on the actual pen, paper, drying time, and machine.</p>
       <p>The <a href="../examples/plotter_export/">Plotter Export poster</a> separates four concerns: canvas colours, the artwork, semantic SVG layers, and physical export. Its <code>black</code> and <code>red</code> layers map to pen 1 and pen 2. Choosing A5, A4, A3, or A2 applies the built-in 10 mm margin, centre-line model, geometric clipping, optimized travel, and width-fitting scale; the 720 × 900 canvas composition does not move.</p>
       <p>The <a href="../examples/plotter_calibration/">Plotter Calibration sheet</a> likewise contains only physical tests: millimetre scale, hatch spacing, geometric disturbance, and one through six real pen passages. It no longer presents alpha, pressure, or SVG stroke width as machine controls.</p>
+
+      <h3 id="hpgl">HPGL</h3>
+      <p><code>plot.exportHPGL(options)</code> returns the current traces as an HPGL string. <code>plot.downloadHPGL(filename, options)</code> passes the same options to that exporter and downloads the result as a <code>.hpgl</code> file. Both methods are part of the core library; no text or typewriter addon is required.</p>
+      <div class="code-preview">
+        <code>const hpglOptions = {
+  page: "A4",                  // current source: physical page + 10 mm margin
+  optimize: true,              // reduce pen-up travel per semantic layer
+  penMap: { black: 1, red: 2 },
+  speed: 20
+};
+
+const hpgl = plot.exportHPGL(hpglOptions);          // HPGL text
+plot.downloadHPGL("drawing.hpgl", hpglOptions);     // browser download</code>
+      </div>
+      <p><strong>For physical output, pass both an explicit physical page and <code>optimize: true</code>.</strong> HPGL uses the generic export route: without <code>page</code> it falls back to the plot or canvas dimensions, and without <code>optimize: true</code> it preserves drawing order. A current-source preset such as <code>page: "A4"</code> supplies exact millimetres, a 10 mm margin, width-fitting scale, top-left origin, and geometric clipping. Unlike <code>exportPlotterSVG()</code>, HPGL does not require those safeguards or switch optimization on automatically.</p>
+      <p><code>penMap</code> maps a semantic layer name or an exact stroke colour to a positive physical pen number. A layer match wins over a colour match; an unmapped trace uses pen 1. The exporter writes <code>SP</code> commands when that number changes. It does not preserve SVG layer names.</p>
+      <ul>
+        <li><code>page</code>: <code>"A5"</code>, <code>"A4"</code>, <code>"A3"</code>, <code>"A2"</code>, or a custom page object with dimensions, units, margins, origin, rotation, scale, and optional clipping.</li>
+        <li><code>optimize</code>: <code>true</code> sorts travel inside each semantic layer; it remains opt-in and supports at most 2,000 traces per optimized layer.</li>
+        <li><code>penMap</code>: maps layer names or stroke colours to HPGL pen numbers.</li>
+        <li><code>speed</code>: emits a rounded <code>VS</code> command. Its physical interpretation depends on the plotter or controller.</li>
+        <li><code>scale</code>: overrides coordinate conversion. Defaults are 40 plotter units per mm, 400 per cm, and 1,016 per inch.</li>
+        <li><code>offsetX</code>: shifts horizontal coordinates in the selected page units before HPGL scaling.</li>
+        <li><code>offsetY</code>: shifts vertical coordinates in the selected page units before HPGL scaling.</li>
+        <li><code>maxPointsPerCommand</code>: limits each <code>PD</code> command; the default is 100 points.</li>
+        <li><code>tool</code>: <code>"pen"</code> preserves fill, bleed, and repeated passages; <code>"blade"</code> removes fill and later passages.</li>
+      </ul>
+      <p>HPGL stores coordinates, pen selections, and optional speed—not SVG colours, opacity, varying stroke width, layer names, or page metadata. Physical line width and density therefore come from the installed pen and from repeated geometry. The file starts with initialization and pen selection, draws with <code>PU</code>/<code>PD</code>, and ends by deselecting the pen. It creates a file only: sending that file to a specific machine remains the responsibility of the plotter software or controller.</p>
+
+      <h3>Shared page model</h3>
       <p>The page model applies units, margins, origin, rotation, scale, and optional clipping to generic SVG, HPGL, and statistics. Generic route optimization remains opt-in so existing drawing order stays unchanged.</p>
-      <p>Supported units are <code>px</code>, <code>mm</code>, <code>cm</code>, and <code>in</code>. Origins are <code>top-left</code> and <code>bottom-left</code>. SVG precision accepts <code>decimals</code> from 0 through 12. HPGL additionally accepts <code>scale</code>, <code>penMap</code>, <code>speed</code>, offsets, and <code>maxPointsPerCommand</code>.</p>
+      <p>Supported units are <code>px</code>, <code>mm</code>, <code>cm</code>, and <code>in</code>. Origins are <code>top-left</code> and <code>bottom-left</code>. SVG precision accepts <code>decimals</code> from 0 through 12.</p>
     </section>
 
     <section class="guide-block">

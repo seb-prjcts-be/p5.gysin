@@ -1208,6 +1208,17 @@ assert.match(collagePage, /<pre class="ex-code-block"><code class="language-java
 assert.doesNotMatch(siteStyle, /\.ce-colour-specimen/);
 assert.match(systemPage, /<section class="guide-block" id="export">/);
 assert.match(systemPage, /show every layer beginning with <code>1<\/code>, install pen 1 and plot; then hide those layers and repeat for <code>2<\/code>, <code>3<\/code>, and so on/);
+assert.match(systemPage, /<h3 id="hpgl">HPGL<\/h3>/);
+assert.match(systemPage, /plot\.exportHPGL\(options\)[\s\S]*plot\.downloadHPGL\(filename, options\)/);
+assert.match(systemPage, /const hpgl = plot\.exportHPGL\(hpglOptions\);[\s\S]*plot\.downloadHPGL\("drawing\.hpgl", hpglOptions\);/);
+assert.match(systemPage, /For physical output, pass both an explicit physical page and <code>optimize: true<\/code>/);
+assert.match(systemPage, /without <code>page<\/code> it falls back to the plot or canvas dimensions[\s\S]*without <code>optimize: true<\/code> it preserves drawing order/);
+assert.match(systemPage, /A layer match wins over a colour match; an unmapped trace uses pen 1/);
+for (const option of ["page", "optimize", "penMap", "speed", "scale", "offsetX", "offsetY", "maxPointsPerCommand", "tool"]) {
+  assert.match(systemPage, new RegExp(`<li><code>${option}</code>:`), `System documents HPGL ${option}`);
+}
+assert.match(systemPage, /HPGL stores coordinates, pen selections, and optional speed—not SVG colours, opacity, varying stroke width, layer names, or page metadata/);
+assert.match(systemPage, /sending that file to a specific machine remains the responsibility of the plotter software or controller/);
 
 const canonicalPosterSource = fs.readFileSync(
   path.join(root, "examples", "plotter_export", "composition.js"),
