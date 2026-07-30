@@ -1073,7 +1073,6 @@ const manifest = JSON.parse(fs.readFileSync(
   "utf8"
 ));
 const enterPage = fs.readFileSync(path.join(root, "index.html"), "utf8");
-const openingsRedirectPage = fs.readFileSync(path.join(root, "openings.html"), "utf8");
 const showcasePage = fs.readFileSync(path.join(root, "docs", "openings.html"), "utf8");
 const readmePage = fs.readFileSync(path.join(root, "README.md"), "utf8");
 const collagePage = fs.readFileSync(path.join(root, "docs", "collage", "index.html"), "utf8");
@@ -1123,14 +1122,6 @@ assert.ok(manifest.added_apis.some((entry) =>
 ));
 assert.match(examplesRedirectPage, /href="openings\.html#examples"/);
 assert.match(examplesRedirectPage, /location\.replace\("openings\.html#examples"\)/);
-assert.match(
-  openingsRedirectPage,
-  /href="https:\/\/seb-prjcts-be\.github\.io\/p5\.gysin\/docs\/openings\.html"/
-);
-assert.match(
-  openingsRedirectPage,
-  /location\.replace\("docs\/openings\.html" \+ location\.search \+ location\.hash\)/
-);
 assert.match(enterPage, /<section id="hero">/);
 assert.match(enterPage, /<html lang="en" class="enter-page">/);
 assert.match(siteStyle, /html\.enter-page\s*\{[^}]*overflow-y:\s*scroll;/s);
