@@ -60,6 +60,7 @@
     <div class="work-band">
       <div class="work-band-head"><strong>Trace</strong><small>Parameters, contours, paths.</small></div>
       <div class="contact-sheet">
+        <a class="cs-tile" href="#plate-primitives" data-page="../examples/2d_primitives/" data-slug="2d_primitives"><strong>2D Primitives</strong><small>line &middot; rect &middot; circle &middot; polygon &middot; path</small></a>
         <a class="cs-tile" href="#plate-parameter-lab" data-page="../examples/parameter_lab/" data-slug="parameter_lab"><strong>Parameter Lab</strong><small>breathe &middot; dropout &middot; repeat</small></a>
         <a class="cs-tile" href="#plate-font-outlines" data-page="../examples/font_outlines/" data-slug="font_outlines"><strong>Font Outlines</strong><small>p5.Font contours</small></a>
         <a class="cs-tile" href="#plate-frequencies" data-page="../examples/frequencies/" data-slug="frequencies"><strong>Frequencies</strong><small>path() &middot; no text</small></a>
@@ -167,6 +168,31 @@ plot.draw();</code></pre>
       <div class="ex-links">
         <a class="ex-full-link" href="../examples/worn_word/">-&gt; full example</a>
         <a class="ex-full-link" href="../examples/worn_word/sketch.js">-&gt; source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section plate" id="plate-primitives">
+    <div class="section-header">
+      <div class="section-tag">line() &middot; rect() &middot; circle() &middot; polygon() &middot; path()</div>
+      <h2>2D <span class="accent">Primitives</span></h2>
+      <p class="section-desc">Five clean geometry methods, isolated and named. No disturbance or export option is needed.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-primitives" class="ex-canvas" data-ratio="0.583333"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+
+plot.line(42, 180, 126, 180);
+plot.rect(176, 134, 92, 92);
+plot.circle(360, 180, 92);
+plot.polygon([[498, 126], [552, 180], [498, 234], [444, 180]]);
+plot.path([[588, 216], [612, 144], [636, 216], [660, 144], [684, 216]]);
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/2d_primitives/">-&gt; full example</a>
+        <a class="ex-full-link" href="../examples/2d_primitives/composition.js">-&gt; complete composition</a>
+        <a class="ex-full-link" href="../examples/2d_primitives/sketch.js">-&gt; source sketch</a>
       </div>
     </div>
   </section>
@@ -502,6 +528,7 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
 
   <script src="../p5.gysin.text.min.js?v=word-sentence-1"></script>
   <script src="../p5.gysin.underwood.min.js"></script>
+  <script src="../examples/2d_primitives/composition.js"></script>
   <script src="../examples/gysin_demo/composition.js"></script>
   <script src="../examples/permutation_poem/composition.js"></script>
   <script src="../examples/weave/composition.js"></script>
@@ -761,6 +788,20 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
       seed: 1960,
       sources: GysinWorks.weave.sources
     }).plot;
+  }, { paper: false });
+
+  makePreview("ex-primitives", function(p, canvasW) {
+    const work = GysinWorks.primitives2d.build({ p: p });
+    const scale = canvasW / work.width;
+    return {
+      draw: function() {
+        p.push();
+        p.scale(scale);
+        GysinWorks.primitives2d.drawLabels(p, work.labels);
+        work.plot.draw();
+        p.pop();
+      }
+    };
   }, { paper: false });
 
   makePreview("ex-parameter", function(p, canvasW, canvasH) {

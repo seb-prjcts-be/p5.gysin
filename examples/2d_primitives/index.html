@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2D Primitives | p5.gysin examples</title>
+  <link rel="stylesheet" href="../../docs/style.css">
+</head>
+<body>
+  <script>if (window.self !== window.top) document.documentElement.classList.add("embedded");</script>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../../docs/openings.html">Openings</a></li>
+      <li><a href="../../docs/collage/">Collage</a></li>
+      <li><a href="../../docs/system.html">System</a></li>
+      <li><a href="../../docs/vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">line() · rect() · circle() · polygon() · path()</div>
+      <h1>2D Primitives</h1>
+      <p>Five clean marks, shown side by side. Every call uses the library defaults.</p>
+    </div>
+    <div class="demo-layout">
+      <div class="demo-code">
+        <div class="code-label">Complete composition</div>
+        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+
+plot.line(42, 180, 126, 180);
+plot.rect(176, 134, 92, 92);
+plot.circle(360, 180, 92);
+plot.polygon([
+  [498, 126], [552, 180],
+  [498, 234], [444, 180]
+]);
+plot.path([
+  [588, 216], [612, 144], [636, 216],
+  [660, 144], [684, 216]
+]);
+
+plot.draw();</code></pre>
+        <div class="demo-note"><a href="composition.js">Open the shared composition</a> · no disturbance or export options are involved.</div>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas" id="sketch" role="img" aria-label="Five clean p5.gysin primitives from left to right: line, rectangle, circle, polygon, and open path."></div>
+        <div class="demo-note">The grey names are screen labels. The five black marks are drawn by p5.gysin.</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p><a href="../../docs/openings.html#lib-core">Core works</a> &nbsp;&middot;&nbsp; <a href="../../docs/system.html">System</a></p>
+    <p class="footer-sub">p5.gysin v1.2.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="composition.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

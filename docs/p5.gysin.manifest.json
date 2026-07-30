@@ -63,6 +63,7 @@
     "HPGL"
   ],
   "examples": [
+    "2d_primitives",
     "first_trace",
     "font_outlines",
     "frequencies",

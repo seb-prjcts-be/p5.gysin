@@ -1342,6 +1342,37 @@ for (const [format, width, height] of [
 
 const plotterCalibrationPage = fs.readFileSync(path.join(examplesDir, "plotter_calibration", "index.html"), "utf8");
 const plotterCalibrationSketch = fs.readFileSync(path.join(examplesDir, "plotter_calibration", "sketch.js"), "utf8");
+const primitivesPage = fs.readFileSync(path.join(examplesDir, "2d_primitives", "index.html"), "utf8");
+const primitivesSketch = fs.readFileSync(path.join(examplesDir, "2d_primitives", "sketch.js"), "utf8");
+const primitivesComposition = fs.readFileSync(
+  path.join(examplesDir, "2d_primitives", "composition.js"),
+  "utf8"
+);
+assert.match(primitivesPage, /line\(\) · rect\(\) · circle\(\) · polygon\(\) · path\(\)/);
+assert.match(primitivesPage, /Every call uses the library defaults\./);
+assert.match(primitivesPage, /<script src="composition\.js"><\/script>\s*<script src="sketch\.js"><\/script>/);
+assert.match(
+  systemPage,
+  /href="\.\.\/examples\/2d_primitives\/">2D Primitives<\/a> shows <code>line\(\)<\/code>, <code>rect\(\)<\/code>, <code>circle\(\)<\/code>, <code>polygon\(\)<\/code>, and <code>path\(\)<\/code> side by side with their clean defaults/
+);
+assert.match(primitivesSketch, /GysinWorks\.primitives2d\.build\(\)/);
+assert.doesNotMatch(primitivesSketch, /^\s*plot\.(?:line|rect|circle|polygon|path)\(/m);
+for (const verb of ["line", "rect", "circle", "polygon", "path"]) {
+  assert.equal(
+    (primitivesComposition.match(new RegExp(`plot\\.${verb}\\(`, "g")) || []).length,
+    1,
+    `2D Primitives isolates one ${verb}() call`
+  );
+}
+assert.doesNotMatch(
+  primitivesComposition,
+  /\b(?:breathe|dropout|repeat|rubout|bleed|fill|angle|page|export)\s*:/,
+  "2D Primitives uses clean geometry defaults"
+);
+assert.match(showcasePage, /data-page="\.\.\/examples\/2d_primitives\/"/);
+assert.match(showcasePage, /<script src="\.\.\/examples\/2d_primitives\/composition\.js"><\/script>/);
+assert.match(showcasePage, /GysinWorks\.primitives2d\.build\(\{ p: p \}\)/);
+assert.match(showcasePage, /href="\.\.\/examples\/2d_primitives\/composition\.js"/);
 assert.match(plotterCalibrationPage, /real pen passes/);
 assert.match(plotterCalibrationPage, /downloadPlotterSVG\("calibration\.svg", \{ page: PAGE, penMap: PEN_OF \}\)/);
 assert.match(plotterCalibrationSketch, /5 : PEN PASSES · repeat/);
