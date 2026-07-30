@@ -1073,7 +1073,8 @@ const manifest = JSON.parse(fs.readFileSync(
   "utf8"
 ));
 const enterPage = fs.readFileSync(path.join(root, "index.html"), "utf8");
-const showcasePage = fs.readFileSync(path.join(root, "openings.html"), "utf8");
+const openingsRedirectPage = fs.readFileSync(path.join(root, "openings.html"), "utf8");
+const showcasePage = fs.readFileSync(path.join(root, "docs", "openings.html"), "utf8");
 const readmePage = fs.readFileSync(path.join(root, "README.md"), "utf8");
 const collagePage = fs.readFileSync(path.join(root, "docs", "collage", "index.html"), "utf8");
 const systemPage = fs.readFileSync(path.join(root, "docs", "system.html"), "utf8");
@@ -1120,18 +1121,29 @@ assert.ok(manifest.added_apis.some((entry) =>
   entry.added_in === "1.2.0" &&
   entry.status === "stable"
 ));
-assert.match(examplesRedirectPage, /href="\.\.\/openings\.html#examples"/);
-assert.match(examplesRedirectPage, /location\.replace\("\.\.\/openings\.html#examples"\)/);
+assert.match(examplesRedirectPage, /href="openings\.html#examples"/);
+assert.match(examplesRedirectPage, /location\.replace\("openings\.html#examples"\)/);
+assert.match(
+  openingsRedirectPage,
+  /href="https:\/\/seb-prjcts-be\.github\.io\/p5\.gysin\/docs\/openings\.html"/
+);
+assert.match(
+  openingsRedirectPage,
+  /location\.replace\("docs\/openings\.html" \+ location\.search \+ location\.hash\)/
+);
 assert.match(enterPage, /<section id="hero">/);
 assert.match(enterPage, /<html lang="en" class="enter-page">/);
 assert.match(siteStyle, /html\.enter-page\s*\{[^}]*overflow-y:\s*scroll;/s);
-assert.match(enterPage, /href="openings\.html#studies" class="cta-btn">Enter the three libraries<\/a>/);
-assert.match(enterPage, /location\.replace\("openings\.html" \+ location\.hash\)/);
+assert.match(enterPage, /href="docs\/openings\.html#studies" class="cta-btn">Enter the three libraries<\/a>/);
+assert.match(enterPage, /location\.replace\("docs\/openings\.html" \+ location\.hash\)/);
 assert.match(enterPage, /<script src="docs\/sketch\.js\?v=word-sentence-1"><\/script>/);
 assert.doesNotMatch(enterPage, /id="(?:origin-note|studies|examples|lib-core|lib-text|lib-underwood)"/);
 assert.doesNotMatch(enterPage, /examples\/(?:gysin_demo|permutation_poem|weave|plotter_export)\/composition\.js/);
 assert.match(showcasePage, /<title>Openings \| p5\.gysin<\/title>/);
+assert.match(showcasePage, /https:\/\/seb-prjcts-be\.github\.io\/p5\.gysin\/docs\/openings\.html/);
 assert.match(showcasePage, /<a href="openings\.html" class="active">Openings<\/a>/);
+assert.match(showcasePage, /<script src="\.\.\/p5\.gysin\.min\.js\?v=word-sentence-1"><\/script>/);
+assert.match(showcasePage, /data-page="\.\.\/examples\/first_trace\/"/);
 assert.doesNotMatch(showcasePage, /<section id="hero">|docs\/sketch\.js/);
 assert.match(showcasePage, /<\/nav>\s*<section id="studies"/);
 assert.doesNotMatch(showcasePage, /origin-note|origin-sheet|pull-quote|Writing is fifty years behind painting/);
@@ -1300,7 +1312,7 @@ assert.match(plotterExportComposition, /plot\.underwood\("REMEMBERS", 82, 360, \
 assert.match(plotterExportComposition, /const PEN_MAP = \{ black: 1, red: 2 \}/);
 assert.match(plotterExportSketch, /downloadPlotterSVG\([\s\S]*page: format,[\s\S]*penMap: poster\.penMap/);
 assert.doesNotMatch(plotterExportSketch, /\b(?:ISO_PAGES|physicalPage|downloadJSON|downloadHPGL|optimize|tool)\b/);
-assert.match(showcasePage, /<script src="examples\/plotter_export\/composition\.js"><\/script>/);
+assert.match(showcasePage, /<script src="\.\.\/examples\/plotter_export\/composition\.js"><\/script>/);
 assert.match(showcasePage, /GysinWorks\.plotterPoster\.build\(\{ p \}\)/);
 assert.match(showcasePage, /data-ratio="1\.25"/);
 
@@ -1356,9 +1368,9 @@ assert.doesNotMatch(calibrationPreview, /\b(?:alpha|pressure|strokeWeight)\s*:/)
 for (const name of manifest.examples) {
   assert.ok(fs.existsSync(path.join(examplesDir, name, "index.html")), `${name} index.html`);
   assert.ok(fs.existsSync(path.join(examplesDir, name, "sketch.js")), `${name} sketch.js`);
-  assert.match(showcasePage, new RegExp(`href="examples/${name}/"`));
+  assert.match(showcasePage, new RegExp(`href="\\.\\./examples/${name}/"`));
   const sourceFile = sharedCompositions.has(name) ? "composition.js" : "sketch.js";
-  assert.match(showcasePage, new RegExp(`href="examples/${name}/${sourceFile.replace(".", "\\.")}"`));
+  assert.match(showcasePage, new RegExp(`href="\\.\\./examples/${name}/${sourceFile.replace(".", "\\.")}"`));
 }
 
 for (const [name, workName] of sharedCompositions) {
@@ -1379,7 +1391,7 @@ for (const [name, workName] of sharedCompositions) {
   assert.doesNotMatch(sketch, new RegExp(`plot\\.${verb}\\(`));
   assert.match(page, /<script src="composition\.js"><\/script>\s*<script src="sketch\.js"><\/script>/);
   assert.match(sketch, new RegExp(`GysinWorks\\.${workName}\\.build\\(`));
-  assert.match(showcasePage, new RegExp(`src="examples/${name}/composition\\.js"`));
+  assert.match(showcasePage, new RegExp(`src="\\.\\./examples/${name}/composition\\.js"`));
   assert.match(showcasePage, new RegExp(`GysinWorks\\.${workName}\\.build\\(`));
 
   if (name === "weave") {

@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Openings | p5.gysin</title>
+  <meta name="description" content="Three p5.gysin libraries opened through live works: drawn matter, language operations, and typewriter voice.">
+  <meta property="og:title" content="Openings | p5.gysin">
+  <meta property="og:description" content="Three p5.gysin libraries opened through live works.">
+  <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/docs/openings.html">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://seb-prjcts-be.github.io/p5.gysin/docs/openings.html">
+  <link rel="stylesheet" href="style.css?v=example-themes-1">
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../p5.gysin.min.js?v=word-sentence-1"></script>
+</head>
+<body>
+  <nav id="navbar">
+    <a class="nav-logo" href="../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Enter</a></li>
+      <li><a href="openings.html" class="active">Openings</a></li>
+      <li><a href="collage/">Collage</a></li>
+      <li><a href="system.html">System</a></li>
+      <li><a href="vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <section id="studies" class="section group-intro">
+    <div class="section-header">
+      <div class="section-tag">Word. Sentence. Trace. &middot; v1.2.0</div>
+      <p class="section-desc">Three scripts: drawn matter, language operations, typewriter voice. Each keeps its own sheet of live works.</p>
+    </div>
+    <div class="method-strip" aria-label="The three-library sequence">
+      <a href="#lib-core"><span>01 &middot; CORE</span><strong>p5.gysin.js</strong><small>Capture, disturb, export.</small></a>
+      <a href="#lib-text"><span>02 &middot; ADDON</span><strong>p5.gysin.text.js</strong><small>Sentences change order.</small></a>
+      <a href="#lib-underwood"><span>03 &middot; ADDON</span><strong>p5.gysin.underwood.js</strong><small>The typewriter voice.</small></a>
+    </div>
+    <div class="section-header" id="the-works">
+      <div class="section-tag">Each library keeps its own sheet</div>
+    </div>
+  </section>
+
+
+  <a id="examples"></a>
+  <section class="section group-intro" id="lib-core">
+    <div class="section-header">
+      <div class="section-tag">Library 01 &middot; the core &middot; required</div>
+      <h2>p5.gysin.<span class="accent">js</span></h2>
+      <p class="section-desc">A word can stand alone as a drawn body. The core also carries shapes, fields, and finished traces to paper.</p>
+    </div>
+    <div class="work-band work-band-word">
+      <div class="work-band-head"><strong>Word</strong><small>Isolate it. Enlarge it. Wear it.</small></div>
+      <div class="contact-sheet">
+        <a class="cs-tile" href="#plate-first-trace" data-page="../examples/first_trace/" data-slug="first_trace"><strong>First Trace</strong><small>word &middot; text() &middot; three states</small></a>
+        <a class="cs-tile" href="#study-free" data-page="../examples/worn_word/" data-slug="worn_word"><strong>Worn Word</strong><small>word &middot; rub()</small></a>
+      </div>
+    </div>
+    <div class="work-band">
+      <div class="work-band-head"><strong>Trace</strong><small>Parameters, contours, paths.</small></div>
+      <div class="contact-sheet">
+        <a class="cs-tile" href="#plate-parameter-lab" data-page="../examples/parameter_lab/" data-slug="parameter_lab"><strong>Parameter Lab</strong><small>breathe &middot; dropout &middot; repeat</small></a>
+        <a class="cs-tile" href="#plate-font-outlines" data-page="../examples/font_outlines/" data-slug="font_outlines"><strong>Font Outlines</strong><small>p5.Font contours</small></a>
+        <a class="cs-tile" href="#plate-frequencies" data-page="../examples/frequencies/" data-slug="frequencies"><strong>Frequencies</strong><small>path() &middot; no text</small></a>
+      </div>
+    </div>
+    <div class="work-band">
+      <div class="work-band-head"><strong>Ink</strong><small>Additive return passages.</small></div>
+      <div class="contact-sheet">
+        <a class="cs-tile" href="#plate-ink-bleed" data-page="../examples/ink_bleed/" data-slug="ink_bleed"><strong>Ink Bleed</strong><small>bleed &middot; additive</small></a>
+      </div>
+    </div>
+    <div class="work-band">
+      <div class="work-band-head"><strong>Page</strong><small>Millimetres, pens, layers, export.</small></div>
+      <div class="contact-sheet">
+        <a class="cs-tile" href="#plate-calibration" data-page="../examples/plotter_calibration/" data-slug="plotter_calibration"><strong>Plotter Calibration</strong><small>page &middot; mm &middot; pens</small></a>
+        <a class="cs-tile" href="#plate-export" data-page="../examples/plotter_export/" data-slug="plotter_export"><strong>Plotter Export</strong><small>layers &middot; A5&ndash;A2 &middot; SVG</small></a>
+      </div>
+    </div>
+    <div class="work-band work-band-surface">
+      <div class="work-band-head"><strong>Surface</strong><small>A late disturbance, used sparingly.</small></div>
+      <div class="contact-sheet">
+        <a class="cs-tile" href="#study-cut" data-page="../examples/gysin_demo/" data-slug="gysin_demo"><strong>Sliced Text</strong><small>surface &middot; textCutup()</small></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark plate" id="plate-first-trace">
+    <div class="section-header">
+      <div class="section-tag">text() &middot; one word, three states</div>
+      <h2>First <span class="accent">Trace</span></h2>
+      <p class="section-desc">Start with clean vector forms and let p5.gysin turn them into uncertain plotter traces.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-first-trace" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+const outlineFont = await loadFont(FONT_URL);   // real letterforms
+
+// the same word, three states of the same trace
+plot.text("FIRST TRACE", 68, 90, {
+  font: outlineFont,
+  size: 54,
+  breathe: 0.4
+});
+plot.text("FIRST TRACE", 68, 180, {
+  font: outlineFont,
+  size: 54,
+  breathe: 1.4,
+  dropout: 0.08
+});
+plot.text("FIRST TRACE", 68, 270, {
+  font: outlineFont,
+  size: 54,
+  breathe: 2.2,
+  dropout: 0.2,
+  rubout: 0.2
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/first_trace/">-> full example</a>
+        <a class="ex-full-link" href="../examples/first_trace/sketch.js">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section plate" id="study-cut">
+    <div class="section-header">
+      <div class="section-tag">textCutup() &middot; rare surface effect</div>
+      <h2>Horizontal <span class="accent">slices</span></h2>
+      <p class="section-desc">Shift a few contour bands after the word is already working. This is a graphical disturbance, not the historical cut-up procedure.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-cutup" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// use once, as a surface shift
+const outlineFont = await loadFont(FONT_URL);
+plot.textCutup("SURFACE", 76, 220, {
+  font: outlineFont,
+  size: 84,
+  slices: 5,
+  sliceOffset: 12
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/gysin_demo/">-> full example</a>
+        <a class="ex-full-link" href="../examples/gysin_demo/composition.js">-> complete composition</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark plate" id="study-free">
+    <div class="section-header">
+      <div class="section-tag">rub() &middot; text / cut / asemic</div>
+      <h2>Writing escapes the <span class="accent">word</span></h2>
+      <p class="section-desc"><strong>WORN</strong>, in three passages: intact, cut, buried.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-worn-word" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+const outlineFont = await loadFont(FONT_URL);   // fills the legible head
+
+// one word: legible → cut up → asemic
+plot.rub("WORN", 46, 72, {
+  size: 48,
+  font: outlineFont
+});
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/worn_word/">-&gt; full example</a>
+        <a class="ex-full-link" href="../examples/worn_word/sketch.js">-&gt; source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section plate" id="plate-parameter-lab">
+    <div class="section-header">
+      <div class="section-tag">breathe &middot; dropout &middot; repeat &middot; rubout</div>
+      <h2>Parameter <span class="accent">Lab</span></h2>
+      <p class="section-desc">Four controls, four elements: breathe, rubout, repeat, dropout.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-parameter" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// one slider owns one element, each in its own ink
+plot.text("RUB OUT", 42, 90, {
+  size: 44,
+  breathe: 1.4,
+  stroke: "#b26a00"
+});
+plot.text("ERASE", 42, 160, {
+  size: 30,
+  rubout: 0.12,
+  stroke: "#b0203a"
+});
+plot.path(wave, {   // wave: a sampled sine row
+  repeat: 2,
+  drift: 2.4,
+  stroke: "#2b4fb0"
+});
+for (let i = 0; i < 6; i++) {   // a ruled block, no fill
+  plot.line(42, 240 + i * 9, 380, 240 + i * 9, {
+    dropout: 0.16,
+    stroke: "#0f7a6c"
+  });
+}</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/parameter_lab/">-> full example</a>
+        <a class="ex-full-link" href="../examples/parameter_lab/sketch.js">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark plate" id="plate-font-outlines">
+    <div class="section-header">
+      <div class="section-tag">p5.Font &middot; real contours</div>
+      <h2>Font <span class="accent">Outlines</span></h2>
+      <p class="section-desc">Use a real p5 font and preserve its outer contours and inner counters as plotter paths.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-font-outlines" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const outlineFont = await loadFont(FONT_URL);
+
+plot.text("O8BR", 70, 190, {
+  font: outlineFont,
+  size: 150,
+  breathe: 0.9,
+  repeat: 2
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/font_outlines/">-> full example</a>
+        <a class="ex-full-link" href="../examples/font_outlines/sketch.js">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section plate" id="plate-frequencies">
+    <div class="section-header">
+      <div class="section-tag">path() &middot; no text</div>
+      <h2>Frequen<span class="accent">cies</span></h2>
+      <p class="section-desc">Treat paths as fragile signals: no typography, only a scored machine reading made from vector paths and markers.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-frequencies" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const signal = [];
+for (let x = 0; x &lt;= 620; x += 8) {
+  signal.push([x, y + sin(x * 0.04) * 28]);
+}
+
+// row after row of the same signal, each a step more worn
+plot.path(signal, {
+  dropout: 0.05 + row * 0.01,
+  repeat: 2,
+  rubout: 0.06 + row * 0.03
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/frequencies/">-> full example</a>
+        <a class="ex-full-link" href="../examples/frequencies/sketch.js">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark plate" id="plate-ink-bleed">
+    <div class="section-header">
+      <div class="section-tag">bleed &middot; the additive counterpart</div>
+      <h2>Ink <span class="accent">Bleed</span></h2>
+      <p class="section-desc">Ink gathers in shifted return passages. Blade export keeps only the first.</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-ink-bleed" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// the ink returns harder on each line
+plot.text("I AM THAT I AM", 42, 90, { font: outlineFont, size: 34 });
+plot.text("I AM THAT I AM", 42, 180, {
+  font: outlineFont,
+  size: 34,
+  bleed: 0.22,
+  bleedPasses: 2
+});
+plot.text("I AM THAT I AM", 42, 270, {
+  font: outlineFont,
+  size: 34,
+  bleed: 0.4,
+  bleedPasses: 3,
+  bleedSpread: 1.2
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/ink_bleed/">-&gt; full example</a>
+        <a class="ex-full-link" href="../examples/ink_bleed/sketch.js">-&gt; source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section plate" id="plate-calibration">
+    <div class="section-header">
+      <div class="section-tag">page &middot; mm &middot; penMap &middot; stats</div>
+      <h2>Plotter <span class="accent">Calibration</span></h2>
+      <p class="section-desc">A practical calibration sheet for margins, circles, dropout, overshoot, multi-pen output, and route statistics.</p>
+    </div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-calibration" class="ex-canvas" data-ratio="1.35"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// Advanced: this canvas is a millimetre calibration grid.
+const page = { width: 210, height: 297, units: "mm", margin: 10, scale: 1 / 3, clip: true };
+
+plot.downloadHPGL("calibration.hpgl", {
+  page,
+  penMap: { frame: 1, circle: 2, hatch: 3 },
+  speed: 20
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/plotter_calibration/">-> full example</a>
+        <a class="ex-full-link" href="../examples/plotter_calibration/sketch.js">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark plate" id="plate-export">
+    <div class="section-header">
+      <div class="section-tag">Canvas &middot; layers &middot; A5&ndash;A2 &middot; plotter SVG</div>
+      <h2>Plotter <span class="accent">Export</span></h2>
+      <p class="section-desc">One 720 × 900 poster becomes a physical two-pen SVG without rewriting its composition.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-export" class="ex-canvas" data-ratio="1.25"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// SVG groups become physical pen passes.
+const penMap = { black: 1, red: 2 };
+
+// "A4" is the built-in physical page preset.
+plot.downloadPlotterSVG("poster.svg", {
+  page: "A4",
+  penMap
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/plotter_export/">-> full example</a>
+        <a class="ex-full-link" href="../examples/plotter_export/composition.js">-> poster code</a>
+        <a class="ex-full-link" href="../examples/plotter_export/sketch.js">-> export code</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section group-intro" id="lib-text">
+    <div class="section-header">
+      <div class="section-tag">Library 02 &middot; addon &middot; the sentence</div>
+      <h2>p5.gysin.text.<span class="accent">js</span></h2>
+      <p class="section-desc">A sentence stays readable while its order or source changes. permute() turns one phrase; weave() brings separate sources together without losing their provenance.</p>
+    </div>
+    <div class="work-band">
+      <div class="work-band-head"><strong>Sentence</strong><small>Order, sequence, source.</small></div>
+      <div class="contact-sheet">
+        <a class="cs-tile" href="#study-permute" data-page="../examples/permutation_poem/" data-slug="permutation_poem"><strong>Permutation Poem</strong><small>sentence &middot; chant()</small></a>
+        <a class="cs-tile" href="#study-weave" data-page="../examples/weave/" data-slug="weave"><strong>Weave</strong><small>sentences &middot; weave()</small></a>
+        <a class="cs-tile" href="#plate-rotations" data-page="../examples/rotations/" data-slug="rotations"><strong>Rotations</strong><small>sentence field &middot; permute()</small></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark plate" id="study-permute">
+    <div class="section-header">
+      <div class="section-tag">chant() &middot; one phrase &middot; six orders</div>
+      <h2>Coincidence is a <span class="accent">method</span></h2>
+      <p class="section-desc">The same words return in changing positions. Their order carries the movement.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js</p>
+    </div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-permutation" class="ex-canvas" data-ratio="1.4142857"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+
+plot.chant("I LOVE YOU", width * 0.075, height * 0.12, {
+  lines: 6,
+  size: width * 0.11,
+  leading: height * 0.14,
+  font: outlineFont
+});
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/permutation_poem/">-&gt; open work</a>
+        <a class="ex-full-link" href="../examples/permutation_poem/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section plate" id="study-weave">
+    <div class="section-header">
+      <div class="section-tag">weave() &middot; source provenance</div>
+      <h2>At the <span class="accent">seam</span></h2>
+      <p class="section-desc">Fragments from separate texts cross. The JSON keeps the address of every borrowed piece.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-weave" class="ex-canvas" data-ratio="0.7368421"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+
+plot.weave(sources, width * 0.055, height * 0.145, {
+  lines: 4,
+  unit: "clause",
+  fragments: 2,
+  maxWidth: width * 0.89
+});
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/weave/">-&gt; open work</a>
+        <a class="ex-full-link" href="../examples/weave/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section plate" id="plate-rotations">
+    <div class="section-header">
+      <div class="section-tag">angle &middot; pivot &middot; lattice() &middot; permute()</div>
+      <h2>Rota<span class="accent">tions</span></h2>
+      <p class="section-desc">The sheet turns between passages. A grid persists; orders cross it at their own angles.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-rotations" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// write the field, turn the sheet, write across - then the script over it
+plot.lattice("COME TO FREE THE WORDS", -15, -15, 730, 1190, { turns: [4, 94] });
+GysinText.permute("COME TO FREE THE WORDS", { order: "rotate" })
+  .forEach((row, i) =&gt; {
+    plot.text(row, x[i], y[i], { size: 24, angle: a[i] });
+  });</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/rotations/">-> full example</a>
+        <a class="ex-full-link" href="../examples/rotations/sketch.js">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section group-intro" id="lib-underwood">
+    <div class="section-header">
+      <div class="section-tag">Library 03 &middot; addon &middot; the machine</div>
+      <h2>p5.gysin.underwood.<span class="accent">js</span></h2>
+      <p class="section-desc">Longer voice gets fixed pitch, line height, margins, and a page. The machine keeps only two decorations: an underscore rule and the same key struck twice.</p>
+    </div>
+    <div class="work-band">
+      <div class="work-band-head"><strong>Typewriter</strong><small>Fixed pitch, line height, double strike.</small></div>
+      <div class="contact-sheet">
+        <a class="cs-tile" href="#plate-typewriter" data-page="../examples/typewriter/" data-slug="typewriter"><strong>Typewriter</strong><small>sentence &middot; underwood()</small></a>
+        <a class="cs-tile" href="#plate-the-letter" data-page="../examples/the_letter/" data-slug="the_letter"><strong>The Letter</strong><small>page &middot; underwood()</small></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark plate" id="plate-typewriter">
+    <div class="section-header">
+      <div class="section-tag">underwood() &middot; single-stroke &middot; period</div>
+      <h2>Type<span class="accent">writer</span></h2>
+      <p class="section-desc">Fixed-pitch single-stroke letters. The underscore is a rule; emphasis is a second strike.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-typewriter" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">// defaults alone = a period-correct typed page
+plot.underwood("KICK THAT HABIT MAN", 60, 90);
+
+// the only decoration the machine had:
+plot.underwood("HEADING", 60, 130, { underline: 1 });
+plot.underwood("BOLD?", 60, 160, { bold: true });   // struck twice
+
+// both cases live on the same keys:
+plot.underwood("the small voice.", 60, 190);</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/typewriter/">-&gt; full example</a>
+        <a class="ex-full-link" href="../examples/typewriter/sketch.js">-&gt; source sketch</a>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section plate" id="plate-the-letter">
+    <div class="section-header">
+      <div class="section-tag">underwood() &middot; correspondence</div>
+      <h2>The <span class="accent">Letter</span></h2>
+      <p class="section-desc">A complete typed letter. One word is struck through.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-the-letter" class="ex-canvas"></div>
+      <pre class="ex-code-block"><code class="language-javascript">plot.underwood("DEAR READER,", 60, 90, { underline: 1 });
+plot.underwood("FORGET", 60, 150);
+plot.underwood("XXXXXX", 60, 150, { bold: true });   // struck over
+plot.underwood("the small hand.", 60, 210);</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/the_letter/">-> full example</a>
+        <a class="ex-full-link" href="../examples/the_letter/sketch.js">-> source sketch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-tag">Draw as traces</div>
+      <h2>Not pixels. <span class="accent">Paths.</span></h2>
+      <p class="section-desc">The same seeded traces pass through canvas and onto paper. Methods, addressing and export live in <a href="system.html">System</a>.</p>
+    </div>
+  </section>
+
+
+  <footer>
+    <p>Built with <a href="https://p5js.org" target="_blank">p5.js</a></p>
+    <p class="footer-sub">MIT License &middot; v1.2.0</p>
+  </footer>
+
+  <script src="../p5.gysin.text.min.js?v=word-sentence-1"></script>
+  <script src="../p5.gysin.underwood.min.js"></script>
+  <script src="../examples/gysin_demo/composition.js"></script>
+  <script src="../examples/permutation_poem/composition.js"></script>
+  <script src="../examples/weave/composition.js"></script>
+  <script src="../examples/plotter_export/composition.js"></script>
+  <script>
+  function previewSize(id) {
+    const element = document.getElementById(id);
+    const canvasW = Math.max(280, Math.floor(element.offsetWidth || 420));
+    const ratio = Number(element.dataset.ratio) || 0.68;
+    return {
+      width: canvasW,
+      height: Math.floor(canvasW * ratio)
+    };
+  }
+
+  function makePreview(id, builder, previewOptions) {
+    const options = previewOptions || {};
+    new p5(function(p) {
+      let plot;
+
+      p.setup = function() {
+        const size = previewSize(id);
+        p.createCanvas(size.width, size.height).parent(id);
+        p.pixelDensity(1);
+        p.noLoop();
+        plot = builder(p, size.width, size.height);
+      };
+
+      p.draw = function() {
+        p.background("#f0efe9");
+        if (options.paper !== false) drawPreviewPaper(p);
+        plot.draw();
+      };
+
+      p.windowResized = function() {
+        const size = previewSize(id);
+        p.resizeCanvas(size.width, size.height);
+        plot = builder(p, size.width, size.height);
+        p.redraw();
+      };
+    }, id);
+  }
+
+  function drawPreviewPaper(p) {
+    p.stroke("#dedede");
+    p.strokeWeight(0.6);
+    for (let y = 34; y < p.height; y += 28) {
+      p.line(24, y, p.width - 24, y);
+    }
+  }
+
+  const OUTLINE_FONT_URL = "../examples/font_outlines/assets/Oswald-Regular.otf";
+
+  // Async twin of makePreview: loads the Oswald outline face first and hands it
+  // to the builder (null when the load fails, so builders fall back cleanly).
+  function makeOutlinePreview(id, builder, previewOptions) {
+    const options = previewOptions || {};
+    new p5(function(p) {
+      let plot;
+      let loadedFont = null;
+
+      p.setup = async function() {
+        const size = previewSize(id);
+        p.createCanvas(size.width, size.height).parent(id);
+        p.pixelDensity(1);
+        p.noLoop();
+        try {
+          loadedFont = await p.loadFont(OUTLINE_FONT_URL);
+        } catch (error) {
+          loadedFont = null;
+        }
+        plot = builder(p, size.width, size.height, loadedFont);
+        p.redraw();
+      };
+
+      p.draw = function() {
+        p.background("#f0efe9");
+        if (options.paper !== false) drawPreviewPaper(p);
+        if (plot) plot.draw();
+      };
+
+      // A plate opens from hidden, so the canvas first sized itself to nothing;
+      // re-measure and rebuild at the open panel's width. The face is already
+      // loaded, so hand the same one back to the builder.
+      p.windowResized = function() {
+        if (!plot) return;
+        const size = previewSize(id);
+        p.resizeCanvas(size.width, size.height);
+        plot = builder(p, size.width, size.height, loadedFont);
+        p.redraw();
+      };
+    }, id);
+  }
+
+  function makeFontPreview(id) {
+    makeOutlinePreview(id, function(p, canvasW, canvasH, outlineFont) {
+      const plot = new GysinPlot({ p: p, seed: 8088, width: canvasW, height: canvasH });
+      const fontOptions = outlineFont ? { font: outlineFont } : {};
+      plot.text("O8BR", 36, canvasH * 0.5, Object.assign({}, fontOptions, {
+        size: canvasW * 0.17,
+        breathe: 0.7,
+        dropout: 0.025,
+        repeat: 2,
+        drift: 0.8,
+        rubout: 0.07,
+        stroke: "#171717"
+      }));
+      return plot;
+    });
+  }
+
+  // Period single-stroke typewriter; no font file to load.
+  function makeTypewriterPreview(id) {
+    makePreview(id, function(p, canvasW, canvasH) {
+      const plot = new GysinPlot({ p: p, seed: 1961, width: canvasW, height: canvasH });
+      const rows = GysinText.permute("KICK THAT HABIT MAN", { seed: 1961, limit: 4, order: "walk" });
+      plot.underwood(rows.join("\n"), 26, canvasH * 0.26, {
+        size: canvasW * 0.032,
+        stroke: "#171717"
+      });
+      plot.underwood("the small voice.", 26, canvasH * 0.82, {
+        size: canvasW * 0.032,
+        stroke: "#171717"
+      });
+      return plot;
+    });
+  }
+
+  // Rotations: the palimpsest in miniature - an off-square written
+  // field with the turned script over it.
+  function makeRotationsPreview(id) {
+    makePreview(id, function(p, canvasW, canvasH) {
+      const plot = new GysinPlot({ p: p, seed: 1960, width: canvasW, height: canvasH });
+      plot.lattice("COME TO FREE THE WORDS", -8, -8, canvasW + 16, canvasH + 16, {
+        size: canvasW * 0.026,
+        lineHeight: 1.55,
+        turns: [4, 94],
+        wear: 1.1
+      });
+      const turns = GysinText.permute("COME TO FREE THE WORDS", { order: "rotate" });
+      const spots = [
+        { fx: 0.12, fy: 0.3, a: -6 },
+        { fx: 0.7, fy: 0.12, a: 94 },
+        { fx: 0.3, fy: 0.72, a: 177 }
+      ];
+      spots.forEach(function(spot, i) {
+        plot.text(turns[i], spot.fx * canvasW, spot.fy * canvasH, {
+          size: canvasW * 0.042,
+          angle: spot.a,
+          breathe: 0.5 + i * 0.2,
+          strokeWeight: 1.4,
+          stroke: "#b5362b"
+        });
+      });
+      return plot;
+    });
+  }
+
+  // The Letter: salutation, correction and the small voice, in miniature.
+  function makeLetterPreview(id) {
+    makePreview(id, function(p, canvasW, canvasH) {
+      const plot = new GysinPlot({ p: p, seed: 1912, width: canvasW, height: canvasH });
+      plot.underwood("DEAR READER,", 26, canvasH * 0.24, {
+        size: canvasW * 0.038,
+        underline: 1,
+        stroke: "#171717"
+      });
+      plot.underwood("FORGET", 26, canvasH * 0.5, {
+        size: canvasW * 0.034,
+        stroke: "#171717"
+      });
+      plot.underwood("XXXXXX", 26, canvasH * 0.5, {
+        size: canvasW * 0.034,
+        bold: true,
+        stroke: "#171717"
+      });
+      plot.underwood("the small hand.", 26, canvasH * 0.74, {
+        size: canvasW * 0.034,
+        stroke: "#171717"
+      });
+      return plot;
+    });
+  }
+
+  makeRotationsPreview("ex-rotations");
+  makeLetterPreview("ex-the-letter");
+
+  makeOutlinePreview("ex-first-trace", function(p, canvasW, canvasH, outlineFont) {
+    const plot = new GysinPlot({
+      p: p,
+      seed: 1960,
+      width: canvasW,
+      height: canvasH
+    });
+    // The same word, three states of the same trace - the card's snippet,
+    // verbatim, on real outline letterforms (bitmap fallback when offline).
+    const fontOptions = outlineFont ? { font: outlineFont } : {};
+    const wordSize = canvasW * (outlineFont ? 0.125 : 0.075);
+    plot.text("FIRST TRACE", 44, canvasH * 0.3, Object.assign({}, fontOptions, {
+      size: wordSize,
+      breathe: 0.4
+    }));
+    plot.text("FIRST TRACE", 44, canvasH * 0.56, Object.assign({}, fontOptions, {
+      size: wordSize,
+      breathe: 1.4,
+      dropout: 0.08
+    }));
+    plot.text("FIRST TRACE", 44, canvasH * 0.82, Object.assign({}, fontOptions, {
+      size: wordSize,
+      breathe: 2.2,
+      dropout: 0.2,
+      rubout: 0.2
+    }));
+    return plot;
+  });
+
+  makeOutlinePreview("ex-worn-word", function(p, canvasW, canvasH, outlineFont) {
+    const plot = new GysinPlot({
+      p: p,
+      seed: 1960,
+      width: canvasW,
+      height: canvasH
+    });
+    // Only size scales to the canvas; the outline font fills the legible head.
+    const options = { size: canvasW * 0.0775 };
+    if (outlineFont) options.font = outlineFont;
+    plot.rub("WORN", 46, canvasH * 0.17, options);
+    return plot;
+  });
+
+  makeOutlinePreview("ex-cutup", function(p, canvasW, canvasH, outlineFont) {
+    return GysinWorks.slicedText.build({
+      p: p,
+      seed: 19600319,
+      width: canvasW,
+      height: canvasH,
+      font: outlineFont
+    }).plot;
+  });
+
+  makeOutlinePreview("ex-permutation", function(p, canvasW, canvasH, outlineFont) {
+    return GysinWorks.permutationPoem.build({
+      p,
+      width: canvasW,
+      height: canvasH,
+      seed: 1960,
+      phrase: "I LOVE YOU",
+      font: outlineFont
+    }).plot;
+  }, { paper: false });
+
+  makePreview("ex-weave", function(p, canvasW, canvasH) {
+    return GysinWorks.weave.build({
+      p,
+      width: canvasW,
+      height: canvasH,
+      seed: 1960,
+      sources: GysinWorks.weave.sources
+    }).plot;
+  }, { paper: false });
+
+  makePreview("ex-parameter", function(p, canvasW, canvasH) {
+    const plot = new GysinPlot({
+      p: p,
+      seed: 8319,
+      width: canvasW,
+      height: canvasH
+    });
+    // One slider owns one element - the card's snippet, verbatim, each in its ink.
+    plot.text("RUB OUT", 42, canvasH * 0.3, {
+      size: canvasW * 0.085,
+      breathe: 1.4,
+      stroke: "#b26a00"
+    });
+    plot.text("ERASE", 42, canvasH * 0.52, {
+      size: canvasW * 0.058,
+      rubout: 0.12,
+      stroke: "#b0203a"
+    });
+    const wave = [];
+    for (let x = 42; x <= canvasW - 42; x += 10) {
+      wave.push([x, canvasH * 0.64 + p.sin(x * 0.05) * 6]);
+    }
+    plot.path(wave, {
+      repeat: 2,
+      drift: 2.4,
+      stroke: "#2b4fb0"
+    });
+    for (let i = 0; i < 6; i++) {
+      plot.line(42, canvasH * (0.74 + i * 0.032), canvasW - 84, canvasH * (0.74 + i * 0.032), {
+        dropout: 0.16,
+        stroke: "#0f7a6c"
+      });
+    }
+    return plot;
+  });
+
+  makePreview("ex-frequencies", function(p, canvasW, canvasH) {
+    const plot = new GysinPlot({ p: p, seed: 40017, width: canvasW, height: canvasH });
+    for (let row = 0; row < 4; row++) {
+      const points = [];
+      const yBase = canvasH * (0.22 + row * 0.18);
+      for (let x = 34; x <= canvasW - 34; x += 8) {
+        points.push([x, yBase + p.sin(x * 0.04 + row) * (10 + row * 3)]);
+      }
+      plot.path(points, {
+        breathe: 0.9 + row * 0.1,
+        dropout: 0.05 + row * 0.01,
+        repeat: row % 2 === 0 ? 2 : 1,
+        rubout: 0.06 + row * 0.03,
+        overshoot: 6,
+        stroke: row === 2 ? "#b5362b" : "#171717"
+      });
+    }
+    return plot;
+  });
+
+  // The calibration sheet at sheet scale: a condensed echo of the full page -
+  // frame with registration crosses, masthead, ruler, rings, ramp, gradient,
+  // and physical pen-pass bars, in the layer colors the penMap separates.
+  makePreview("ex-calibration", function(p, canvasW, canvasH) {
+    const plot = new GysinPlot({ p: p, seed: 210297, width: canvasW, height: canvasH });
+    const m = canvasW * 0.09;
+    const left = m;
+    const right = canvasW - m;
+    const innerW = right - left;
+
+    plot.rect(left, m, innerW, canvasH - 2 * m, { breathe: 0.25, repeat: 2, layer: "frame" });
+    const crossR = m * 0.3;
+    for (const cx of [m * 0.5, canvasW - m * 0.5]) {
+      for (const cy of [m * 0.5, canvasH - m * 0.5]) {
+        plot.line(cx - crossR, cy, cx + crossR, cy, { breathe: 0.2, layer: "frame" });
+        plot.line(cx, cy - crossR, cx, cy + crossR, { breathe: 0.2, layer: "frame" });
+      }
+    }
+
+    plot.text("CALIBRATION", left + innerW * 0.04, m + canvasH * 0.045, {
+      size: canvasW * 0.038,
+      breathe: 0.3
+    });
+    plot.line(left + innerW * 0.04, m + canvasH * 0.06, right - innerW * 0.04, m + canvasH * 0.06, {
+      breathe: 0.25,
+      layer: "frame"
+    });
+
+    const rulerY = m + canvasH * 0.1;
+    for (let index = 0; index <= 30; index++) {
+      const x = left + innerW * 0.04 + (innerW * 0.92) * (index / 30);
+      const tall = index % 5 === 0;
+      plot.line(x, rulerY, x, rulerY + (tall ? canvasH * 0.028 : canvasH * 0.014), {
+        breathe: 0.2,
+        layer: "frame"
+      });
+    }
+
+    const ringX = left + innerW * 0.3;
+    const ringY = m + canvasH * 0.24;
+    for (const d of [canvasW * 0.09, canvasW * 0.17, canvasW * 0.25]) {
+      plot.circle(ringX, ringY, d, {
+        density: 1.2,
+        breathe: 0.35,
+        repeat: 2,
+        stroke: "#b5362b",
+        layer: "circle"
+      });
+    }
+    plot.rect(left + innerW * 0.62, ringY - canvasW * 0.09, canvasW * 0.18, canvasW * 0.18, {
+      breathe: 0.3,
+      fill: "cross",
+      hatchSpacing: Math.max(2.4, canvasW * 0.008),
+      layer: "hatch"
+    });
+
+    for (let index = 0; index < 6; index++) {
+      const y = m + canvasH * 0.44 + index * canvasH * 0.022;
+      plot.line(left + innerW * 0.05, y, right - innerW * 0.05, y, {
+        breathe: 0.2 + index * 0.28,
+        dropout: index * 0.03,
+        overshoot: 6,
+        stroke: "#244f73",
+        layer: "hatch"
+      });
+    }
+
+    const gradY = m + canvasH * 0.6;
+    for (let index = 0; index < 3; index++) {
+      plot.rect(left + innerW * (0.05 + index * 0.32), gradY, innerW * 0.26, canvasH * 0.085, {
+        breathe: 0.25,
+        fill: "hatch",
+        hatchSpacing: Math.max(1.8, canvasW * (0.014 - index * 0.004)),
+        hatchAngle: 45,
+        layer: "hatch"
+      });
+    }
+
+    for (let index = 0; index < 5; index++) {
+      const y = m + canvasH * 0.75 + index * canvasH * 0.022;
+      plot.line(left + innerW * 0.05, y, left + innerW * 0.6, y, {
+        breathe: 0.2,
+        repeat: index + 1,
+        layer: "frame"
+      });
+      plot.text(String(index + 1), left + innerW * 0.65, y + canvasH * 0.008, {
+        size: canvasW * 0.024,
+        breathe: 0.2,
+        stroke: "#244f73"
+      });
+    }
+
+    plot.symbols(left + innerW * 0.05, canvasH - m - canvasH * 0.045, innerW * 0.9, canvasH * 0.035, {
+      set: "/\"()-",
+      size: canvasW * 0.026,
+      breathe: 0.3,
+      stroke: "#b5362b"
+    });
+    return plot;
+  });
+
+  makeOutlinePreview("ex-ink-bleed", function(p, canvasW, canvasH, outlineFont) {
+    const plot = new GysinPlot({
+      p: p,
+      seed: 1916,
+      width: canvasW,
+      height: canvasH
+    });
+    // The same whole line three times - the card's snippet, verbatim; the ink
+    // gathers along real outline letterforms, like the full example.
+    const fontOptions = outlineFont ? { font: outlineFont } : {};
+    const lineSize = canvasW * (outlineFont ? 0.085 : 0.062);
+    plot.text("I AM THAT I AM", 42, canvasH * 0.28, Object.assign({}, fontOptions, {
+      size: lineSize
+    }));
+    plot.text("I AM THAT I AM", 42, canvasH * 0.56, Object.assign({}, fontOptions, {
+      size: lineSize,
+      bleed: 0.22,
+      bleedPasses: 2
+    }));
+    plot.text("I AM THAT I AM", 42, canvasH * 0.84, Object.assign({}, fontOptions, {
+      size: lineSize,
+      bleed: 0.4,
+      bleedPasses: 3,
+      bleedSpread: 1.2
+    }));
+    return plot;
+  });
+
+  makeFontPreview("ex-font-outlines");
+  makeTypewriterPreview("ex-typewriter");
+
+  makePreview("ex-export", function(p, canvasW, canvasH) {
+    const work = GysinWorks.plotterPoster.build({ p });
+    const scale = canvasW / work.width;
+
+    // Draw the canonical poster smaller; do not rebuild its composition.
+    return {
+      draw: function() {
+        p.push();
+        p.scale(scale);
+        work.plot.draw();
+        p.pop();
+      }
+    };
+  }, { paper: false });
+  </script>
+  <button type="button" id="plate-prev" class="plate-arrow" aria-label="Previous work" aria-keyshortcuts="ArrowLeft" hidden>&larr;</button>
+  <button type="button" id="plate-next" class="plate-arrow" aria-label="Next work" aria-keyshortcuts="ArrowRight" hidden>&rarr;</button>
+  <script>
+  // The sheet turner follows Collage's chapter pattern: one existing plate is
+  // revealed in normal document flow while the primary navigation stays put.
+  // Without JavaScript every plate remains a regular anchor target.
+  (function() {
+    const tiles = Array.from(document.querySelectorAll(".cs-tile[data-page]"));
+    const previous = document.getElementById("plate-prev");
+    const next = document.getElementById("plate-next");
+    if (!tiles.length || !previous || !next) return;
+
+    const items = tiles
+      .map(function(tile) {
+        const href = tile.getAttribute("href");
+        const plate = href && href.charAt(0) === "#" ? document.querySelector(href) : null;
+        return { tile: tile, plate: plate, slug: tile.dataset.slug };
+      })
+      .filter(function(item) { return item.plate; });
+    if (!items.length) return;
+
+    let current = -1;
+
+    // The folder starts as its three contact sheets. Selecting a tile reveals
+    // exactly one plate below its own library sheet.
+    document.body.classList.add("folder");
+    items.forEach(function(item) {
+      item.tile.setAttribute("aria-expanded", "false");
+    });
+
+    function openPlate(index) {
+      current = (index + items.length) % items.length;
+      previous.hidden = false;
+      next.hidden = false;
+      items.forEach(function(item, i) {
+        item.plate.classList.toggle("plate-active", i === current);
+        item.tile.classList.toggle("active", i === current);
+        item.tile.setAttribute("aria-expanded", i === current ? "true" : "false");
+      });
+      history.replaceState(null, "", "#sheet-" + items[current].slug);
+
+      // A hidden p5 preview initially measures a zero-width box. Trigger its
+      // real resize path after reveal and keep checking briefly for deep links,
+      // whose sketch setup can finish a beat later.
+      const shown = current;
+      window.dispatchEvent(new Event("resize"));
+      (function settle(tries) {
+        if (current !== shown || tries <= 0) return;
+        const box = items[shown].plate.querySelector(".ex-canvas");
+        const canvas = box && box.querySelector("canvas");
+        if (canvas && canvas.width >= box.offsetWidth - 4) return;
+        window.dispatchEvent(new Event("resize"));
+        setTimeout(function() { settle(tries - 1); }, 150);
+      })(16);
+
+      requestAnimationFrame(function() {
+        if (current === shown) items[shown].plate.scrollIntoView({ block: "start" });
+      });
+    }
+
+    function closePlates(options) {
+      options = options || {};
+      const closing = current;
+      current = -1;
+      previous.hidden = true;
+      next.hidden = true;
+      items.forEach(function(item) {
+        item.plate.classList.remove("plate-active");
+        item.tile.classList.remove("active");
+        item.tile.setAttribute("aria-expanded", "false");
+      });
+      if (options.updateHistory !== false) {
+        history.replaceState(null, "", location.pathname + location.search);
+      }
+      if (options.restoreFocus !== false && items[closing] && items[closing].tile) {
+        items[closing].tile.focus();
+      }
+    }
+
+    tiles.forEach(function(tile) {
+      const index = items.findIndex(function(item) { return item.tile === tile; });
+      if (index === -1) return;
+      tile.addEventListener("click", function(event) {
+        event.preventDefault();
+        if (current === index) closePlates();
+        else openPlate(index);
+      });
+    });
+
+    previous.addEventListener("click", function() {
+      if (current !== -1) openPlate(current - 1);
+    });
+    next.addEventListener("click", function() {
+      if (current !== -1) openPlate(current + 1);
+    });
+    document.addEventListener("keydown", function(event) {
+      if (current === -1) return;
+      if (event.key === "Escape") {
+        closePlates();
+        return;
+      }
+      const target = event.target;
+      if (target && (
+        target.isContentEditable ||
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT"
+      )) return;
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        openPlate(current - 1);
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        openPlate(current + 1);
+      }
+    });
+
+    // Deep links: the #sheet-<slug> form, plus the older plate anchors. Read on
+    // load and again on any hash change, so a shared link opens its plate even
+    // when the hash arrives a beat after the page.
+    function openFromHash() {
+      const hash = location.hash;
+      let start = -1;
+      let ordinaryTarget = null;
+      if (hash.indexOf("#sheet-") === 0) {
+        start = items.findIndex(function(item) { return item.slug === hash.slice(7); });
+      } else if (hash) {
+        start = items.findIndex(function(item) { return item.tile.getAttribute("href") === hash; });
+        if (start === -1) {
+          try {
+            ordinaryTarget = document.querySelector(hash);
+          } catch (error) { /* invalid hash: leave the current sheet untouched */ }
+        }
+      }
+      if (start !== -1) openPlate(start);
+      else if (current !== -1) {
+        closePlates({ updateHistory: false, restoreFocus: false });
+        if (ordinaryTarget) {
+          requestAnimationFrame(function() {
+            ordinaryTarget.scrollIntoView({ block: "start" });
+          });
+        }
+      }
+    }
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+    })();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>
