@@ -650,10 +650,12 @@
       const shape = this._getShape(id);
       if (!shape) return null;
 
-      const split = splitOptions(options);
-      const human = normalizeHumanOptions(Object.assign({}, shape.human, split.human));
-      const style = normalizeStyleOptions(Object.assign({}, shape.style, split.style));
-      const exportSettings = normalizeExportOptions(Object.assign({}, shape.exportSettings, split.exportSettings));
+      const overrides = splitOptions(options);
+      const { human, style, exportSettings } = normalizeShapeOptions({
+        human: shape.human,
+        style: shape.style,
+        exportSettings: shape.exportSettings
+      }, overrides);
       const params = normalizeShapeParams(shape.type, Object.assign({}, shape.params, options.params || {}));
       const candidate = Object.assign({}, shape, { human, style, exportSettings, params });
 
@@ -664,7 +666,7 @@
         candidate.pivot = normalizePivot(options.pivot);
       }
 
-      if (Object.prototype.hasOwnProperty.call(split.human, "seed")) {
+      if (Object.prototype.hasOwnProperty.call(overrides.human, "seed")) {
         candidate.baseSeed = human.seed === null || human.seed === undefined
           ? `${this.globalSeed}:${shape.id}:${shape.type}`
           : human.seed;
@@ -906,12 +908,14 @@
     }
 
     _addShape(type, params, closed, options) {
-      const split = splitOptions(options);
+      const overrides = splitOptions(options);
       const id = options.id === undefined ? this._nextShapeId() : normalizeId(options.id);
       if (this.shapeMap.has(id)) throw new Error(`A shape with id "${id}" already exists.`);
-      const human = normalizeHumanOptions(Object.assign({}, this.defaultHuman, split.human));
-      const style = normalizeStyleOptions(Object.assign({}, this.defaultStyle, split.style));
-      const exportSettings = normalizeExportOptions(Object.assign({}, this.defaultExport, split.exportSettings));
+      const { human, style, exportSettings } = normalizeShapeOptions({
+        human: this.defaultHuman,
+        style: this.defaultStyle,
+        exportSettings: this.defaultExport
+      }, overrides);
       const baseSeed = human.seed === null || human.seed === undefined
         ? `${this.globalSeed}:${id}:${type}`
         : human.seed;
@@ -1612,6 +1616,14 @@
     delete human.breathe;
 
     return { human, style, exportSettings };
+  }
+
+  function normalizeShapeOptions(defaults, overrides) {
+    return {
+      human: normalizeHumanOptions(Object.assign({}, defaults.human, overrides.human)),
+      style: normalizeStyleOptions(Object.assign({}, defaults.style, overrides.style)),
+      exportSettings: normalizeExportOptions(Object.assign({}, defaults.exportSettings, overrides.exportSettings))
+    };
   }
 
   function sampleSpacing(human) {
