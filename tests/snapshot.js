@@ -474,6 +474,28 @@ assert.equal(updatePlot.get(updateId).human.wobble, 0);
 assert.equal(updatePlot.get(updateId).params.points[1].x, 20);
 assert.equal(updatePlot.get(updateId).params.points[1].y, 0);
 
+// Shape options keep one public contract whether they enter through capture
+// or update: the same input produces the same state and visible SVG.
+for (const Plot of [SourcePlot, MinPlot]) {
+  const options = {
+    human: { wobble: 1.25, dropout: 0.04 },
+    style: { stroke: "#345678", strokeWeight: 1.5, alpha: 0.7 },
+    export: { layer: "contract", simplify: 0.1, minSegmentLength: 0.2 }
+  };
+  const captured = new Plot({ seed: 33, width: 100, height: 50 });
+  const capturedId = captured.line(10, 20, 90, 20, options);
+  const updated = new Plot({ seed: 33, width: 100, height: 50 });
+  const updatedId = updated.line(10, 20, 90, 20);
+  updated.update(updatedId, options);
+
+  const capturedShape = captured.get(capturedId);
+  const updatedShape = updated.get(updatedId);
+  assert.deepEqual(updatedShape.human, capturedShape.human);
+  assert.deepEqual(updatedShape.style, capturedShape.style);
+  assert.deepEqual(updatedShape.exportSettings, capturedShape.exportSettings);
+  assert.equal(updated.exportSVG(), captured.exportSVG());
+}
+
 const frozenStylePlot = new SourcePlot();
 const frozenStyleId = frozenStylePlot.line(0, 0, 10, 0);
 frozenStylePlot.freeze(frozenStyleId);
