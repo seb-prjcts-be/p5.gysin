@@ -3,7 +3,7 @@
 Status: **voorstel, wacht op Sebs akkoord.** Nog niets geïmplementeerd.
 
 ## De regel waar dit uit volgt
-Sebs productregel (STATUS.md, 20 jul): de publieke hoofdroute lost problemen op
+Sebs productregel (vastgelegd op 20 jul): de publieke hoofdroute lost problemen op
 met **betekenisvolle werkwoorden en sterke defaults**. Seeds, sampling-details en
 parameterbundels zijn **escape hatches**, niet de normale gebruikerservaring.
 
