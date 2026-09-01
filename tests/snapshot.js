@@ -848,6 +848,16 @@ assert.ok(typeA.ids.length > 0, "underwood() emits shapes");
 const typeJSON = JSON.stringify(typeA.ids.map((id) => typeA.plot.get(id).generated));
 assert.equal(JSON.stringify(typeB.ids.map((id) => typeB.plot.get(id).generated)), typeJSON);
 assert.equal(JSON.stringify(typeMin.ids.map((id) => typeMin.plot.get(id).generated)), typeJSON);
+// The bundled face has real lowercase paths; examples must not need to uppercase input.
+const typeLowerPlot = new TypePlot({ seed: 1961 });
+const typeLowerIds = typeLowerPlot.underwood("I rub out the word.", 40, 80, { size: 20, wear: 0 });
+const typeUpperPlot = new TypePlot({ seed: 1961 });
+const typeUpperIds = typeUpperPlot.underwood("I RUB OUT THE WORD.", 40, 80, { size: 20, wear: 0 });
+const typeLowerMinPlot = new TypeMinPlot({ seed: 1961 });
+const typeLowerMinIds = typeLowerMinPlot.underwood("I rub out the word.", 40, 80, { size: 20, wear: 0 });
+const typeLowerJSON = JSON.stringify(typeLowerIds.map((id) => typeLowerPlot.get(id).generated));
+assert.notEqual(typeLowerJSON, JSON.stringify(typeUpperIds.map((id) => typeUpperPlot.get(id).generated)), "lowercase uses distinct glyph paths");
+assert.equal(JSON.stringify(typeLowerMinIds.map((id) => typeLowerMinPlot.get(id).generated)), typeLowerJSON, "lowercase matches the min build");
 // bold overstrikes every glyph: more shapes than the mechanically clean default
 const typeClean = new TypePlot({ seed: 1961 }).underwood("RUB OUT", 40, 80, { size: 20, wear: 0 });
 const typeBold = new TypePlot({ seed: 1961 }).underwood("RUB OUT", 40, 80, { size: 20, wear: 0, bold: true });
