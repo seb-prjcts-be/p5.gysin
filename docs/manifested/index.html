@@ -10,7 +10,7 @@
   <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/docs/manifested/">
   <meta property="og:type" content="website">
   <link rel="canonical" href="https://seb-prjcts-be.github.io/p5.gysin/docs/manifested/">
-  <link rel="stylesheet" href="../style.css?v=manifested-2">
+  <link rel="stylesheet" href="../style.css?v=manifested-3">
 </head>
 <body class="manifested-page">
   <nav id="navbar">
@@ -175,11 +175,10 @@
           <button type="button" id="mf-close" class="secondary">Close</button>
         </div>
         <div class="demo-note" id="mf-status" role="status" aria-live="polite"></div>
-        <details class="mf-plot" id="mf-plot">
-          <summary>Plot it</summary>
-          <p><strong>Save the plotter SVG.</strong> One Inkscape layer per pen, numbered like the pens, centre lines on an A3 sheet. In Inkscape show layer 1, load pen 1 and plot; hide it and repeat for 2.</p>
-          <p><strong>Test it first.</strong> vanilla.penplotter plans the route here in your browser: pens, travel and time. Nothing is sent to a machine.</p>
-          <p>To plot for real, open the drawing in <a href="https://seb-prjcts-be.github.io/vanilla.penplotter/docs/setup.html" target="_blank" rel="noopener">vanilla.penplotter</a>: park the carriage in the home corner, use Chrome or Edge, and click to start.</p>
+        <details class="mf-plot" id="mf-plot" hidden>
+          <summary>Plot it &middot; experimental</summary>
+          <p>Experimental: the route is planned here, but this path to a real plotter has not been tested on a machine yet. Offered for short sheets only.</p>
+          <p>The plotter SVG has one Inkscape layer per pen: show layer 1, plot it with pen 1, then repeat for 2. The test plans the route in your browser and sends nothing to a machine. To plot for real, use <a href="https://seb-prjcts-be.github.io/vanilla.penplotter/docs/setup.html" target="_blank" rel="noopener">vanilla.penplotter</a> in Chrome or Edge.</p>
           <div class="mf-controls">
             <button type="button" id="mf-plotter-svg" class="secondary">Save plotter SVG (A3)</button>
             <button type="button" id="mf-dryrun" class="secondary">Test with vanilla.penplotter</button>
@@ -211,7 +210,8 @@
     "verbs": "lattice() · rect() · text()",
     "lead": "The fine print is a wall. The button you are meant to press is red and wide.",
     "req": "loads p5.gysin.min.js",
-    "code": "const plot = new GysinPlot({ seed: 2018 });\n\nplot.lattice(fine.repeat(2), 48, 56, 624, 660, {   // fine: the cookie notice\n  size: 15,\n  turns: [0, 90]\n});\nplot.rect(48, 884, 624, 76, { repeat: 3 });   // the button you are meant to press\nplot.lattice(\"ACCEPT ALL \".repeat(8), 56, 890, 608, 64, { size: 9, turns: [0] });\n\nplot.draw();"
+    "code": "const plot = new GysinPlot({ seed: 2018 });\n\nplot.lattice(fine.repeat(2), 48, 56, 624, 660, {   // fine: the cookie notice\n  size: 15,\n  turns: [0, 90]\n});\nplot.rect(48, 884, 624, 76, { repeat: 3 });   // the button you are meant to press\nplot.lattice(\"ACCEPT ALL \".repeat(8), 56, 890, 608, 64, { size: 9, turns: [0] });\n\nplot.draw();",
+    "plot": false
   },
   {
     "slug": "42_days",
@@ -220,7 +220,8 @@
     "verbs": "line() · circle() · underwood()",
     "lead": "Six weeks of rainfall, one cell per day. The wetter the day, the denser the hatching.",
     "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
-    "code": "const plot = new GysinPlot({ seed: 42 });\n\n// rain is ruled lines: the wetter the day, the closer they stand\nfor (let k = gap; k \u003c 72; k += gap) {\n  plot.line(x + k, y, x + k, y + 72);   // gap = Math.max(1.1, 9 - mm * 0.72)\n}\nplot.circle(x + 42, y + 42, 5);   // a dry day is a dot\n\nplot.draw();"
+    "code": "const plot = new GysinPlot({ seed: 42 });\n\n// rain is ruled lines: the wetter the day, the closer they stand\nfor (let k = gap; k \u003c 72; k += gap) {\n  plot.line(x + k, y, x + k, y + 72);   // gap = Math.max(1.1, 9 - mm * 0.72)\n}\nplot.circle(x + 42, y + 42, 5);   // a dry day is a dot\n\nplot.draw();",
+    "plot": true
   },
   {
     "slug": "on_hold",
@@ -229,7 +230,8 @@
     "verbs": "chant() · line() · underwood()",
     "lead": "A recorded message, permuted again and again until it falls apart.",
     "req": "loads p5.gysin.min.js + p5.gysin.text.min.js + p5.gysin.underwood.min.js",
-    "code": "const plot = new GysinPlot({ seed: 1403 });\n\nplot.chant(\"YOUR CALL MAY BE RECORDED\", 48, 90, {\n  lines: 11,\n  order: \"walk\",\n  size: 24,\n  leading: 52\n});\n\nplot.draw();"
+    "code": "const plot = new GysinPlot({ seed: 1403 });\n\nplot.chant(\"YOUR CALL MAY BE RECORDED\", 48, 90, {\n  lines: 11,\n  order: \"walk\",\n  size: 24,\n  leading: 52\n});\n\nplot.draw();",
+    "plot": false
   },
   {
     "slug": "final",
@@ -238,7 +240,8 @@
     "verbs": "rub() · underwood()",
     "lead": "Three versions of one file name, each a little further erased.",
     "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
-    "code": "const plot = new GysinPlot({ seed: 3 });\n\nplot.rub(\"FINAL\", 48, 130, { size: 64, decay: 0.7 });\nplot.rub(\"FINAL FINAL\", 48, 790, { size: 54, decay: 1.5 });\n\nplot.draw();"
+    "code": "const plot = new GysinPlot({ seed: 3 });\n\nplot.rub(\"FINAL\", 48, 130, { size: 64, decay: 0.7 });\nplot.rub(\"FINAL FINAL\", 48, 790, { size: 54, decay: 1.5 });\n\nplot.draw();",
+    "plot": true
   },
   {
     "slug": "objection",
@@ -247,7 +250,8 @@
     "verbs": "underwood() · text()",
     "lead": "A letter to a system that does not explain itself. The answers are struck out.",
     "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
-    "code": "const plot = new GysinPlot({ seed: 1984 });\n\nplot.underwood(letter, 64, 150, { size: 13, wear: 1.3 });\nplot.underwood(\"XXXXXXXX\", x, y, { bold: true });   // an answer, struck out\n\nplot.draw();"
+    "code": "const plot = new GysinPlot({ seed: 1984 });\n\nplot.underwood(letter, 64, 150, { size: 13, wear: 1.3 });\nplot.underwood(\"XXXXXXXX\", x, y, { bold: true });   // an answer, struck out\n\nplot.draw();",
+    "plot": true
   },
   {
     "slug": "views",
@@ -256,7 +260,8 @@
     "verbs": "weave() · path() · underwood()",
     "lead": "Two texts, a climate report and a sales brochure, woven into a third voice.",
     "req": "loads p5.gysin.min.js + p5.gysin.text.min.js + p5.gysin.underwood.min.js",
-    "code": "const plot = new GysinPlot({ seed: 2100 });\n\nplot.weave(sources, 48, 312, {   // a climate report and a sales brochure\n  lines: 10,\n  unit: \"clause\",\n  fragments: 2,\n  size: 24,\n  leading: 46,\n  maxWidth: 640\n});\n\nplot.draw();"
+    "code": "const plot = new GysinPlot({ seed: 2100 });\n\nplot.weave(sources, 48, 312, {   // a climate report and a sales brochure\n  lines: 10,\n  unit: \"clause\",\n  fragments: 2,\n  size: 24,\n  leading: 46,\n  maxWidth: 640\n});\n\nplot.draw();",
+    "plot": false
   },
   {
     "slug": "say_it_again",
@@ -265,7 +270,8 @@
     "verbs": "lattice() · underwood()",
     "lead": "One phrase, turned twice across the sheet. The pattern matters more than the words.",
     "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
-    "code": "const plot = new GysinPlot({ seed: 90 });\n\nplot.lattice(\"SAY IT AGAIN \".repeat(3), 48, 48, 624, 700, {\n  size: 26,\n  turns: [0, 90]\n});\nplot.lattice(\"SAY IT AGAIN \".repeat(3), 84, 84, 552, 628, {\n  size: 26,\n  turns: [45, 135],\n  wear: 1.6\n});\n\nplot.draw();"
+    "code": "const plot = new GysinPlot({ seed: 90 });\n\nplot.lattice(\"SAY IT AGAIN \".repeat(3), 48, 48, 624, 700, {\n  size: 26,\n  turns: [0, 90]\n});\nplot.lattice(\"SAY IT AGAIN \".repeat(3), 84, 84, 552, 628, {\n  size: 26,\n  turns: [45, 135],\n  wear: 1.6\n});\n\nplot.draw();",
+    "plot": false
   },
   {
     "slug": "transcript",
@@ -274,7 +280,8 @@
     "verbs": "text() · asemic() · path()",
     "lead": "A voice message that gets harder to hear. A loop runs straight through the lines.",
     "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
-    "code": "const plot = new GysinPlot({ seed: 612 });\n\nlines.forEach((line, i) => {   // each line a little harder to hear\n  const k = i / (lines.length - 1);\n  plot.text(line, 170, 295 + i * 56, {\n    size: 15,\n    dropout: k * 0.32,\n    rubout: k * 0.22,\n    glyphJitter: 0.35 + k * 0.9\n  });\n});\n\nplot.draw();"
+    "code": "const plot = new GysinPlot({ seed: 612 });\n\nlines.forEach((line, i) => {   // each line a little harder to hear\n  const k = i / (lines.length - 1);\n  plot.text(line, 170, 295 + i * 56, {\n    size: 15,\n    dropout: k * 0.32,\n    rubout: k * 0.22,\n    glyphJitter: 0.35 + k * 0.9\n  });\n});\n\nplot.draw();",
+    "plot": false
   },
   {
     "slug": "exercise",
@@ -283,7 +290,8 @@
     "verbs": "path() · bleed · fray",
     "lead": "Looped handwriting on a chalkboard. Erased, resumed, never finished.",
     "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
-    "code": "const plot = new GysinPlot({ seed: 1951 });\n\nplot.path(loops, {   // loops: one row of looped handwriting\n  bleed: 0.4,\n  fray: 0.3,\n  dropout: 0.1,\n  rubout: 0.25\n});\n\nplot.draw();"
+    "code": "const plot = new GysinPlot({ seed: 1951 });\n\nplot.path(loops, {   // loops: one row of looped handwriting\n  bleed: 0.4,\n  fray: 0.3,\n  dropout: 0.1,\n  rubout: 0.25\n});\n\nplot.draw();",
+    "plot": true
   }
 ]
   </script>
@@ -300,7 +308,7 @@
   <script src="../../examples/say_it_again/composition.js?v=manifested-1"></script>
   <script src="../../examples/transcript/composition.js?v=manifested-1"></script>
   <script src="../../examples/exercise/composition.js?v=manifested-1"></script>
-  <script src="manifested.js?v=manifested-2"></script>
+  <script src="manifested.js?v=manifested-3"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
 </body>
 </html>

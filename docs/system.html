@@ -359,8 +359,8 @@ plot.downloadHPGL("drawing.hpgl", hpglOptions);     // browser download</code>
       </ul>
       <p>HPGL stores coordinates, pen selections, and optional speed—not SVG colours, opacity, varying stroke width, layer names, or page metadata. Physical line width and density therefore come from the installed pen and from repeated geometry. The file starts with initialization and pen selection, draws with <code>PU</code>/<code>PD</code>, and ends by deselecting the pen. It creates a file only: sending that file to a specific machine remains the responsibility of the plotter software or controller.</p>
 
-      <h3 id="traces">Traces as data</h3>
-      <p><code>plot.exportTraces(options)</code> returns the finished traces as plain objects instead of a file: the same clipped, page-scaled geometry the exporters write, for a tool that draws or plots them itself. It takes <code>page</code>, <code>penMap</code>, <code>tool</code>, and <code>optimize</code> like HPGL, so the generic route rules above apply. Each call builds new objects; editing the result never changes the plot.</p>
+      <h3 id="traces">Traces as data &middot; experimental</h3>
+      <p><strong>Experimental:</strong> the shape of the result may still change, and it has not been used to drive a machine. <code>plot.exportTraces(options)</code> returns the finished traces as plain objects instead of a file: the same clipped, page-scaled geometry the exporters write, for a tool that draws or plots them itself. It takes <code>page</code>, <code>penMap</code>, <code>tool</code>, and <code>optimize</code> like HPGL, so the generic route rules above apply. Each call builds new objects; editing the result never changes the plot.</p>
       <div class="code-preview">
         <code>const traces = plot.exportTraces({
   page: "A3",

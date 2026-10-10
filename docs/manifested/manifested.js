@@ -117,6 +117,10 @@
       bigPoster.redraw(next);
     }
     status.textContent = "seed " + next;
+    // Plot it is experimental and offered for short sheets only.
+    document.getElementById("mf-plot").hidden = !item.plot;
+    document.getElementById("mf-plot").open = false;
+    document.getElementById("mf-dry").hidden = true;
     history.replaceState(null, "", "#" + item.slug);
   }
 
@@ -155,18 +159,16 @@
   document.getElementById("mf-next").addEventListener("click", function() { show(open + 1); });
   document.getElementById("mf-close").addEventListener("click", closeSheet);
 
-  // The plotter file: one Inkscape layer per pen on A3. Route optimization
-  // stops at 2000 traces per pen, so a dense sheet is saved in drawing order.
+  // The plotter file: one Inkscape layer per pen on A3. Plot it is offered
+  // only for sheets within the 2000 traces per pen that route optimization allows.
   function savePlotterSVG() {
     const item = data[open];
-    const options = { page: "A3", penMap: workFor(item).penMap };
     const name = "p5-gysin-" + item.slug.replace(/_/g, "-") + "-" + bigPoster.seed + "-a3.svg";
     try {
-      bigPoster.plot.downloadPlotterSVG(name, options);
+      bigPoster.plot.downloadPlotterSVG(name, { page: "A3", penMap: workFor(item).penMap });
       status.textContent = "seed " + bigPoster.seed + " · plotter SVG saved";
     } catch (error) {
-      bigPoster.plot.downloadPlotterSVG(name, Object.assign({}, options, { optimize: false }));
-      status.textContent = "seed " + bigPoster.seed + " · too many traces to optimize the route: saved in drawing order";
+      status.textContent = "The plotter SVG could not be saved: " + error.message;
     }
   }
 
@@ -183,10 +185,7 @@
     button.disabled = true;
     try {
       const traces = bigPoster.plot.exportTraces({ page: "A3", penMap: work.penMap });
-      note.textContent = traces.length > 5000
-        ? "Planning " + traces.length.toLocaleString("en") + " traces. This dense sheet can take a while…"
-        : "Planning " + traces.length.toLocaleString("en") + " traces…";
-      await new Promise(function(resolve) { setTimeout(resolve, 60); });
+      note.textContent = "Planning " + traces.length.toLocaleString("en") + " traces…";
       const { PlotterEngine } = await import(PENPLOTTER);
       const plot = new PlotterEngine({ units: "mm", page: { width: 297, height: 420, margin: 10 } });
       const pens = Array.from(new Set(traces.map(function(trace) { return trace.pen; }))).sort(function(a, b) { return a - b; });

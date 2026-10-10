@@ -198,6 +198,10 @@ bedekken de hoofdnavigatie niet met een tweede menubalk.
 - Een dicht bezet blad kan boven de 2000 sporen per pen uitkomen. Dan weigert
   `exportPlotterSVG` de routeoptimalisatie; de sketch valt terug op
   `optimize: false` (tekenvolgorde) en meldt dat in de statusregel.
+- "Plot it" op Manifested is experimenteel (niet op een machine getest) en
+  wordt alleen getoond bij korte bladen: `plot: true` in de data, voor posters
+  met ten hoogste 2000 sporen. Zo blijft de routeoptimalisatie van gysin zelf
+  geldig en blijft de dry-run snel; een test bewaakt de grens.
 - Ook op een poster geldt Regel 8: knoppen, doorhalingen, regencellen en cijfers
   zijn lijnenblokken, letterveld of getypte tekens (`X` met `bold`), nooit `fill`.
   `tests/snapshot.js` bewaakt dat.

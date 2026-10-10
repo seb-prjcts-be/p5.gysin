@@ -1505,20 +1505,21 @@ for (const page of navPages) {
 assert.match(manifestedPage, /<body class="manifested-page">/);
 assert.match(manifestedPage, /<a href="index\.html" class="active">Manifested<\/a>/);
 assert.match(manifestedPage, /<title>Manifested \| p5\.gysin<\/title>/);
-assert.match(manifestedPage, /<link rel="stylesheet" href="\.\.\/style\.css\?v=manifested-2">/);
+assert.match(manifestedPage, /<link rel="stylesheet" href="\.\.\/style\.css\?v=manifested-3">/);
 assert.match(manifestedPage, /<h1>Mani<span class="accent">fested<\/span><\/h1>/);
 assert.equal((manifestedPage.match(/class="mf-card"/g) || []).length, 9);
 assert.equal((manifestedPage.match(/class="mf-canvas"/g) || []).length, 9);
 assert.doesNotMatch(manifestedPage, /cs-tile|work-band|class="[^"]*\bplate\b/, "Manifested is a wall, not a copy of Openings");
 assert.match(manifestedPage, /<dialog id="mf-dialog"/);
 assert.match(manifestedPage, /id="mf-surprise">Surprise me<\/button>/);
-assert.match(manifestedPage, /<script src="manifested\.js\?v=manifested-2"><\/script>/);
-assert.match(manifestedPage, /<details class="mf-plot" id="mf-plot">\s*<summary>Plot it<\/summary>/, "Plot it stays closed until opened");
+assert.match(manifestedPage, /<script src="manifested\.js\?v=manifested-3"><\/script>/);
+assert.match(manifestedPage, /<details class="mf-plot" id="mf-plot" hidden>\s*<summary>Plot it &middot; experimental<\/summary>/, "Plot it is closed, hidden until a short sheet opens, and says experimental");
+assert.match(manifestedPage, /has not been tested on a machine yet/);
 assert.match(manifestedPage, /id="mf-plotter-svg"[^>]*>Save plotter SVG \(A3\)<\/button>/);
 assert.match(manifestedPage, /id="mf-dryrun"[^>]*>Test with vanilla\.penplotter<\/button>/);
-assert.match(manifestedPage, /Nothing is sent to a machine/);
-assert.match(manifestedScript, /downloadPlotterSVG\(name, options\)/);
-assert.match(manifestedScript, /optimize: false/);
+assert.match(manifestedPage, /sends nothing to a machine/);
+assert.match(manifestedScript, /downloadPlotterSVG\(name, \{ page: "A3", penMap: workFor\(item\)\.penMap \}\)/);
+assert.match(manifestedScript, /hidden = !item\.plot/);
 assert.match(manifestedScript, /exportTraces\(\{ page: "A3", penMap: work\.penMap \}\)/);
 assert.match(manifestedScript, /vanilla\.penplotter@v0\.5\.0\/vanilla\.penplotter\.js/, "the dry run loads a pinned release");
 assert.doesNotMatch(manifestedScript, /Serial|EbbDriver|DrawCore|\.run\(/, "the site never talks to a machine");
@@ -1530,6 +1531,11 @@ assert.match(siteStyle, /\.mf-wall\s*\{[^}]*display:\s*grid;/s);
 assert.match(siteStyle, /\.sheet-layout\s*\{[^}]*max-width:\s*1320px;/s);
 const manifestedData = JSON.parse(manifestedPage.match(/<script type="application\/json" id="mf-data">([\s\S]*?)<\/script>/)[1]);
 assert.deepEqual(manifestedData.map((item) => item.slug).sort(), posterExamples.slice().sort());
+assert.deepEqual(
+  manifestedData.filter((item) => item.plot).map((item) => item.slug).sort(),
+  ["42_days", "exercise", "final", "objection"],
+  "Plot it is offered for short sheets only"
+);
 
 const posterKeys = new Map([
   ["42_days", "fortyTwoDays"], ["consent", "consent"], ["exercise", "exercise"],
@@ -1580,6 +1586,11 @@ for (const [name, key] of posterKeys) {
 
   const first = work.build();
   const again = work.build();
+  const offersPlotIt = manifestedData.find((item) => item.slug === name).plot;
+  for (const seedStep of [0, 1, 2, 3, 4]) {
+    const traces = work.build({ seed: work.seed + seedStep }).plot.stats().paths;
+    assert.equal(traces <= 2000, offersPlotIt, `${name}: Plot it follows the 2000-trace limit (${traces} traces)`);
+  }
   assert.equal(first.plot.shapes.length, posterShapeCounts.get(name), `${name} keeps its shape count`);
   assert.equal(first.plot.exportSVG(), again.plot.exportSVG(), `${name} is reproducible from its seed`);
   assert.notEqual(

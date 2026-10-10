@@ -55,7 +55,7 @@
     {
       "name": "GysinPlot.exportTraces",
       "added_in": "unreleased",
-      "status": "stable",
+      "status": "experimental",
       "note": "Finished traces as plain data in page units, clipped to the page, each with its physical pen from penMap, layer, stroke, passage and role. The hand-off to route planners and machine drivers."
     },
     {
