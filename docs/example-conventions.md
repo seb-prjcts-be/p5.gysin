@@ -179,20 +179,22 @@ bedekken de hoofdnavigatie niet met een tweede menubalk.
   zichtbaar; links/rechts gebruikt hetzelfde sobere pijlenpatroon als Collage.
 - `tools/check-links.js` bewaakt zowel lokale doelen als dit same-tab-contract.
 
-## Regel 11 - Posters: een afgewerkt blad heeft een eigen pagina
+## Regel 11 - Manifested: afgewerkte posters hangen aan een eigen muur
 
 - Een poster (720 × 1018, A3-verhouding) is een voorbeeld als alle andere:
   `examples/<naam>/` met `index.html`, `sketch.js` en `composition.js`, en dus
   ook een regel in het manifest. Mapnamen volgen de titel in snake_case
   (`on_hold`, `42_days`).
-- Posters staan niet op Openings maar op `docs/posters/`, in de menubalk tussen
-  Collage en System. `tests/snapshot.js` toetst ze daar (`posterExamples`);
-  Openings blijft het blad van de drie bibliotheken.
-- De pagina groepeert met dezelfde werkmomenten als Regel 6 (Word, Trace,
-  Sentence, Typewriter); een poster staat bij het gebaar dat het blad draagt.
+- Posters staan niet op Openings maar op `docs/manifested/`, in de menubalk
+  tussen Collage en System. `tests/snapshot.js` toetst ze daar
+  (`posterExamples`); Openings blijft het blad van de drie bibliotheken.
+- Manifested is een inspiratiemuur en spiegelt Openings niet: geen
+  contactbladen of werkmomenten, maar negen levende posters op eigen hoogte.
+  Een poster opent in een dialoog met een nieuwe seed, de code, SVG-download,
+  vorige/volgende en "Surprise me".
 - `composition.js` registreert `GysinWorks.<naam>` met `build`, `seed`,
-  `width`, `height`, `paper` en `penMap`. Voorbeeldpagina en plaat tekenen
-  dezelfde compositie; de plaat schaalt met `p.scale()` en bouwt niet opnieuw.
+  `width`, `height`, `paper` en `penMap`. Voorbeeldpagina en muur tekenen
+  dezelfde compositie; de muur schaalt met `p.scale()` en bouwt niet opnieuw.
 - Een dicht bezet blad kan boven de 2000 sporen per pen uitkomen. Dan weigert
   `exportPlotterSVG` de routeoptimalisatie; de sketch valt terug op
   `optimize: false` (tekenvolgorde) en meldt dat in de statusregel.
@@ -216,5 +218,5 @@ bedekken de hoofdnavigatie niet met een tweede menubalk.
 - [ ] Geen lege toonvlakken; een blok is lijnen/letters/tekens (Regel 8).
 - [ ] Interne links blijven in hetzelfde tabblad en onder de gewone menubalk
       (Regel 10).
-- [ ] Poster: eigen map in `examples/`, vermeld op `docs/posters/` en niet op
-      Openings (Regel 11).
+- [ ] Poster: eigen map in `examples/`, vermeld op `docs/manifested/` en niet
+      op Openings (Regel 11).

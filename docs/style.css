@@ -943,14 +943,14 @@ body.chapters .ce-module.chapter-active {
 /* ── curation engine page ───────────────────────────────────────────── */
 
 .collage-page .page-header .section-tag,
-.posters-page .page-header .section-tag {
+.manifested-page .page-header .section-tag {
   color: var(--red);
 }
 
 .collage-page a:focus-visible,
 .collage-page button:focus-visible,
-.posters-page a:focus-visible,
-.posters-page button:focus-visible {
+.manifested-page a:focus-visible,
+.manifested-page button:focus-visible {
   outline-color: var(--red);
 }
 
@@ -979,6 +979,184 @@ body.chapters .ce-module.chapter-active {
 
 .ce-chips a:hover {
   border-color: var(--ink);
+}
+
+/* ── manifested: a free wall of finished sheets ─────────────────────── */
+
+.mf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 24px 0 0;
+}
+
+.mf-actions button,
+.mf-controls button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--white);
+  font-family: "Oswald", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.mf-actions button.secondary,
+.mf-controls button.secondary {
+  background: transparent;
+  color: var(--ink);
+}
+
+.mf-actions button:hover,
+.mf-controls button:hover {
+  background: #000;
+  color: var(--white);
+}
+
+/* The sheets hang at their own heights, like prints pinned to a wall. */
+.mf-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  align-items: start;
+  gap: 56px 34px;
+  padding: 64px var(--col-pad) 96px;
+}
+
+.mf-card {
+  margin: 0;
+}
+
+.mf-card:nth-child(3n + 2) {
+  margin-top: 46px;
+}
+
+.mf-card:nth-child(3n) {
+  margin-top: 18px;
+}
+
+.mf-sheet {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.mf-canvas {
+  aspect-ratio: 720 / 1018;
+  overflow: hidden;
+  background: var(--sheet);
+  box-shadow: 0 1px 0 var(--rule), 0 22px 44px -24px rgba(21, 21, 21, 0.55);
+  transition: transform 0.25s ease;
+}
+
+.mf-sheet:hover .mf-canvas,
+.mf-sheet:focus-visible .mf-canvas {
+  transform: translateY(-5px);
+}
+
+.mf-canvas canvas {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+.mf-card figcaption {
+  display: grid;
+  gap: 4px;
+  padding-top: 14px;
+}
+
+.mf-card figcaption strong {
+  font-family: "Oswald", sans-serif;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.mf-card figcaption .ex-links {
+  gap: 6px 14px;
+  margin-top: 6px;
+}
+
+.mf-card figcaption small {
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+.mf-dialog {
+  width: min(1180px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  padding: 0;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.mf-dialog::backdrop {
+  background: rgba(21, 21, 21, 0.74);
+}
+
+.mf-dialog-body {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 30px;
+  padding: 30px;
+}
+
+.mf-dialog-canvas {
+  align-self: start;
+  background: var(--sheet);
+  box-shadow: 0 22px 44px -24px rgba(21, 21, 21, 0.55);
+}
+
+.mf-dialog-canvas canvas {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+.mf-dialog-text {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
+}
+
+.mf-dialog-text h2 {
+  font-size: clamp(40px, 6vw, 72px);
+}
+
+.mf-dialog-text .section-desc,
+.mf-dialog-text .lib-req {
+  margin: 0;
+}
+
+.mf-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 800px) {
+  .mf-dialog-body {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .mf-card:nth-child(n) {
+    margin-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mf-canvas {
+    transition: none;
+  }
 }
 
 .ce-module {

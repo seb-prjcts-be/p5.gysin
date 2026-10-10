@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manifested | p5.gysin</title>
+  <meta name="description" content="Nine finished p5.gysin posters on one wall: open a sheet, take its seed, borrow its code, or let the wall surprise you.">
+  <meta property="og:title" content="Manifested | p5.gysin">
+  <meta property="og:description" content="Nine finished p5.gysin posters as live code: open one, redraw it, borrow it.">
+  <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/docs/manifested/">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://seb-prjcts-be.github.io/p5.gysin/docs/manifested/">
+  <link rel="stylesheet" href="../style.css?v=manifested-1">
+</head>
+<body class="manifested-page">
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../openings.html">Openings</a></li>
+      <li><a href="../collage/">Collage</a></li>
+      <li><a href="index.html" class="active">Manifested</a></li>
+      <li><a href="../system.html">System</a></li>
+      <li><a href="../vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank" rel="noreferrer">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <header class="page-header">
+    <div class="section-tag">Nine sheets &middot; live code</div>
+    <h1>Mani<span class="accent">fested</span></h1>
+    <p>Finished posters to look at, borrow from and start from. Open a sheet to redraw it with another seed, read the code behind it, or take its file to a pen.</p>
+    <div class="mf-actions">
+      <button type="button" id="mf-surprise">Surprise me</button>
+      <button type="button" id="mf-redraw" class="secondary">Redraw the wall</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="mf-wall" id="wall" aria-label="Nine manifested posters">
+    <figure class="mf-card">
+      <button type="button" class="mf-sheet" data-slug="consent" aria-label="Open Consent">
+        <div class="mf-canvas" data-work="consent" data-slug="consent"></div>
+      </button>
+      <figcaption>
+        <strong>Consent</strong>
+        <small>lattice() · rect() · text()</small>
+        <span class="ex-links">
+          <a class="ex-full-link" href="../../examples/consent/">-&gt; open work</a>
+          <a class="ex-full-link" href="../../examples/consent/composition.js">-&gt; composition</a>
+        </span>
+      </figcaption>
+    </figure>
+    <figure class="mf-card">
+      <button type="button" class="mf-sheet" data-slug="42_days" aria-label="Open 42 Days">
+        <div class="mf-canvas" data-work="fortyTwoDays" data-slug="42_days"></div>
+      </button>
+      <figcaption>
+        <strong>42 Days</strong>
+        <small>rect() · circle() · underwood()</small>
+        <span class="ex-links">
+          <a class="ex-full-link" href="../../examples/42_days/">-&gt; open work</a>
+          <a class="ex-full-link" href="../../examples/42_days/composition.js">-&gt; composition</a>
+        </span>
+      </figcaption>
+    </figure>
+    <figure class="mf-card">
+      <button type="button" class="mf-sheet" data-slug="on_hold" aria-label="Open On Hold">
+        <div class="mf-canvas" data-work="onHold" data-slug="on_hold"></div>
+      </button>
+      <figcaption>
+        <strong>On Hold</strong>
+        <small>chant() · rect() · underwood()</small>
+        <span class="ex-links">
+          <a class="ex-full-link" href="../../examples/on_hold/">-&gt; open work</a>
+          <a class="ex-full-link" href="../../examples/on_hold/composition.js">-&gt; composition</a>
+        </span>
+      </figcaption>
+    </figure>
+    <figure class="mf-card">
+      <button type="button" class="mf-sheet" data-slug="final" aria-label="Open Final">
+        <div class="mf-canvas" data-work="final" data-slug="final"></div>
+      </button>
+      <figcaption>
+        <strong>Final</strong>
+        <small>rub() · underwood()</small>
+        <span class="ex-links">
+          <a class="ex-full-link" href="../../examples/final/">-&gt; open work</a>
+          <a class="ex-full-link" href="../../examples/final/composition.js">-&gt; composition</a>
+        </span>
+      </figcaption>
+    </figure>
+    <figure class="mf-card">
+      <button type="button" class="mf-sheet" data-slug="objection" aria-label="Open Objection">
+        <div class="mf-canvas" data-work="objection" data-slug="objection"></div>
+      </button>
+      <figcaption>
+        <strong>Objection</strong>
+        <small>underwood() · rect() · text()</small>
+        <span class="ex-links">
+          <a class="ex-full-link" href="../../examples/objection/">-&gt; open work</a>
+          <a class="ex-full-link" href="../../examples/objection/composition.js">-&gt; composition</a>
+        </span>
+      </figcaption>
+    </figure>
+    <figure class="mf-card">
+      <button type="button" class="mf-sheet" data-slug="views" aria-label="Open Views">
+        <div class="mf-canvas" data-work="views" data-slug="views"></div>
+      </button>
+      <figcaption>
+        <strong>Views</strong>
+        <small>weave() · path() · underwood()</small>
+        <span class="ex-links">
+          <a class="ex-full-link" href="../../examples/views/">-&gt; open work</a>
+          <a class="ex-full-link" href="../../examples/views/composition.js">-&gt; composition</a>
+        </span>
+      </figcaption>
+    </figure>
+    <figure class="mf-card">
+      <button type="button" class="mf-sheet" data-slug="say_it_again" aria-label="Open Say It Again">
+        <div class="mf-canvas" data-work="sayItAgain" data-slug="say_it_again"></div>
+      </button>
+      <figcaption>
+        <strong>Say It Again</strong>
+        <small>lattice() · underwood()</small>
+        <span class="ex-links">
+          <a class="ex-full-link" href="../../examples/say_it_again/">-&gt; open work</a>
+          <a class="ex-full-link" href="../../examples/say_it_again/composition.js">-&gt; composition</a>
+        </span>
+      </figcaption>
+    </figure>
+    <figure class="mf-card">
+      <button type="button" class="mf-sheet" data-slug="transcript" aria-label="Open Transcript">
+        <div class="mf-canvas" data-work="transcript" data-slug="transcript"></div>
+      </button>
+      <figcaption>
+        <strong>Transcript</strong>
+        <small>text() · asemic() · path()</small>
+        <span class="ex-links">
+          <a class="ex-full-link" href="../../examples/transcript/">-&gt; open work</a>
+          <a class="ex-full-link" href="../../examples/transcript/composition.js">-&gt; composition</a>
+        </span>
+      </figcaption>
+    </figure>
+    <figure class="mf-card">
+      <button type="button" class="mf-sheet" data-slug="exercise" aria-label="Open Exercise">
+        <div class="mf-canvas" data-work="exercise" data-slug="exercise"></div>
+      </button>
+      <figcaption>
+        <strong>Exercise</strong>
+        <small>path() · bleed · fray</small>
+        <span class="ex-links">
+          <a class="ex-full-link" href="../../examples/exercise/">-&gt; open work</a>
+          <a class="ex-full-link" href="../../examples/exercise/composition.js">-&gt; composition</a>
+        </span>
+      </figcaption>
+    </figure>
+    </section>
+  </main>
+
+  <dialog id="mf-dialog" class="mf-dialog" aria-labelledby="mf-title">
+    <div class="mf-dialog-body">
+      <div class="mf-dialog-canvas" id="mf-big" role="img" aria-label="The open poster"></div>
+      <div class="mf-dialog-text">
+        <div class="section-tag" id="mf-verbs"></div>
+        <h2 id="mf-title"></h2>
+        <p class="section-desc" id="mf-lead"></p>
+        <p class="lib-req" id="mf-req"></p>
+        <pre class="ex-code-block"><code class="language-javascript" id="mf-code"></code></pre>
+        <div class="mf-controls">
+          <button type="button" id="mf-seed">New seed</button>
+          <button type="button" id="mf-svg">Download SVG</button>
+          <button type="button" id="mf-prev" class="secondary" aria-keyshortcuts="ArrowLeft">&larr; Previous</button>
+          <button type="button" id="mf-next" class="secondary" aria-keyshortcuts="ArrowRight">Next &rarr;</button>
+          <button type="button" id="mf-close" class="secondary">Close</button>
+        </div>
+        <div class="demo-note" id="mf-status" role="status" aria-live="polite"></div>
+        <div class="ex-links">
+          <a class="ex-full-link" id="mf-open" href="#">-&gt; open work</a>
+          <a class="ex-full-link" id="mf-composition" href="#">-&gt; complete composition</a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <footer>
+    <p><a href="../openings.html#examples">Openings</a> &nbsp;&middot;&nbsp; <a href="../system.html">System</a></p>
+    <p class="footer-sub">p5.gysin v1.2.0</p>
+  </footer>
+
+  <script type="application/json" id="mf-data">
+[
+  {
+    "slug": "consent",
+    "key": "consent",
+    "title": "Consent",
+    "verbs": "lattice() · rect() · text()",
+    "lead": "The fine print is a wall. The button you are meant to press is red and wide.",
+    "req": "loads p5.gysin.min.js",
+    "code": "const plot = new GysinPlot({ seed: 2018 });\n\nplot.lattice(fine.repeat(2), 48, 56, 624, 660, {   // fine: the cookie notice\n  size: 15,\n  turns: [0, 90]\n});\nplot.rect(48, 884, 624, 76, {   // the button you are meant to press\n  repeat: 3,\n  fill: \"hatch\"\n});\n\nplot.draw();"
+  },
+  {
+    "slug": "42_days",
+    "key": "fortyTwoDays",
+    "title": "42 Days",
+    "verbs": "rect() · circle() · underwood()",
+    "lead": "Six weeks of rainfall, one cell per day. The wetter the day, the denser the hatching.",
+    "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
+    "code": "const plot = new GysinPlot({ seed: 42 });\n\n// rain is hatching: the wetter the day, the denser the lines\nplot.rect(x, y, 72, 72, {\n  fill: \"hatch\",\n  hatchSpacing: Math.max(1.1, 9 - mm * 0.72)\n});\nplot.circle(x + 42, y + 42, 5);   // a dry day is a dot\n\nplot.draw();"
+  },
+  {
+    "slug": "on_hold",
+    "key": "onHold",
+    "title": "On Hold",
+    "verbs": "chant() · rect() · underwood()",
+    "lead": "A recorded message, permuted again and again until it falls apart.",
+    "req": "loads p5.gysin.min.js + p5.gysin.text.min.js + p5.gysin.underwood.min.js",
+    "code": "const plot = new GysinPlot({ seed: 1403 });\n\nplot.chant(\"YOUR CALL MAY BE RECORDED\", 48, 90, {\n  lines: 11,\n  order: \"walk\",\n  size: 24,\n  leading: 52\n});\n\nplot.draw();"
+  },
+  {
+    "slug": "final",
+    "key": "final",
+    "title": "Final",
+    "verbs": "rub() · underwood()",
+    "lead": "Three versions of one file name, each a little further erased.",
+    "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
+    "code": "const plot = new GysinPlot({ seed: 3 });\n\nplot.rub(\"FINAL\", 48, 130, { size: 64, decay: 0.7 });\nplot.rub(\"FINAL FINAL\", 48, 790, { size: 54, decay: 1.5 });\n\nplot.draw();"
+  },
+  {
+    "slug": "objection",
+    "key": "objection",
+    "title": "Objection",
+    "verbs": "underwood() · rect() · text()",
+    "lead": "A letter to a system that does not explain itself. The answers are struck out.",
+    "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
+    "code": "const plot = new GysinPlot({ seed: 1984 });\n\nplot.underwood(letter, 64, 150, { size: 13, wear: 1.3 });\nplot.rect(x, y, w, 20, {   // an answer, struck out\n  fill: \"hatch\",\n  hatchSpacing: 1.6\n});\n\nplot.draw();"
+  },
+  {
+    "slug": "views",
+    "key": "views",
+    "title": "Views",
+    "verbs": "weave() · path() · underwood()",
+    "lead": "Two texts, a climate report and a sales brochure, woven into a third voice.",
+    "req": "loads p5.gysin.min.js + p5.gysin.text.min.js + p5.gysin.underwood.min.js",
+    "code": "const plot = new GysinPlot({ seed: 2100 });\n\nplot.weave(sources, 48, 312, {   // a climate report and a sales brochure\n  lines: 10,\n  unit: \"clause\",\n  fragments: 2,\n  size: 24,\n  leading: 46,\n  maxWidth: 640\n});\n\nplot.draw();"
+  },
+  {
+    "slug": "say_it_again",
+    "key": "sayItAgain",
+    "title": "Say It Again",
+    "verbs": "lattice() · underwood()",
+    "lead": "One phrase, turned twice across the sheet. The pattern matters more than the words.",
+    "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
+    "code": "const plot = new GysinPlot({ seed: 90 });\n\nplot.lattice(\"SAY IT AGAIN \".repeat(3), 48, 48, 624, 700, {\n  size: 26,\n  turns: [0, 90]\n});\nplot.lattice(\"SAY IT AGAIN \".repeat(3), 84, 84, 552, 628, {\n  size: 26,\n  turns: [45, 135],\n  wear: 1.6\n});\n\nplot.draw();"
+  },
+  {
+    "slug": "transcript",
+    "key": "transcript",
+    "title": "Transcript",
+    "verbs": "text() · asemic() · path()",
+    "lead": "A voice message that gets harder to hear. A loop runs straight through the lines.",
+    "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
+    "code": "const plot = new GysinPlot({ seed: 612 });\n\nlines.forEach((line, i) => {   // each line a little harder to hear\n  const k = i / (lines.length - 1);\n  plot.text(line, 170, 295 + i * 56, {\n    size: 15,\n    dropout: k * 0.32,\n    rubout: k * 0.22,\n    glyphJitter: 0.35 + k * 0.9\n  });\n});\n\nplot.draw();"
+  },
+  {
+    "slug": "exercise",
+    "key": "exercise",
+    "title": "Exercise",
+    "verbs": "path() · bleed · fray",
+    "lead": "Looped handwriting on a chalkboard. Erased, resumed, never finished.",
+    "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
+    "code": "const plot = new GysinPlot({ seed: 1951 });\n\nplot.path(loops, {   // loops: one row of looped handwriting\n  bleed: 0.4,\n  fray: 0.3,\n  dropout: 0.1,\n  rubout: 0.25\n});\n\nplot.draw();"
+  }
+]
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.text.min.js"></script>
+  <script src="../../p5.gysin.underwood.min.js"></script>
+  <script src="../../examples/consent/composition.js?v=manifested-1"></script>
+  <script src="../../examples/42_days/composition.js?v=manifested-1"></script>
+  <script src="../../examples/on_hold/composition.js?v=manifested-1"></script>
+  <script src="../../examples/final/composition.js?v=manifested-1"></script>
+  <script src="../../examples/objection/composition.js?v=manifested-1"></script>
+  <script src="../../examples/views/composition.js?v=manifested-1"></script>
+  <script src="../../examples/say_it_again/composition.js?v=manifested-1"></script>
+  <script src="../../examples/transcript/composition.js?v=manifested-1"></script>
+  <script src="../../examples/exercise/composition.js?v=manifested-1"></script>
+  <script src="manifested.js?v=manifested-1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

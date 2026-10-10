@@ -1108,8 +1108,8 @@ const enterPage = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const showcasePage = fs.readFileSync(path.join(root, "docs", "openings.html"), "utf8");
 const readmePage = fs.readFileSync(path.join(root, "README.md"), "utf8");
 const collagePage = fs.readFileSync(path.join(root, "docs", "collage", "index.html"), "utf8");
-const postersPage = fs.readFileSync(path.join(root, "docs", "posters", "index.html"), "utf8");
-const postersSheet = fs.readFileSync(path.join(root, "docs", "posters", "sheet.js"), "utf8");
+const manifestedPage = fs.readFileSync(path.join(root, "docs", "manifested", "index.html"), "utf8");
+const manifestedScript = fs.readFileSync(path.join(root, "docs", "manifested", "manifested.js"), "utf8");
 const systemPage = fs.readFileSync(path.join(root, "docs", "system.html"), "utf8");
 const visionPage = fs.readFileSync(path.join(root, "docs", "vision.html"), "utf8");
 const plotterContract = fs.readFileSync(path.join(root, "docs", "plotter-export-contract.md"), "utf8");
@@ -1421,8 +1421,8 @@ const calibrationPreview = showcasePage.slice(calibrationPreviewStart, calibrati
 assert.match(calibrationPreview, /repeat: index \+ 1/);
 assert.doesNotMatch(calibrationPreview, /\b(?:alpha|pressure|strokeWeight)\s*:/);
 
-// The nine posters are finished sheets with their own page; every other
-// example is a plate on Openings.
+// The nine posters are finished sheets with their own wall, Manifested; every
+// other example is a plate on Openings.
 const posterExamples = [
   "42_days", "consent", "exercise", "final", "objection",
   "on_hold", "say_it_again", "transcript", "views"
@@ -1431,7 +1431,7 @@ for (const name of manifest.examples) {
   assert.ok(fs.existsSync(path.join(examplesDir, name, "index.html")), `${name} index.html`);
   assert.ok(fs.existsSync(path.join(examplesDir, name, "sketch.js")), `${name} sketch.js`);
   const isPoster = posterExamples.includes(name);
-  const listing = isPoster ? postersPage : showcasePage;
+  const listing = isPoster ? manifestedPage : showcasePage;
   const prefix = isPoster ? "\\.\\./\\.\\./examples" : "\\.\\./examples";
   assert.match(listing, new RegExp(`href="${prefix}/${name}/"`));
   const sourceFile = sharedCompositions.has(name) || isPoster ? "composition.js" : "sketch.js";
@@ -1475,12 +1475,12 @@ for (const [name, workName] of sharedCompositions) {
   }
 }
 
-// ── Posters: nine finished sheets, one shared composition each ─────────
+// ── Manifested: nine finished sheets, one shared composition each ──────
 const navPages = [
   "index.html",
   ...fs.readdirSync(path.join(root, "docs")).filter((f) => f.endsWith(".html")).map((f) => path.join("docs", f)),
   path.join("docs", "collage", "index.html"),
-  path.join("docs", "posters", "index.html"),
+  path.join("docs", "manifested", "index.html"),
   ...manifest.examples.map((name) => path.join("examples", name, "index.html"))
 ];
 for (const page of navPages) {
@@ -1490,28 +1490,28 @@ for (const page of navPages) {
   const labels = Array.from(navigation.matchAll(/<li><a [^>]*>([^<]+)<\/a><\/li>/g), (m) => m[1]);
   assert.deepEqual(
     labels,
-    ["Enter", "Openings", "Collage", "Posters", "System", "Vision", "GitHub"],
-    `${page} carries Posters between Collage and System`
+    ["Enter", "Openings", "Collage", "Manifested", "System", "Vision", "GitHub"],
+    `${page} carries Manifested between Collage and System`
   );
 }
-assert.match(postersPage, /<body class="posters-page">/);
-assert.match(postersPage, /<a href="index\.html" class="active">Posters<\/a>/);
-assert.match(postersPage, /<title>Posters \| p5\.gysin<\/title>/);
-assert.match(postersPage, /<link rel="stylesheet" href="\.\.\/style\.css\?v=posters-1">/);
-assert.match(postersPage, /<h1>Pos<span class="accent">ters<\/span><\/h1>/);
-assert.equal((postersPage.match(/class="cs-tile"/g) || []).length, 9);
-assert.equal((postersPage.match(/<section class="section(?: section-dark)? plate"/g) || []).length, 9);
-assert.equal((postersPage.match(/class="ex-code-block"/g) || []).length, 9);
-assert.ok(
-  postersPage.indexOf("<strong>Word</strong>") < postersPage.indexOf("<strong>Trace</strong>") &&
-    postersPage.indexOf("<strong>Trace</strong>") < postersPage.indexOf("<strong>Sentence</strong>") &&
-    postersPage.indexOf("<strong>Sentence</strong>") < postersPage.indexOf("<strong>Typewriter</strong>"),
-  "the posters follow the same work moments as Openings"
-);
-assert.match(postersPage, /<script src="sheet\.js\?v=posters-1"><\/script>/);
-assert.match(postersSheet, /document\.body\.classList\.add\("folder"\)/);
-assert.match(siteStyle, /\.posters-page \.page-header \.section-tag/);
+assert.match(manifestedPage, /<body class="manifested-page">/);
+assert.match(manifestedPage, /<a href="index\.html" class="active">Manifested<\/a>/);
+assert.match(manifestedPage, /<title>Manifested \| p5\.gysin<\/title>/);
+assert.match(manifestedPage, /<link rel="stylesheet" href="\.\.\/style\.css\?v=manifested-1">/);
+assert.match(manifestedPage, /<h1>Mani<span class="accent">fested<\/span><\/h1>/);
+assert.equal((manifestedPage.match(/class="mf-card"/g) || []).length, 9);
+assert.equal((manifestedPage.match(/class="mf-canvas"/g) || []).length, 9);
+assert.doesNotMatch(manifestedPage, /cs-tile|work-band|class="[^"]*\bplate\b/, "Manifested is a wall, not a copy of Openings");
+assert.match(manifestedPage, /<dialog id="mf-dialog"/);
+assert.match(manifestedPage, /id="mf-surprise">Surprise me<\/button>/);
+assert.match(manifestedPage, /<script src="manifested\.js\?v=manifested-1"><\/script>/);
+assert.match(manifestedScript, /dialog\.showModal\(\)/);
+assert.match(manifestedScript, /downloadSVG\(/);
+assert.match(siteStyle, /\.manifested-page \.page-header \.section-tag/);
+assert.match(siteStyle, /\.mf-wall\s*\{[^}]*display:\s*grid;/s);
 assert.match(siteStyle, /\.sheet-layout\s*\{[^}]*max-width:\s*1320px;/s);
+const manifestedData = JSON.parse(manifestedPage.match(/<script type="application\/json" id="mf-data">([\s\S]*?)<\/script>/)[1]);
+assert.deepEqual(manifestedData.map((item) => item.slug).sort(), posterExamples.slice().sort());
 
 const posterKeys = new Map([
   ["42_days", "fortyTwoDays"], ["consent", "consent"], ["exercise", "exercise"],
@@ -1554,10 +1554,10 @@ for (const [name, key] of posterKeys) {
   assert.match(sketch, /page: "A3", penMap: WORK\.penMap/);
   assert.match(page, /<script src="composition\.js"><\/script>\s*<script src="sketch\.js"><\/script>/);
   assert.match(page, /<a href="composition\.js">Open the complete composition<\/a>/);
-  assert.match(page, /<a href="\.\.\/\.\.\/docs\/posters\/">All posters<\/a>/);
-  assert.match(page, /<link rel="stylesheet" href="\.\.\/\.\.\/docs\/style\.css\?v=posters-1">/);
-  assert.match(postersPage, new RegExp(`<script src="\\.\\./\\.\\./examples/${name}/composition\\.js\\?v=posters-1"></script>`));
-  assert.match(postersPage, new RegExp(`data-work="${key}"`));
+  assert.match(page, /<a href="\.\.\/\.\.\/docs\/manifested\/">Manifested<\/a>/);
+  assert.match(page, /<link rel="stylesheet" href="\.\.\/\.\.\/docs\/style\.css\?v=manifested-1">/);
+  assert.match(manifestedPage, new RegExp(`<script src="\\.\\./\\.\\./examples/${name}/composition\\.js\\?v=manifested-1"></script>`));
+  assert.match(manifestedPage, new RegExp(`data-work="${key}"`));
 
   const first = work.build();
   const again = work.build();
