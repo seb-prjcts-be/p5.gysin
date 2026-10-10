@@ -10,7 +10,7 @@
   <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/docs/manifested/">
   <meta property="og:type" content="website">
   <link rel="canonical" href="https://seb-prjcts-be.github.io/p5.gysin/docs/manifested/">
-  <link rel="stylesheet" href="../style.css?v=manifested-1">
+  <link rel="stylesheet" href="../style.css?v=manifested-2">
 </head>
 <body class="manifested-page">
   <nav id="navbar">
@@ -175,6 +175,20 @@
           <button type="button" id="mf-close" class="secondary">Close</button>
         </div>
         <div class="demo-note" id="mf-status" role="status" aria-live="polite"></div>
+        <details class="mf-plot" id="mf-plot">
+          <summary>Plot it</summary>
+          <p><strong>Save the plotter SVG.</strong> One Inkscape layer per pen, numbered like the pens, centre lines on an A3 sheet. In Inkscape show layer 1, load pen 1 and plot; hide it and repeat for 2.</p>
+          <p><strong>Test it first.</strong> vanilla.penplotter plans the route here in your browser: pens, travel and time. Nothing is sent to a machine.</p>
+          <p>To plot for real, open the drawing in <a href="https://seb-prjcts-be.github.io/vanilla.penplotter/docs/setup.html" target="_blank" rel="noopener">vanilla.penplotter</a>: park the carriage in the home corner, use Chrome or Edge, and click to start.</p>
+          <div class="mf-controls">
+            <button type="button" id="mf-plotter-svg" class="secondary">Save plotter SVG (A3)</button>
+            <button type="button" id="mf-dryrun" class="secondary">Test with vanilla.penplotter</button>
+          </div>
+          <div class="mf-dry" id="mf-dry" hidden>
+            <canvas id="mf-route" width="210" height="297" aria-label="The planned pen route"></canvas>
+            <div class="demo-note" id="mf-dry-status" role="status" aria-live="polite"></div>
+          </div>
+        </details>
         <div class="ex-links">
           <a class="ex-full-link" id="mf-open" href="#">-&gt; open work</a>
           <a class="ex-full-link" id="mf-composition" href="#">-&gt; complete composition</a>
@@ -286,7 +300,7 @@
   <script src="../../examples/say_it_again/composition.js?v=manifested-1"></script>
   <script src="../../examples/transcript/composition.js?v=manifested-1"></script>
   <script src="../../examples/exercise/composition.js?v=manifested-1"></script>
-  <script src="manifested.js?v=manifested-1"></script>
+  <script src="manifested.js?v=manifested-2"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
 </body>
 </html>

@@ -1134,6 +1134,49 @@ body.chapters .ce-module.chapter-active {
   gap: 10px;
 }
 
+/* "Plot it": closed by default, in the quiet voice of a footnote. */
+.mf-plot {
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+  font-size: 12px;
+}
+
+.mf-plot summary {
+  color: var(--muted);
+  cursor: pointer;
+  letter-spacing: 0.04em;
+}
+
+.mf-plot p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.mf-plot .mf-controls {
+  margin-top: 12px;
+}
+
+.mf-plot .mf-controls button {
+  min-height: 32px;
+  font-size: 11px;
+}
+
+.mf-dry {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.mf-dry canvas {
+  width: 120px;
+  height: auto;
+  flex: none;
+  border: 1px solid var(--rule);
+  background: #fff;
+}
+
 @media (max-width: 800px) {
   .mf-dialog-body {
     grid-template-columns: 1fr;

@@ -149,9 +149,71 @@
     const item = data[open];
     bigPoster.plot.downloadSVG("p5-gysin-" + item.slug.replace(/_/g, "-") + "-" + bigPoster.seed + ".svg");
   });
+  document.getElementById("mf-plotter-svg").addEventListener("click", savePlotterSVG);
+  document.getElementById("mf-dryrun").addEventListener("click", dryRun);
   document.getElementById("mf-prev").addEventListener("click", function() { show(open - 1); });
   document.getElementById("mf-next").addEventListener("click", function() { show(open + 1); });
   document.getElementById("mf-close").addEventListener("click", closeSheet);
+
+  // The plotter file: one Inkscape layer per pen on A3. Route optimization
+  // stops at 2000 traces per pen, so a dense sheet is saved in drawing order.
+  function savePlotterSVG() {
+    const item = data[open];
+    const options = { page: "A3", penMap: workFor(item).penMap };
+    const name = "p5-gysin-" + item.slug.replace(/_/g, "-") + "-" + bigPoster.seed + "-a3.svg";
+    try {
+      bigPoster.plot.downloadPlotterSVG(name, options);
+      status.textContent = "seed " + bigPoster.seed + " · plotter SVG saved";
+    } catch (error) {
+      bigPoster.plot.downloadPlotterSVG(name, Object.assign({}, options, { optimize: false }));
+      status.textContent = "seed " + bigPoster.seed + " · too many traces to optimize the route: saved in drawing order";
+    }
+  }
+
+  // The dry run plans the poster with vanilla.penplotter and draws the route.
+  // It loads the pinned release only when asked, and never touches a machine.
+  const PENPLOTTER = "https://cdn.jsdelivr.net/gh/seb-prjcts-be/vanilla.penplotter@v0.5.0/vanilla.penplotter.js";
+  async function dryRun() {
+    const note = document.getElementById("mf-dry-status");
+    const panel = document.getElementById("mf-dry");
+    const button = document.getElementById("mf-dryrun");
+    const item = data[open];
+    const work = workFor(item);
+    panel.hidden = false;
+    button.disabled = true;
+    try {
+      const traces = bigPoster.plot.exportTraces({ page: "A3", penMap: work.penMap });
+      note.textContent = traces.length > 5000
+        ? "Planning " + traces.length.toLocaleString("en") + " traces. This dense sheet can take a while…"
+        : "Planning " + traces.length.toLocaleString("en") + " traces…";
+      await new Promise(function(resolve) { setTimeout(resolve, 60); });
+      const { PlotterEngine } = await import(PENPLOTTER);
+      const plot = new PlotterEngine({ units: "mm", page: { width: 297, height: 420, margin: 10 } });
+      const pens = Array.from(new Set(traces.map(function(trace) { return trace.pen; }))).sort(function(a, b) { return a - b; });
+      pens.forEach(function(pen) {
+        const first = traces.find(function(trace) { return trace.pen === pen; });
+        plot.pen({ id: "pen-" + pen, name: "Pen " + pen, color: first.stroke });
+        plot.layer("pen-" + pen, { toolId: "pen-" + pen });
+        traces.forEach(function(trace) {
+          if (trace.pen === pen) plot.polyline(trace.points);
+        });
+      });
+      plot.optimize({ passes: ["clean"] });   // keep every passage and every gap
+      const plan = plot.plan({ strategy: "nearest" });
+      plot.drawRoute(document.getElementById("mf-route").getContext("2d"), {
+        showTravel: false, padding: 8, paper: "#ffffff"
+      });
+      const minutes = Math.round(plan.stats.estimatedSeconds / 60);
+      note.textContent = plan.stats.paths.toLocaleString("en") + " paths · " + pens.length + " pens · " +
+        (plan.stats.drawDistance / 1000).toFixed(1) + " m drawn · about " +
+        (minutes >= 90 ? (minutes / 60).toFixed(1) + " h" : minutes + " min") + " · " +
+        plan.stats.penLifts.toLocaleString("en") + " pen lifts";
+    } catch (error) {
+      note.textContent = "The test could not run: " + error.message;
+    } finally {
+      button.disabled = false;
+    }
+  }
 
   // A click on the backdrop closes; Escape is native to <dialog>.
   dialog.addEventListener("click", function(event) {
