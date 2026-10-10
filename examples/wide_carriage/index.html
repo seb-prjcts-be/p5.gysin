@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wide Carriage | p5.gysin examples</title>
+  <link rel="stylesheet" href="../../docs/style.css">
+</head>
+<body>
+  <script>if (window.self !== window.top) document.documentElement.classList.add("embedded");</script>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../../docs/openings.html">Openings</a></li>
+      <li><a href="../../docs/collage/">Collage</a></li>
+      <li><a href="../../docs/manifested/">Manifested</a></li>
+      <li><a href="../../docs/system.html">System</a></li>
+      <li><a href="../../docs/vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">underwood() · pitch · lineHeight</div>
+      <h1>Wide Carriage</h1>
+      <p>The same machine with a wider pitch. The letters keep their fixed cells; only the cells grow.</p>
+    </div>
+    <div class="demo-layout">
+      <div class="demo-code">
+        <div class="code-label">The shared composition</div>
+        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 1961 });
+const size = width * 0.022;
+
+plot.underwood("ONE LETTER\nAT A TIME\nTHE PAGE FILLS", width * 0.09, height * 0.26, {
+  size,
+  pitch: size * 2.4,        // default is size * 1.2
+  lineHeight: size * 5.6
+});
+
+plot.draw();</code></pre>
+        <div class="demo-note"><a href="composition.js">Open the complete composition</a> · the same file draws the Openings plate and this work.</div>
+        <div class="control-grid">
+          <label class="control-row"><span>pitch <output id="pitch-input-value">2.4</output></span>
+            <input type="range" id="pitch-input" min="1.2" max="2.8" step="0.1" value="2.4">
+          </label>
+        </div>
+        <div class="demo-actions" aria-label="Wide Carriage actions">
+          <button type="button" id="svg-button">Download SVG</button>
+        </div>
+        <div class="demo-note">Move <strong>pitch</strong> to change the width of every cell. Letters never slide into each other: the grid stays fixed.</div>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas" id="sketch" role="img" aria-label="Three short lines of black plotter text, typed with wide letter spacing and tall line height."></div>
+        <div class="demo-note" id="carriage-status" role="status" aria-live="polite">Drawing…</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p><a href="../../docs/openings.html#lib-underwood">Typewriter works</a> &nbsp;&middot;&nbsp; <a href="../../docs/system.html">System</a></p>
+    <p class="footer-sub">Optional typewriter addon &nbsp;&middot;&nbsp; p5.gysin v1.2.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.underwood.min.js"></script>
+  <script src="composition.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

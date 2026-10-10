@@ -57,7 +57,7 @@
       </button>
       <figcaption>
         <strong>42 Days</strong>
-        <small>rect() · circle() · underwood()</small>
+        <small>line() · circle() · underwood()</small>
         <span class="ex-links">
           <a class="ex-full-link" href="../../examples/42_days/">-&gt; open work</a>
           <a class="ex-full-link" href="../../examples/42_days/composition.js">-&gt; composition</a>
@@ -70,7 +70,7 @@
       </button>
       <figcaption>
         <strong>On Hold</strong>
-        <small>chant() · rect() · underwood()</small>
+        <small>chant() · line() · underwood()</small>
         <span class="ex-links">
           <a class="ex-full-link" href="../../examples/on_hold/">-&gt; open work</a>
           <a class="ex-full-link" href="../../examples/on_hold/composition.js">-&gt; composition</a>
@@ -96,7 +96,7 @@
       </button>
       <figcaption>
         <strong>Objection</strong>
-        <small>underwood() · rect() · text()</small>
+        <small>underwood() · text()</small>
         <span class="ex-links">
           <a class="ex-full-link" href="../../examples/objection/">-&gt; open work</a>
           <a class="ex-full-link" href="../../examples/objection/composition.js">-&gt; composition</a>
@@ -197,22 +197,22 @@
     "verbs": "lattice() · rect() · text()",
     "lead": "The fine print is a wall. The button you are meant to press is red and wide.",
     "req": "loads p5.gysin.min.js",
-    "code": "const plot = new GysinPlot({ seed: 2018 });\n\nplot.lattice(fine.repeat(2), 48, 56, 624, 660, {   // fine: the cookie notice\n  size: 15,\n  turns: [0, 90]\n});\nplot.rect(48, 884, 624, 76, {   // the button you are meant to press\n  repeat: 3,\n  fill: \"hatch\"\n});\n\nplot.draw();"
+    "code": "const plot = new GysinPlot({ seed: 2018 });\n\nplot.lattice(fine.repeat(2), 48, 56, 624, 660, {   // fine: the cookie notice\n  size: 15,\n  turns: [0, 90]\n});\nplot.rect(48, 884, 624, 76, { repeat: 3 });   // the button you are meant to press\nplot.lattice(\"ACCEPT ALL \".repeat(8), 56, 890, 608, 64, { size: 9, turns: [0] });\n\nplot.draw();"
   },
   {
     "slug": "42_days",
     "key": "fortyTwoDays",
     "title": "42 Days",
-    "verbs": "rect() · circle() · underwood()",
+    "verbs": "line() · circle() · underwood()",
     "lead": "Six weeks of rainfall, one cell per day. The wetter the day, the denser the hatching.",
     "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
-    "code": "const plot = new GysinPlot({ seed: 42 });\n\n// rain is hatching: the wetter the day, the denser the lines\nplot.rect(x, y, 72, 72, {\n  fill: \"hatch\",\n  hatchSpacing: Math.max(1.1, 9 - mm * 0.72)\n});\nplot.circle(x + 42, y + 42, 5);   // a dry day is a dot\n\nplot.draw();"
+    "code": "const plot = new GysinPlot({ seed: 42 });\n\n// rain is ruled lines: the wetter the day, the closer they stand\nfor (let k = gap; k \u003c 72; k += gap) {\n  plot.line(x + k, y, x + k, y + 72);   // gap = Math.max(1.1, 9 - mm * 0.72)\n}\nplot.circle(x + 42, y + 42, 5);   // a dry day is a dot\n\nplot.draw();"
   },
   {
     "slug": "on_hold",
     "key": "onHold",
     "title": "On Hold",
-    "verbs": "chant() · rect() · underwood()",
+    "verbs": "chant() · line() · underwood()",
     "lead": "A recorded message, permuted again and again until it falls apart.",
     "req": "loads p5.gysin.min.js + p5.gysin.text.min.js + p5.gysin.underwood.min.js",
     "code": "const plot = new GysinPlot({ seed: 1403 });\n\nplot.chant(\"YOUR CALL MAY BE RECORDED\", 48, 90, {\n  lines: 11,\n  order: \"walk\",\n  size: 24,\n  leading: 52\n});\n\nplot.draw();"
@@ -230,10 +230,10 @@
     "slug": "objection",
     "key": "objection",
     "title": "Objection",
-    "verbs": "underwood() · rect() · text()",
+    "verbs": "underwood() · text()",
     "lead": "A letter to a system that does not explain itself. The answers are struck out.",
     "req": "loads p5.gysin.min.js + p5.gysin.underwood.min.js",
-    "code": "const plot = new GysinPlot({ seed: 1984 });\n\nplot.underwood(letter, 64, 150, { size: 13, wear: 1.3 });\nplot.rect(x, y, w, 20, {   // an answer, struck out\n  fill: \"hatch\",\n  hatchSpacing: 1.6\n});\n\nplot.draw();"
+    "code": "const plot = new GysinPlot({ seed: 1984 });\n\nplot.underwood(letter, 64, 150, { size: 13, wear: 1.3 });\nplot.underwood(\"XXXXXXXX\", x, y, { bold: true });   // an answer, struck out\n\nplot.draw();"
   },
   {
     "slug": "views",

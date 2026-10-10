@@ -23,7 +23,7 @@
 
   <main class="demo-page">
     <div class="demo-header">
-      <div class="demo-number">rect() · circle() · underwood()</div>
+      <div class="demo-number">line() · circle() · underwood()</div>
       <h1>42 Days</h1>
       <p>Six weeks of rainfall, one cell per day. The wetter the day, the denser the hatching.</p>
     </div>
@@ -32,11 +32,10 @@
         <div class="code-label">The shared composition</div>
         <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 42 });
 
-// rain is hatching: the wetter the day, the denser the lines
-plot.rect(x, y, 72, 72, {
-  fill: "hatch",
-  hatchSpacing: Math.max(1.1, 9 - mm * 0.72)
-});
+// rain is ruled lines: the wetter the day, the closer they stand
+for (let k = gap; k &lt; 72; k += gap) {
+  plot.line(x + k, y, x + k, y + 72);   // gap = Math.max(1.1, 9 - mm * 0.72)
+}
 plot.circle(x + 42, y + 42, 5);   // a dry day is a dot
 
 plot.draw();</code></pre>

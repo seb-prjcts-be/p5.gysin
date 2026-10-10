@@ -40,7 +40,7 @@
 
     DAYS.forEach((d, i) => plot.text(d, x0 + i * cell + cell / 2 - 10, y0 - 14, { size: 12, stroke: BROWN, layer: "title" }));
 
-    // ── 2 · one cell per day: a dot is dry, hatching is rain ────────
+    // ── 2 · one cell per day: a dot is dry, ruled lines are rain ────
     let total = 0;
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
@@ -52,11 +52,12 @@
         if (mm < 0.1) {
           plot.circle(x + cell / 2, y + cell / 2, 5, { stroke: BROWN, strokeWeight: 1.4, layer: "dry" });
         } else {
-          plot.rect(x + g, y + g, cell - 2 * g, cell - 2 * g, {
-            stroke: BLUE, strokeWeight: 1, fill: "hatch",
-            hatchSpacing: Math.max(1.1, 9 - mm * 0.72), hatchAngle: 90 + (rnd() - 0.5) * 12,
-            wobble: 0.35, layer: "rain"
-          });
+          const side = cell - 2 * g, gap = Math.max(1.1, 9 - mm * 0.72);
+          const lean = side * Math.tan((rnd() - 0.5) * 12 * Math.PI / 180);
+          plot.rect(x + g, y + g, side, side, { stroke: BLUE, strokeWeight: 1, wobble: 0.35, layer: "rain" });
+          for (let k = Math.max(0, -lean) + gap; k < side - Math.max(0, lean); k += gap) {
+            plot.line(x + g + k, y + g, x + g + k + lean, y + g + side, { stroke: BLUE, strokeWeight: 1, wobble: 0.35, layer: "rain" });
+          }
         }
       }
     }

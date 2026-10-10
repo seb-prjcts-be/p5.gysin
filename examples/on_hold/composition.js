@@ -35,9 +35,12 @@
     const cell = 27, x0 = 386, y0 = 700;
     DIGITS.forEach((d, k) => d.forEach((row, r) => [...row].forEach((ch, c) => {
       if (ch !== "#") return;
-      plot.rect(x0 + k * (5 * cell + cell) + c * cell, y0 + r * cell, cell, cell, {
-        stroke: AMBER, strokeWeight: 1.2, wobble: 0.5, fill: "hatch", hatchSpacing: 4, hatchAngle: 45, layer: "number"
-      });
+      const left = x0 + k * (5 * cell + cell) + c * cell, top = y0 + r * cell;
+      for (let i = 0; i < 7; i++) {
+        plot.line(left, top + (i + 0.5) * cell / 7, left + cell, top + (i + 0.5) * cell / 7, {
+          stroke: AMBER, strokeWeight: 1.2, wobble: 0.5, layer: "number"
+        });
+      }
     })));
     plot.underwood("your position in the queue", 48, 955, { size: 13, stroke: AMBER, layer: "number" });
     plot.underwood("estimated wait: unknown", 48, 985, { size: 13, stroke: AMBER, layer: "number" });

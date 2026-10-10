@@ -32,7 +32,8 @@
     plot.text("YOUR PRIVACY", 48, 846, { size: 38, stroke: INK, strokeWeight: 2, wobble: 0.4, layer: "heading" });
 
     // ── 3 · the button you are meant to press ───────────────────────
-    plot.rect(48, 884, 624, 76, { stroke: RED, strokeWeight: 2.2, repeat: 3, wobble: 0.9, fill: "hatch", hatchSpacing: 5, hatchAngle: 62, layer: "button" });
+    plot.rect(48, 884, 624, 76, { stroke: RED, strokeWeight: 2.2, repeat: 3, wobble: 0.9, layer: "button" });
+    plot.lattice("ACCEPT ALL ".repeat(8), 56, 890, 608, 64, { size: 9, turns: [0], stroke: RED, strokeWeight: 1, layer: "button" });
     plot.text("ACCEPT ALL", 232, 931, { size: 30, stroke: INK, strokeWeight: 2.4, layer: "heading" });
 
     // ── 4 · the way out, barely there ───────────────────────────────

@@ -198,6 +198,9 @@ bedekken de hoofdnavigatie niet met een tweede menubalk.
 - Een dicht bezet blad kan boven de 2000 sporen per pen uitkomen. Dan weigert
   `exportPlotterSVG` de routeoptimalisatie; de sketch valt terug op
   `optimize: false` (tekenvolgorde) en meldt dat in de statusregel.
+- Ook op een poster geldt Regel 8: knoppen, doorhalingen, regencellen en cijfers
+  zijn lijnenblokken, letterveld of getypte tekens (`X` met `bold`), nooit `fill`.
+  `tests/snapshot.js` bewaakt dat.
 - `rub()` geeft `layer` niet door. Op zo'n blad komen de pennen uit `stroke`
   en `penMap`, niet uit laagnamen.
 

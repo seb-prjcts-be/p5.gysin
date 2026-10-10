@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tired Ribbon | p5.gysin examples</title>
+  <link rel="stylesheet" href="../../docs/style.css">
+</head>
+<body>
+  <script>if (window.self !== window.top) document.documentElement.classList.add("embedded");</script>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../../docs/openings.html">Openings</a></li>
+      <li><a href="../../docs/collage/">Collage</a></li>
+      <li><a href="../../docs/manifested/">Manifested</a></li>
+      <li><a href="../../docs/system.html">System</a></li>
+      <li><a href="../../docs/vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">underwood() · wear</div>
+      <h1>Tired Ribbon</h1>
+      <p>A short note typed on a worn ribbon. One number, wear, loosens every key at once.</p>
+    </div>
+    <div class="demo-layout">
+      <div class="demo-code">
+        <div class="code-label">The shared composition</div>
+        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 1912 });
+
+plot.underwood(note, width * 0.08, height * 0.2, {
+  size: width * 0.022,
+  wear: 2.2   // 0 = mechanically clean
+});
+
+plot.draw();</code></pre>
+        <div class="demo-note"><a href="composition.js">Open the complete composition</a> · the same file draws the Openings plate and this work.</div>
+        <div class="control-grid">
+          <label class="control-row"><span>wear <output id="wear-input-value">2.2</output></span>
+            <input type="range" id="wear-input" min="0" max="3" step="0.1" value="2.2">
+          </label>
+        </div>
+        <div class="demo-actions" aria-label="Tired Ribbon actions">
+          <button type="button" id="strike-button">New strike</button>
+          <button type="button" id="svg-button">Download SVG</button>
+        </div>
+        <div class="demo-note">Move <strong>wear</strong> to 0 for a mechanically clean page; higher values loosen baseline, ink and strike together.</div>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas" id="sketch" role="img" aria-label="Six typed lines of black plotter text. The letters wander from their baseline and some are struck twice."></div>
+        <div class="demo-note" id="ribbon-status" role="status" aria-live="polite">Drawing…</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p><a href="../../docs/openings.html#lib-underwood">Typewriter works</a> &nbsp;&middot;&nbsp; <a href="../../docs/system.html">System</a></p>
+    <p class="footer-sub">Optional typewriter addon &nbsp;&middot;&nbsp; p5.gysin v1.2.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.underwood.min.js"></script>
+  <script src="composition.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

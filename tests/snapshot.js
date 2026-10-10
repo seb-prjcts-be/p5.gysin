@@ -1123,12 +1123,20 @@ const examplesDir = path.join(root, "examples");
 const sharedCompositions = new Map([
   ["gysin_demo", "slicedText"],
   ["permutation_poem", "permutationPoem"],
-  ["weave", "weave"]
+  ["weave", "weave"],
+  ["chorus", "chorus"],
+  ["ring", "ring"],
+  ["tired_ribbon", "tiredRibbon"],
+  ["wide_carriage", "wideCarriage"]
 ]);
 const sharedCompositionVerbs = new Map([
   ["gysin_demo", "textCutup"],
   ["permutation_poem", "chant"],
-  ["weave", "weave"]
+  ["weave", "weave"],
+  ["chorus", "weave"],
+  ["ring", "chant"],
+  ["tired_ribbon", "underwood"],
+  ["wide_carriage", "underwood"]
 ]);
 const exampleDirs = fs.readdirSync(examplesDir, { withFileTypes: true })
   .filter(function(entry) {
@@ -1518,11 +1526,11 @@ const posterKeys = new Map([
   ["final", "final"], ["objection", "objection"], ["on_hold", "onHold"],
   ["say_it_again", "sayItAgain"], ["transcript", "transcript"], ["views", "views"]
 ]);
-// Recorded when the posters were first drawn: a change here means the
-// drawing changed.
+// Recorded when the blocks became ruled lines and typed characters (rule 8):
+// a change here means the drawing changed.
 const posterShapeCounts = new Map([
-  ["42_days", 223], ["consent", 70], ["exercise", 71], ["final", 136], ["objection", 947],
-  ["on_hold", 124], ["say_it_again", 267], ["transcript", 175], ["views", 82]
+  ["42_days", 348], ["consent", 75], ["exercise", 71], ["final", 136], ["objection", 1253],
+  ["on_hold", 268], ["say_it_again", 267], ["transcript", 175], ["views", 82]
 ]);
 const posterContext = { console };
 posterContext.globalThis = posterContext;
@@ -1547,6 +1555,7 @@ for (const [name, key] of posterKeys) {
   assert.ok(work, `${name} registers GysinWorks.${key}`);
   assert.equal(work.width, 720, `${name} is 720 wide`);
   assert.equal(work.height, 1018, `${name} is 1018 tall`);
+  assert.doesNotMatch(composition, /\bfill\s*:/, `${name} has no tone block: a block is lines, letters or marks (rule 8)`);
   assert.doesNotMatch(composition, /\bdocument\b|download[A-Z]|createCanvas|function\s+(?:setup|draw)\b/, `${name} composition holds only the work`);
   assert.doesNotMatch(sketch, /plot\.(?:text|rect|circle|line|path|polygon|lattice|chant|weave|rub|asemic|underwood)\(/, `${name} sketch draws nothing itself`);
   assert.match(sketch, new RegExp(`GysinWorks\\.${key}\\b`));

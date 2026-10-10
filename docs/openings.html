@@ -374,6 +374,8 @@ plot.downloadPlotterSVG("poster.svg", {
         <a class="cs-tile" href="#study-permute" data-page="../examples/permutation_poem/" data-slug="permutation_poem"><strong>Permutation Poem</strong><small>sentence &middot; chant()</small></a>
         <a class="cs-tile" href="#study-weave" data-page="../examples/weave/" data-slug="weave"><strong>Weave</strong><small>sentences &middot; weave()</small></a>
         <a class="cs-tile" href="#plate-rotations" data-page="../examples/rotations/" data-slug="rotations"><strong>Rotations</strong><small>sentence field &middot; permute()</small></a>
+        <a class="cs-tile" href="#plate-chorus" data-page="../examples/chorus/" data-slug="chorus"><strong>Chorus</strong><small>four sources &middot; weave()</small></a>
+        <a class="cs-tile" href="#plate-ring" data-page="../examples/ring/" data-slug="ring"><strong>Ring</strong><small>order &middot; chant()</small></a>
       </div>
     </div>
   </section>
@@ -452,6 +454,54 @@ GysinText.permute("COME TO FREE THE WORDS", { order: "rotate" })
     </div>
   </section>
 
+  <section class="section section-dark plate" id="plate-chorus">
+    <div class="section-header">
+      <div class="section-tag">weave() &middot; four sources</div>
+      <h2>Four <span class="accent">voices</span></h2>
+      <p class="section-desc">Four texts share every line. The JSON keeps the source address of each clause.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-chorus" class="ex-canvas" data-ratio="0.7368421"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1960 });
+
+plot.weave(sources, width * 0.055, height * 0.15, {   // four sources
+  lines: 6,
+  unit: "clause",
+  fragments: 3,
+  maxWidth: width * 0.89
+});
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/chorus/">-&gt; open work</a>
+        <a class="ex-full-link" href="../examples/chorus/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section plate" id="plate-ring">
+    <div class="section-header">
+      <div class="section-tag">chant() &middot; order: rotate</div>
+      <h2>A <span class="accent">ring</span> of words</h2>
+      <p class="section-desc">Three words, three lines. Each line begins one word later, so the phrase never ends.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-ring" class="ex-canvas" data-ratio="0.7368421"></div>
+      <pre class="ex-code-block"><code class="language-javascript">plot.chant("CUT ARRANGE GLUE", width * 0.07, height * 0.24, {
+  order: "rotate",
+  lines: 3,
+  size: width * 0.06,
+  leading: height * 0.27
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/ring/">-&gt; open work</a>
+        <a class="ex-full-link" href="../examples/ring/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
   <section class="section group-intro" id="lib-underwood">
     <div class="section-header">
       <div class="section-tag">Library 03 &middot; addon &middot; the machine</div>
@@ -463,6 +513,8 @@ GysinText.permute("COME TO FREE THE WORDS", { order: "rotate" })
       <div class="contact-sheet">
         <a class="cs-tile" href="#plate-typewriter" data-page="../examples/typewriter/" data-slug="typewriter"><strong>Typewriter</strong><small>sentence &middot; underwood()</small></a>
         <a class="cs-tile" href="#plate-the-letter" data-page="../examples/the_letter/" data-slug="the_letter"><strong>The Letter</strong><small>page &middot; underwood()</small></a>
+        <a class="cs-tile" href="#plate-tired-ribbon" data-page="../examples/tired_ribbon/" data-slug="tired_ribbon"><strong>Tired Ribbon</strong><small>wear &middot; underwood()</small></a>
+        <a class="cs-tile" href="#plate-wide-carriage" data-page="../examples/wide_carriage/" data-slug="wide_carriage"><strong>Wide Carriage</strong><small>pitch &middot; underwood()</small></a>
       </div>
     </div>
   </section>
@@ -513,6 +565,49 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
     </div>
   </section>
 
+  <section class="section section-dark plate" id="plate-tired-ribbon">
+    <div class="section-header">
+      <div class="section-tag">underwood() &middot; wear</div>
+      <h2>Tired <span class="accent">ribbon</span></h2>
+      <p class="section-desc">A short note typed on a worn ribbon. One number, wear, loosens every key at once.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-tired-ribbon" class="ex-canvas" data-ratio="0.7368421"></div>
+      <pre class="ex-code-block"><code class="language-javascript">plot.underwood(note, width * 0.08, height * 0.2, {
+  size: width * 0.022,
+  wear: 2.2   // 0 = mechanically clean
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/tired_ribbon/">-&gt; open work</a>
+        <a class="ex-full-link" href="../examples/tired_ribbon/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section plate" id="plate-wide-carriage">
+    <div class="section-header">
+      <div class="section-tag">underwood() &middot; pitch &middot; lineHeight</div>
+      <h2>Wide <span class="accent">carriage</span></h2>
+      <p class="section-desc">The same machine with a wider pitch. The letters keep their fixed cells; only the cells grow.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview">
+      <div id="ex-wide-carriage" class="ex-canvas" data-ratio="0.7368421"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const size = width * 0.022;
+
+plot.underwood(haiku, width * 0.09, height * 0.26, {
+  size,
+  pitch: size * 2.4,   // default is size * 1.2
+  lineHeight: size * 5.6
+});</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../examples/wide_carriage/">-&gt; open work</a>
+        <a class="ex-full-link" href="../examples/wide_carriage/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="section-header">
       <div class="section-tag">Draw as traces</div>
@@ -533,6 +628,10 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
   <script src="../examples/gysin_demo/composition.js"></script>
   <script src="../examples/permutation_poem/composition.js"></script>
   <script src="../examples/weave/composition.js"></script>
+  <script src="../examples/chorus/composition.js"></script>
+  <script src="../examples/ring/composition.js"></script>
+  <script src="../examples/tired_ribbon/composition.js"></script>
+  <script src="../examples/wide_carriage/composition.js"></script>
   <script src="../examples/plotter_export/composition.js"></script>
   <script>
   function previewSize(id) {
@@ -789,6 +888,28 @@ plot.underwood("the small hand.", 60, 210);</code></pre>
       seed: 1960,
       sources: GysinWorks.weave.sources
     }).plot;
+  }, { paper: false });
+
+  makePreview("ex-chorus", function(p, canvasW, canvasH) {
+    return GysinWorks.chorus.build({
+      p,
+      width: canvasW,
+      height: canvasH,
+      seed: 1960,
+      sources: GysinWorks.chorus.sources
+    }).plot;
+  }, { paper: false });
+
+  makePreview("ex-ring", function(p, canvasW, canvasH) {
+    return GysinWorks.ring.build({ p, width: canvasW, height: canvasH }).plot;
+  }, { paper: false });
+
+  makePreview("ex-tired-ribbon", function(p, canvasW, canvasH) {
+    return GysinWorks.tiredRibbon.build({ p, width: canvasW, height: canvasH }).plot;
+  }, { paper: false });
+
+  makePreview("ex-wide-carriage", function(p, canvasW, canvasH) {
+    return GysinWorks.wideCarriage.build({ p, width: canvasW, height: canvasH }).plot;
   }, { paper: false });
 
   makePreview("ex-primitives", function(p, canvasW) {

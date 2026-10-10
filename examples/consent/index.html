@@ -36,10 +36,8 @@ plot.lattice(fine.repeat(2), 48, 56, 624, 660, {   // fine: the cookie notice
   size: 15,
   turns: [0, 90]
 });
-plot.rect(48, 884, 624, 76, {   // the button you are meant to press
-  repeat: 3,
-  fill: "hatch"
-});
+plot.rect(48, 884, 624, 76, { repeat: 3 });   // the button you are meant to press
+plot.lattice("ACCEPT ALL ".repeat(8), 56, 890, 608, 64, { size: 9, turns: [0] });
 
 plot.draw();</code></pre>
         <div class="demo-note"><a href="composition.js">Open the complete composition</a> · the same file draws the Manifested wall and this work.</div>

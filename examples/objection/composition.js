@@ -50,11 +50,9 @@
     // ── 1 · the letter, typed ───────────────────────────────────────
     plot.underwood(LETTER.join("\n"), x0, y0, { size, stroke: INK, wear: 1.3, layer: "text" });
 
-    // ── 2 · the answers, struck out ─────────────────────────────────
+    // ── 2 · the answers, struck out with the same machine ──────────
     REDACTED.forEach(([row, a, b]) => {
-      plot.rect(x0 + a * pitch - 3, y0 + row * lh - 16, (b - a) * pitch + 6, 20, {
-        stroke: RED, strokeWeight: 1.1, fill: "hatch", hatchSpacing: 1.6, hatchAngle: 0, wobble: 0.5, layer: "red"
-      });
+      plot.underwood("X".repeat(b - a), x0 + a * pitch, y0 + row * lh, { size, stroke: RED, bold: true, wear: 1.3, layer: "red" });
     });
 
     // ── 3 · the stamp ───────────────────────────────────────────────
