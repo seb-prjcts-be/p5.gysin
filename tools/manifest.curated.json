@@ -53,6 +53,12 @@
       "note": "Intent route for physical SVG output: requires a physical page, clips geometry, optimizes per physical pen group by default, splits mixed-colour layers, emits true top-level Inkscape layers whose visible names start with the physical pen number, preserves pen passes, and writes centre lines while discarding alpha, strokeWeight, and pressure-derived screen styling."
     },
     {
+      "name": "GysinPlot.exportTraces",
+      "added_in": "unreleased",
+      "status": "stable",
+      "note": "Finished traces as plain data in page units, clipped to the page, each with its physical pen from penMap, layer, stroke, passage and role. The hand-off to route planners and machine drivers."
+    },
+    {
       "name": "page: A5|A4|A3|A2",
       "added_in": "1.2.0",
       "status": "stable",

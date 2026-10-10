@@ -1598,4 +1598,50 @@ for (const [name, key] of posterKeys) {
   assert.ok(!plotter.toLowerCase().includes(work.paper.toLowerCase()), `${name} paper is not a plotted path`);
 }
 
+// ── exportTraces(): the finished traces as data for tools that plot them ──
+for (const Plot of [SourcePlot, MinPlot]) {
+  const plot = new Plot({ seed: 1960, width: 200, height: 100 });
+  plot.line(10, 10, 150, 10, { layer: "frame", stroke: "#111111", repeat: 2 });
+  plot.circle(60, 50, 40, { layer: "type", stroke: "#cc0000" });
+  plot.line(10, 90, 150, 90, { stroke: "#00aa00" });
+
+  const options = { page: "A5", penMap: { frame: 1, type: 2 } };
+  const traces = plot.exportTraces(options);
+  assert.ok(traces.length > 0);
+  assert.equal(traces.length, (plot.exportSVG({ page: "A5" }).match(/<path /g) || []).length, "one trace per exported path");
+  for (const trace of traces) {
+    assert.deepEqual(
+      Object.keys(trace).sort(),
+      ["closed", "layer", "pass", "pen", "points", "role", "shapeId", "stroke", "type"]
+    );
+    assert.ok(trace.points.length >= 2 && trace.points.every((p) => Number.isFinite(p.x) && Number.isFinite(p.y)));
+    assert.ok(trace.points.every((p) => p.x >= 10 - 1e-6 && p.x <= 138 + 1e-6 && p.y >= 10 - 1e-6 && p.y <= 200 + 1e-6), "clipped to the A5 margins");
+  }
+  const penOf = (layer) => new Set(traces.filter((t) => t.layer === layer).map((t) => t.pen));
+  assert.deepEqual([...penOf("frame")], [1]);
+  assert.deepEqual([...penOf("type")], [2]);
+  assert.deepEqual([...new Set(traces.filter((t) => t.stroke === "#00aa00").map((t) => t.pen))], [1], "an unmapped trace uses pen 1");
+  assert.ok(traces.some((t) => t.pass === 2), "every passage of a repeated trace is kept");
+  assert.ok(plot.exportTraces({ ...options, tool: "blade" }).every((t) => t.pass === 1), "blade keeps the first passage");
+  assert.deepEqual(
+    [...new Set(plot.exportTraces({ penMap: { "#00aa00": 4 } }).filter((t) => t.stroke === "#00aa00").map((t) => t.pen))],
+    [4],
+    "a stroke colour maps to a pen"
+  );
+
+  const before = JSON.stringify(plot.exportTraces(options));
+  traces[0].points[0].x = 9999;
+  traces[0].pen = 99;
+  assert.equal(JSON.stringify(plot.exportTraces(options)), before, "the result is a copy");
+  assert.throws(() => plot.exportTraces({ penMap: { frame: 0 } }), /pen/);
+}
+{
+  const traceJson = (Plot) => {
+    const plot = new Plot({ seed: 3, width: 100, height: 100 });
+    plot.circle(50, 50, 30);
+    return JSON.stringify(plot.exportTraces({ page: "A5" }));
+  };
+  assert.equal(traceJson(SourcePlot), traceJson(MinPlot), "source and browser build agree");
+}
+
 console.log("p5.gysin snapshot ok");

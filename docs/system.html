@@ -304,7 +304,7 @@ plot.clear();         // empty the sheet: shapes, ids, and selection</code>
       <h2>Public Method Index</h2>
       <p>Core creation and drawing: <code>new GysinPlot()</code>, <code>p.createGysinPlot()</code>, <code>plot.line()</code>, <code>plot.rect()</code>, <code>plot.circle()</code>, <code>plot.polygon()</code>, <code>plot.path()</code>, <code>plot.text()</code>, <code>plot.textCutup()</code>, <code>plot.asemic()</code>, <code>plot.grid()</code>, <code>plot.letters()</code>, <code>plot.symbols()</code>, <code>plot.rub()</code>, <code>plot.lattice()</code>, and <code>plot.draw()</code>.</p>
       <p>Core addressing: <code>plot.get()</code>, <code>plot.select()</code>, <code>plot.freeze()</code>, <code>plot.thaw()</code>, <code>plot.regenerate()</code>, <code>plot.reroll()</code>, <code>plot.remove()</code>, <code>plot.update()</code>, <code>plot.setSeed()</code>, and <code>plot.clear()</code>.</p>
-      <p>Core output: <code>plot.exportSVG()</code>, <code>plot.exportPlotterSVG()</code>, <code>plot.exportJSON()</code>, <code>plot.exportHPGL()</code>, <code>plot.downloadSVG()</code>, <code>plot.downloadPlotterSVG()</code>, <code>plot.downloadJSON()</code>, <code>plot.downloadHPGL()</code>, and <code>plot.stats()</code>.</p>
+      <p>Core output: <code>plot.exportSVG()</code>, <code>plot.exportPlotterSVG()</code>, <code>plot.exportJSON()</code>, <code>plot.exportHPGL()</code>, <code>plot.exportTraces()</code>, <code>plot.downloadSVG()</code>, <code>plot.downloadPlotterSVG()</code>, <code>plot.downloadJSON()</code>, <code>plot.downloadHPGL()</code>, and <code>plot.stats()</code>.</p>
       <p>Text addon: <code>GysinText.permute()</code>, <code>GysinText.weave()</code>, <code>plot.chant()</code>, and <code>plot.weave()</code>. Typewriter addon: <code>plot.underwood()</code>, <code>GysinUnderwood.glyphPolylines()</code>, and <code>GysinUnderwood.render()</code>.</p>
     </section>
 
@@ -358,6 +358,27 @@ plot.downloadHPGL("drawing.hpgl", hpglOptions);     // browser download</code>
         <li><code>tool</code>: <code>"pen"</code> preserves fill, bleed, and repeated passages; <code>"blade"</code> removes fill and later passages.</li>
       </ul>
       <p>HPGL stores coordinates, pen selections, and optional speed—not SVG colours, opacity, varying stroke width, layer names, or page metadata. Physical line width and density therefore come from the installed pen and from repeated geometry. The file starts with initialization and pen selection, draws with <code>PU</code>/<code>PD</code>, and ends by deselecting the pen. It creates a file only: sending that file to a specific machine remains the responsibility of the plotter software or controller.</p>
+
+      <h3 id="traces">Traces as data</h3>
+      <p><code>plot.exportTraces(options)</code> returns the finished traces as plain objects instead of a file: the same clipped, page-scaled geometry the exporters write, for a tool that draws or plots them itself. It takes <code>page</code>, <code>penMap</code>, <code>tool</code>, and <code>optimize</code> like HPGL, so the generic route rules above apply. Each call builds new objects; editing the result never changes the plot.</p>
+      <div class="code-preview">
+        <code>const traces = plot.exportTraces({
+  page: "A3",
+  penMap: { frame: 1, type: 2 },
+  tool: "pen"
+});
+
+// [{ points: [{ x, y }, ...], pen: 1, layer: "frame", stroke: "#111",
+//    pass: 1, role: "base", type: "rect", shapeId: "hp_1", closed: true }, ...]</code>
+      </div>
+      <ul>
+        <li><code>points</code>: the trace in page units, after clipping; a clipped path can return several traces.</li>
+        <li><code>pen</code>: the positive physical pen number; a layer match in <code>penMap</code> wins over a stroke-colour match, and an unmapped trace uses pen 1.</li>
+        <li><code>layer</code>, <code>stroke</code>: the semantic layer and the screen stroke colour.</li>
+        <li><code>pass</code>, <code>role</code>: which passage of a repeated or bled trace this is, and whether it is <code>base</code> or <code>fill</code>. <code>tool: "blade"</code> keeps only the first passage and no fill.</li>
+        <li><code>type</code>, <code>shapeId</code>, <code>closed</code>: the shape that produced the trace.</li>
+      </ul>
+      <p>This is the hand-off to other tools. A route planner or machine driver can take the traces, group them by <code>pen</code> and keep every passage. Alpha, stroke weight, and pressure are screen styling and are not part of the result.</p>
 
       <h3>Shared page model</h3>
       <p>The page model applies units, margins, origin, rotation, scale, and optional clipping to generic SVG, HPGL, and statistics. Generic route optimization remains opt-in so existing drawing order stays unchanged.</p>

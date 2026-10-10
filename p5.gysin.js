@@ -793,6 +793,25 @@
       return JSON.stringify(data, null, options.pretty === false ? 0 : 2);
     }
 
+    // The finished traces as plain data, in page units and clipped to the
+    // page: what the exporters write, for a tool that draws or plots them
+    // itself. Each trace names its physical pen, resolved like HPGL does.
+    exportTraces(options = {}) {
+      const page = this._resolvePage(options);
+      const penMap = options.penMap || {};
+      return this._exportTraces(page, options).map((trace) => ({
+        points: trace.points.map((point) => ({ x: point.x, y: point.y })),
+        pen: penForTrace(trace, penMap),
+        layer: trace.layer,
+        stroke: trace.style.stroke,
+        pass: trace.pass,
+        role: trace.role,
+        type: trace.type,
+        shapeId: trace.shapeId,
+        closed: trace.closed
+      }));
+    }
+
     exportHPGL(options = {}) {
       const page = this._resolvePage(options);
       const scale = positiveNumber(options.scale === undefined ? hpglScaleForUnits(page.units) : options.scale, "HPGL scale");
