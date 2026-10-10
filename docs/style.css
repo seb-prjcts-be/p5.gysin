@@ -1016,7 +1016,7 @@ body.chapters .ce-module.chapter-active {
   color: var(--white);
 }
 
-/* The sheets hang at their own heights, like prints pinned to a wall. */
+/* The sheets hang in one even grid. */
 .mf-wall {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -1027,14 +1027,6 @@ body.chapters .ce-module.chapter-active {
 
 .mf-card {
   margin: 0;
-}
-
-.mf-card:nth-child(3n + 2) {
-  margin-top: 46px;
-}
-
-.mf-card:nth-child(3n) {
-  margin-top: 18px;
 }
 
 .mf-sheet {
@@ -1146,10 +1138,6 @@ body.chapters .ce-module.chapter-active {
   .mf-dialog-body {
     grid-template-columns: 1fr;
     padding: 18px;
-  }
-
-  .mf-card:nth-child(n) {
-    margin-top: 0;
   }
 }
 

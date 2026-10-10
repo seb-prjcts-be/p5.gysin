@@ -189,7 +189,7 @@ bedekken de hoofdnavigatie niet met een tweede menubalk.
   tussen Collage en System. `tests/snapshot.js` toetst ze daar
   (`posterExamples`); Openings blijft het blad van de drie bibliotheken.
 - Manifested is een inspiratiemuur en spiegelt Openings niet: geen
-  contactbladen of werkmomenten, maar negen levende posters op eigen hoogte.
+  contactbladen of werkmomenten, maar negen levende posters in een gelijk raster.
   Een poster opent in een dialoog met een nieuwe seed, de code, SVG-download,
   vorige/volgende en "Surprise me".
 - `composition.js` registreert `GysinWorks.<naam>` met `build`, `seed`,
