@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Objection | p5.gysin examples</title>
+  <link rel="stylesheet" href="../../docs/style.css?v=posters-1">
+</head>
+<body>
+  <script>if (window.self !== window.top) document.documentElement.classList.add("embedded");</script>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../../docs/openings.html">Openings</a></li>
+      <li><a href="../../docs/collage/">Collage</a></li>
+      <li><a href="../../docs/posters/">Posters</a></li>
+      <li><a href="../../docs/system.html">System</a></li>
+      <li><a href="../../docs/vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">underwood() · rect() · text()</div>
+      <h1>Objection</h1>
+      <p>A letter to a system that does not explain itself. The answers are struck out.</p>
+    </div>
+    <div class="demo-layout sheet-layout">
+      <div class="demo-code">
+        <div class="code-label">The shared composition</div>
+        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 1984 });
+
+plot.underwood(letter, 64, 150, { size: 13, wear: 1.3 });
+plot.rect(x, y, w, 20, {   // an answer, struck out
+  fill: "hatch",
+  hatchSpacing: 1.6
+});
+
+plot.draw();</code></pre>
+        <div class="demo-note"><a href="composition.js">Open the complete composition</a> · the same file draws the Posters sheet and this work.</div>
+        <div class="demo-actions" aria-label="Objection actions">
+          <button type="button" id="reroll-button">New seed</button>
+          <button type="button" id="svg-button">Download SVG</button>
+          <button type="button" id="plotter-button">Download A3 plotter SVG</button>
+        </div>
+        <div class="demo-note"><strong>New seed</strong> redraws the same composition with another seed. The plotter file keeps one line per stroke: black → pen 1 · red → pen 2.</div>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas" id="sketch" role="img" aria-label="A poster in black and red: a typewritten letter to an automated decision-maker, six passages struck out in dense red hatching, and an OFFICIAL stamp."></div>
+        <div class="demo-note" id="poster-status" role="status" aria-live="polite">Drawing the poster…</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p><a href="../../docs/posters/">All posters</a> &nbsp;&middot;&nbsp; <a href="../../docs/system.html">System</a></p>
+    <p class="footer-sub">Optional typewriter addon &nbsp;&middot;&nbsp; p5.gysin v1.2.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.underwood.min.js"></script>
+  <script src="composition.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

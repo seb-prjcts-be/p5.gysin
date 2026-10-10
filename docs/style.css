@@ -815,6 +815,12 @@ body.chapters .ce-module.chapter-active {
   gap: 12px;
 }
 
+/* A poster page: the code keeps the narrower column, the A3 sheet the wider. */
+.sheet-layout {
+  grid-template-columns: minmax(300px, 0.64fr) minmax(420px, 1fr);
+  max-width: 1320px;
+}
+
 .demo-canvas {
   display: grid;
   place-items: center;
@@ -936,12 +942,15 @@ body.chapters .ce-module.chapter-active {
 
 /* ── curation engine page ───────────────────────────────────────────── */
 
-.collage-page .page-header .section-tag {
+.collage-page .page-header .section-tag,
+.posters-page .page-header .section-tag {
   color: var(--red);
 }
 
 .collage-page a:focus-visible,
-.collage-page button:focus-visible {
+.collage-page button:focus-visible,
+.posters-page a:focus-visible,
+.posters-page button:focus-visible {
   outline-color: var(--red);
 }
 

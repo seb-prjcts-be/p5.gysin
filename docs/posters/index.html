@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Posters | p5.gysin</title>
+  <meta name="description" content="Nine finished p5.gysin posters: worn words, permuted sentences, a typed letter and a rain calendar, each one composition that draws on screen and goes to A3 paper.">
+  <meta property="og:title" content="Posters | p5.gysin">
+  <meta property="og:description" content="Nine finished p5.gysin posters, each one shared composition drawn on screen and saved for the plotter.">
+  <meta property="og:url" content="https://seb-prjcts-be.github.io/p5.gysin/docs/posters/">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://seb-prjcts-be.github.io/p5.gysin/docs/posters/">
+  <link rel="stylesheet" href="../style.css?v=posters-1">
+</head>
+<body class="posters-page">
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../openings.html">Openings</a></li>
+      <li><a href="../collage/">Collage</a></li>
+      <li><a href="index.html" class="active">Posters</a></li>
+      <li><a href="../system.html">System</a></li>
+      <li><a href="../vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank" rel="noreferrer">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <header class="page-header">
+    <div class="section-tag">Nine sheets &middot; canvas to paper</div>
+    <h1>Pos<span class="accent">ters</span></h1>
+    <p>Finished sheets rather than single verbs. Each poster is one shared composition: it draws here, on its own page, and onto A3 paper.</p>
+  </header>
+
+  <main>
+  <section class="section group-intro" id="sheets">
+    <div class="section-header">
+      <div class="section-tag">Word. Trace. Sentence. Typewriter. &middot; v1.2.0</div>
+      <p class="section-desc">Every poster loads the core and, where it speaks in sentences or on a typewriter, an addon. Pick a sheet: its code opens below, and the complete composition is one click away.</p>
+    </div>
+    <div class="work-band work-band-word">
+      <div class="work-band-head"><strong>Word</strong><small>Isolate it. Enlarge it. Wear it.</small></div>
+      <div class="contact-sheet">
+        <a class="cs-tile" href="#poster-final" data-page="../../examples/final/" data-slug="final"><strong>Final</strong><small>word &middot; rub()</small></a>
+      </div>
+    </div>
+    <div class="work-band">
+      <div class="work-band-head"><strong>Trace</strong><small>Parameters, contours, paths.</small></div>
+      <div class="contact-sheet">
+        <a class="cs-tile" href="#poster-exercise" data-page="../../examples/exercise/" data-slug="exercise"><strong>Exercise</strong><small>trace &middot; path() &middot; bleed</small></a>
+        <a class="cs-tile" href="#poster-transcript" data-page="../../examples/transcript/" data-slug="transcript"><strong>Transcript</strong><small>trace &middot; asemic() &middot; rubout</small></a>
+        <a class="cs-tile" href="#poster-42-days" data-page="../../examples/42_days/" data-slug="42_days"><strong>42 Days</strong><small>trace &middot; rect() &middot; hatch</small></a>
+      </div>
+    </div>
+    <div class="work-band">
+      <div class="work-band-head"><strong>Sentence</strong><small>Order, sequence, source.</small></div>
+      <div class="contact-sheet">
+        <a class="cs-tile" href="#poster-on-hold" data-page="../../examples/on_hold/" data-slug="on_hold"><strong>On Hold</strong><small>sentence &middot; chant()</small></a>
+        <a class="cs-tile" href="#poster-views" data-page="../../examples/views/" data-slug="views"><strong>Views</strong><small>sentences &middot; weave()</small></a>
+        <a class="cs-tile" href="#poster-say-it-again" data-page="../../examples/say_it_again/" data-slug="say_it_again"><strong>Say It Again</strong><small>sentence field &middot; lattice()</small></a>
+        <a class="cs-tile" href="#poster-consent" data-page="../../examples/consent/" data-slug="consent"><strong>Consent</strong><small>sentence field &middot; lattice()</small></a>
+      </div>
+    </div>
+    <div class="work-band">
+      <div class="work-band-head"><strong>Typewriter</strong><small>Fixed pitch, line height, double strike.</small></div>
+      <div class="contact-sheet">
+        <a class="cs-tile" href="#poster-objection" data-page="../../examples/objection/" data-slug="objection"><strong>Objection</strong><small>page &middot; underwood()</small></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark plate" id="poster-final">
+    <div class="section-header">
+      <div class="section-tag">rub() · underwood()</div>
+      <h2>Fi<span class="accent">nal</span></h2>
+      <p class="section-desc">Three versions of one file name, each a little further erased.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-final" class="ex-canvas" data-work="final" data-ratio="1.4138889"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 3 });
+
+plot.rub("FINAL", 48, 130, { size: 64, decay: 0.7 });
+plot.rub("FINAL FINAL", 48, 790, { size: 54, decay: 1.5 });
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../../examples/final/">-&gt; open work</a>
+        <a class="ex-full-link" href="../../examples/final/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section plate" id="poster-exercise">
+    <div class="section-header">
+      <div class="section-tag">path() · bleed · fray</div>
+      <h2>Exer<span class="accent">cise</span></h2>
+      <p class="section-desc">Looped handwriting on a chalkboard. Erased, resumed, never finished.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-exercise" class="ex-canvas" data-work="exercise" data-ratio="1.4138889"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1951 });
+
+plot.path(loops, {   // loops: one row of looped handwriting
+  bleed: 0.4,
+  fray: 0.3,
+  dropout: 0.1,
+  rubout: 0.25
+});
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../../examples/exercise/">-&gt; open work</a>
+        <a class="ex-full-link" href="../../examples/exercise/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark plate" id="poster-transcript">
+    <div class="section-header">
+      <div class="section-tag">text() · asemic() · path()</div>
+      <h2>Trans<span class="accent">cript</span></h2>
+      <p class="section-desc">A voice message that gets harder to hear. A loop runs straight through the lines.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-transcript" class="ex-canvas" data-work="transcript" data-ratio="1.4138889"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 612 });
+
+lines.forEach((line, i) =&gt; {   // each line a little harder to hear
+  const k = i / (lines.length - 1);
+  plot.text(line, 170, 295 + i * 56, {
+    size: 15,
+    dropout: k * 0.32,
+    rubout: k * 0.22,
+    glyphJitter: 0.35 + k * 0.9
+  });
+});
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../../examples/transcript/">-&gt; open work</a>
+        <a class="ex-full-link" href="../../examples/transcript/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section plate" id="poster-42-days">
+    <div class="section-header">
+      <div class="section-tag">rect() · circle() · underwood()</div>
+      <h2>42 <span class="accent">days</span></h2>
+      <p class="section-desc">Six weeks of rainfall, one cell per day. The wetter the day, the denser the hatching.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-42-days" class="ex-canvas" data-work="fortyTwoDays" data-ratio="1.4138889"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 42 });
+
+// rain is hatching: the wetter the day, the denser the lines
+plot.rect(x, y, 72, 72, {
+  fill: "hatch",
+  hatchSpacing: Math.max(1.1, 9 - mm * 0.72)
+});
+plot.circle(x + 42, y + 42, 5);   // a dry day is a dot
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../../examples/42_days/">-&gt; open work</a>
+        <a class="ex-full-link" href="../../examples/42_days/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark plate" id="poster-on-hold">
+    <div class="section-header">
+      <div class="section-tag">chant() · rect() · underwood()</div>
+      <h2>On <span class="accent">hold</span></h2>
+      <p class="section-desc">A recorded message, permuted again and again until it falls apart.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-on-hold" class="ex-canvas" data-work="onHold" data-ratio="1.4138889"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1403 });
+
+plot.chant("YOUR CALL MAY BE RECORDED", 48, 90, {
+  lines: 11,
+  order: "walk",
+  size: 24,
+  leading: 52
+});
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../../examples/on_hold/">-&gt; open work</a>
+        <a class="ex-full-link" href="../../examples/on_hold/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section plate" id="poster-views">
+    <div class="section-header">
+      <div class="section-tag">weave() · path() · underwood()</div>
+      <h2>V<span class="accent">iews</span></h2>
+      <p class="section-desc">Two texts, a climate report and a sales brochure, woven into a third voice.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.text.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-views" class="ex-canvas" data-work="views" data-ratio="1.4138889"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 2100 });
+
+plot.weave(sources, 48, 312, {   // a climate report and a sales brochure
+  lines: 10,
+  unit: "clause",
+  fragments: 2,
+  size: 24,
+  leading: 46,
+  maxWidth: 640
+});
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../../examples/views/">-&gt; open work</a>
+        <a class="ex-full-link" href="../../examples/views/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark plate" id="poster-say-it-again">
+    <div class="section-header">
+      <div class="section-tag">lattice() · underwood()</div>
+      <h2>Say it <span class="accent">again</span></h2>
+      <p class="section-desc">One phrase, turned twice across the sheet. The pattern matters more than the words.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-say-it-again" class="ex-canvas" data-work="sayItAgain" data-ratio="1.4138889"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 90 });
+
+plot.lattice("SAY IT AGAIN ".repeat(3), 48, 48, 624, 700, {
+  size: 26,
+  turns: [0, 90]
+});
+plot.lattice("SAY IT AGAIN ".repeat(3), 84, 84, 552, 628, {
+  size: 26,
+  turns: [45, 135],
+  wear: 1.6
+});
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../../examples/say_it_again/">-&gt; open work</a>
+        <a class="ex-full-link" href="../../examples/say_it_again/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section plate" id="poster-consent">
+    <div class="section-header">
+      <div class="section-tag">lattice() · rect() · text()</div>
+      <h2>Con<span class="accent">sent</span></h2>
+      <p class="section-desc">The fine print is a wall. The button you are meant to press is red and wide.</p>
+      <p class="lib-req">loads p5.gysin.min.js</p>
+    </div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-consent" class="ex-canvas" data-work="consent" data-ratio="1.4138889"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 2018 });
+
+plot.lattice(fine.repeat(2), 48, 56, 624, 660, {   // fine: the cookie notice
+  size: 15,
+  turns: [0, 90]
+});
+plot.rect(48, 884, 624, 76, {   // the button you are meant to press
+  repeat: 3,
+  fill: "hatch"
+});
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../../examples/consent/">-&gt; open work</a>
+        <a class="ex-full-link" href="../../examples/consent/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark plate" id="poster-objection">
+    <div class="section-header">
+      <div class="section-tag">underwood() · rect() · text()</div>
+      <h2>Ob<span class="accent">jection</span></h2>
+      <p class="section-desc">A letter to a system that does not explain itself. The answers are struck out.</p>
+      <p class="lib-req">loads p5.gysin.min.js + p5.gysin.underwood.min.js</p>
+    </div>
+    <div class="ex-preview ex-sheet">
+      <div id="ex-objection" class="ex-canvas" data-work="objection" data-ratio="1.4138889"></div>
+      <pre class="ex-code-block"><code class="language-javascript">const plot = new GysinPlot({ seed: 1984 });
+
+plot.underwood(letter, 64, 150, { size: 13, wear: 1.3 });
+plot.rect(x, y, w, 20, {   // an answer, struck out
+  fill: "hatch",
+  hatchSpacing: 1.6
+});
+
+plot.draw();</code></pre>
+      <div class="ex-links">
+        <a class="ex-full-link" href="../../examples/objection/">-&gt; open work</a>
+        <a class="ex-full-link" href="../../examples/objection/composition.js">-&gt; complete composition</a>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <footer>
+    <p><a href="../openings.html#examples">Openings</a> &nbsp;&middot;&nbsp; <a href="../system.html">System</a></p>
+    <p class="footer-sub">p5.gysin v1.2.0</p>
+  </footer>
+
+  <button type="button" id="plate-prev" class="plate-arrow" aria-label="Previous poster" aria-keyshortcuts="ArrowLeft" hidden>&larr;</button>
+  <button type="button" id="plate-next" class="plate-arrow" aria-label="Next poster" aria-keyshortcuts="ArrowRight" hidden>&rarr;</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.text.min.js"></script>
+  <script src="../../p5.gysin.underwood.min.js"></script>
+  <script src="../../examples/final/composition.js?v=posters-1"></script>
+  <script src="../../examples/exercise/composition.js?v=posters-1"></script>
+  <script src="../../examples/transcript/composition.js?v=posters-1"></script>
+  <script src="../../examples/42_days/composition.js?v=posters-1"></script>
+  <script src="../../examples/on_hold/composition.js?v=posters-1"></script>
+  <script src="../../examples/views/composition.js?v=posters-1"></script>
+  <script src="../../examples/say_it_again/composition.js?v=posters-1"></script>
+  <script src="../../examples/consent/composition.js?v=posters-1"></script>
+  <script src="../../examples/objection/composition.js?v=posters-1"></script>
+  <script src="sheet.js?v=posters-1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

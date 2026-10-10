@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Transcript | p5.gysin examples</title>
+  <link rel="stylesheet" href="../../docs/style.css?v=posters-1">
+</head>
+<body>
+  <script>if (window.self !== window.top) document.documentElement.classList.add("embedded");</script>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../../docs/openings.html">Openings</a></li>
+      <li><a href="../../docs/collage/">Collage</a></li>
+      <li><a href="../../docs/posters/">Posters</a></li>
+      <li><a href="../../docs/system.html">System</a></li>
+      <li><a href="../../docs/vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">text() · asemic() · path()</div>
+      <h1>Transcript</h1>
+      <p>A voice message that gets harder to hear. A loop runs straight through the lines.</p>
+    </div>
+    <div class="demo-layout sheet-layout">
+      <div class="demo-code">
+        <div class="code-label">The shared composition</div>
+        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 612 });
+
+lines.forEach((line, i) =&gt; {   // each line a little harder to hear
+  const k = i / (lines.length - 1);
+  plot.text(line, 170, 295 + i * 56, {
+    size: 15,
+    dropout: k * 0.32,
+    rubout: k * 0.22,
+    glyphJitter: 0.35 + k * 0.9
+  });
+});
+
+plot.draw();</code></pre>
+        <div class="demo-note"><a href="composition.js">Open the complete composition</a> · the same file draws the Posters sheet and this work.</div>
+        <div class="demo-actions" aria-label="Transcript actions">
+          <button type="button" id="reroll-button">New seed</button>
+          <button type="button" id="svg-button">Download SVG</button>
+          <button type="button" id="plotter-button">Download A3 plotter SVG</button>
+        </div>
+        <div class="demo-note"><strong>New seed</strong> redraws the same composition with another seed. The plotter file keeps one line per stroke: graphite → pen 1 · red → pen 2.</div>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas" id="sketch" role="img" aria-label="A poster in graphite and red: an automatic transcript of a voice message with timestamps. The lines wear away as they go, one passage is an inaudible red tangle, and a loop runs through the text."></div>
+        <div class="demo-note" id="poster-status" role="status" aria-live="polite">Drawing the poster…</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p><a href="../../docs/posters/">All posters</a> &nbsp;&middot;&nbsp; <a href="../../docs/system.html">System</a></p>
+    <p class="footer-sub">Optional typewriter addon &nbsp;&middot;&nbsp; p5.gysin v1.2.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="../../p5.gysin.underwood.min.js"></script>
+  <script src="composition.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

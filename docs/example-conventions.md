@@ -179,6 +179,26 @@ bedekken de hoofdnavigatie niet met een tweede menubalk.
   zichtbaar; links/rechts gebruikt hetzelfde sobere pijlenpatroon als Collage.
 - `tools/check-links.js` bewaakt zowel lokale doelen als dit same-tab-contract.
 
+## Regel 11 - Posters: een afgewerkt blad heeft een eigen pagina
+
+- Een poster (720 × 1018, A3-verhouding) is een voorbeeld als alle andere:
+  `examples/<naam>/` met `index.html`, `sketch.js` en `composition.js`, en dus
+  ook een regel in het manifest. Mapnamen volgen de titel in snake_case
+  (`on_hold`, `42_days`).
+- Posters staan niet op Openings maar op `docs/posters/`, in de menubalk tussen
+  Collage en System. `tests/snapshot.js` toetst ze daar (`posterExamples`);
+  Openings blijft het blad van de drie bibliotheken.
+- De pagina groepeert met dezelfde werkmomenten als Regel 6 (Word, Trace,
+  Sentence, Typewriter); een poster staat bij het gebaar dat het blad draagt.
+- `composition.js` registreert `GysinWorks.<naam>` met `build`, `seed`,
+  `width`, `height`, `paper` en `penMap`. Voorbeeldpagina en plaat tekenen
+  dezelfde compositie; de plaat schaalt met `p.scale()` en bouwt niet opnieuw.
+- Een dicht bezet blad kan boven de 2000 sporen per pen uitkomen. Dan weigert
+  `exportPlotterSVG` de routeoptimalisatie; de sketch valt terug op
+  `optimize: false` (tekenvolgorde) en meldt dat in de statusregel.
+- `rub()` geeft `layer` niet door. Op zo'n blad komen de pennen uit `stroke`
+  en `penMap`, niet uit laagnamen.
+
 ## Checklist per voorbeeld
 
 - [ ] On-ramp-kop toegevoegd, met het juiste woord/de juiste maten.
@@ -196,3 +216,5 @@ bedekken de hoofdnavigatie niet met een tweede menubalk.
 - [ ] Geen lege toonvlakken; een blok is lijnen/letters/tekens (Regel 8).
 - [ ] Interne links blijven in hetzelfde tabblad en onder de gewone menubalk
       (Regel 10).
+- [ ] Poster: eigen map in `examples/`, vermeld op `docs/posters/` en niet op
+      Openings (Regel 11).

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Consent | p5.gysin examples</title>
+  <link rel="stylesheet" href="../../docs/style.css?v=posters-1">
+</head>
+<body>
+  <script>if (window.self !== window.top) document.documentElement.classList.add("embedded");</script>
+  <nav id="navbar">
+    <a class="nav-logo" href="../../index.html"><span>p5</span>.gysin</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Enter</a></li>
+      <li><a href="../../docs/openings.html">Openings</a></li>
+      <li><a href="../../docs/collage/">Collage</a></li>
+      <li><a href="../../docs/posters/">Posters</a></li>
+      <li><a href="../../docs/system.html">System</a></li>
+      <li><a href="../../docs/vision.html">Vision</a></li>
+      <li><a href="https://github.com/seb-prjcts-be/p5.gysin" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <main class="demo-page">
+    <div class="demo-header">
+      <div class="demo-number">lattice() · rect() · text()</div>
+      <h1>Consent</h1>
+      <p>The fine print is a wall. The button you are meant to press is red and wide.</p>
+    </div>
+    <div class="demo-layout sheet-layout">
+      <div class="demo-code">
+        <div class="code-label">The shared composition</div>
+        <pre><code class="language-javascript">const plot = new GysinPlot({ seed: 2018 });
+
+plot.lattice(fine.repeat(2), 48, 56, 624, 660, {   // fine: the cookie notice
+  size: 15,
+  turns: [0, 90]
+});
+plot.rect(48, 884, 624, 76, {   // the button you are meant to press
+  repeat: 3,
+  fill: "hatch"
+});
+
+plot.draw();</code></pre>
+        <div class="demo-note"><a href="composition.js">Open the complete composition</a> · the same file draws the Posters sheet and this work.</div>
+        <div class="demo-actions" aria-label="Consent actions">
+          <button type="button" id="reroll-button">New seed</button>
+          <button type="button" id="svg-button">Download SVG</button>
+          <button type="button" id="plotter-button">Download A3 plotter SVG</button>
+        </div>
+        <div class="demo-note"><strong>New seed</strong> redraws the same composition with another seed. The plotter file keeps one line per stroke: navy → pen 1 · red → pen 2.</div>
+      </div>
+      <div class="demo-right">
+        <div class="demo-canvas" id="sketch" role="img" aria-label="A poster in navy and red: a wall of cookie-notice text, two lines of heading, and one wide hatched button reading ACCEPT ALL."></div>
+        <div class="demo-note" id="poster-status" role="status" aria-live="polite">Drawing the poster…</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p><a href="../../docs/posters/">All posters</a> &nbsp;&middot;&nbsp; <a href="../../docs/system.html">System</a></p>
+    <p class="footer-sub">p5.gysin v1.2.0 &nbsp;&middot;&nbsp; p5.js 2.x</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.js"></script>
+  <script src="../../p5.gysin.min.js"></script>
+  <script src="composition.js"></script>
+  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+</body>
+</html>

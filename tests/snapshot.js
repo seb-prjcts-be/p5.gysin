@@ -1108,6 +1108,8 @@ const enterPage = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const showcasePage = fs.readFileSync(path.join(root, "docs", "openings.html"), "utf8");
 const readmePage = fs.readFileSync(path.join(root, "README.md"), "utf8");
 const collagePage = fs.readFileSync(path.join(root, "docs", "collage", "index.html"), "utf8");
+const postersPage = fs.readFileSync(path.join(root, "docs", "posters", "index.html"), "utf8");
+const postersSheet = fs.readFileSync(path.join(root, "docs", "posters", "sheet.js"), "utf8");
 const systemPage = fs.readFileSync(path.join(root, "docs", "system.html"), "utf8");
 const visionPage = fs.readFileSync(path.join(root, "docs", "vision.html"), "utf8");
 const plotterContract = fs.readFileSync(path.join(root, "docs", "plotter-export-contract.md"), "utf8");
@@ -1419,12 +1421,21 @@ const calibrationPreview = showcasePage.slice(calibrationPreviewStart, calibrati
 assert.match(calibrationPreview, /repeat: index \+ 1/);
 assert.doesNotMatch(calibrationPreview, /\b(?:alpha|pressure|strokeWeight)\s*:/);
 
+// The nine posters are finished sheets with their own page; every other
+// example is a plate on Openings.
+const posterExamples = [
+  "42_days", "consent", "exercise", "final", "objection",
+  "on_hold", "say_it_again", "transcript", "views"
+];
 for (const name of manifest.examples) {
   assert.ok(fs.existsSync(path.join(examplesDir, name, "index.html")), `${name} index.html`);
   assert.ok(fs.existsSync(path.join(examplesDir, name, "sketch.js")), `${name} sketch.js`);
-  assert.match(showcasePage, new RegExp(`href="\\.\\./examples/${name}/"`));
-  const sourceFile = sharedCompositions.has(name) ? "composition.js" : "sketch.js";
-  assert.match(showcasePage, new RegExp(`href="\\.\\./examples/${name}/${sourceFile.replace(".", "\\.")}"`));
+  const isPoster = posterExamples.includes(name);
+  const listing = isPoster ? postersPage : showcasePage;
+  const prefix = isPoster ? "\\.\\./\\.\\./examples" : "\\.\\./examples";
+  assert.match(listing, new RegExp(`href="${prefix}/${name}/"`));
+  const sourceFile = sharedCompositions.has(name) || isPoster ? "composition.js" : "sketch.js";
+  assert.match(listing, new RegExp(`href="${prefix}/${name}/${sourceFile.replace(".", "\\.")}"`));
 }
 
 for (const [name, workName] of sharedCompositions) {
@@ -1462,6 +1473,120 @@ for (const [name, workName] of sharedCompositions) {
     assert.match(sketch, /page:\s*"A3"/);
     assert.doesNotMatch(sketch, /function\s+a3Page|width:\s*297|scale:\s*277\s*\/\s*POSTER_WIDTH/);
   }
+}
+
+// ── Posters: nine finished sheets, one shared composition each ─────────
+const navPages = [
+  "index.html",
+  ...fs.readdirSync(path.join(root, "docs")).filter((f) => f.endsWith(".html")).map((f) => path.join("docs", f)),
+  path.join("docs", "collage", "index.html"),
+  path.join("docs", "posters", "index.html"),
+  ...manifest.examples.map((name) => path.join("examples", name, "index.html"))
+];
+for (const page of navPages) {
+  const source = fs.readFileSync(path.join(root, page), "utf8");
+  if (!source.includes('<nav id="navbar">')) continue;
+  const navigation = source.slice(source.indexOf('<nav id="navbar">'), source.indexOf("</nav>"));
+  const labels = Array.from(navigation.matchAll(/<li><a [^>]*>([^<]+)<\/a><\/li>/g), (m) => m[1]);
+  assert.deepEqual(
+    labels,
+    ["Enter", "Openings", "Collage", "Posters", "System", "Vision", "GitHub"],
+    `${page} carries Posters between Collage and System`
+  );
+}
+assert.match(postersPage, /<body class="posters-page">/);
+assert.match(postersPage, /<a href="index\.html" class="active">Posters<\/a>/);
+assert.match(postersPage, /<title>Posters \| p5\.gysin<\/title>/);
+assert.match(postersPage, /<link rel="stylesheet" href="\.\.\/style\.css\?v=posters-1">/);
+assert.match(postersPage, /<h1>Pos<span class="accent">ters<\/span><\/h1>/);
+assert.equal((postersPage.match(/class="cs-tile"/g) || []).length, 9);
+assert.equal((postersPage.match(/<section class="section(?: section-dark)? plate"/g) || []).length, 9);
+assert.equal((postersPage.match(/class="ex-code-block"/g) || []).length, 9);
+assert.ok(
+  postersPage.indexOf("<strong>Word</strong>") < postersPage.indexOf("<strong>Trace</strong>") &&
+    postersPage.indexOf("<strong>Trace</strong>") < postersPage.indexOf("<strong>Sentence</strong>") &&
+    postersPage.indexOf("<strong>Sentence</strong>") < postersPage.indexOf("<strong>Typewriter</strong>"),
+  "the posters follow the same work moments as Openings"
+);
+assert.match(postersPage, /<script src="sheet\.js\?v=posters-1"><\/script>/);
+assert.match(postersSheet, /document\.body\.classList\.add\("folder"\)/);
+assert.match(siteStyle, /\.posters-page \.page-header \.section-tag/);
+assert.match(siteStyle, /\.sheet-layout\s*\{[^}]*max-width:\s*1320px;/s);
+
+const posterKeys = new Map([
+  ["42_days", "fortyTwoDays"], ["consent", "consent"], ["exercise", "exercise"],
+  ["final", "final"], ["objection", "objection"], ["on_hold", "onHold"],
+  ["say_it_again", "sayItAgain"], ["transcript", "transcript"], ["views", "views"]
+]);
+// Recorded when the posters were first drawn: a change here means the
+// drawing changed.
+const posterShapeCounts = new Map([
+  ["42_days", 223], ["consent", 70], ["exercise", 71], ["final", 136], ["objection", 947],
+  ["on_hold", 124], ["say_it_again", 267], ["transcript", 175], ["views", 82]
+]);
+const posterContext = { console };
+posterContext.globalThis = posterContext;
+vm.createContext(posterContext);
+for (const filename of [
+  "p5.gysin.js",
+  "p5.gysin.text.js",
+  "p5.gysin.underwood.js",
+  ...posterExamples.map((name) => path.join("examples", name, "composition.js"))
+]) {
+  vm.runInContext(fs.readFileSync(path.join(root, filename), "utf8"), posterContext, { filename });
+}
+assert.deepEqual(posterExamples.slice().sort(), Array.from(posterKeys.keys()).sort());
+
+for (const [name, key] of posterKeys) {
+  const directory = path.join(examplesDir, name);
+  const composition = fs.readFileSync(path.join(directory, "composition.js"), "utf8");
+  const sketch = fs.readFileSync(path.join(directory, "sketch.js"), "utf8");
+  const page = fs.readFileSync(path.join(directory, "index.html"), "utf8");
+  const work = posterContext.GysinWorks[key];
+
+  assert.ok(work, `${name} registers GysinWorks.${key}`);
+  assert.equal(work.width, 720, `${name} is 720 wide`);
+  assert.equal(work.height, 1018, `${name} is 1018 tall`);
+  assert.doesNotMatch(composition, /\bdocument\b|download[A-Z]|createCanvas|function\s+(?:setup|draw)\b/, `${name} composition holds only the work`);
+  assert.doesNotMatch(sketch, /plot\.(?:text|rect|circle|line|path|polygon|lattice|chant|weave|rub|asemic|underwood)\(/, `${name} sketch draws nothing itself`);
+  assert.match(sketch, new RegExp(`GysinWorks\\.${key}\\b`));
+  assert.match(sketch, /downloadPlotterSVG\(name, options\)/);
+  assert.match(sketch, /page: "A3", penMap: WORK\.penMap/);
+  assert.match(page, /<script src="composition\.js"><\/script>\s*<script src="sketch\.js"><\/script>/);
+  assert.match(page, /<a href="composition\.js">Open the complete composition<\/a>/);
+  assert.match(page, /<a href="\.\.\/\.\.\/docs\/posters\/">All posters<\/a>/);
+  assert.match(page, /<link rel="stylesheet" href="\.\.\/\.\.\/docs\/style\.css\?v=posters-1">/);
+  assert.match(postersPage, new RegExp(`<script src="\\.\\./\\.\\./examples/${name}/composition\\.js\\?v=posters-1"></script>`));
+  assert.match(postersPage, new RegExp(`data-work="${key}"`));
+
+  const first = work.build();
+  const again = work.build();
+  assert.equal(first.plot.shapes.length, posterShapeCounts.get(name), `${name} keeps its shape count`);
+  assert.equal(first.plot.exportSVG(), again.plot.exportSVG(), `${name} is reproducible from its seed`);
+  assert.notEqual(
+    first.plot.exportSVG(),
+    work.build({ seed: work.seed + 1 }).plot.exportSVG(),
+    `${name} changes with another seed`
+  );
+
+  // Every ink maps to a physical pen. Optimized routes stop at 2000 traces per
+  // pen group, so a crowded sheet is exported in drawing order instead.
+  const pens = new Set(Object.values(work.penMap));
+  let plotter;
+  try {
+    plotter = first.plot.exportPlotterSVG({ page: "A3", penMap: work.penMap });
+  } catch (error) {
+    assert.match(error.message, /at most 2000 traces per pen group/, `${name} fails only on route size`);
+    plotter = first.plot.exportPlotterSVG({ page: "A3", penMap: work.penMap, optimize: false });
+  }
+  assert.match(plotter, /width="297mm" height="420mm"/);
+  const labels = Array.from(plotter.matchAll(/inkscape:label="([^"]+)"/g), (m) => m[1]);
+  assert.ok(labels.length > 0, `${name} writes Inkscape layers`);
+  assert.ok(
+    labels.every((label) => pens.has(Number(label.split(" ")[0]))),
+    `${name} layers start with a mapped pen: ${labels.join(", ")}`
+  );
+  assert.ok(!plotter.toLowerCase().includes(work.paper.toLowerCase()), `${name} paper is not a plotted path`);
 }
 
 console.log("p5.gysin snapshot ok");

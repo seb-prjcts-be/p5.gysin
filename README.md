@@ -31,7 +31,9 @@ function setup() {
 The complete API, options, mutation model, and export model are documented in
 [System](https://seb-prjcts-be.github.io/p5.gysin/docs/system.html). The
 [gallery](https://seb-prjcts-be.github.io/p5.gysin/#examples) leads to
-standalone works with their source code.
+standalone works with their source code, and
+[Posters](https://seb-prjcts-be.github.io/p5.gysin/docs/posters/) shows nine
+finished A3 sheets that share one composition between page and plotter file.
 
 ## Plotter-safe SVG
 
